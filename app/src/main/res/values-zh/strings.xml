@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ETA@HK</string>
+
+    <string name="eta_msg_no_eta_service">沒有到站時間服務</string>
+    <string name="eta_msg_not_in_service_hours">服務時間已過</string>
+</resources>
