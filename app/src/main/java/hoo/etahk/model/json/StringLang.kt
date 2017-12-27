@@ -1,4 +1,4 @@
-package hoo.etahk.model.data
+package hoo.etahk.model.json
 
 data class StringLang(
         var tc: String = "",

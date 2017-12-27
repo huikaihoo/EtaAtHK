@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import hoo.etahk.common.Constants
 import hoo.etahk.model.AppDatabase
 import okhttp3.OkHttpClient
@@ -15,7 +16,10 @@ object AppHelper {
     lateinit var okHttp: OkHttpClient private set
 
     fun init(context: Context) {
-        gson = Gson()
+        //gson = Gson()
+        gson = GsonBuilder()
+                .serializeNulls()
+                .create()
 
         db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
                 .allowMainThreadQueries()

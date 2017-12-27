@@ -1,4 +1,4 @@
-package hoo.etahk.model.data
+package hoo.etahk.model.json
 
 import hoo.etahk.common.Constants.Time.ONE_MINUTE_IN_SECONDS
 import hoo.etahk.common.Utils.getCurrentTimestamp
@@ -7,14 +7,16 @@ data class EtaResult (
         var company: String = "",
         var etaTime: Long = 0L,
         var msg: String = "",
-        var scheduledOnly: Boolean = false,
+        var scheduleOnly: Boolean = false,
+        var gps: Boolean = false,
         var variant: Long = 0L,
-        var wifi: Boolean? = false,
-        var distance: Long? = 0L) {
+        var wifi: Boolean = false,
+        var capacity: Long = -1L,
+        var distance: Long = 0L) {
 
-    fun isValid() : Boolean {
-        return etaTime > 0
-    }
+    var valid = etaTime > 0L
+        get() = etaTime > 0L
+        private set
 
     fun getDiffInMinutes(): Long {
         val sec = etaTime - getCurrentTimestamp()
@@ -22,7 +24,7 @@ data class EtaResult (
     }
 
     fun getDisplayMsg() : String {
-        return msg + when (isValid()) {
+        return msg + when (valid) {
             true -> {
                 val min = getDiffInMinutes()
                 if (min > 0)

@@ -1,4 +1,4 @@
-package hoo.etahk.common.connection
+package hoo.etahk.remote.connection
 
 import hoo.etahk.model.data.Stop
 

@@ -2,8 +2,8 @@ package hoo.etahk.model
 
 import android.arch.persistence.room.TypeConverter
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.model.data.EtaResult
-import hoo.etahk.model.data.StringLang
+import hoo.etahk.model.json.EtaResult
+import hoo.etahk.model.json.StringLang
 import org.json.JSONObject
 
 class Converters {

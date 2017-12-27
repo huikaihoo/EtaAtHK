@@ -22,6 +22,8 @@ object Constants {
     }
 
     object Eta {
+        val NWFB_API_PARAMETER_APP_VERSION = "3.3.1"
+
         val NWFB_ETA_RECORD_SIZE = 31
         val NWFB_EAT_RECORD_COMPANY = 0
         val NWFB_EAT_RECORD_DISTANCE = 13

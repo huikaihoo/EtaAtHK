@@ -70,6 +70,7 @@ class FollowedStopsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
 
     private fun subscribeUiChanges() {
         mFollowedStopsViewModel?.getLastUpdateTime()?.observe(this, Observer<Long> {
+            // TODO("Check if the time is updated >> ready need to refresh or just...")
             mFollowedStopsViewModel?.updateAllEta()
             Snackbar.make(main_content, "Auto Refresh", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()} )

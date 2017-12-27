@@ -3,6 +3,7 @@ package hoo.etahk.view
 import android.app.Application
 import com.facebook.stetho.Stetho
 import hoo.etahk.common.helper.AppHelper
+import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
 
 class App : Application() {
@@ -18,6 +19,7 @@ class App : Application() {
         initStetho()
         initSharePrefs()
         initAppHelper()
+        initConnectionHelper()
     }
 
     private fun initStetho() {
@@ -32,4 +34,7 @@ class App : Application() {
         AppHelper.init(this)
     }
 
+    private fun initConnectionHelper() {
+        ConnectionHelper.init()
+    }
 }

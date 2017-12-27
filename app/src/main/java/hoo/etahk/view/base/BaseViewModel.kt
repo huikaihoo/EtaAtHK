@@ -28,20 +28,17 @@ open class BaseViewModel : ViewModel() {
         if (period > 0) {
             val periodInMillis = period * Time.ONE_SECOND_IN_MILLIS
 
-            if (timer != null) {
-                timer!!.cancel()
-            } else {
+            if (timer == null) {
                 timer = Timer()
+                // Update the elapsed time every n second (n = period)
+                timer!!.scheduleAtFixedRate(object : TimerTask() {
+                    override fun run() {
+                        Handler(Looper.getMainLooper()).post({
+                            lastUpdateTime.value = Utils.getCurrentTimestamp()
+                            Log.d("T", "BaseViewModel")})
+                    }
+                }, Time.ONE_SECOND_IN_MILLIS, periodInMillis)
             }
-
-            // Update the elapsed time every n second (n = period)
-            timer!!.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    Handler(Looper.getMainLooper()).post({
-                        lastUpdateTime.value = Utils.getCurrentTimestamp()
-                        Log.d("T", "BaseViewModel")})
-                }
-            }, Time.ONE_SECOND_IN_MILLIS, periodInMillis)
         }
     }
 }
