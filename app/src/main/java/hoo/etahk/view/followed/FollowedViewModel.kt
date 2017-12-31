@@ -5,7 +5,7 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.repo.StopsRepo
 import hoo.etahk.view.base.BaseViewModel
 
-class FollowedStopsViewModel() : BaseViewModel() {
+class FollowedViewModel : BaseViewModel() {
     private var mFollowedStops: LiveData<List<Stop>>? = null
 
     init {

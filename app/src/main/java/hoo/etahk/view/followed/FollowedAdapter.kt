@@ -9,20 +9,21 @@ import hoo.etahk.view.base.BaseAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_stop.view.*
 
-class FollowedStopsAdapter : BaseAdapter<FollowedStopsFragment, Stop, FollowedStopsAdapter.ViewHolder>() {
+class FollowedAdapter : BaseAdapter<FollowedFragment, Stop, FollowedAdapter.ViewHolder>() {
 
     override fun getItemViewId(): Int = R.layout.item_stop
 
     override fun instantiateViewHolder(view: View?): ViewHolder = ViewHolder(view)
 
-    class ViewHolder(itemView: View?) : BaseViewHolder<FollowedStopsFragment, Stop>(itemView) {
+    class ViewHolder(itemView: View?) : BaseViewHolder<FollowedFragment, Stop>(itemView) {
 
         //val tvName by lazy { itemView?.findViewById<TextView?>(R.id.tvName) }
         //val tvDescription by lazy { itemView?.findViewById<TextView?>(R.id.tvDescription) }
 
-        override fun onBind(context: FollowedStopsFragment?, item: Stop) {
+        override fun onBind(context: FollowedFragment?, position: Int, dataSource: List<Stop>) {
+            val item = dataSource[position]
             val etaResults = item.etaResults
-            itemView.stop_name.text = item.id.toString()
+            itemView.stop_name.text = item.seq.toString()
 
             for (i in 0..2) {
                 val tv = when (i) {
@@ -41,7 +42,7 @@ class FollowedStopsAdapter : BaseAdapter<FollowedStopsFragment, Stop, FollowedSt
 
             itemView.setOnClickListener { view ->
                 context?.updateEta(listOf(item))
-                Snackbar.make(view, "Item ${item.id} Clicked", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Item ${item.seq} Clicked", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show()
             }
         }
@@ -49,7 +50,7 @@ class FollowedStopsAdapter : BaseAdapter<FollowedStopsFragment, Stop, FollowedSt
     }
 }
 
-//class FollowedStopsAdapter(val items : List<Stop>, val itemClickListener: (Stop)->Unit) : RecyclerView.Adapter<FollowedStopsAdapter.ViewHolder>() {
+//class FollowedAdapter(val items : List<Stop>, val itemClickListener: (Stop)->Unit) : RecyclerView.Adapter<FollowedAdapter.ViewHolder>() {
 //
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 //        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_stop, parent, false)

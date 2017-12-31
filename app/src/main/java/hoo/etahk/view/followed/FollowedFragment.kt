@@ -10,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import hoo.etahk.R
 import hoo.etahk.model.data.Stop
-import kotlinx.android.synthetic.main.fragment_followed_stops.view.*
+import kotlinx.android.synthetic.main.fragment_followed.view.*
 
-class FollowedStopsFragment : Fragment() {
+class FollowedFragment : Fragment() {
 
     companion object {
         /**
@@ -25,8 +25,8 @@ class FollowedStopsFragment : Fragment() {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        fun newInstance(sectionNumber: Int): FollowedStopsFragment {
-            val fragment = FollowedStopsFragment()
+        fun newInstance(sectionNumber: Int): FollowedFragment {
+            val fragment = FollowedFragment()
             val args = Bundle()
             args.putInt(ARG_SECTION_NUMBER, sectionNumber)
             fragment.arguments = args
@@ -34,32 +34,31 @@ class FollowedStopsFragment : Fragment() {
         }
     }
 
-    private var mFollowedStopsViewModel: FollowedStopsViewModel? = null
-    private var mFollowedStopsAdapter: FollowedStopsAdapter = FollowedStopsAdapter()
+    private var mFollowedViewModel: FollowedViewModel? = null
+    private var mFollowedAdapter: FollowedAdapter = FollowedAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mFollowedStopsAdapter.context = this
+        mFollowedAdapter.context = this
 
-        val rootView = inflater.inflate(R.layout.fragment_followed_stops, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_followed, container, false)
 
         rootView.recycler_view.layoutManager = LinearLayoutManager(activity)
-        rootView.recycler_view.adapter = mFollowedStopsAdapter
+        rootView.recycler_view.adapter = mFollowedAdapter
 
-        mFollowedStopsViewModel = ViewModelProviders.of(activity!!).get(FollowedStopsViewModel::class.java)
+        mFollowedViewModel = ViewModelProviders.of(activity!!).get(FollowedViewModel::class.java)
         subscribeUiChanges()
 
         return rootView
     }
 
-
     fun updateEta(stops: List<Stop>) {
-        mFollowedStopsViewModel?.updateEta(stops)
+        mFollowedViewModel?.updateEta(stops)
     }
 
     private fun subscribeUiChanges() {
-        mFollowedStopsViewModel?.getFollowStops()?.observe(this, Observer<List<Stop>> {
-            it?.let { mFollowedStopsAdapter.dataSource = it }
+        mFollowedViewModel?.getFollowStops()?.observe(this, Observer<List<Stop>> {
+            it?.let { mFollowedAdapter.dataSource = it }
         })
     }
 }

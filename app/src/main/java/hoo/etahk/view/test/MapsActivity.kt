@@ -1,4 +1,4 @@
-package hoo.etahk.view.base
+package hoo.etahk.view.test
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -16,7 +16,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
+        setContentView(R.layout.activity_t_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment

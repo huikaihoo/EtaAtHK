@@ -4,7 +4,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="hoo.etahk.view.base.SimpleFragment">
+    tools:context="hoo.etahk.view.test.SimpleFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"

@@ -1,4 +1,4 @@
-package hoo.etahk.view.base
+package hoo.etahk.view.test
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

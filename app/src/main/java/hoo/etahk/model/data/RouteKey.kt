@@ -3,6 +3,6 @@ package hoo.etahk.model.data
 data class RouteKey (
         var company: String,
         var routeNo: String,
-        var direction: Long,
+        var bound: Long,
         var variant: Long
 )

@@ -2,24 +2,72 @@ package hoo.etahk.model.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
 
 @Dao
-interface StopsDao {
+abstract class StopsDao {
 
+    // Count
     @Query("SELECT COUNT(*) FROM stop")
-    fun count(): Int
+    abstract fun count(): Int
+
+    // Select
+    @Query("SELECT * FROM stop " +
+            "WHERE company = :company " +
+            "AND routeNo = :routeNo " +
+            "AND bound = :bound " +
+            "AND variant = :variant " +
+            "AND updateTime >= :updateTime " +
+            "ORDER BY seq")
+    abstract fun select(company: String,
+                        routeNo: String,
+                        bound: Long,
+                        variant: Long,
+                        updateTime: Long): LiveData<List<Stop>>
 
     @Query("SELECT * FROM stop")
-    fun selectAll(): LiveData<List<Stop>>
+    abstract fun selectAll(): LiveData<List<Stop>>
 
-    @Insert(onConflict = REPLACE)
-    fun insert(stop: Stop)
+    // Insert / Update
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insert(stop: Stop)
 
-    @Update
-    fun update(stop: Stop)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    abstract fun insert(stops: List<Stop>)
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    abstract fun update(stops: List<Stop>)
+
+    @Transaction
+    open fun insertOrUpdate(route: Route? = null, stops: List<Stop>, updateTime: Long? = null) {
+        insert(stops)
+        update(stops)
+        if (route != null && updateTime != null) {
+            delete(route.routeKey.company,
+                    route.routeKey.routeNo,
+                    route.routeKey.bound,
+                    route.routeKey.variant,
+                    updateTime)
+        }
+    }
+
+    // Delete
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun update(stop: Stop)
 
     @Delete
-    fun delete(stop: Stop)
+    abstract fun delete(stop: Stop)
+
+    @Query("DELETE FROM stop " +
+            "WHERE company = :company " +
+            "AND routeNo = :routeNo " +
+            "AND bound = :bound " +
+            "AND variant = :variant " +
+            "AND updateTime < :updateTime")
+    abstract fun delete(company: String,
+                        routeNo: String,
+                        bound: Long,
+                        variant: Long,
+                        updateTime: Long)
 }

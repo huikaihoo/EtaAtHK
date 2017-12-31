@@ -21,14 +21,24 @@ object Constants {
         val MTR = "MTR"
     }
 
+    object Url {
+        val KMB_URL = "http://search.kmb.hk/KMBWebSite/"
+        val KMB_ETA_URL = "http://etav3.kmb.hk/"
+        val KMB_ETA_FEED_URL = "http://etadatafeed.kmb.hk:1933/"
+        val NWFB_URL = "http://mobile.nwstbus.com.hk/"
+    }
     object Eta {
+        // >>> Change to share pref
+        val ETA_AUTO_REFRESH = 30L
+        val HIGHLIGHT_B4_DEPARTURE = 5
         val NWFB_API_PARAMETER_APP_VERSION = "3.3.1"
+        // <<< Change to share pref
 
         val NWFB_ETA_RECORD_SIZE = 31
-        val NWFB_EAT_RECORD_COMPANY = 0
-        val NWFB_EAT_RECORD_DISTANCE = 13
-        val NWFB_EAT_RECORD_ETA_TIME = 16
-        val NWFB_EAT_RECORD_MSG = 26
+        val NWFB_ETA_RECORD_COMPANY = 0
+        val NWFB_ETA_RECORD_DISTANCE = 13
+        val NWFB_ETA_RECORD_ETA_TIME = 16
+        val NWFB_ETA_RECORD_MSG = 26
     }
 
     // Share Preferences Key

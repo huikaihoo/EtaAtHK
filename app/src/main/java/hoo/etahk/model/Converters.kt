@@ -3,6 +3,7 @@ package hoo.etahk.model
 import android.arch.persistence.room.TypeConverter
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.json.EtaResult
+import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 import org.json.JSONObject
 
@@ -16,6 +17,30 @@ class Converters {
     @TypeConverter
     fun jsonObjectToString(item: JSONObject): String {
         return item.toString()
+    }
+
+    @TypeConverter
+    fun stringToStringList(value: String): List<String> {
+        val array = AppHelper.gson.fromJson(value, Array<String>::class.java)
+        return  when (array != null && array.isNotEmpty()) {
+            true -> array.toList()
+            false -> emptyList()
+        }
+    }
+
+    @TypeConverter
+    fun stringListToString(item: List<String>): String {
+        return AppHelper.gson.toJson(item)
+    }
+
+    @TypeConverter
+    fun stringToInfo(value: String): Info {
+        return AppHelper.gson.fromJson(value, Info::class.java)
+    }
+
+    @TypeConverter
+    fun infoToString(item: Info): String {
+        return AppHelper.gson.toJson(item)
     }
 
     @TypeConverter

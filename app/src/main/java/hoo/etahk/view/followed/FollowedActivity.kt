@@ -1,4 +1,4 @@
-package hoo.etahk.view.base
+package hoo.etahk.view.followed
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -15,14 +15,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import hoo.etahk.R
+import hoo.etahk.common.Constants.Eta
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.model.data.Stop
-import hoo.etahk.view.followed.FollowedStopsViewModel
 import kotlinx.android.synthetic.main.activity_nav_tab.*
 import kotlinx.android.synthetic.main.activity_tab.*
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class FollowedActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
-    private var mFollowedStopsViewModel: FollowedStopsViewModel? = null
+    private var mFollowedViewModel: FollowedViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,13 +45,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
-        container.adapter = mSectionsPagerAdapter
+        coordinatorlayout.adapter = mSectionsPagerAdapter
 
-        container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
-        tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
+        coordinatorlayout.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
+        tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(coordinatorlayout))
+
+        mFollowedViewModel = ViewModelProviders.of(this).get(FollowedViewModel::class.java)
+        mFollowedViewModel?.period = Eta.ETA_AUTO_REFRESH
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action" + AppHelper.db.stopsDao().count(), Snackbar.LENGTH_LONG)
+            mFollowedViewModel?.insertStops()
+            Snackbar.make(view, "Stop Reset" + AppHelper.db.stopsDao().count(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 
@@ -63,14 +66,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        mFollowedStopsViewModel = ViewModelProviders.of(this).get(FollowedStopsViewModel::class.java)
         subscribeUiChanges()
     }
 
     private fun subscribeUiChanges() {
-        mFollowedStopsViewModel?.getFollowStops()?.observe(this, Observer<List<Stop>> { stops ->
-            Snackbar.make(main_content, "Model Updated" + stops?.size, Snackbar.LENGTH_LONG)
-        .setAction("Action", null).show() } )
+        mFollowedViewModel?.getLastUpdateTime()?.observe(this, Observer<Long> {
+            // TODO("Check if the time is updated >> ready need to refresh or just...")
+            mFollowedViewModel?.updateAllEta()
+            Snackbar.make(main_content, "Auto Refresh", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()} )
     }
 
     override fun onBackPressed() {
@@ -133,7 +137,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return SimpleFragment.newInstance(position + 1)
+            return FollowedFragment.newInstance(position + 1)
         }
 
         override fun getCount(): Int {
@@ -141,39 +145,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return 3
         }
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    /*
-    class PlaceholderFragment : Fragment() {
-
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                                  savedInstanceState: Bundle?): View? {
-            val rootView = inflater.inflate(R.layout.fragment_simple, container, false)
-            rootView.section_label.text = getString(R.string.section_format, arguments!!.getInt(ARG_SECTION_NUMBER))
-            return rootView
-        }
-
-        companion object {
-            /**
-             * The fragment argument representing the section number for this
-             * fragment.
-             */
-            private val ARG_SECTION_NUMBER = "section_number"
-
-            /**
-             * Returns a new instance of this fragment for the given section
-             * number.
-             */
-            fun newInstance(sectionNumber: Int): PlaceholderFragment {
-                val fragment = PlaceholderFragment()
-                val args = Bundle()
-                args.putInt(ARG_SECTION_NUMBER, sectionNumber)
-                fragment.arguments = args
-                return fragment
-            }
-        }
-    }
-    */
 }

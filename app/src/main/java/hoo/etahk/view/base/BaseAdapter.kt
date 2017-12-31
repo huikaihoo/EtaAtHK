@@ -28,9 +28,8 @@ abstract class BaseAdapter<C, D, VH : BaseViewHolder<C, D>> : RecyclerView.Adapt
     abstract fun instantiateViewHolder(view: View?): VH
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.onBind(context, getItem(position))
+        holder.onBind(context, position, dataSource)
     }
 
-    fun getItem(position: Int) = dataSource[position]
-
+    //fun getDataSource(position: Int) = dataSource[position]
 }

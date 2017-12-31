@@ -15,6 +15,12 @@ object AppHelper {
     lateinit var db: AppDatabase private set
     lateinit var okHttp: OkHttpClient private set
 
+    fun init() {
+        gson = GsonBuilder()
+                .serializeNulls()
+                .create()
+    }
+
     fun init(context: Context) {
         //gson = Gson()
         gson = GsonBuilder()

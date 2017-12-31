@@ -11,6 +11,11 @@ import hoo.etahk.common.Utils
 import java.util.*
 
 open class BaseViewModel : ViewModel() {
+
+    companion object {
+        private val TAG = "BaseViewModel"
+    }
+
     private val lastUpdateTime = MutableLiveData<Long>()
     private var timer :Timer? = null
 
@@ -35,7 +40,7 @@ open class BaseViewModel : ViewModel() {
                     override fun run() {
                         Handler(Looper.getMainLooper()).post({
                             lastUpdateTime.value = Utils.getCurrentTimestamp()
-                            Log.d("T", "BaseViewModel")})
+                            Log.d(TAG, lastUpdateTime.value.toString())})
                     }
                 }, Time.ONE_SECOND_IN_MILLIS, periodInMillis)
             }
