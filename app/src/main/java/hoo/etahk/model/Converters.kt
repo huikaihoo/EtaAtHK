@@ -1,6 +1,7 @@
 package hoo.etahk.model
 
 import android.arch.persistence.room.TypeConverter
+import hoo.etahk.common.Constants
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
@@ -19,6 +20,7 @@ class Converters {
         return item.toString()
     }
 
+    // List<String>
     @TypeConverter
     fun stringToStringList(value: String): List<String> {
         val array = AppHelper.gson.fromJson(value, Array<String>::class.java)
@@ -33,6 +35,7 @@ class Converters {
         return AppHelper.gson.toJson(item)
     }
 
+    // Info
     @TypeConverter
     fun stringToInfo(value: String): Info {
         return AppHelper.gson.fromJson(value, Info::class.java)
@@ -43,6 +46,7 @@ class Converters {
         return AppHelper.gson.toJson(item)
     }
 
+    // List<EtaResult>
     @TypeConverter
     fun stringToEtaResultList(value: String): List<EtaResult> {
         val array = AppHelper.gson.fromJson(value, Array<EtaResult>::class.java)
@@ -57,6 +61,7 @@ class Converters {
         return AppHelper.gson.toJson(item)
     }
 
+    // StringLang
     @TypeConverter
     fun stringToStringLang(value: String): StringLang {
         return AppHelper.gson.fromJson(value, StringLang::class.java)
@@ -65,5 +70,16 @@ class Converters {
     @TypeConverter
     fun stringLangToString(item: StringLang): String {
         return AppHelper.gson.toJson(item)
+    }
+
+    // EtaStatus
+    @TypeConverter
+    fun stringToEtaStatus(value: String): Constants.EtaStatus {
+        return Constants.EtaStatus.valueOf(value)
+    }
+
+    @TypeConverter
+    fun etaStatusToString(item: Constants.EtaStatus): String {
+        return item.toString()
     }
 }

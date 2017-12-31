@@ -2,8 +2,8 @@ package hoo.etahk.model.data
 
 import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Ignore
 import com.google.android.gms.maps.model.LatLng
+import hoo.etahk.common.Constants
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
@@ -24,7 +24,7 @@ data class Stop(
         var longitude: Double = 0.0,
         var fare: Double = -1.0,
         var info: Info = Info(),
-        var etaUrl: String = "",                        // reserved for later
+        var etaStatus: Constants.EtaStatus = Constants.EtaStatus.NONE,
         var etaResults: List<EtaResult> = emptyList(),  // store as json string
         var etaUpdateTime: Long = 0L,
         var updateTime: Long = 0L) {
@@ -34,6 +34,4 @@ data class Stop(
             latitude = value.latitude
             longitude = value.longitude
         }
-    @Ignore
-    var etaStatus: Int = 0
 }

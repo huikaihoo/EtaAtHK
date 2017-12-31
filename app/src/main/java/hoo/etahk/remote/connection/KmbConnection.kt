@@ -1,6 +1,7 @@
 package hoo.etahk.remote.connection
 
 import android.util.Log
+import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
@@ -51,8 +52,6 @@ object KmbConnection: BaseConnection {
     }
 
     private fun toStop(route: Route, routeStop: KmbStopsRes.RouteStop, t: Long): Stop {
-        val info = Info()
-
         val stop = Stop(
                 routeKey = route.routeKey,
                 seq = routeStop.seq?: 0,
@@ -80,7 +79,15 @@ object KmbConnection: BaseConnection {
                 serviceType = stop.routeKey.variant.toString(),
                 lang = "tc")
                 .enqueue(object : Callback<KmbEtaRes> {
-                    override fun onFailure(call: Call<KmbEtaRes>, t: Throwable) {}
+                    override fun onFailure(call: Call<KmbEtaRes>, t: Throwable) {
+                        val t = Utils.getCurrentTimestamp()
+
+                        stop.etaStatus = Constants.EtaStatus.FAILED
+                        stop.etaUpdateTime = t
+
+                        AppHelper.db.stopsDao().update(stop)
+                    }
+
                     override fun onResponse(call: Call<KmbEtaRes>, response: Response<KmbEtaRes>){
                         val t = Utils.getCurrentTimestamp()
                         val kmbEtaRes = response.body()
@@ -91,12 +98,16 @@ object KmbConnection: BaseConnection {
                             (kmbEtaRes.response).forEach {
                                 etaResults.add(toEtaResult(stop, it))
                             }
+                            stop.etaStatus = Constants.EtaStatus.SUCCESS
                             stop.etaResults = etaResults
                             stop.etaUpdateTime = t
-
-                            Log.d(TAG, AppHelper.gson.toJson(etaResults))
-                            AppHelper.db.stopsDao().update(stop)
+                            //Log.d(TAG, AppHelper.gson.toJson(etaResults))
+                        } else {
+                            stop.etaStatus = Constants.EtaStatus.FAILED
+                            stop.etaUpdateTime = t
                         }
+
+                        AppHelper.db.stopsDao().update(stop)
                     }
                 })
     }

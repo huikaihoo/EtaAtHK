@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import hoo.etahk.common.Constants
 import hoo.etahk.model.AppDatabase
+import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
@@ -32,16 +33,22 @@ object AppHelper {
                 .fallbackToDestructiveMigration()
                 .build()
 
+        val dispatcher = Dispatcher()
+        dispatcher.maxRequests = Constants.SharePrefs.DEFAULT_MAX_REQUESTS
+        dispatcher.maxRequestsPerHost = Constants.SharePrefs.DEFAULT_MAX_REQUESTS_PER_HOST
+
         okHttp = when (SharedPrefsHelper.getAppMode()) {
             Constants.AppMode.DEV ->
                 OkHttpClient().newBuilder()
                         .addNetworkInterceptor(StethoInterceptor())
-                        .connectTimeout(10, TimeUnit.SECONDS)
+                        .connectTimeout(Constants.SharePrefs.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+                        .dispatcher(dispatcher)
                         .build()
             else ->
                 OkHttpClient().newBuilder()
                         .addNetworkInterceptor(StethoInterceptor())
-                        .connectTimeout(10, TimeUnit.SECONDS)
+                        .connectTimeout(Constants.SharePrefs.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+                        .dispatcher(dispatcher)
                         .build()
         }
     }

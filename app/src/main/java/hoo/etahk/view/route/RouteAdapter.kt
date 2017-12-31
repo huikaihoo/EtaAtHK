@@ -2,11 +2,10 @@ package hoo.etahk.view.route
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.view.View
 import hoo.etahk.R
-import hoo.etahk.common.Constants.Eta
+import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Stop
 import hoo.etahk.view.App
@@ -40,16 +39,16 @@ class RouteAdapter : BaseAdapter<RouteFragment, Stop, RouteAdapter.ViewHolder>()
                 val prevEtaTime = if (prevEtaResults.isNotEmpty()) prevEtaResults[0].etaTime else -1
                 val currEtaTime = if (etaResults.isNotEmpty()) etaResults[0].etaTime else -1
 
-                if (prevEtaTime > 0 && currEtaTime > 0 && prevEtaTime > currEtaTime)
+                if (currEtaTime in 1..(prevEtaTime-1) || (prevEtaTime < 0L && currEtaTime > 0L))
                     highlight = true
             } else {
-                if (etaResults.isNotEmpty() && etaResults[0].getDiffInMinutes() <= Eta.HIGHLIGHT_B4_DEPARTURE)
+                if (etaResults.isNotEmpty() && etaResults[0].valid && etaResults[0].getDiffInMinutes() <= Constants.SharePrefs.DEFAULT_HIGHLIGHT_B4_DEPARTURE)
                     highlight = true
             }
 
             val color = when (highlight) {
                 true -> Utils.getThemeColorAccent(context!!.activity as Context)
-                false -> ContextCompat.getColor(App.instance, R.color.colorBlack)
+                false -> ContextCompat.getColor(App.instance, R.color.colorWhite)
             }
             itemView.stop_name.setTextColor(color)
             itemView.eta_0.setTextColor(color)
@@ -71,8 +70,6 @@ class RouteAdapter : BaseAdapter<RouteFragment, Stop, RouteAdapter.ViewHolder>()
 
             itemView.setOnClickListener { view ->
                 context?.updateEta(listOf(item))
-                Snackbar.make(view, "Item ${item.seq} Clicked", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
             }
         }
     }

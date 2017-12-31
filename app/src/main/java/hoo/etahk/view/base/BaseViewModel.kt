@@ -44,6 +44,9 @@ open class BaseViewModel : ViewModel() {
                     }
                 }, Time.ONE_SECOND_IN_MILLIS, periodInMillis)
             }
+        } else {
+            timer?.cancel()
+            timer = null
         }
     }
 }
