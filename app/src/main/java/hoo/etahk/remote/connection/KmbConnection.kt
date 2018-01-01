@@ -10,6 +10,7 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
+import hoo.etahk.remote.response.KmbBoundVariantRes
 import hoo.etahk.remote.response.KmbEtaRes
 import hoo.etahk.remote.response.KmbStopsRes
 import retrofit2.Call
@@ -20,10 +21,55 @@ object KmbConnection: BaseConnection {
 
     private val TAG = "KmbConnection"
 
+    /*******************
+     * Get Child Routes
+     *******************/
+    override fun getChildRoutes(parentRoute: Route) {
+        for (bound in 1..parentRoute.boundCount) {
+            ConnectionHelper.kmb.getBoundVariant(
+                    route = parentRoute.routeKey.routeNo,
+                    bound = bound.toString())
+                    .enqueue(object : Callback<KmbBoundVariantRes> {
+                        override fun onFailure(call: Call<KmbBoundVariantRes>, t: Throwable) {}
+                        override fun onResponse(call: Call<KmbBoundVariantRes>, response: Response<KmbBoundVariantRes>) {
+                            val t = Utils.getCurrentTimestamp()
+                            val kmbBoundVariantRes = response.body()
+                            Log.d(TAG, kmbBoundVariantRes.toString())
+
+                            if (kmbBoundVariantRes?.data?.routes != null && (kmbBoundVariantRes.data.routes).isNotEmpty()) {
+                                val routes = mutableListOf<Route>()
+                                (kmbBoundVariantRes.data.routes).forEach {
+                                    Log.d(TAG, "${it?.bound} == $bound")
+                                    assert(it!!.bound!! == bound)
+                                    routes.add(toChildRoute(parentRoute, it!!, t))
+                                }
+
+                                Log.d(TAG, AppHelper.gson.toJson(routes))
+                                AppHelper.db.childRoutesDao().insertOrUpdate(routes, t)
+                            }
+                        }
+                    })
+        }
+
+    }
+
+    private fun toChildRoute(parentRoute: Route, route: KmbBoundVariantRes.Route, t: Long): Route {
+        return Route(
+                routeKey = parentRoute.routeKey.copy(bound = route.bound!!, variant = route.serviceType?.trim()?.toLong()?: 1),
+                direction = parentRoute.childDirection,
+                companyDetails = parentRoute.companyDetails,
+                from = StringLang(route.originChi?: "", route.originEng?: ""),
+                to = StringLang(route.destinationChi?: "", route.destinationEng?: ""),
+                details = StringLang(route.descChi?: "", route.descEng?: ""),
+                seq = parentRoute.seq,
+                updateTime = t
+        )
+    }
+
     /***************
      * Get Stops
      ***************/
-    override fun getStops(route: Route) {
+    override fun getStops(route: Route, needEtaUpdate: Boolean) {
         ConnectionHelper.kmb.getStops(
                 route = route.routeKey.routeNo,
                 bound = route.routeKey.bound.toString(),
@@ -33,7 +79,7 @@ object KmbConnection: BaseConnection {
                     override fun onResponse(call: Call<KmbStopsRes>, response: Response<KmbStopsRes>) {
                         val t = Utils.getCurrentTimestamp()
                         val kmbStopsRes = response.body()
-                        Log.d(TAG, kmbStopsRes.toString())
+                        //Log.d(TAG, kmbStopsRes.toString())
 
                         if (kmbStopsRes?.data?.routeStops != null && (kmbStopsRes.data.routeStops).isNotEmpty()) {
                             val stops = mutableListOf<Stop>()
@@ -41,11 +87,10 @@ object KmbConnection: BaseConnection {
                                 stops.add(toStop(route, it!!, t))
                             }
 
-                            Log.d(TAG, AppHelper.gson.toJson(stops))
+                            //Log.d(TAG, AppHelper.gson.toJson(stops))
                             AppHelper.db.stopsDao().insertOrUpdate(route, stops, t)
-                            stops.forEach {
-                                updateEta(it)
-                            }
+                            if (needEtaUpdate)
+                                stops.forEach { updateEta(it) }
                         }
                     }
                 })
@@ -53,7 +98,7 @@ object KmbConnection: BaseConnection {
 
     private fun toStop(route: Route, routeStop: KmbStopsRes.RouteStop, t: Long): Stop {
         val stop = Stop(
-                routeKey = route.routeKey,
+                routeKey = route.routeKey.copy(),
                 seq = routeStop.seq?: 0,
                 name = StringLang(routeStop.cName?: "", routeStop.eName?: "", routeStop.sCName?: ""),
                 to = route.getToByBound(),
@@ -91,7 +136,7 @@ object KmbConnection: BaseConnection {
                     override fun onResponse(call: Call<KmbEtaRes>, response: Response<KmbEtaRes>){
                         val t = Utils.getCurrentTimestamp()
                         val kmbEtaRes = response.body()
-                        Log.d(TAG, kmbEtaRes.toString())
+                        //Log.d(TAG, kmbEtaRes.toString())
 
                         if (kmbEtaRes?.response != null && (kmbEtaRes.response).isNotEmpty()) {
                             val etaResults = mutableListOf<EtaResult>()

@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 abstract class BaseAdapter<C, D, VH : BaseViewHolder<C, D>> : RecyclerView.Adapter<VH>() {
 
@@ -12,7 +14,9 @@ abstract class BaseAdapter<C, D, VH : BaseViewHolder<C, D>> : RecyclerView.Adapt
     var dataSource: List<D> = emptyList()
         set(value) {
             field = value
-            notifyDataSetChanged()
+            launch(UI) {
+                notifyDataSetChanged()
+            }
         }
 
     override fun getItemCount() = dataSource.size

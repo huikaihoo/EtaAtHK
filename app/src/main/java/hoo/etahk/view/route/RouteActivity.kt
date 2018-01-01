@@ -8,9 +8,10 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import hoo.etahk.R
-import hoo.etahk.common.Constants.Eta
+import hoo.etahk.common.Constants
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
+import hoo.etahk.model.repo.RoutesRepo
 import kotlinx.android.synthetic.main.activity_route.*
 
 class RouteActivity : AppCompatActivity() {
@@ -33,8 +34,8 @@ class RouteActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         mRouteViewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
-        mRouteViewModel.routeKey = RouteKey("KMB", "5M", -1, -1)
-        mRouteViewModel.period = Eta.ETA_AUTO_REFRESH
+        mRouteViewModel.routeKey = RouteKey("KMB", "101", -1, -1)
+        mRouteViewModel.period = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -59,7 +60,13 @@ class RouteActivity : AppCompatActivity() {
 
     private fun subscribeUiChanges() {
         mRouteViewModel.getRoute().observe(this, Observer<Route> {
-            it?.let { mRoutePagerAdapter?.dataSource = it }
+            it?.let {
+                if (!mRouteViewModel.hasGetChildRouteFromRemote) {
+                    mRouteViewModel.hasGetChildRouteFromRemote = true
+                    RoutesRepo.getChildRoutesFromRemote(it)
+                }
+                mRoutePagerAdapter?.dataSource = it
+            }
         })
     }
 

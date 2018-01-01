@@ -27,10 +27,7 @@ class RoutePagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
     }
 
     override fun getCount(): Int {
-        return when(dataSource == null) {
-            true -> 0
-            false -> if (dataSource!!.direction >= 2) dataSource!!.direction.toInt() else 1
-        }
+        return dataSource?.boundCount?.toInt()?: 0
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

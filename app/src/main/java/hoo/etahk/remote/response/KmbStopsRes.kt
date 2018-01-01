@@ -1,11 +1,6 @@
 package hoo.etahk.remote.response
 import com.google.gson.annotations.SerializedName
 
-
-/**
- * Created by huikaihoo on 30/12/2017.
- */
-
 data class KmbStopsRes(
 		@SerializedName("data") val data: Data? = Data(),
 		@SerializedName("result") val result: Boolean? = false

@@ -40,10 +40,17 @@ object NwfbConnection: BaseConnection {
         return timestamp + randomInt + HASH.md5(timestamp + randomInt + "firstbusmwymwy")
     }
 
+    /*******************
+     * Get Child Routes
+     *******************/
+    override fun getChildRoutes(parentRoute: Route) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     /***************
      * Get Stops
      ***************/
-    override fun getStops(route: Route) {
+    override fun getStops(route: Route, needEtaUpdate: Boolean) {
         val info = "1|*|${route.routeKey.company}||${route.info.rdv}||${route.info.startSeq}||${route.info.endSeq}"
         //Log.d(TAG, "info=[$info]")
 
@@ -72,9 +79,8 @@ object NwfbConnection: BaseConnection {
 
                             //Log.d(TAG, AppHelper.gson.toJson(stops))
                             AppHelper.db.stopsDao().insertOrUpdate(route, stops, t)
-                            stops.forEach {
-                                updateEta(it)
-                            }
+                            if (needEtaUpdate)
+                                stops.forEach { updateEta(it) }
                         }
                     }
                 })

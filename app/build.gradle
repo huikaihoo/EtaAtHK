@@ -13,6 +13,12 @@ def static getCurrentDate() {
     return date.format('yyyyMMdd')
 }
 
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -37,6 +43,8 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     //implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.21'
 
     // Android Core
     implementation 'com.android.support:appcompat-v7:27.0.2'

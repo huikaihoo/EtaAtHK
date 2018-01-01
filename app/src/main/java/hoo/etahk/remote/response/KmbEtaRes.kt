@@ -8,7 +8,7 @@ data class KmbEtaRes(
 		@SerializedName("updated") val updated: Long? = 0
 ) {
     data class Response(
-            @SerializedName("bus_service_type") val busServiceType: Long = 1,
+            @SerializedName("bus_service_type") val busServiceType: Long = 1L,
             @SerializedName("ei") val ei: String? = "",     // can server receive bus gps signal (N=Yes; Y=No)
             @SerializedName("eot") val eot: String? = "",   // E: time only; T: with text
             @SerializedName("ex") val ex: String? = "",     // expire time (YYYY-MM-DD hh:mm:ss)

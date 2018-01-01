@@ -17,7 +17,7 @@ class FollowedViewModel : BaseViewModel() {
     }
 
     fun insertStops() {
-        StopsRepo.insertStop()
+        //StopsRepo.insertStop()
     }
 
     fun updateEta(stops: List<Stop>) {

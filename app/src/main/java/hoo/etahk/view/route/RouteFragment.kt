@@ -11,7 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
+import hoo.etahk.model.repo.StopsRepo
 import kotlinx.android.synthetic.main.fragment_route.view.*
 
 class RouteFragment : Fragment() {
@@ -39,12 +41,13 @@ class RouteFragment : Fragment() {
     private lateinit var mRootView: View
     private lateinit var mRouteViewModel: RouteViewModel
     private lateinit var mRouteFragmentViewModel: RouteFragmentViewModel
-    private var mRouteAdapter: RouteAdapter = RouteAdapter()
+    private var mRouteStopsAdapter: RouteStopsAdapter = RouteStopsAdapter()
+    private var mSubscribeStops = false
     private var mIgnoreTimer = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mRouteAdapter.context = this
+        mRouteStopsAdapter.context = this
 
         mRouteViewModel = ViewModelProviders.of(activity!!).get(RouteViewModel::class.java)
         mRouteFragmentViewModel = ViewModelProviders.of(this).get(RouteFragmentViewModel::class.java)
@@ -55,7 +58,7 @@ class RouteFragment : Fragment() {
         mRootView = inflater.inflate(R.layout.fragment_route, container, false)
 
         mRootView.recycler_view.layoutManager = LinearLayoutManager(activity)
-        mRootView.recycler_view.adapter = mRouteAdapter
+        mRootView.recycler_view.adapter = mRouteStopsAdapter
 
         mRootView.refresh_layout.isRefreshing = true
         mRootView.refresh_layout.setOnRefreshListener {
@@ -76,37 +79,55 @@ class RouteFragment : Fragment() {
     private fun subscribeUiChanges() {
         mIgnoreTimer = true
 
+        mRouteFragmentViewModel.getChildRoutes().observe(this, Observer<List<Route>> {
+            it?.let {
+                // TODO("Add Eta updater")
+                if (!mRouteFragmentViewModel.hasGetStopsFromRemote && it.isNotEmpty()) {
+                    mRouteFragmentViewModel.hasGetStopsFromRemote = true
+                    StopsRepo.getStopsFromRemote(it[0], false)
+                }
+                if (!mSubscribeStops && it.isNotEmpty()) {
+                    mSubscribeStops = true
+                    mRouteFragmentViewModel.subscribeStopsToRepo()
+                    subscribeStopsChanges()
+                }
+            }
+        })
+
+        mRouteViewModel.getLastUpdateTime().observe(this, Observer<Long> {
+            if (it != null) {
+                // Ignore the update for 1st time / on rotation
+                if (mIgnoreTimer) {
+                    mIgnoreTimer = false
+                } else {
+                    //Log.d("XXX", "time = $it")
+                    mRootView.refresh_layout.isRefreshing = true
+                    mRouteFragmentViewModel.updateAllEta(it)
+                }
+            }
+        })
+    }
+
+    private fun subscribeStopsChanges() {
         mRouteFragmentViewModel.getStops().observe(this, Observer<List<Stop>> {
             val size = it?.size?: 0
             val last = mRouteViewModel.getLastUpdateTime().value?: 0
             var count = 0
 
             it?.forEach { item ->
-                if(item.etaUpdateTime >= last)
+                if(item.etaUpdateTime >= 0L && item.etaUpdateTime >= last)
                     count++
             }
 
-            if (size == count || mRouteAdapter.dataSource.size != size) {
-                it?.let { mRouteAdapter.dataSource = it }
+            if (size == count || mRouteStopsAdapter.dataSource.size != size) {
+                it?.let { mRouteStopsAdapter.dataSource = it }
 
                 if (size == count)
                     mRootView.refresh_layout.isRefreshing = false
 
-                Log.d("XXX", "GoGo = $count")
+                Log.d("XXX", "[GoGo] $count $size ${mRouteStopsAdapter.dataSource.size}")
             } else {
-                Log.d("XXX", "Wait = $count")
-            }
-        })
-
-        mRouteViewModel.getLastUpdateTime().observe(this, Observer<Long> {
-//            Snackbar.make(constraintLayout, "Auto Refresh Ignore=$mIgnoreTimer", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-            // Ignore the update for 1st time / on rotation
-            if (mIgnoreTimer) {
-                mIgnoreTimer = false
-            } else {
-                mRootView.refresh_layout.isRefreshing = true
-                mRouteFragmentViewModel.updateAllEta()
+                //Log.d("XXX", "[Wait] = $count")
             }
         })
     }

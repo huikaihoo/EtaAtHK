@@ -15,17 +15,23 @@ data class Route(
         var routeKey: RouteKey,
         var direction: Long,
         var companyDetails: List<String>,               // store as json string
-        var specialCode: Long = -1L,
+        var specialCode: Long = -1L,                    // reserve
         var from: StringLang = StringLang(),            // store as json string
         var to: StringLang = StringLang(),              // store as json string
         var details: StringLang = StringLang(),         // store as json string
-        var path: StringLang = StringLang(),            // store as json string
+        var path: String = "",                          // reserve
         var info: Info = Info(),
         var eta: Boolean = false,
         var seq: Long = -1L,
         var infoBatchUpdate: Boolean = false,
         var infoUpdateTime: Long = 0L,
         var updateTime: Long = 0L) {
+
+    val boundCount: Long
+        get() = if (direction < 2L) 1L else direction
+
+    val childDirection: Long
+        get() = if (direction > 1L) 1L else direction
 
     fun getToByBound(): StringLang {
         return if (routeKey.variant > 0) getToByBound(routeKey.bound) else StringLang()

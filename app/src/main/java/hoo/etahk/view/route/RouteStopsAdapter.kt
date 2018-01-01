@@ -13,7 +13,7 @@ import hoo.etahk.view.base.BaseAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_stop.view.*
 
-class RouteAdapter : BaseAdapter<RouteFragment, Stop, RouteAdapter.ViewHolder>() {
+class RouteStopsAdapter : BaseAdapter<RouteFragment, Stop, RouteStopsAdapter.ViewHolder>() {
 
     override fun getItemViewId(): Int = R.layout.item_stop
 
@@ -35,11 +35,11 @@ class RouteAdapter : BaseAdapter<RouteFragment, Stop, RouteAdapter.ViewHolder>()
             // ETA Text Color
             var highlight = false
             if (position > 0) {
-                val prevEtaResults = dataSource[position-1].etaResults
+                val prevEtaResults = dataSource[position - 1].etaResults
                 val prevEtaTime = if (prevEtaResults.isNotEmpty()) prevEtaResults[0].etaTime else -1
                 val currEtaTime = if (etaResults.isNotEmpty()) etaResults[0].etaTime else -1
 
-                if (currEtaTime in 1..(prevEtaTime-1) || (prevEtaTime < 0L && currEtaTime > 0L))
+                if (currEtaTime in 1..(prevEtaTime - 1) || (prevEtaTime < 0L && currEtaTime > 0L))
                     highlight = true
             } else {
                 if (etaResults.isNotEmpty() && etaResults[0].valid && etaResults[0].getDiffInMinutes() <= Constants.SharePrefs.DEFAULT_HIGHLIGHT_B4_DEPARTURE)
@@ -68,9 +68,7 @@ class RouteAdapter : BaseAdapter<RouteFragment, Stop, RouteAdapter.ViewHolder>()
                 tv?.text = msg
             }
 
-            itemView.setOnClickListener { view ->
-                context?.updateEta(listOf(item))
-            }
+            itemView.setOnClickListener { context?.updateEta(listOf(item)) }
         }
     }
 }

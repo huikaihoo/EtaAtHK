@@ -1,8 +1,6 @@
 package hoo.etahk.remote.api
 
-import hoo.etahk.remote.response.KmbEtaRes
-import hoo.etahk.remote.response.KmbEtaRoutesRes
-import hoo.etahk.remote.response.KmbStopsRes
+import hoo.etahk.remote.response.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -11,12 +9,12 @@ import retrofit2.http.Url
 interface KmbApi {
 
     // Base Url = "http://search.kmb.hk/KMBWebSite/"
-//    @GET("Function/FunctionRequest.ashx?action=getRouteBound")
-//    fun getRouteBound(@Query("route") route: String): Call<KmbRouteBoundRes>
-//
-//    @GET("Function/FunctionRequest.ashx?action=getSpecialRoute")
-//    fun getSpecialRoute(@Query("route") route: String, @Query("bound") bound: String): Call<KmbSpecialRouteRes>
-//
+    @GET("Function/FunctionRequest.ashx?action=getRouteBound")
+    fun getRouteBound(@Query("route") route: String): Call<KmbRouteBoundRes>
+
+    @GET("Function/FunctionRequest.ashx?action=getSpecialRoute")
+    fun getBoundVariant(@Query("route") route: String, @Query("bound") bound: String): Call<KmbBoundVariantRes>
+
     @GET("Function/FunctionRequest.ashx?action=getStops")
     fun getStops(@Query("route") route: String = "",
                  @Query("bound") bound: String = "",

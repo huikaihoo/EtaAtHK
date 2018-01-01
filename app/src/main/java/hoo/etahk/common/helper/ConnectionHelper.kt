@@ -58,12 +58,15 @@ object ConnectionHelper: BaseConnection {
         }
     }
 
+    override fun getChildRoutes(parentRoute: Route) {
+        getConnection(parentRoute.routeKey.company)?.getChildRoutes(parentRoute)
+    }
+
+    override fun getStops(route: Route, needEtaUpdate: Boolean) {
+        getConnection(route.routeKey.company)?.getStops(route, needEtaUpdate)
+    }
+
     override fun updateEta(stop: Stop) {
         getConnection(stop.routeKey.company)?.updateEta(stop)
     }
-
-    override fun getStops(route: Route) {
-        getConnection(route.routeKey.company)?.getStops(route)
-    }
-
 }

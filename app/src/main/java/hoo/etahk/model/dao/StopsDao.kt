@@ -26,13 +26,30 @@ abstract class StopsDao {
                         variant: Long,
                         updateTime: Long): LiveData<List<Stop>>
 
+    @Query("SELECT * FROM stop " +
+            "WHERE company = :company " +
+            "AND routeNo = :routeNo " +
+            "AND bound = :bound " +
+            "AND variant = :variant " +
+            "AND updateTime >= :updateTime " +
+            "ORDER BY seq")
+    abstract fun selectOnce(company: String,
+                            routeNo: String,
+                            bound: Long,
+                            variant: Long,
+                            updateTime: Long): List<Stop>
+
     @Query("SELECT * FROM stop")
     abstract fun selectAll(): LiveData<List<Stop>>
 
-    // Insert / Update
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(stop: Stop)
+    // Insert / Update (single)
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    abstract fun insert(stop: Stop)
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun update(stop: Stop)
+
+    // Insert / Update (list)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract fun insert(stops: List<Stop>)
 
@@ -53,11 +70,8 @@ abstract class StopsDao {
     }
 
     // Delete
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun update(stop: Stop)
-
-    @Delete
-    abstract fun delete(stop: Stop)
+//    @Delete
+//    abstract fun delete(stop: Stop)
 
     @Query("DELETE FROM stop " +
             "WHERE company = :company " +
