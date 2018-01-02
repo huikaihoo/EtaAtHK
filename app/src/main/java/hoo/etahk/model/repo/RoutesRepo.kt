@@ -5,6 +5,7 @@ import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
+import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
@@ -38,9 +39,10 @@ object RoutesRepo {
     // Testing only
     fun insertRoute() {
         val route1 = Route(//id = 1,
-                routeKey = RouteKey("KMB", "101", 0L, 0L),
+                routeKey = RouteKey("CTB", "E23", 0L, 0L),
                 direction = 2,
-                companyDetails = listOf("KMB"),
+                companyDetails = listOf("CTB"),
+                info = Info(boundIds = listOf("E23--Airport_(Ground_Transportation_Centre)", "E23--Tsz_Wan_Shan_(South)")),
                 //info = Info(rdv="E23-TWS-1", bound="I", startSeq = 1L, endSeq = 31L),
                 from = StringLang("A", ""),
                 to = StringLang("B", ""))

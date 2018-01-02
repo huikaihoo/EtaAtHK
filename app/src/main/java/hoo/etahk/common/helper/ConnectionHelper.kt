@@ -69,4 +69,9 @@ object ConnectionHelper: BaseConnection {
     override fun updateEta(stop: Stop) {
         getConnection(stop.routeKey.company)?.updateEta(stop)
     }
+
+    override fun updateEta(stops: List<Stop>) {
+        if (stops.isNotEmpty())
+            getConnection(stops[0].routeKey.company)?.updateEta(stops)
+    }
 }

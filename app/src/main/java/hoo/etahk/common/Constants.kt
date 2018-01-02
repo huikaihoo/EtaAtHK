@@ -11,7 +11,8 @@ object Constants {
         NONE,
         LOADING,
         SUCCESS,
-        FAILED
+        FAILED,
+        NETWORK_ERROR
     }
 
     object Time {
@@ -25,11 +26,11 @@ object Constants {
         val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
 
         val DEFAULT_MAX_REQUESTS = 100
-        val DEFAULT_MAX_REQUESTS_PER_HOST = 4
+        val DEFAULT_MAX_REQUESTS_PER_HOST = 3
         val DEFAULT_MAX_RETRY_ON_FAILED = 1L
-        val DEFAULT_CONNECTION_TIMEOUT = 3500L
-        val DEFAULT_READ_TIMEOUT = 3000L
-        val DEFAULT_WRITE_TIMEOUT = 3000L
+        val DEFAULT_CONNECTION_TIMEOUT = 5000L
+        val DEFAULT_READ_TIMEOUT = 5000L
+        val DEFAULT_WRITE_TIMEOUT = 5000L
         val NWFB_API_PARAMETER_PLATFORM = "android"
         val NWFB_API_PARAMETER_APP_VERSION = "3.3.1"
     }
@@ -49,11 +50,20 @@ object Constants {
         val NWFB_URL = "http://mobile.nwstbus.com.hk/"
     }
 
+    object Route {
+        val NWFB_VARIANT_RECORD_SIZE = 10
+        val NWFB_VARIANT_RECORD_VARIANT = 0
+        val NWFB_VARIANT_RECORD_RDV = 2
+        val NWFB_VARIANT_RECORD_DETAILS = 3
+        val NWFB_VARIANT_RECORD_START_SEQ = 6
+        val NWFB_VARIANT_RECORD_END_SEQ = 7
+        val NWFB_VARIANT_RECORD_INFO_BOUND = 9
+    }
     object Stop {
         val NWFB_STOP_RECORD_SIZE = 14
         val NWFB_STOP_RECORD_RDV = 1
         val NWFB_STOP_RECORD_SEQ = 2
-        val NWFB_STOP_RECORD_STOPID = 3
+        val NWFB_STOP_RECORD_STOP_ID = 3
         val NWFB_STOP_RECORD_LATITUDE = 5
         val NWFB_STOP_RECORD_LONGITUDE = 6
         val NWFB_STOP_RECORD_DETAILS = 7

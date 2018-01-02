@@ -34,7 +34,7 @@ class RouteActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         mRouteViewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
-        mRouteViewModel.routeKey = RouteKey("KMB", "101", -1, -1)
+        mRouteViewModel.routeKey = RouteKey("CTB", "E23", -1, -1)
         mRouteViewModel.period = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH
 
         // Create the adapter that will return a fragment for each of the three
@@ -46,6 +46,9 @@ class RouteActivity : AppCompatActivity() {
 
         tabs.setupWithViewPager(container)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // TODO("Set Action Bar Title")
+        //supportActionBar?.setTitle()
         //container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         //tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
 
@@ -58,6 +61,19 @@ class RouteActivity : AppCompatActivity() {
         subscribeUiChanges()
     }
 
+    private fun setActionBarSubtitle(route: Route) {
+        if (supportActionBar?.subtitle.isNullOrBlank() ) {
+            val directionArrow = getString(
+                    when (route.direction) {
+                        0L -> R.string.arrow_circular
+                        1L -> R.string.arrow_one_way
+                        else -> R.string.arrow_two_ways
+                    })
+
+            supportActionBar?.subtitle = route.from.value + directionArrow + route.to.value
+        }
+    }
+
     private fun subscribeUiChanges() {
         mRouteViewModel.getRoute().observe(this, Observer<Route> {
             it?.let {
@@ -66,6 +82,7 @@ class RouteActivity : AppCompatActivity() {
                     RoutesRepo.getChildRoutesFromRemote(it)
                 }
                 mRoutePagerAdapter?.dataSource = it
+                setActionBarSubtitle(it)
             }
         })
     }

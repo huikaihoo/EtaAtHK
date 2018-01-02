@@ -39,7 +39,7 @@ open class BaseViewModel : ViewModel() {
                 timer!!.scheduleAtFixedRate(object : TimerTask() {
                     override fun run() {
                         Handler(Looper.getMainLooper()).post({
-                            lastUpdateTime.value = Utils.getCurrentTimestamp()
+                            lastUpdateTime.value = Utils.getCurrentTimestamp() - 1
                             Log.d(TAG, lastUpdateTime.value.toString())})
                     }
                 }, Time.ONE_SECOND_IN_MILLIS, periodInMillis)

@@ -23,6 +23,10 @@
     <!-- Common -->
     <string name="to">To\u0020</string>
     <string name="price_2dp" translatable="false">$%.2f</string>
+    <string name="arrow_circular" translatable="false">\u0020⟲\u0020</string>
+    <string name="arrow_one_way" translatable="false">\u0020→\u0020</string>
+    <string name="arrow_two_ways" translatable="false">\u0020⇄\u0020</string>
+
     <!-- Stop Item -->
     <string name="eta_msg_no_eta_service">No ETA Service</string>
     <string name="eta_msg_not_in_service_hours">Not in service hours</string>

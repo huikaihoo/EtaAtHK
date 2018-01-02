@@ -35,9 +35,8 @@ object StopsRepo {
     // ETA
     fun updateEta(stops: List<Stop>?) {
         launch(CommonPool) {
-            stops?.forEach { stop ->
-                ConnectionHelper.updateEta(stop)
-            }
+            if (stops != null && stops.isNotEmpty())
+                ConnectionHelper.updateEta(stops)
         }
     }
 

@@ -1,5 +1,6 @@
 package hoo.etahk.remote.connection
 
+import android.util.Log
 import com.mcxiaoke.koi.HASH
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -14,6 +15,10 @@ import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 import hoo.etahk.view.App
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +49,58 @@ object NwfbConnection: BaseConnection {
      * Get Child Routes
      *******************/
     override fun getChildRoutes(parentRoute: Route) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        parentRoute.info.boundIds.forEach { boundId ->
+            ConnectionHelper.nwfb.getBoundVariant(
+                    id = boundId,
+                    l = "0",
+                    syscode = getSystemCode())
+                    .enqueue(object : Callback<ResponseBody> {
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                            val t = Utils.getCurrentTimestamp()
+                            val responseStr = response.body()?.string()
+                            //Log.d(TAG, responseStr)
+
+                            if (!responseStr.isNullOrBlank()) {
+                                val routes = mutableListOf<Route>()
+                                val nwfbResponse = responseStr!!.split("<br>")
+
+                                nwfbResponse.forEach({
+                                    val records = it.split("(\\|\\|)|(\\*\\*\\*)".toRegex())
+                                    if(records.size >= Constants.Route.NWFB_VARIANT_RECORD_SIZE) {
+                                        routes.add(toChildRoute(parentRoute, records, t))
+                                    }
+                                    //Log.d(TAG, it)
+                                })
+
+                                //Log.d(TAG, AppHelper.gson.toJson(routes))
+                                AppHelper.db.childRoutesDao().insertOrUpdate(routes, t)
+                            }
+                        }
+                    })
+        }
+    }
+
+    private fun toChildRoute(parentRoute: Route, records: List<String>, t: Long): Route {
+        val infoBound = records[Constants.Route.NWFB_VARIANT_RECORD_INFO_BOUND].trim()
+        val bound = if (parentRoute.boundCount <= 1L || infoBound == "O") 1L else 2L
+        val from = if (bound == 1L) parentRoute.from else parentRoute.to
+        val to = if (bound == 1L) parentRoute.to else parentRoute.from
+
+        return Route(
+                routeKey = parentRoute.routeKey.copy(bound = bound, variant = records[Constants.Route.NWFB_VARIANT_RECORD_VARIANT].toLong()),
+                direction = parentRoute.childDirection,
+                companyDetails = parentRoute.companyDetails,
+                from = from,
+                to = to,
+                details = StringLang.newInstance(records[Constants.Route.NWFB_VARIANT_RECORD_DETAILS].trim()),
+                info = Info(rdv = records[Constants.Route.NWFB_VARIANT_RECORD_RDV].trim(),
+                        bound = infoBound,
+                        startSeq = records[Constants.Route.NWFB_VARIANT_RECORD_START_SEQ].toLong(),
+                        endSeq =  records[Constants.Route.NWFB_VARIANT_RECORD_END_SEQ].toLong()),
+                seq = parentRoute.seq,
+                updateTime = t
+        )
     }
 
     /***************
@@ -100,7 +156,7 @@ object NwfbConnection: BaseConnection {
                 fare = records[Constants.Stop.NWFB_STOP_RECORD_FARE].toDouble(),
                 info = Info(rdv = records[Constants.Stop.NWFB_STOP_RECORD_RDV].trim(),
                         bound = route.info.bound,
-                        stopId = records[Constants.Stop.NWFB_STOP_RECORD_STOPID].toInt().toString()),
+                        stopId = records[Constants.Stop.NWFB_STOP_RECORD_STOP_ID].toInt().toString()),
                 updateTime = t
         )
     }
@@ -108,6 +164,81 @@ object NwfbConnection: BaseConnection {
     /***************
      * Update ETA
      ***************/
+    override fun updateEta(stops: List<Stop>) {
+        val t = Utils.getCurrentTimestamp()
+
+        try {
+            runBlocking<Unit> {
+                val jobs = arrayListOf<Job>()
+
+                stops.forEach({ stop ->
+                    jobs += launch(CommonPool) {
+                        try {
+                            val response =
+                                    ConnectionHelper.nwfb.getEta(
+                                            stopid = stop.info.stopId,
+                                            service_no = stop.routeKey.routeNo,
+                                            removeRepeatedSuspend = "Y",
+                                            interval = "60",
+                                            l = "0",
+                                            bound = stop.info.bound,
+                                            stopseq = stop.seq.toString(),
+                                            rdv = stop.info.rdv,
+                                            showtime = "Y",
+                                            syscode = getSystemCode()).execute()
+
+                            if (response.isSuccessful) {
+                                var responseStr = response.body()?.string()
+                                //Log.d(TAG, responseStr)
+
+                                val etaResults = mutableListOf<EtaResult>()
+                                val msg = getInvalidMsg(responseStr ?: "")
+
+                                if (responseStr.isNullOrBlank() || !msg.isEmpty()) {
+                                    etaResults.add(toEtaResult(stop, msg))
+
+                                } else {
+                                    responseStr = responseStr!!.replace(".*\\|##\\|".toRegex(), "")
+                                    val nwfbResponse = responseStr.split("<br>")
+
+                                    nwfbResponse.forEach({
+                                        val records = it.split("(\\|\\|)|(\\|\\^\\|)".toRegex())
+                                        if(records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
+                                            etaResults.add(toEtaResult(records))
+                                        }
+                                        //Log.d(TAG, it)
+                                    })
+                                }
+
+                                if (!etaResults.isEmpty()) {
+                                    stop.etaStatus = Constants.EtaStatus.SUCCESS
+                                    stop.etaResults = etaResults
+                                    stop.etaUpdateTime = t
+                                    //Log.d(TAG, AppHelper.gson.toJson(stop.etaResults))
+                                } else {
+                                    stop.etaStatus = Constants.EtaStatus.FAILED
+                                    stop.etaUpdateTime = t
+                                }
+                            } else {
+                                stop.etaStatus = Constants.EtaStatus.FAILED
+                                stop.etaUpdateTime = t
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, e.toString())
+                            stop.etaStatus = Constants.EtaStatus.NETWORK_ERROR
+                            stop.etaUpdateTime = t
+                        }
+                    }
+                })
+                jobs.forEach { it.join() }
+            }
+
+            AppHelper.db.stopsDao().updateOnReplace(stops)
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
     override fun updateEta(stop: Stop) {
         ConnectionHelper.nwfb.getEta(
                 stopid = stop.info.stopId,

@@ -13,6 +13,10 @@ import hoo.etahk.model.json.StringLang
 import hoo.etahk.remote.response.KmbBoundVariantRes
 import hoo.etahk.remote.response.KmbEtaRes
 import hoo.etahk.remote.response.KmbStopsRes
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,17 +38,17 @@ object KmbConnection: BaseConnection {
                         override fun onResponse(call: Call<KmbBoundVariantRes>, response: Response<KmbBoundVariantRes>) {
                             val t = Utils.getCurrentTimestamp()
                             val kmbBoundVariantRes = response.body()
-                            Log.d(TAG, kmbBoundVariantRes.toString())
+                            //Log.d(TAG, kmbBoundVariantRes.toString())
 
                             if (kmbBoundVariantRes?.data?.routes != null && (kmbBoundVariantRes.data.routes).isNotEmpty()) {
                                 val routes = mutableListOf<Route>()
                                 (kmbBoundVariantRes.data.routes).forEach {
-                                    Log.d(TAG, "${it?.bound} == $bound")
+                                    //Log.d(TAG, "${it?.bound} == $bound")
                                     assert(it!!.bound!! == bound)
                                     routes.add(toChildRoute(parentRoute, it!!, t))
                                 }
 
-                                Log.d(TAG, AppHelper.gson.toJson(routes))
+                                //Log.d(TAG, AppHelper.gson.toJson(routes))
                                 AppHelper.db.childRoutesDao().insertOrUpdate(routes, t)
                             }
                         }
@@ -115,6 +119,63 @@ object KmbConnection: BaseConnection {
     /***************
      * Update ETA
      ***************/
+
+    override fun updateEta(stops: List<Stop>) {
+        val t = Utils.getCurrentTimestamp()
+
+        try {
+            runBlocking<Unit> {
+                val jobs = arrayListOf<Job>()
+
+                stops.forEach({ stop ->
+                    jobs += launch(CommonPool) {
+                        try {
+                            val response =
+                                    ConnectionHelper.kmbEta.getEta(
+                                            route = stop.routeKey.routeNo,
+                                            bound = stop.routeKey.bound.toString(),
+                                            stop = stop.info.stopId,
+                                            stop_seq = stop.seq.toString(),
+                                            serviceType = stop.routeKey.variant.toString(),
+                                            lang = "tc").execute()
+
+                            if (response.isSuccessful) {
+                                val kmbEtaRes = response.body()
+                                //Log.d(TAG, kmbEtaRes.toString())
+
+                                if (kmbEtaRes?.response != null && (kmbEtaRes.response).isNotEmpty()) {
+                                    val etaResults = mutableListOf<EtaResult>()
+                                    (kmbEtaRes.response).forEach {
+                                        etaResults.add(toEtaResult(stop, it))
+                                    }
+                                    stop.etaStatus = Constants.EtaStatus.SUCCESS
+                                    stop.etaResults = etaResults
+                                    stop.etaUpdateTime = t
+                                    //Log.d(TAG, AppHelper.gson.toJson(etaResults))
+                                } else {
+                                    stop.etaStatus = Constants.EtaStatus.FAILED
+                                    stop.etaUpdateTime = t
+                                }
+                            } else {
+                                stop.etaStatus = Constants.EtaStatus.FAILED
+                                stop.etaUpdateTime = t
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, e.toString())
+                            stop.etaStatus = Constants.EtaStatus.NETWORK_ERROR
+                            stop.etaUpdateTime = t
+                        }
+                    }
+                })
+                jobs.forEach { it.join() }
+            }
+
+            AppHelper.db.stopsDao().updateOnReplace(stops)
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
     override fun updateEta(stop: Stop) {
         ConnectionHelper.kmbEta.getEta(
                 route = stop.routeKey.routeNo,

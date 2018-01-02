@@ -46,7 +46,7 @@ object AppHelper {
             Constants.AppMode.DEV ->
                 OkHttpClient().newBuilder()
                         .addNetworkInterceptor(StethoInterceptor())
-                        .addInterceptor(RetryInterceptor(Constants.SharePrefs.DEFAULT_MAX_RETRY_ON_FAILED))
+                        //.addInterceptor(RetryInterceptor(Constants.SharePrefs.DEFAULT_MAX_RETRY_ON_FAILED))
                         .connectTimeout(Constants.SharePrefs.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                         .readTimeout(Constants.SharePrefs.DEFAULT_READ_TIMEOUT, TimeUnit.MILLISECONDS)
                         .writeTimeout(Constants.SharePrefs.DEFAULT_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -55,7 +55,7 @@ object AppHelper {
             else ->
                 OkHttpClient().newBuilder()
                         .addNetworkInterceptor(StethoInterceptor())
-                        .addInterceptor(RetryInterceptor(Constants.SharePrefs.DEFAULT_MAX_RETRY_ON_FAILED))
+                        //.addInterceptor(RetryInterceptor(Constants.SharePrefs.DEFAULT_MAX_RETRY_ON_FAILED))
                         .connectTimeout(Constants.SharePrefs.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                         .readTimeout(Constants.SharePrefs.DEFAULT_READ_TIMEOUT, TimeUnit.MILLISECONDS)
                         .writeTimeout(Constants.SharePrefs.DEFAULT_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)

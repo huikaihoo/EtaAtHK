@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_route.view.*
 class RouteFragment : Fragment() {
 
     companion object {
+        private val TAG = "RouteFragment"
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -84,7 +85,7 @@ class RouteFragment : Fragment() {
                 // TODO("Add Eta updater")
                 if (!mRouteFragmentViewModel.hasGetStopsFromRemote && it.isNotEmpty()) {
                     mRouteFragmentViewModel.hasGetStopsFromRemote = true
-                    StopsRepo.getStopsFromRemote(it[0], false)
+                    StopsRepo.getStopsFromRemote(it[0], true)
                 }
                 if (!mSubscribeStops && it.isNotEmpty()) {
                     mSubscribeStops = true
@@ -112,23 +113,25 @@ class RouteFragment : Fragment() {
         mRouteFragmentViewModel.getStops().observe(this, Observer<List<Stop>> {
             val size = it?.size?: 0
             val last = mRouteViewModel.getLastUpdateTime().value?: 0
-            var count = 0
+
+            var networkErrorCount = 0
+            var updatedCount = 0
 
             it?.forEach { item ->
+                if(item.etaStatus == Constants.EtaStatus.NETWORK_ERROR)
+                    networkErrorCount++
                 if(item.etaUpdateTime >= 0L && item.etaUpdateTime >= last)
-                    count++
+                    updatedCount++
             }
 
-            if (size == count || mRouteStopsAdapter.dataSource.size != size) {
-                it?.let { mRouteStopsAdapter.dataSource = it }
+            Log.d(TAG, "NE=$networkErrorCount U=$updatedCount T=$size")
 
-                if (size == count)
-                    mRootView.refresh_layout.isRefreshing = false
+            it?.let { mRouteStopsAdapter.dataSource = it }
 
-                Log.d("XXX", "[GoGo] $count $size ${mRouteStopsAdapter.dataSource.size}")
-            } else {
-                //Log.d("XXX", "[Wait] = $count")
-            }
+            if (size == updatedCount)
+                mRootView.refresh_layout.isRefreshing = false
+
+            // TODO ("Show Network Error Message based on Network Error")
         })
     }
 }

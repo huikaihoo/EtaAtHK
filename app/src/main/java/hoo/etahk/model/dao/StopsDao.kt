@@ -56,6 +56,9 @@ abstract class StopsDao {
     @Update(onConflict = OnConflictStrategy.IGNORE)
     abstract fun update(stops: List<Stop>)
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun updateOnReplace(stops: List<Stop>)
+
     @Transaction
     open fun insertOrUpdate(route: Route? = null, stops: List<Stop>, updateTime: Long? = null) {
         insert(stops)
