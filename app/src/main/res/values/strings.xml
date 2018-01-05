@@ -27,6 +27,27 @@
     <string name="arrow_one_way" translatable="false">\u0020→\u0020</string>
     <string name="arrow_two_ways" translatable="false">\u0020⇄\u0020</string>
 
+    <!-- Company -->
+    <string name="kmb">KMB</string>
+    <string name="lwb">LWB</string>
+    <string name="nwfb">NWFB</string>
+    <string name="ctb">CTB</string>
+    <string name="ntb">NTB</string>
+    <string name="tram">Tram</string>
+    <string name="mtr">MTR</string>
+
+    <!-- Route Type -->
+    <string name="all">All</string>
+    <string name="kln">KLN</string>
+    <string name="nt">NT</string>
+    <string name="kln_nt">KLN/NT</string>
+    <string name="hki">HK</string>
+    <string name="cross_harbour">Cross Harbour</string>
+    <string name="airport">Airport</string>
+    <string name="lantau">Lantau</string>
+    <string name="airport_lantau">Airport/Lantau</string>
+    <string name="overnight">Overnight</string>
+
     <!-- Stop Item -->
     <string name="eta_msg_no_eta_service">No ETA Service</string>
     <string name="eta_msg_not_in_service_hours">Not in service hours</string>

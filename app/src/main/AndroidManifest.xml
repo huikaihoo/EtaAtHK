@@ -52,13 +52,18 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".view.test.BvActivity"
-            android:label="@string/title_activity_bv">
+            android:label="@string/title_activity_bv" />
 
-        </activity>
         <activity
             android:name=".view.route.RouteActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".view.search.BusSearchActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.All">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

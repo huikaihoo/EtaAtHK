@@ -2,6 +2,28 @@
 <resources>
     <string name="app_name">ETA@HK</string>
 
+    <!-- Company -->
+    <string name="kmb">九巴</string>
+    <string name="lwb">龍運</string>
+    <string name="nwfb">新巴</string>
+    <string name="ctb">城巴</string>
+    <string name="ntb">嶼巴</string>
+    <string name="tram">電車</string>
+    <string name="mtr">港鐵</string>
+
+    <!-- Route Type -->
+    <string name="all">全部</string>
+    <string name="kln">九龍</string>
+    <string name="nt">新界</string>
+    <string name="kln_nt">九龍/新界</string>
+    <string name="hki">香港島</string>
+    <string name="cross_harbour">過海</string>
+    <string name="airport">機場</string>
+    <string name="lantau">大嶼山</string>
+    <string name="airport_lantau">機場/大嶼山</string>
+    <string name="overnight">通宵</string>
+
+    <!-- Stop Item -->
     <string name="eta_msg_no_eta_service">沒有到站時間服務</string>
     <string name="eta_msg_not_in_service_hours">服務時間已過</string>
 </resources>

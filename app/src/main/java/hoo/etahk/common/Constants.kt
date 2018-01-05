@@ -16,6 +16,7 @@ object Constants {
     }
 
     object Time {
+        val ANIMATION_TIME = 300L
         val ONE_SECOND_IN_MILLIS = 1000L
         val ONE_MINUTE_IN_SECONDS = 60L
         val ONE_DAY_IN_SECONDS = 86400L
@@ -41,6 +42,22 @@ object Constants {
         val NWFB = "NWFB"
         val CTB = "CTB"
         val MTR = "MTR"
+    }
+
+    object RouteType {
+        val BUS_ALL = -1L
+        val BUS_ALL_DAY = 0L
+        val BUS_KL_NT = 1L
+        val BUS_HKI = 2L
+        val BUS_CROSS_HARBOUR = 3L
+        val BUS_AIRPORT_LANTAU = 4L
+        val BUS_ALL_NIGHT = 10L
+        val BUS_KL_NT_NIGHT = 11L
+        val BUS_HKI_NIGHT = 12L
+        val BUS_CROSS_HARBOUR_NIGHT = 13L
+        val BUS_AIRPORT_LANTAU_NIGHT = 14L
+        val TRAM = 30L
+        val MTR = 40L
     }
 
     object Url {

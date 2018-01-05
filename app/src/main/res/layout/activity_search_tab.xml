@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="hoo.etahk.view.route.RouteActivity">
+    tools:context="hoo.etahk.view.search.BusSearchActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -31,8 +31,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabGravity="center"
-            app:tabMode="fixed"
+            app:tabMode="scrollable"
             app:tabIndicatorColor="@android:color/white"
             app:tabIndicatorHeight="@dimen/tab_indicator_height" />
 
