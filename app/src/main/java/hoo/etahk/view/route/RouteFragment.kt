@@ -13,18 +13,17 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
-import hoo.etahk.model.repo.StopsRepo
-import kotlinx.android.synthetic.main.fragment_route.view.*
+import kotlinx.android.synthetic.main.fragment_recycler.view.*
 
 class RouteFragment : Fragment() {
 
     companion object {
-        private val TAG = "RouteFragment"
+        private const val TAG = "RouteFragment"
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private val ARG_BOUND = "bound"
+        private const val ARG_BOUND = "bound"
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -56,7 +55,7 @@ class RouteFragment : Fragment() {
         if (mRouteFragmentViewModel.routeKey == null)
             mRouteFragmentViewModel.routeKey = mRouteViewModel.routeKey?.copy(bound = arguments!!.getLong(ARG_BOUND))
 
-        mRootView = inflater.inflate(R.layout.fragment_route, container, false)
+        mRootView = inflater.inflate(R.layout.fragment_recycler, container, false)
 
         mRootView.recycler_view.layoutManager = LinearLayoutManager(activity)
         mRootView.recycler_view.adapter = mRouteStopsAdapter
@@ -82,11 +81,7 @@ class RouteFragment : Fragment() {
 
         mRouteFragmentViewModel.getChildRoutes().observe(this, Observer<List<Route>> {
             it?.let {
-                // TODO("Add Eta updater")
-                if (!mRouteFragmentViewModel.hasGetStopsFromRemote && it.isNotEmpty()) {
-                    mRouteFragmentViewModel.hasGetStopsFromRemote = true
-                    StopsRepo.getStopsFromRemote(it[0], true)
-                }
+                mRouteFragmentViewModel.updateStops(it)
                 if (!mSubscribeStops && it.isNotEmpty()) {
                     mSubscribeStops = true
                     mRouteFragmentViewModel.subscribeStopsToRepo()

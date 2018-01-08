@@ -12,11 +12,18 @@ import kotlinx.coroutines.experimental.launch
 
 object RoutesRepo {
 
-    private val TAG = "RoutesRepo"
+    private const val TAG = "RoutesRepo"
 
-    // Parents routes by Company
-    fun getParentRoutes(company: String): LiveData<List<Route>> {
-        return AppHelper.db.parentRoutesDao().select(company)
+    // Parents routes by type codes
+    fun getParentRoutes(typeCodes: List<Long>): LiveData<List<Route>> {
+        return AppHelper.db.parentRoutesDao().select(typeCodes)
+    }
+
+    fun updateParentRoutes() {
+        launch(CommonPool) {
+            // TODO("Only get from remote when data outdated")
+            ConnectionHelper.getParentRoutes()
+        }
     }
 
     // Parents route by Company and routeNo
@@ -25,11 +32,10 @@ object RoutesRepo {
     }
 
     fun getChildRoutes(company: String, routeNo: String, bound: Long): LiveData<List<Route>> {
-        // TODO("Only get data not expired")
-        return AppHelper.db.childRoutesDao().select(company, routeNo, bound, 0)
+        return AppHelper.db.childRoutesDao().select(company, routeNo, bound)
     }
 
-    fun getChildRoutesFromRemote(parentRoute: Route) {
+    fun updateChildRoutes(parentRoute: Route) {
         launch(CommonPool) {
             // TODO("Only get from remote when data outdated")
             ConnectionHelper.getChildRoutes(parentRoute)

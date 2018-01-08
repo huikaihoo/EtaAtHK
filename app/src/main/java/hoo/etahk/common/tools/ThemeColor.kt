@@ -1,13 +1,13 @@
-package hoo.etahk.common.view
+package hoo.etahk.common.tools
 
 import hoo.etahk.view.App
 
 class ThemeColor{
 
     constructor(_colorPrimaryResId: Int, _colorPrimaryDarkResId: Int, _colorPrimaryAccentResId: Int) {
-        this.colorPrimaryResId = _colorPrimaryResId
-        this.colorPrimaryDarkResId = _colorPrimaryDarkResId
-        this.colorPrimaryAccentResId = _colorPrimaryAccentResId
+        colorPrimaryResId = _colorPrimaryResId
+        colorPrimaryDarkResId = _colorPrimaryDarkResId
+        colorPrimaryAccentResId = _colorPrimaryAccentResId
     }
 
     var colorPrimaryResId: Int

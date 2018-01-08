@@ -18,26 +18,22 @@ abstract class StopsDao {
             "AND routeNo = :routeNo " +
             "AND bound = :bound " +
             "AND variant = :variant " +
-            "AND updateTime >= :updateTime " +
             "ORDER BY seq")
     abstract fun select(company: String,
                         routeNo: String,
                         bound: Long,
-                        variant: Long,
-                        updateTime: Long): LiveData<List<Stop>>
+                        variant: Long): LiveData<List<Stop>>
 
-    @Query("SELECT * FROM stop " +
-            "WHERE company = :company " +
-            "AND routeNo = :routeNo " +
-            "AND bound = :bound " +
-            "AND variant = :variant " +
-            "AND updateTime >= :updateTime " +
-            "ORDER BY seq")
-    abstract fun selectOnce(company: String,
-                            routeNo: String,
-                            bound: Long,
-                            variant: Long,
-                            updateTime: Long): List<Stop>
+//    @Query("SELECT * FROM stop " +
+//            "WHERE company = :company " +
+//            "AND routeNo = :routeNo " +
+//            "AND bound = :bound " +
+//            "AND variant = :variant " +
+//            "ORDER BY seq")
+//    abstract fun selectOnce(company: String,
+//                            routeNo: String,
+//                            bound: Long,
+//                            variant: Long): List<Stop>
 
     @Query("SELECT * FROM stop")
     abstract fun selectAll(): LiveData<List<Stop>>

@@ -3,9 +3,9 @@ package hoo.etahk.view.followed
 import android.arch.lifecycle.LiveData
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.repo.StopsRepo
-import hoo.etahk.view.base.BaseViewModel
+import hoo.etahk.view.base.TimerViewModel
 
-class FollowedViewModel : BaseViewModel() {
+class FollowedViewModel : TimerViewModel() {
     private var mFollowedStops: LiveData<List<Stop>>? = null
 
     init {

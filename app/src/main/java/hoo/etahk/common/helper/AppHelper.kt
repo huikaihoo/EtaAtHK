@@ -13,7 +13,6 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 
 object AppHelper {
@@ -47,18 +46,18 @@ object AppHelper {
                 OkHttpClient().newBuilder()
                         .addNetworkInterceptor(StethoInterceptor())
                         //.addInterceptor(RetryInterceptor(Constants.SharePrefs.DEFAULT_MAX_RETRY_ON_FAILED))
-                        .connectTimeout(Constants.SharePrefs.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
-                        .readTimeout(Constants.SharePrefs.DEFAULT_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-                        .writeTimeout(Constants.SharePrefs.DEFAULT_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+                        //.connectTimeout(Constants.SharePrefs.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
+                        //.readTimeout(Constants.SharePrefs.DEFAULT_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                        //.writeTimeout(Constants.SharePrefs.DEFAULT_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
                         .dispatcher(dispatcher)
                         .build()
             else ->
                 OkHttpClient().newBuilder()
                         .addNetworkInterceptor(StethoInterceptor())
                         //.addInterceptor(RetryInterceptor(Constants.SharePrefs.DEFAULT_MAX_RETRY_ON_FAILED))
-                        .connectTimeout(Constants.SharePrefs.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
-                        .readTimeout(Constants.SharePrefs.DEFAULT_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-                        .writeTimeout(Constants.SharePrefs.DEFAULT_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+                        //.connectTimeout(Constants.SharePrefs.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
+                        //.readTimeout(Constants.SharePrefs.DEFAULT_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                        //.writeTimeout(Constants.SharePrefs.DEFAULT_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
                         .dispatcher(dispatcher)
                         .build()
         }
@@ -70,7 +69,7 @@ object AppHelper {
     class RetryInterceptor(var maxRetry: Long) : Interceptor {
 
         companion object {
-            private val TAG = "RetryIntercepter"
+            private const val TAG = "RetryIntercepter"
         }
 
         private var retryCnt = 0L

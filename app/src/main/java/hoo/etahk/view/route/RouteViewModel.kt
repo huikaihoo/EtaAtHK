@@ -4,12 +4,11 @@ import android.arch.lifecycle.LiveData
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.repo.RoutesRepo
-import hoo.etahk.view.base.BaseViewModel
+import hoo.etahk.view.base.TimerViewModel
 
-class RouteViewModel: BaseViewModel() {
-    private var mRoute: LiveData<Route>? = null
-
-    var hasGetChildRouteFromRemote = false
+class RouteViewModel: TimerViewModel() {
+    private var mParentRoute: LiveData<Route>? = null
+    private var hasUpdateChildRoutes = false
 
     var routeKey: RouteKey? = null
         set(value) {
@@ -22,11 +21,18 @@ class RouteViewModel: BaseViewModel() {
         RoutesRepo.insertRoute()
     }
 
-    fun getRoute(): LiveData<Route> {
-        return mRoute!!
+    fun getParentRoute(): LiveData<Route> {
+        return mParentRoute!!
+    }
+
+    fun updateChildRoutes(parentRoute: Route) {
+        if (!hasUpdateChildRoutes) {
+            hasUpdateChildRoutes = true
+            RoutesRepo.updateChildRoutes(parentRoute)
+        }
     }
 
     private fun subscribeToRepo() {
-        mRoute = RoutesRepo.getParentRoute(routeKey!!.company, routeKey!!.routeNo)
+        mParentRoute = RoutesRepo.getParentRoute(routeKey!!.company, routeKey!!.routeNo)
     }
 }

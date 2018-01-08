@@ -20,17 +20,15 @@ abstract class ChildRoutesDao {
             "AND routeNo = :routeNo " +
             "AND bound = :bound " +
             "AND variant > 0 " +
-            "AND updateTime >= :updateTime " +
             "ORDER BY variant")
-    abstract fun select(company: String, routeNo: String, bound: Long, updateTime: Long): LiveData<List<Route>>
+    abstract fun select(company: String, routeNo: String, bound: Long): LiveData<List<Route>>
 
     @Query("SELECT * FROM route " +
             "WHERE company = :company " +
             "AND routeNo = :routeNo " +
             "AND bound = :bound " +
-            "AND variant = :variant " +
-            "AND updateTime >= :updateTime")
-    abstract fun select(company: String, routeNo: String, bound: Long, variant: Long, updateTime: Long): LiveData<Route>
+            "AND variant = :variant")
+    abstract fun select(company: String, routeNo: String, bound: Long, variant: Long): LiveData<Route>
 
     // Insert / Update (single)
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -41,10 +39,10 @@ abstract class ChildRoutesDao {
 
     // Insert / Update (list)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract fun insert(route: List<Route>)
+    abstract fun insert(routes: List<Route>)
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
-    abstract fun update(route: List<Route>)
+    abstract fun update(routes: List<Route>)
 
     @Transaction
     open fun insertOrUpdate(routes: List<Route>, updateTime: Long? = null) {

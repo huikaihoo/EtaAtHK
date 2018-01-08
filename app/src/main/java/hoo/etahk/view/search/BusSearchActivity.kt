@@ -19,21 +19,20 @@ import android.view.WindowManager
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.RouteType
-import hoo.etahk.common.view.ThemeColor
+import hoo.etahk.common.tools.ThemeColor
 import kotlinx.android.synthetic.main.activity_search_nav_tab.*
 import kotlinx.android.synthetic.main.activity_search_tab.*
-
-
-
 
 class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
-        private val TAG = "BusSearchActivity"
-        private val ARG_SELECTED_TAB = "selected_tab"
+        private const val TAG = "BusSearchActivity"
+        private const val ARG_SELECTED_TAB = "selected_tab"
+
+        val availableIndices = listOf(0, 1, 2, 3, 4, 5)
 
         val searchList = listOf(
-                listOf(RouteType.BUS_ALL),
+                listOf(RouteType.NONE),
                 listOf(RouteType.BUS_KL_NT, RouteType.BUS_KL_NT_NIGHT),
                 listOf(RouteType.BUS_HKI, RouteType.BUS_HKI_NIGHT),
                 listOf(RouteType.BUS_CROSS_HARBOUR, RouteType.BUS_CROSS_HARBOUR_NIGHT),
@@ -74,6 +73,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         setSupportActionBar(toolbar)
 
         mBusSearchViewModel = ViewModelProviders.of(this).get(BusSearchViewModel::class.java)
+        mBusSearchViewModel.updateParentRoutes()
 
         if (mBusSearchViewModel.selectedTabPosition == -1)
             mBusSearchViewModel.selectedTabPosition = 0 // TODO(" Pass argument to Activity to set the default open tab")

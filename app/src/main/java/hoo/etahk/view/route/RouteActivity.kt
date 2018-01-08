@@ -11,7 +11,6 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
-import hoo.etahk.model.repo.RoutesRepo
 import kotlinx.android.synthetic.main.activity_route.*
 
 class RouteActivity : AppCompatActivity() {
@@ -75,12 +74,9 @@ class RouteActivity : AppCompatActivity() {
     }
 
     private fun subscribeUiChanges() {
-        mRouteViewModel.getRoute().observe(this, Observer<Route> {
+        mRouteViewModel.getParentRoute().observe(this, Observer<Route> {
             it?.let {
-                if (!mRouteViewModel.hasGetChildRouteFromRemote) {
-                    mRouteViewModel.hasGetChildRouteFromRemote = true
-                    RoutesRepo.getChildRoutesFromRemote(it)
-                }
+                mRouteViewModel.updateChildRoutes(it)
                 mRoutePagerAdapter?.dataSource = it
                 setActionBarSubtitle(it)
             }

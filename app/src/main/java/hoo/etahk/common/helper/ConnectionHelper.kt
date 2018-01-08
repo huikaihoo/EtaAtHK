@@ -4,9 +4,11 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
+import hoo.etahk.remote.api.GovApi
 import hoo.etahk.remote.api.KmbApi
 import hoo.etahk.remote.api.NwfbApi
 import hoo.etahk.remote.connection.BaseConnection
+import hoo.etahk.remote.connection.GovConnection
 import hoo.etahk.remote.connection.KmbConnection
 import hoo.etahk.remote.connection.NwfbConnection
 import retrofit2.Retrofit
@@ -17,6 +19,7 @@ object ConnectionHelper: BaseConnection {
     lateinit var kmbEta: KmbApi private set
     lateinit var kmbEtaFeed: KmbApi private set
     lateinit var nwfb: NwfbApi private set
+    lateinit var gov: GovApi private set
 
     fun init() {
         kmb = Retrofit.Builder()
@@ -46,6 +49,13 @@ object ConnectionHelper: BaseConnection {
                 //.addConverterFactory(GsonConverterFactory.create(AppHelper.gson))
                 .build()
                 .create(NwfbApi::class.java)
+
+        gov = Retrofit.Builder()
+                .client(AppHelper.okHttp)
+                .baseUrl(Constants.Url.GOV_URL)
+                //.addConverterFactory(GsonConverterFactory.create(AppHelper.gson))
+                .build()
+                .create(GovApi::class.java)
     }
 
     private fun getConnection(company: String): BaseConnection? {
@@ -56,6 +66,10 @@ object ConnectionHelper: BaseConnection {
             Company.CTB -> NwfbConnection
             else -> null
         }
+    }
+
+    override fun getParentRoutes() {
+        GovConnection.getParentRoutes()
     }
 
     override fun getChildRoutes(parentRoute: Route) {

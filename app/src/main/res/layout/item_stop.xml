@@ -16,7 +16,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
         <TextView
@@ -25,16 +24,14 @@
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp" />
+            android:layout_marginEnd="8dp" />
 
 
         <TextView
             android:id="@+id/fare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp" />
+            android:layout_marginEnd="8dp" />
 
     </LinearLayout>
 
@@ -46,11 +43,9 @@
         android:gravity="end"
         android:layout_gravity="end"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/ll_stop_name_fare"
-        android:layout_toRightOf="@+id/ll_stop_name_fare"
         android:ellipsize="end"
         android:maxLines="1" />
 
@@ -60,8 +55,7 @@
         android:layout_below="@id/eta_0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentEnd="true">
 
         <TextView
             android:id="@+id/eta_1"
@@ -86,12 +80,9 @@
         android:layout_below="@id/ll_stop_name_fare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@+id/rl_eta_more"
-        android:layout_toLeftOf="@+id/rl_eta_more"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:ellipsize="end"
         android:maxLines="2" />
 

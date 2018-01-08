@@ -1,11 +1,8 @@
 package hoo.etahk.common
 
 object Constants {
-    enum class AppMode {
-        DEV,
-        BETA,
-        RELEASE
-    }
+
+    const val PACKAGE_NAME = "hoo.etahk"
 
     enum class EtaStatus {
         NONE,
@@ -15,91 +12,116 @@ object Constants {
         NETWORK_ERROR
     }
 
+    object AppMode {
+        const val DEV = 0L
+        const val BETA = 1L
+        const val RELEASE = 2L
+    }
+
     object Time {
-        val ANIMATION_TIME = 300L
-        val ONE_SECOND_IN_MILLIS = 1000L
-        val ONE_MINUTE_IN_SECONDS = 60L
-        val ONE_DAY_IN_SECONDS = 86400L
+        const val ANIMATION_TIME = 300L
+        const val ONE_SECOND_IN_MILLIS = 1000L
+        const val ONE_MINUTE_IN_SECONDS = 60L
+        const val ONE_DAY_IN_SECONDS = 86400L
     }
 
     object SharePrefs {
-        val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
-        val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
+        const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
+        const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
 
-        val DEFAULT_MAX_REQUESTS = 100
-        val DEFAULT_MAX_REQUESTS_PER_HOST = 3
-        val DEFAULT_MAX_RETRY_ON_FAILED = 1L
-        val DEFAULT_CONNECTION_TIMEOUT = 5000L
-        val DEFAULT_READ_TIMEOUT = 5000L
-        val DEFAULT_WRITE_TIMEOUT = 5000L
-        val NWFB_API_PARAMETER_PLATFORM = "android"
-        val NWFB_API_PARAMETER_APP_VERSION = "3.3.1"
+        const val DEFAULT_MAX_REQUESTS = 100
+        const val DEFAULT_MAX_REQUESTS_PER_HOST = 3
+        const val DEFAULT_MAX_RETRY_ON_FAILED = 1L
+        const val DEFAULT_CONNECTION_TIMEOUT = 5000L
+        const val DEFAULT_READ_TIMEOUT = 5000L
+        const val DEFAULT_WRITE_TIMEOUT = 5000L
+        const val NWFB_API_PARAMETER_PLATFORM = "android"
+        const val NWFB_API_PARAMETER_APP_VERSION = "3.3.1"
+        const val GOV_API_PARAMETER_PLATFORM = "android"
+        const val GOV_API_PARAMETER_APP_VERSION = "3.6"
+        const val GOV_API_PARAMETER_COMPANY_ALL_BUS = "-1"
+        const val GOV_API_PARAMETER_COMPANY_ALL_BUS_MINIBUS = "0"
     }
 
     object Company {
-        val KMB = "KMB"
-        val LWB = "LWB"
-        val NWFB = "NWFB"
-        val CTB = "CTB"
-        val MTR = "MTR"
+        // Support ETA (Bus)
+        const val KMB = "KMB"
+        const val LWB = "LWB"
+        const val NWFB = "NWFB"
+        const val CTB = "CTB"
+        const val NLB = "NLB"
+        // Not Support ETA (Bus)
+        const val DB = "DB"
+        const val PI = "PI"
+        const val LRT_FEEDER = "LRTFeeder"
+        const val MTR = "MTR"
     }
 
     object RouteType {
-        val BUS_ALL = -1L
-        val BUS_ALL_DAY = 0L
-        val BUS_KL_NT = 1L
-        val BUS_HKI = 2L
-        val BUS_CROSS_HARBOUR = 3L
-        val BUS_AIRPORT_LANTAU = 4L
-        val BUS_ALL_NIGHT = 10L
-        val BUS_KL_NT_NIGHT = 11L
-        val BUS_HKI_NIGHT = 12L
-        val BUS_CROSS_HARBOUR_NIGHT = 13L
-        val BUS_AIRPORT_LANTAU_NIGHT = 14L
-        val TRAM = 30L
-        val MTR = 40L
+        const val NONE = -1L
+        const val BUS_KL_NT = 1L
+        const val BUS_HKI = 2L
+        const val BUS_CROSS_HARBOUR = 3L
+        const val BUS_AIRPORT_LANTAU = 4L
+        const val BUS_KL_NT_NIGHT = 11L
+        const val BUS_HKI_NIGHT = 12L
+        const val BUS_CROSS_HARBOUR_NIGHT = 13L
+        const val BUS_AIRPORT_LANTAU_NIGHT = 14L
+        const val TRAM = 30L
+        const val MTR = 100L
     }
 
     object Url {
-        val KMB_URL = "http://search.kmb.hk/KMBWebSite/"
-        val KMB_ETA_URL = "http://etav3.kmb.hk/"
-        val KMB_ETA_FEED_URL = "http://etadatafeed.kmb.hk:1933/"
-        val NWFB_URL = "http://mobile.nwstbus.com.hk/"
+        const val KMB_URL = "http://search.kmb.hk/KMBWebSite/"
+        const val KMB_ETA_URL = "http://etav3.kmb.hk/"
+        const val KMB_ETA_FEED_URL = "http://etadatafeed.kmb.hk:1933/"
+        const val NWFB_URL = "http://mobile.nwstbus.com.hk/"
+        const val GOV_URL = "http://app1.hketransport.td.gov.hk/"
     }
 
     object Route {
-        val NWFB_VARIANT_RECORD_SIZE = 10
-        val NWFB_VARIANT_RECORD_VARIANT = 0
-        val NWFB_VARIANT_RECORD_RDV = 2
-        val NWFB_VARIANT_RECORD_DETAILS = 3
-        val NWFB_VARIANT_RECORD_START_SEQ = 6
-        val NWFB_VARIANT_RECORD_END_SEQ = 7
-        val NWFB_VARIANT_RECORD_INFO_BOUND = 9
+        const val GOV_ROUTE_RECORD_SIZE = 16
+        const val GOV_ROUTE_RECORD_ROUTE_NO = 1
+        const val GOV_ROUTE_RECORD_FROM = 2
+        const val GOV_ROUTE_RECORD_TO = 3
+        const val GOV_ROUTE_RECORD_BOUND_COUNT = 6
+        const val GOV_ROUTE_RECORD_CIRCULAR = 7
+        const val GOV_ROUTE_RECORD_SPECIAL = 9
+        const val GOV_ROUTE_RECORD_FARE = 11
+        const val GOV_ROUTE_RECORD_COMPANIES = 15
+
+        const val NWFB_VARIANT_RECORD_SIZE = 10
+        const val NWFB_VARIANT_RECORD_VARIANT = 0
+        const val NWFB_VARIANT_RECORD_RDV = 2
+        const val NWFB_VARIANT_RECORD_DETAILS = 3
+        const val NWFB_VARIANT_RECORD_START_SEQ = 6
+        const val NWFB_VARIANT_RECORD_END_SEQ = 7
+        const val NWFB_VARIANT_RECORD_INFO_BOUND = 9
     }
     object Stop {
-        val NWFB_STOP_RECORD_SIZE = 14
-        val NWFB_STOP_RECORD_RDV = 1
-        val NWFB_STOP_RECORD_SEQ = 2
-        val NWFB_STOP_RECORD_STOP_ID = 3
-        val NWFB_STOP_RECORD_LATITUDE = 5
-        val NWFB_STOP_RECORD_LONGITUDE = 6
-        val NWFB_STOP_RECORD_DETAILS = 7
-        val NWFB_STOP_RECORD_TO = 8
-        val NWFB_STOP_RECORD_FARE = 10
+        const val NWFB_STOP_RECORD_SIZE = 14
+        const val NWFB_STOP_RECORD_RDV = 1
+        const val NWFB_STOP_RECORD_SEQ = 2
+        const val NWFB_STOP_RECORD_STOP_ID = 3
+        const val NWFB_STOP_RECORD_LATITUDE = 5
+        const val NWFB_STOP_RECORD_LONGITUDE = 6
+        const val NWFB_STOP_RECORD_DETAILS = 7
+        const val NWFB_STOP_RECORD_TO = 8
+        const val NWFB_STOP_RECORD_FARE = 10
     }
 
     object Eta {
-        val NWFB_ETA_RECORD_SIZE = 31
-        val NWFB_ETA_RECORD_COMPANY = 0
-        val NWFB_ETA_RECORD_DISTANCE = 13
-        val NWFB_ETA_RECORD_ETA_TIME = 16
-        val NWFB_ETA_RECORD_MSG = 26
+        const val NWFB_ETA_RECORD_SIZE = 31
+        const val NWFB_ETA_RECORD_COMPANY = 0
+        const val NWFB_ETA_RECORD_DISTANCE = 13
+        const val NWFB_ETA_RECORD_ETA_TIME = 16
+        const val NWFB_ETA_RECORD_MSG = 26
     }
 
     // Share Preferences Key
     object Prefs {
-        val APP_MODE = "app_mode"
-        val LANG = "lang"
+        const val APP_MODE = "app_mode"
+        const val LANG = "lang"
     }
 }
 

@@ -12,7 +12,7 @@ object SharedPrefsHelper {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     }
 
-    fun getAppMode(): Constants.AppMode {
+    fun getAppMode(): Long {
         return when (getString(Constants.Prefs.APP_MODE, "")) {
             "dev" -> Constants.AppMode.DEV
             "beta" -> Constants.AppMode.BETA

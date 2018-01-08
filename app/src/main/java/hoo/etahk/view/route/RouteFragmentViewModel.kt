@@ -12,8 +12,7 @@ class RouteFragmentViewModel : ViewModel() {
     private var mChildRoutes: LiveData<List<Route>>? = null
     private var mStops: LiveData<List<Stop>>? = null
     private var mlastUpdateEtaTime = 0L
-
-    var hasGetStopsFromRemote = false
+    private var hasUpdateStops = false
 
     var routeKey: RouteKey? = null
         set(value) {
@@ -30,6 +29,13 @@ class RouteFragmentViewModel : ViewModel() {
         return mStops!!
     }
 
+    fun updateStops(childRoutes: List<Route>, needEtaUpdate: Boolean = true) {
+        if (!hasUpdateStops && childRoutes.isNotEmpty()) {
+            hasUpdateStops = true
+            StopsRepo.updateStops(childRoutes[0], needEtaUpdate)
+        }
+    }
+
     fun updateEta(stops: List<Stop>) {
         StopsRepo.updateEta(stops)
     }
@@ -44,7 +50,6 @@ class RouteFragmentViewModel : ViewModel() {
 
     private fun subscribeChildRoutesToRepo() {
         mChildRoutes = RoutesRepo.getChildRoutes(routeKey!!.company, routeKey!!.routeNo, routeKey!!.bound)
-        //mStops = StopsRepo.getStops()
     }
 
     fun subscribeStopsToRepo() {

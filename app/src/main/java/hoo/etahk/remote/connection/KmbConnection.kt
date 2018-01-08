@@ -23,7 +23,14 @@ import retrofit2.Response
 
 object KmbConnection: BaseConnection {
 
-    private val TAG = "KmbConnection"
+    private const val TAG = "KmbConnection"
+
+    /********************
+     * Get Parent Routes
+     ********************/
+    override fun getParentRoutes() {
+        return
+    }
 
     /*******************
      * Get Child Routes
@@ -61,11 +68,13 @@ object KmbConnection: BaseConnection {
         return Route(
                 routeKey = parentRoute.routeKey.copy(bound = route.bound!!, variant = route.serviceType?.trim()?.toLong()?: 1),
                 direction = parentRoute.childDirection,
+                specialCode = parentRoute.specialCode,
                 companyDetails = parentRoute.companyDetails,
                 from = StringLang(route.originChi?: "", route.originEng?: ""),
                 to = StringLang(route.destinationChi?: "", route.destinationEng?: ""),
                 details = StringLang(route.descChi?: "", route.descEng?: ""),
                 seq = parentRoute.seq,
+                typeSeq = parentRoute.typeSeq,
                 updateTime = t
         )
     }

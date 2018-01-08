@@ -25,24 +25,27 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-
 object NwfbConnection: BaseConnection {
 
-    private val TAG = "BaseConnection"
+    private const val TAG = "BaseConnection"
 
     /***************
      * Shared
      ***************/
     fun getSystemCode(): String {
-        var randomInt = Integer.toString(Random().nextInt(1000))
-        while (randomInt.length < 4) {
-            randomInt += "0"
-        }
-
+        val random = String.format("%04d", Random().nextInt(1000))
         var timestamp = Utils.getCurrentTimestamp().toString()
+
         timestamp = timestamp.substring(timestamp.length - 6)
 
-        return timestamp + randomInt + HASH.md5(timestamp + randomInt + "firstbusmwymwy")
+        return timestamp + random + HASH.md5(timestamp + random + "firstbusmwymwy")
+    }
+
+    /********************
+     * Get Parent Routes
+     ********************/
+    override fun getParentRoutes() {
+        return
     }
 
     /*******************
@@ -90,6 +93,7 @@ object NwfbConnection: BaseConnection {
         return Route(
                 routeKey = parentRoute.routeKey.copy(bound = bound, variant = records[Constants.Route.NWFB_VARIANT_RECORD_VARIANT].toLong()),
                 direction = parentRoute.childDirection,
+                specialCode = parentRoute.specialCode,
                 companyDetails = parentRoute.companyDetails,
                 from = from,
                 to = to,
@@ -99,6 +103,7 @@ object NwfbConnection: BaseConnection {
                         startSeq = records[Constants.Route.NWFB_VARIANT_RECORD_START_SEQ].toLong(),
                         endSeq =  records[Constants.Route.NWFB_VARIANT_RECORD_END_SEQ].toLong()),
                 seq = parentRoute.seq,
+                typeSeq = parentRoute.typeSeq,
                 updateTime = t
         )
     }

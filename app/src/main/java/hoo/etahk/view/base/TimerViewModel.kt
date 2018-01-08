@@ -10,10 +10,10 @@ import hoo.etahk.common.Constants.Time
 import hoo.etahk.common.Utils
 import java.util.*
 
-open class BaseViewModel : ViewModel() {
+open class TimerViewModel : ViewModel() {
 
     companion object {
-        private val TAG = "BaseViewModel"
+        private const val TAG = "TimerViewModel"
     }
 
     private val lastUpdateTime = MutableLiveData<Long>()

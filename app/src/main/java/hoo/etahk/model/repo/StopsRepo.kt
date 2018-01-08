@@ -10,25 +10,21 @@ import kotlinx.coroutines.experimental.launch
 
 object StopsRepo {
 
-    private val TAG = "StopsRepo"
+    private const val TAG = "StopsRepo"
 
     // Stops by RouteKey
     fun getStops(route: Route): LiveData<List<Stop>> {
-        // TODO("Only get data not expired")
         return AppHelper.db.stopsDao().select(
                 route.routeKey.company,
                 route.routeKey.routeNo,
                 route.routeKey.bound,
-                route.routeKey.variant,
-                0)
+                route.routeKey.variant)
     }
 
-    fun getStopsFromRemote(route: Route, needEtaUpdate: Boolean){
+    fun updateStops(route: Route, needEtaUpdate: Boolean){
         launch(CommonPool) {
             // TODO("Only get from remote when data outdated")
             ConnectionHelper.getStops(route, needEtaUpdate)
-            // if data is not outdated
-            // updateEta(ListOfStops)
         }
     }
 

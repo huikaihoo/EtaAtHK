@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import android.util.TypedValue
 import com.google.android.gms.maps.model.LatLng
+import hoo.etahk.view.App
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
 import java.text.SimpleDateFormat
@@ -29,6 +30,14 @@ object Utils {
         val value = TypedValue()
         context.theme.resolveAttribute(resId, value, true)
         return value.data
+    }
+
+    fun getStringResourceByName(name: String): String {
+        val resId = App.instance.applicationContext.resources.getIdentifier(name, "string", App.instance.packageName)
+        return when (resId) {
+            0 -> ""
+            else -> App.instance.getString(resId)
+        }
     }
 
     /**

@@ -8,14 +8,18 @@ import hoo.etahk.model.data.Route
 abstract class ParentRoutesDao {
 
     // Count
-    @Query("SELECT COUNT(*) FROM route WHERE bound = 0 AND variant = 0")
+    @Query("SELECT COUNT(*) FROM route WHERE bound = 0")
     abstract fun count(): Int
 
     // Select
-    @Query("SELECT * FROM route WHERE company = :company AND bound = 0 AND variant = 0 ORDER BY seq, routeNo")
-    abstract fun select(company: String): LiveData<List<Route>>
+    @Query("SELECT * FROM route " +
+            "WHERE typeCode IN (:typeCodes) " +
+            "AND bound = 0 " +
+            "AND variant = 0 " +
+            "ORDER BY typeCode, seq, routeNo")
+    abstract fun select(typeCodes: List<Long>): LiveData<List<Route>>
 
-    @Query("SELECT * FROM route WHERE company = :company AND routeNo = :routeNo AND bound = 0 AND variant = 0 LIMIT 1")
+    @Query("SELECT * FROM route WHERE company = :company AND routeNo = :routeNo AND bound = 0 LIMIT 1")
     abstract fun select(company: String, routeNo: String): LiveData<Route>
 
     // Insert / Update (single)
@@ -27,10 +31,10 @@ abstract class ParentRoutesDao {
 
     // Insert / Update (list)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract fun insert(route: List<Route>)
+    abstract fun insert(routes: List<Route>)
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
-    abstract fun update(route: List<Route>)
+    abstract fun update(routes: List<Route>)
 
     @Transaction
     open fun insertOrUpdate(routes: List<Route>, updateTime: Long? = null) {
@@ -47,7 +51,6 @@ abstract class ParentRoutesDao {
 
     @Query("DELETE FROM route " +
             "WHERE bound = 0 " +
-            "AND variant = 0 " +
             "AND updateTime < :updateTime")
     abstract fun delete(updateTime: Long)
 }
