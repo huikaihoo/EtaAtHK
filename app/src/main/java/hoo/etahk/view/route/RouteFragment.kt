@@ -4,6 +4,8 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -59,6 +61,10 @@ class RouteFragment : Fragment() {
 
         mRootView.recycler_view.layoutManager = LinearLayoutManager(activity)
         mRootView.recycler_view.adapter = mRouteStopsAdapter
+        mRootView.recycler_view.itemAnimator = DefaultItemAnimator()
+        mRootView.recycler_view.addItemDecoration(
+                DividerItemDecoration(activity,
+                        (mRootView.recycler_view.layoutManager as LinearLayoutManager).orientation))
 
         mRootView.refresh_layout.isRefreshing = true
         mRootView.refresh_layout.setOnRefreshListener {

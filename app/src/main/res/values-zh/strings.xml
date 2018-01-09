@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ETA@HK</string>
+    <string name="title_bus_search">巴士路線</string>
+
+    <!-- Common -->
+    <string name="to">往\u0020</string>
 
     <!-- Company -->
     <string name="kmb">九巴</string>

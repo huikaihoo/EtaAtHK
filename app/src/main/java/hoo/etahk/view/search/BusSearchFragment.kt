@@ -4,6 +4,8 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +54,11 @@ class BusSearchFragment : Fragment() {
         mRootView = inflater.inflate(R.layout.fragment_recycler, container, false)
 
         mRootView.recycler_view.layoutManager = LinearLayoutManager(activity)
+        mRootView.recycler_view.itemAnimator = DefaultItemAnimator()
+        mRootView.recycler_view.addItemDecoration(
+                DividerItemDecoration(activity,
+                        (mRootView.recycler_view.layoutManager as LinearLayoutManager).orientation))
+
         mRootView.recycler_view.adapter = mBusRoutesAdapter
 
         mRootView.refresh_layout.isEnabled = false

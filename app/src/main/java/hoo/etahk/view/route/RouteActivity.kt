@@ -15,6 +15,11 @@ import kotlinx.android.synthetic.main.activity_route.*
 
 class RouteActivity : AppCompatActivity() {
 
+    companion object {
+        const val ARG_COMPANY = "company"
+        const val ARG_ROUTE_NO = "route_no"
+    }
+
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
      * fragments for each of the sections. We use a
@@ -33,7 +38,7 @@ class RouteActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         mRouteViewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
-        mRouteViewModel.routeKey = RouteKey("CTB", "E23", -1, -1)
+        mRouteViewModel.routeKey = RouteKey(intent.extras.getString(ARG_COMPANY), intent.extras.getString(ARG_ROUTE_NO), -1, -1)
         mRouteViewModel.period = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH
 
         // Create the adapter that will return a fragment for each of the three
@@ -46,10 +51,7 @@ class RouteActivity : AppCompatActivity() {
         tabs.setupWithViewPager(container)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        // TODO("Set Action Bar Title")
-        //supportActionBar?.setTitle()
-        //container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
-        //tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
+        supportActionBar?.title = mRouteViewModel.routeKey!!.routeNo
 
         fab.setOnClickListener { view ->
             mRouteViewModel.insertRoutes()
@@ -93,12 +95,14 @@ class RouteActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
 
-        if (id == R.id.action_settings) {
-            return true
+        return when (item.itemId) {
+            R.id.action_settings -> true
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-
-        return super.onOptionsItemSelected(item)
     }
 }

@@ -103,6 +103,8 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         })
         tabs.getTabAt(mBusSearchViewModel.selectedTabPosition)?.select()
 
+        supportActionBar?.title = getString(R.string.title_bus_search)
+
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own actionXX", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()

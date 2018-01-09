@@ -56,13 +56,12 @@
 
         <activity
             android:name=".view.route.RouteActivity"
-            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
             android:name=".view.search.BusSearchActivity"
-            android:label="@string/title_activity_main"
+            android:label="@string/title_bus_search"
             android:theme="@style/AppTheme.All">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
