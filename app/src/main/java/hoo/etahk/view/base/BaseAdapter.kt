@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
-abstract class BaseAdapter<C, D, VH : BaseViewHolder<C, D>> : RecyclerView.Adapter<VH>() {
+abstract class BaseAdapter<C, D> : RecyclerView.Adapter<BaseViewHolder<C, D>>() {
 
     var context: C? = null
 
@@ -21,19 +21,21 @@ abstract class BaseAdapter<C, D, VH : BaseViewHolder<C, D>> : RecyclerView.Adapt
 
     override fun getItemCount() = dataSource.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): VH {
-        val inflater = LayoutInflater.from(parent?.context)
-        val view = inflater.inflate(getItemViewId(), parent, false)
-        return instantiateViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): BaseViewHolder<C, D> {
+        return instantiateViewHolder(LayoutInflater.from(parent?.context).inflate(viewType, parent, false), viewType)
     }
 
-    abstract fun getItemViewId() : Int
+    override fun getItemViewType(position: Int): Int {
+        return getItemViewId(position, dataSource)
+    }
 
-    abstract fun instantiateViewHolder(view: View?): VH
+    // Need to override
+    protected abstract fun getItemViewId(position: Int, dataSource: List<D>): Int
 
-    override fun onBindViewHolder(holder: VH, position: Int) {
+    // Need to override
+    abstract fun instantiateViewHolder(view: View?, viewType: Int): BaseViewHolder<C, D>
+
+    override fun onBindViewHolder(holder: BaseViewHolder<C, D>, position: Int) {
         holder.onBind(context, position, dataSource)
     }
-
-    //fun getDataSource(position: Int) = dataSource[position]
 }

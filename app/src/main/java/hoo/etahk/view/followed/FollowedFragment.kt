@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import hoo.etahk.R
 import hoo.etahk.model.data.Stop
-import kotlinx.android.synthetic.main.fragment_followed.view.*
+import kotlinx.android.synthetic.main.fragment_recycler.view.*
 
 class FollowedFragment : Fragment() {
 
@@ -41,7 +41,7 @@ class FollowedFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         mFollowedAdapter.context = this
 
-        val rootView = inflater.inflate(R.layout.fragment_followed, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_recycler, container, false)
 
         rootView.recycler_view.layoutManager = LinearLayoutManager(activity)
         rootView.recycler_view.adapter = mFollowedAdapter

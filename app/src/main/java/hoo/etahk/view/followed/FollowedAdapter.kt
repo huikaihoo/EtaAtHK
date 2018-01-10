@@ -9,11 +9,11 @@ import hoo.etahk.view.base.BaseAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_stop.view.*
 
-class FollowedAdapter : BaseAdapter<FollowedFragment, Stop, FollowedAdapter.ViewHolder>() {
+class FollowedAdapter : BaseAdapter<FollowedFragment, Stop>() {
 
-    override fun getItemViewId(): Int = R.layout.item_stop
+    override fun getItemViewId(position: Int, dataSource: List<Stop>): Int = R.layout.item_stop
 
-    override fun instantiateViewHolder(view: View?): ViewHolder = ViewHolder(view)
+    override fun instantiateViewHolder(view: View?, viewType: Int): ViewHolder = ViewHolder(view)
 
     class ViewHolder(itemView: View?) : BaseViewHolder<FollowedFragment, Stop>(itemView) {
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.View
 import com.mcxiaoke.koi.ext.Bundle
 import com.mcxiaoke.koi.ext.startActivity
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import hoo.etahk.R
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -13,11 +14,11 @@ import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.item_route.view.*
 
-class BusRoutesAdapter : BaseAdapter<BusSearchFragment, Route, BusRoutesAdapter.ViewHolder>() {
+class BusRoutesAdapter : BaseAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
 
-    override fun getItemViewId(): Int = R.layout.item_route
+    override fun getItemViewId(position: Int, dataSource: List<Route>): Int = R.layout.item_route
 
-    override fun instantiateViewHolder(view: View?): ViewHolder = ViewHolder(view)
+    override fun instantiateViewHolder(view: View?, viewType: Int): ViewHolder = ViewHolder(view)
 
     class ViewHolder(itemView: View?) : BaseViewHolder<BusSearchFragment, Route>(itemView) {
 
@@ -44,5 +45,10 @@ class BusRoutesAdapter : BaseAdapter<BusSearchFragment, Route, BusRoutesAdapter.
                 putString(RouteActivity.ARG_ROUTE_NO, routeKey.routeNo)
             })
         }
+    }
+
+    // For FastScroll
+    override fun getSectionName(position: Int): String {
+        return dataSource[position].routeKey.routeNo
     }
 }

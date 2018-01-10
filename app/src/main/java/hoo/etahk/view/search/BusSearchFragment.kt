@@ -10,9 +10,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener
 import hoo.etahk.R
+import hoo.etahk.common.view.FloatingActionButtonOnVisibilityChangedListener
 import hoo.etahk.model.data.Route
-import kotlinx.android.synthetic.main.fragment_recycler.view.*
+import kotlinx.android.synthetic.main.activity_search_tab.*
+import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
 
 class BusSearchFragment : Fragment() {
 
@@ -51,13 +54,25 @@ class BusSearchFragment : Fragment() {
 
         mBusSearchFragmentViewModel.index = arguments!!.getInt(ARG_INDEX)
 
-        mRootView = inflater.inflate(R.layout.fragment_recycler, container, false)
+        mRootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
 
         mRootView.recycler_view.layoutManager = LinearLayoutManager(activity)
         mRootView.recycler_view.itemAnimator = DefaultItemAnimator()
         mRootView.recycler_view.addItemDecoration(
                 DividerItemDecoration(activity,
                         (mRootView.recycler_view.layoutManager as LinearLayoutManager).orientation))
+
+        mRootView.recycler_view.setPopupBgColor(BusSearchActivity.colorList[mBusSearchFragmentViewModel.index].colorPrimaryAccent)
+        mRootView.recycler_view.setThumbColor(BusSearchActivity.colorList[mBusSearchFragmentViewModel.index].colorPrimaryAccent)
+        mRootView.recycler_view.setStateChangeListener(object: OnFastScrollStateChangeListener{
+            override fun onFastScrollStop() {
+                (activity as BusSearchActivity).fab?.show()
+            }
+            override fun onFastScrollStart() {
+                (activity as BusSearchActivity).fab?.hide(FloatingActionButtonOnVisibilityChangedListener())
+            }
+
+        })
 
         mRootView.recycler_view.adapter = mBusRoutesAdapter
 
