@@ -8,13 +8,17 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import hoo.etahk.R
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
+import hoo.etahk.model.diff.BaseDiffCallback
+import hoo.etahk.model.diff.ParentRouteDiffCallback
 import hoo.etahk.view.App
-import hoo.etahk.view.base.BaseAdapter
+import hoo.etahk.view.base.BaseDiffAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.item_route.view.*
 
-class BusRoutesAdapter : BaseAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
+class BusRoutesAdapter : BaseDiffAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
+
+    override fun getDiffCallback(oldData: List<Route>, newData: List<Route>): BaseDiffCallback<Route> = ParentRouteDiffCallback(oldData, newData)
 
     override fun getItemViewId(position: Int, dataSource: List<Route>): Int = R.layout.item_route
 
@@ -43,6 +47,7 @@ class BusRoutesAdapter : BaseAdapter<BusSearchFragment, Route>(), FastScrollRecy
             context?.activity?.startActivity<RouteActivity>(Bundle {
                 putString(RouteActivity.ARG_COMPANY, routeKey.company)
                 putString(RouteActivity.ARG_ROUTE_NO, routeKey.routeNo)
+                putLong(RouteActivity.ARG_TYPE_CODE, routeKey.typeCode)
             })
         }
     }

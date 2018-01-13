@@ -29,12 +29,23 @@ object Constants {
         const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
         const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
 
-        const val DEFAULT_MAX_REQUESTS = 100
-        const val DEFAULT_MAX_REQUESTS_PER_HOST = 3
-        const val DEFAULT_MAX_RETRY_ON_FAILED = 1L
-        const val DEFAULT_CONNECTION_TIMEOUT = 5000L
-        const val DEFAULT_READ_TIMEOUT = 5000L
-        const val DEFAULT_WRITE_TIMEOUT = 5000L
+        const val DEFAULT_MAX_REQUESTS_VAL = 64
+        const val DEFAULT_MAX_REQUESTS_PER_HOST_VAL = 5
+        // Stop
+        const val STOP_CONNECTION_TIMEOUT_VAL = 10000L
+        const val STOP_READ_TIMEOUT_VAL = 10000L
+        const val STOP_WRITE_TIMEOUT_VAL = 10000L
+        // KMB Eta
+        const val ETA_KMB_MAX_REQUESTS_PER_HOST_VAL = 4
+        const val ETA_KMB_CONNECTION_TIMEOUT_VAL = 3500L
+        const val ETA_KMB_READ_TIMEOUT_VAL = 3500L
+        const val ETA_KMB_WRITE_TIMEOUT_VAL = 3500L
+        // NWFB Eta
+        const val ETA_NWFB_MAX_REQUESTS_PER_HOST_VAL = 3
+        const val ETA_NWFB_CONNECTION_TIMEOUT_VAL = 5000L
+        const val ETA_NWFB_READ_TIMEOUT_VAL = 5000L
+        const val ETA_NWFB_WRITE_TIMEOUT_VAL = 5000L
+
         const val NWFB_API_PARAMETER_PLATFORM = "android"
         const val NWFB_API_PARAMETER_APP_VERSION = "3.3.1"
         const val GOV_API_PARAMETER_PLATFORM = "android"
@@ -63,6 +74,7 @@ object Constants {
         const val BUS_HKI = 2L
         const val BUS_CROSS_HARBOUR = 3L
         const val BUS_AIRPORT_LANTAU = 4L
+        const val BUS_NIGHT = 10L
         const val BUS_KL_NT_NIGHT = 11L
         const val BUS_HKI_NIGHT = 12L
         const val BUS_CROSS_HARBOUR_NIGHT = 13L
@@ -71,12 +83,24 @@ object Constants {
         const val MTR = 100L
     }
 
+    object Ordering {
+        const val NORMAL = 0L
+        const val TYPE_CODE = 1L
+        const val BUS = 2L
+    }
+
     object Url {
         const val KMB_URL = "http://search.kmb.hk/KMBWebSite/"
         const val KMB_ETA_URL = "http://etav3.kmb.hk/"
         const val KMB_ETA_FEED_URL = "http://etadatafeed.kmb.hk:1933/"
         const val NWFB_URL = "http://mobile.nwstbus.com.hk/"
         const val GOV_URL = "http://app1.hketransport.td.gov.hk/"
+    }
+
+    object NetworkType {
+        const val DEFAULT = 0L
+        const val STOP = 1L
+        const val ETA = 2L
     }
 
     object Route {
@@ -98,6 +122,7 @@ object Constants {
         const val NWFB_VARIANT_RECORD_END_SEQ = 7
         const val NWFB_VARIANT_RECORD_INFO_BOUND = 9
     }
+
     object Stop {
         const val NWFB_STOP_RECORD_SIZE = 14
         const val NWFB_STOP_RECORD_RDV = 1

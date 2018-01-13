@@ -3,7 +3,6 @@ package hoo.etahk.view.search
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import hoo.etahk.view.App
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -22,7 +21,7 @@ class BusSearchPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return App.instance.getString(BusSearchActivity.titleList[position])
+        return BusSearchActivity.searchList[position].title
     }
 
 //    override fun getItemPosition(`object`: Any): Int {

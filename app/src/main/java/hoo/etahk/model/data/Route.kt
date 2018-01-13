@@ -44,7 +44,7 @@ data class Route(
     }
 
     private fun getToByBound(bound: Long): StringLang {
-        return when(bound) {
+        return when (bound) {
             1L -> to
             2L -> from
             else -> StringLang()

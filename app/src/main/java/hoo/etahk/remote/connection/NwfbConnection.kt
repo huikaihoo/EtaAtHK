@@ -60,24 +60,26 @@ object NwfbConnection: BaseConnection {
                     .enqueue(object : Callback<ResponseBody> {
                         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                            val t = Utils.getCurrentTimestamp()
-                            val responseStr = response.body()?.string()
-                            //Log.d(TAG, responseStr)
+                            launch(CommonPool) {
+                                val t = Utils.getCurrentTimestamp()
+                                val responseStr = response.body()?.string()
+                                //Log.d(TAG, responseStr)
 
-                            if (!responseStr.isNullOrBlank()) {
-                                val routes = mutableListOf<Route>()
-                                val nwfbResponse = responseStr!!.split("<br>")
+                                if (!responseStr.isNullOrBlank()) {
+                                    val routes = mutableListOf<Route>()
+                                    val nwfbResponse = responseStr!!.split("<br>")
 
-                                nwfbResponse.forEach({
-                                    val records = it.split("(\\|\\|)|(\\*\\*\\*)".toRegex())
-                                    if(records.size >= Constants.Route.NWFB_VARIANT_RECORD_SIZE) {
-                                        routes.add(toChildRoute(parentRoute, records, t))
-                                    }
-                                    //Log.d(TAG, it)
-                                })
+                                    nwfbResponse.forEach({
+                                        val records = it.split("(\\|\\|)|(\\*\\*\\*)".toRegex())
+                                        if (records.size >= Constants.Route.NWFB_VARIANT_RECORD_SIZE) {
+                                            routes.add(toChildRoute(parentRoute, records, t))
+                                        }
+                                        //Log.d(TAG, it)
+                                    })
 
-                                //Log.d(TAG, AppHelper.gson.toJson(routes))
-                                AppHelper.db.childRoutesDao().insertOrUpdate(routes, t)
+                                    //Log.d(TAG, AppHelper.gson.toJson(routes))
+                                    AppHelper.db.childRoutesDao().insertOrUpdate(routes, t)
+                                }
                             }
                         }
                     })
@@ -115,33 +117,35 @@ object NwfbConnection: BaseConnection {
         val info = "1|*|${route.routeKey.company}||${route.info.rdv}||${route.info.startSeq}||${route.info.endSeq}"
         //Log.d(TAG, "info=[$info]")
 
-        ConnectionHelper.nwfb.getStops(
+        ConnectionHelper.nwfbStop.getStops(
                 info = info,
                 l = "0",
                 syscode = getSystemCode())
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                        val t = Utils.getCurrentTimestamp()
-                        val responseStr = response.body()?.string()
-                        //Log.d(TAG, responseStr)
+                        launch(CommonPool) {
+                            val t = Utils.getCurrentTimestamp()
+                            val responseStr = response.body()?.string()
+                            //Log.d(TAG, responseStr)
 
-                        if (!responseStr.isNullOrBlank()) {
-                            val stops = mutableListOf<Stop>()
-                            val nwfbResponse = responseStr!!.split("<br>")
+                            if (!responseStr.isNullOrBlank()) {
+                                val stops = mutableListOf<Stop>()
+                                val nwfbResponse = responseStr!!.split("<br>")
 
-                            nwfbResponse.forEach({
-                                val records = it.split("\\|\\|".toRegex())
-                                if(records.size >= Constants.Stop.NWFB_STOP_RECORD_SIZE) {
-                                    stops.add(toStop(route, records, t))
-                                }
-                                //Log.d(TAG, it)
-                            })
+                                nwfbResponse.forEach({
+                                    val records = it.split("\\|\\|".toRegex())
+                                    if (records.size >= Constants.Stop.NWFB_STOP_RECORD_SIZE) {
+                                        stops.add(toStop(route, records, t))
+                                    }
+                                    //Log.d(TAG, it)
+                                })
 
-                            //Log.d(TAG, AppHelper.gson.toJson(stops))
-                            AppHelper.db.stopsDao().insertOrUpdate(route, stops, t)
-                            if (needEtaUpdate)
-                                stops.forEach { updateEta(it) }
+                                //Log.d(TAG, AppHelper.gson.toJson(stops))
+                                AppHelper.db.stopsDao().insertOrUpdate(route, stops, t)
+                                if (needEtaUpdate)
+                                    stops.forEach { updateEta(it) }
+                            }
                         }
                     }
                 })
@@ -173,14 +177,14 @@ object NwfbConnection: BaseConnection {
         val t = Utils.getCurrentTimestamp()
 
         try {
-            runBlocking<Unit> {
+            runBlocking {
                 val jobs = arrayListOf<Job>()
 
                 stops.forEach({ stop ->
                     jobs += launch(CommonPool) {
                         try {
                             val response =
-                                    ConnectionHelper.nwfb.getEta(
+                                    ConnectionHelper.nwfbEta.getEta(
                                             stopid = stop.info.stopId,
                                             service_no = stop.routeKey.routeNo,
                                             removeRepeatedSuspend = "Y",
@@ -245,7 +249,7 @@ object NwfbConnection: BaseConnection {
     }
 
     override fun updateEta(stop: Stop) {
-        ConnectionHelper.nwfb.getEta(
+        ConnectionHelper.nwfbEta.getEta(
                 stopid = stop.info.stopId,
                 service_no = stop.routeKey.routeNo,
                 removeRepeatedSuspend = "Y",

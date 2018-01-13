@@ -32,7 +32,7 @@ class RoutePagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
 
     override fun getPageTitle(position: Int): CharSequence? {
         return App.instance.getString(R.string.to) +
-                when(position) {
+                when (position) {
                     0 -> dataSource!!.to.value
                     1 -> dataSource!!.from.value
                     else -> ""

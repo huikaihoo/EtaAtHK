@@ -11,6 +11,8 @@ import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.StringLang
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -54,23 +56,26 @@ object GovConnection: BaseConnection{
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                        val t = Utils.getCurrentTimestamp()
-                        val routes = mutableListOf<Route>()
-                        val separator = Separator("\\|\\*\\|".toRegex(), "\\|\\|".toRegex(), Constants.Route.GOV_ROUTE_RECORD_SIZE)
+                        launch(CommonPool) {
+                            val t = Utils.getCurrentTimestamp()
+                            val routes = mutableListOf<Route>()
+                            val separator = Separator("\\|\\*\\|".toRegex(), "\\|\\|".toRegex(), Constants.Route.GOV_ROUTE_RECORD_SIZE)
 
-                        //Log.d(TAG, "onResponse ${separator.columnSize}")
-                        separator.original = response.body()?.string()?: ""
-                        separator.result.forEach {
-                            routes.addAll(toRoutes(it, t))
-                        }
-                        Log.d(TAG, "onResponse ${separator.result.size}")
-
-                        if (routes.size > 0) {
-                            routes.sort()
-                            for (i in routes.indices) {
-                                routes[i].seq = i + 1L
+                            //Log.d(TAG, "onResponse ${separator.columnSize}")
+                            separator.original = response.body()?.string() ?: ""
+                            separator.result.forEach {
+                                routes.addAll(toRoutes(it, t))
                             }
-                            AppHelper.db.parentRoutesDao().insertOrUpdate(routes, t)
+                            Log.d(TAG, "onResponse ${separator.result.size}")
+
+                            if (routes.size > 0) {
+                                routes.sort()
+                                for (i in routes.indices) {
+                                    routes[i].seq = i + 1L
+                                }
+
+                                AppHelper.db.parentRoutesDao().insertOrUpdate(routes, t)
+                            }
                         }
                     }
                 })

@@ -1,7 +1,9 @@
 package hoo.etahk.common.helper
 
-import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Company
+import hoo.etahk.common.Constants.NetworkType
+import hoo.etahk.common.Constants.Url
+import hoo.etahk.common.tools.ConnectionFactory
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
 import hoo.etahk.remote.api.GovApi
@@ -11,50 +13,58 @@ import hoo.etahk.remote.connection.BaseConnection
 import hoo.etahk.remote.connection.GovConnection
 import hoo.etahk.remote.connection.KmbConnection
 import hoo.etahk.remote.connection.NwfbConnection
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.OkHttpClient
 
 object ConnectionHelper: BaseConnection {
+    private lateinit var okHttp: OkHttpClient
+    private lateinit var okHttpStop: OkHttpClient
+    private lateinit var okHttpEtaKmb: OkHttpClient
+    private lateinit var okHttpEtaNwfb: OkHttpClient
+
+    // KMB
     lateinit var kmb: KmbApi private set
+    lateinit var kmbStop: KmbApi private set
     lateinit var kmbEta: KmbApi private set
     lateinit var kmbEtaFeed: KmbApi private set
+    // NWFB
     lateinit var nwfb: NwfbApi private set
+    lateinit var nwfbStop: NwfbApi private set
+    lateinit var nwfbEta: NwfbApi private set
+    // GOV
     lateinit var gov: GovApi private set
+    lateinit var govStop: GovApi private set
 
     fun init() {
-        kmb = Retrofit.Builder()
-                .client(AppHelper.okHttp)
-                .baseUrl(Constants.Url.KMB_URL)
-                .addConverterFactory(GsonConverterFactory.create(AppHelper.gson))
-                .build()
+        okHttp = ConnectionFactory.createClient(NetworkType.DEFAULT, "")
+        okHttpStop = ConnectionFactory.createClient(NetworkType.STOP, "")
+        okHttpEtaKmb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
+        okHttpEtaNwfb = ConnectionFactory.createClient(NetworkType.ETA, Company.NWFB)
+
+        kmb = ConnectionFactory.createRetrofit(okHttp, Url.KMB_URL)
                 .create(KmbApi::class.java)
 
-        kmbEta = Retrofit.Builder()
-                .client(AppHelper.okHttp)
-                .baseUrl(Constants.Url.KMB_ETA_URL)
-                .addConverterFactory(GsonConverterFactory.create(AppHelper.gson))
-                .build()
+        kmbStop = ConnectionFactory.createRetrofit(okHttpStop, Url.KMB_URL)
                 .create(KmbApi::class.java)
 
-        kmbEtaFeed = Retrofit.Builder()
-                .client(AppHelper.okHttp)
-                .baseUrl(Constants.Url.KMB_ETA_FEED_URL)
-                .addConverterFactory(GsonConverterFactory.create(AppHelper.gson))
-                .build()
+        kmbEta = ConnectionFactory.createRetrofit(okHttpEtaKmb, Url.KMB_ETA_URL)
                 .create(KmbApi::class.java)
 
-        nwfb = Retrofit.Builder()
-                .client(AppHelper.okHttp)
-                .baseUrl(Constants.Url.NWFB_URL)
-                //.addConverterFactory(GsonConverterFactory.create(AppHelper.gson))
-                .build()
+        kmbEtaFeed = ConnectionFactory.createRetrofit(okHttp, Url.KMB_ETA_FEED_URL)
+                .create(KmbApi::class.java)
+
+        nwfb = ConnectionFactory.createRetrofit(okHttp, Url.NWFB_URL)
                 .create(NwfbApi::class.java)
 
-        gov = Retrofit.Builder()
-                .client(AppHelper.okHttp)
-                .baseUrl(Constants.Url.GOV_URL)
-                //.addConverterFactory(GsonConverterFactory.create(AppHelper.gson))
-                .build()
+        nwfbStop = ConnectionFactory.createRetrofit(okHttpStop, Url.NWFB_URL)
+                .create(NwfbApi::class.java)
+
+        nwfbEta = ConnectionFactory.createRetrofit(okHttpEtaNwfb, Url.NWFB_URL)
+                .create(NwfbApi::class.java)
+
+        gov = ConnectionFactory.createRetrofit(okHttp, Url.GOV_URL)
+                .create(GovApi::class.java)
+
+        govStop = ConnectionFactory.createRetrofit(okHttpStop, Url.GOV_URL)
                 .create(GovApi::class.java)
     }
 

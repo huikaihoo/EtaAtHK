@@ -9,6 +9,8 @@ import android.view.Menu
 import android.view.MenuItem
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Constants.Company
+import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import kotlinx.android.synthetic.main.activity_route.*
@@ -18,6 +20,20 @@ class RouteActivity : AppCompatActivity() {
     companion object {
         const val ARG_COMPANY = "company"
         const val ARG_ROUTE_NO = "route_no"
+        const val ARG_TYPE_CODE = "type_code"
+
+        fun getTheme(company: String, typeCode: Long): Int {
+            val isOvernight = (typeCode / RouteType.BUS_NIGHT * RouteType.BUS_NIGHT) == RouteType.BUS_NIGHT
+            return when {
+                isOvernight -> R.style.AppTheme_Night
+                company == Company.KMB -> R.style.AppTheme_Kmb
+                company == Company.LWB -> R.style.AppTheme_Lwb
+                company == Company.NWFB -> R.style.AppTheme_Nwfb
+                company == Company.CTB -> R.style.AppTheme_Ctb
+                company == Company.NLB -> R.style.AppTheme_Nlb
+                else -> R.style.AppTheme_Night
+            }
+        }
     }
 
     /**
@@ -32,6 +48,8 @@ class RouteActivity : AppCompatActivity() {
     private lateinit var mRouteViewModel: RouteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(getTheme(intent.extras.getString(ARG_COMPANY), intent.extras.getLong(ARG_TYPE_CODE)))
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)
 

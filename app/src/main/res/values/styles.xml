@@ -26,6 +26,42 @@
         <item name="colorAccent">@color/colorAllAccent</item>
     </style>
 
+    <style name="AppTheme.Kmb" parent="AppTheme">
+        <item name="colorPrimary">@color/colorKmb</item>
+        <item name="colorPrimaryDark">@color/colorKmbDark</item>
+        <item name="colorAccent">@color/colorKmbAccent</item>
+    </style>
+
+    <style name="AppTheme.Lwb" parent="AppTheme">
+        <item name="colorPrimary">@color/colorLwb</item>
+        <item name="colorPrimaryDark">@color/colorLwbDark</item>
+        <item name="colorAccent">@color/colorLwbAccent</item>
+    </style>
+
+    <style name="AppTheme.Nwfb" parent="AppTheme">
+        <item name="colorPrimary">@color/colorNwfb</item>
+        <item name="colorPrimaryDark">@color/colorNwfbDark</item>
+        <item name="colorAccent">@color/colorNwfbAccent</item>
+    </style>
+
+    <style name="AppTheme.Ctb" parent="AppTheme">
+        <item name="colorPrimary">@color/colorCtb</item>
+        <item name="colorPrimaryDark">@color/colorCtbDark</item>
+        <item name="colorAccent">@color/colorCtbAccent</item>
+    </style>
+
+    <style name="AppTheme.Nlb" parent="AppTheme">
+        <item name="colorPrimary">@color/colorNlb</item>
+        <item name="colorPrimaryDark">@color/colorNlbDark</item>
+        <item name="colorAccent">@color/colorNlbAccent</item>
+    </style>
+
+    <style name="AppTheme.Night" parent="AppTheme">
+        <item name="colorPrimary">@color/colorNight</item>
+        <item name="colorPrimaryDark">@color/colorNightDark</item>
+        <item name="colorAccent">@color/colorNightAccent</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

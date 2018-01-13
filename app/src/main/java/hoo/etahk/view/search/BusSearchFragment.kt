@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener
 import hoo.etahk.R
-import hoo.etahk.common.view.FloatingActionButtonOnVisibilityChangedListener
 import hoo.etahk.model.data.Route
 import kotlinx.android.synthetic.main.activity_search_tab.*
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
@@ -62,14 +61,14 @@ class BusSearchFragment : Fragment() {
                 DividerItemDecoration(activity,
                         (mRootView.recycler_view.layoutManager as LinearLayoutManager).orientation))
 
-        mRootView.recycler_view.setPopupBgColor(BusSearchActivity.colorList[mBusSearchFragmentViewModel.index].colorPrimaryAccent)
-        mRootView.recycler_view.setThumbColor(BusSearchActivity.colorList[mBusSearchFragmentViewModel.index].colorPrimaryAccent)
+        mRootView.recycler_view.setPopupBgColor(BusSearchActivity.searchList[mBusSearchFragmentViewModel.index].color.colorPrimaryAccent)
+        mRootView.recycler_view.setThumbColor(BusSearchActivity.searchList[mBusSearchFragmentViewModel.index].color.colorPrimaryAccent)
         mRootView.recycler_view.setStateChangeListener(object: OnFastScrollStateChangeListener{
             override fun onFastScrollStop() {
                 (activity as BusSearchActivity).fab?.show()
             }
             override fun onFastScrollStart() {
-                (activity as BusSearchActivity).fab?.hide(FloatingActionButtonOnVisibilityChangedListener())
+                (activity as BusSearchActivity).fab?.hide()
             }
 
         })

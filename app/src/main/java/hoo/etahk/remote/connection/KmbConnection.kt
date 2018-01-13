@@ -43,20 +43,22 @@ object KmbConnection: BaseConnection {
                     .enqueue(object : Callback<KmbBoundVariantRes> {
                         override fun onFailure(call: Call<KmbBoundVariantRes>, t: Throwable) {}
                         override fun onResponse(call: Call<KmbBoundVariantRes>, response: Response<KmbBoundVariantRes>) {
-                            val t = Utils.getCurrentTimestamp()
-                            val kmbBoundVariantRes = response.body()
-                            //Log.d(TAG, kmbBoundVariantRes.toString())
+                            launch(CommonPool) {
+                                val t = Utils.getCurrentTimestamp()
+                                val kmbBoundVariantRes = response.body()
+                                //Log.d(TAG, kmbBoundVariantRes.toString())
 
-                            if (kmbBoundVariantRes?.data?.routes != null && (kmbBoundVariantRes.data.routes).isNotEmpty()) {
-                                val routes = mutableListOf<Route>()
-                                (kmbBoundVariantRes.data.routes).forEach {
-                                    //Log.d(TAG, "${it?.bound} == $bound")
-                                    assert(it!!.bound!! == bound)
-                                    routes.add(toChildRoute(parentRoute, it!!, t))
+                                if (kmbBoundVariantRes?.data?.routes != null && (kmbBoundVariantRes.data.routes).isNotEmpty()) {
+                                    val routes = mutableListOf<Route>()
+                                    (kmbBoundVariantRes.data.routes).forEach {
+                                        //Log.d(TAG, "${it?.bound} == $bound")
+                                        assert(it!!.bound!! == bound)
+                                        routes.add(toChildRoute(parentRoute, it!!, t))
+                                    }
+
+                                    //Log.d(TAG, AppHelper.gson.toJson(routes))
+                                    AppHelper.db.childRoutesDao().insertOrUpdate(routes, t)
                                 }
-
-                                //Log.d(TAG, AppHelper.gson.toJson(routes))
-                                AppHelper.db.childRoutesDao().insertOrUpdate(routes, t)
                             }
                         }
                     })
@@ -83,27 +85,29 @@ object KmbConnection: BaseConnection {
      * Get Stops
      ***************/
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
-        ConnectionHelper.kmb.getStops(
+        ConnectionHelper.kmbStop.getStops(
                 route = route.routeKey.routeNo,
                 bound = route.routeKey.bound.toString(),
                 serviceType = route.routeKey.variant.toString())
                 .enqueue(object : Callback<KmbStopsRes> {
                     override fun onFailure(call: Call<KmbStopsRes>, t: Throwable) {}
                     override fun onResponse(call: Call<KmbStopsRes>, response: Response<KmbStopsRes>) {
-                        val t = Utils.getCurrentTimestamp()
-                        val kmbStopsRes = response.body()
-                        //Log.d(TAG, kmbStopsRes.toString())
+                        launch(CommonPool) {
+                            val t = Utils.getCurrentTimestamp()
+                            val kmbStopsRes = response.body()
+                            //Log.d(TAG, kmbStopsRes.toString())
 
-                        if (kmbStopsRes?.data?.routeStops != null && (kmbStopsRes.data.routeStops).isNotEmpty()) {
-                            val stops = mutableListOf<Stop>()
-                            (kmbStopsRes.data.routeStops).forEach {
-                                stops.add(toStop(route, it!!, t))
+                            if (kmbStopsRes?.data?.routeStops != null && (kmbStopsRes.data.routeStops).isNotEmpty()) {
+                                val stops = mutableListOf<Stop>()
+                                (kmbStopsRes.data.routeStops).forEach {
+                                    stops.add(toStop(route, it!!, t))
+                                }
+
+                                //Log.d(TAG, AppHelper.gson.toJson(stops))
+                                AppHelper.db.stopsDao().insertOrUpdate(route, stops, t)
+                                if (needEtaUpdate)
+                                    stops.forEach { updateEta(it) }
                             }
-
-                            //Log.d(TAG, AppHelper.gson.toJson(stops))
-                            AppHelper.db.stopsDao().insertOrUpdate(route, stops, t)
-                            if (needEtaUpdate)
-                                stops.forEach { updateEta(it) }
                         }
                     }
                 })
@@ -133,7 +137,7 @@ object KmbConnection: BaseConnection {
         val t = Utils.getCurrentTimestamp()
 
         try {
-            runBlocking<Unit> {
+            runBlocking {
                 val jobs = arrayListOf<Job>()
 
                 stops.forEach({ stop ->
