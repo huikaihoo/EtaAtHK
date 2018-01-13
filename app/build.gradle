@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 def versionMajor = 0
 def versionMinor = 3
-def versionPatch = 10
+def versionPatch = 11
 def versionBuild = 1
 
 def static getCurrentDate() {

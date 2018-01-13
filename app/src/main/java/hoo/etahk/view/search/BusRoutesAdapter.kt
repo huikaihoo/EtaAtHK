@@ -11,12 +11,16 @@ import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.ParentRouteDiffCallback
 import hoo.etahk.view.App
-import hoo.etahk.view.base.BaseDiffAdapter
+import hoo.etahk.view.base.BaseFilterDiffAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.item_route.view.*
 
-class BusRoutesAdapter : BaseDiffAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
+class BusRoutesAdapter : BaseFilterDiffAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
+
+    init {
+        useDiff = false
+    }
 
     override fun getDiffCallback(oldData: List<Route>, newData: List<Route>): BaseDiffCallback<Route> = ParentRouteDiffCallback(oldData, newData)
 
@@ -55,5 +59,25 @@ class BusRoutesAdapter : BaseDiffAdapter<BusSearchFragment, Route>(), FastScroll
     // For FastScroll
     override fun getSectionName(position: Int): String {
         return dataSource[position].routeKey.routeNo
+    }
+
+    // For Filtering
+    override fun performFiltering(constraint: String): List<Route> {
+        val result: MutableList<Route> = mutableListOf()
+
+        if (constraint.isBlank()) {
+            result.addAll(dataSource)
+        } else {
+            dataSource.forEach {
+                if (it.routeKey.routeNo.contains(constraint))
+                    result.add(it)
+            }
+        }
+
+        return result.toList()
+    }
+
+    override fun scrollToPosition(position: Int) {
+        context?.scrollToPosition(position)
     }
 }

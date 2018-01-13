@@ -3,6 +3,9 @@
     <string name="app_name">ETA@HK</string>
     <string name="title_bus_search">巴士路線</string>
 
+    <!-- Menu -->
+    <string name="search">搜尋</string>
+
     <!-- Common -->
     <string name="to">往\u0020</string>
 

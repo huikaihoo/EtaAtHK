@@ -65,10 +65,10 @@ class BusSearchFragment : Fragment() {
         mRootView.recycler_view.setThumbColor(BusSearchActivity.searchList[mBusSearchFragmentViewModel.index].color.colorPrimaryAccent)
         mRootView.recycler_view.setStateChangeListener(object: OnFastScrollStateChangeListener{
             override fun onFastScrollStop() {
-                (activity as BusSearchActivity).fab?.show()
+                (activity as BusSearchActivity).fab.show()
             }
             override fun onFastScrollStart() {
-                (activity as BusSearchActivity).fab?.hide()
+                (activity as BusSearchActivity).fab.hide()
             }
 
         })
@@ -83,6 +83,10 @@ class BusSearchFragment : Fragment() {
     }
 
     private fun subscribeUiChanges() {
+        mBusSearchViewModel.searchText.observe(this, Observer<String> {
+            mBusRoutesAdapter.filter = it?: ""
+        })
+
         mBusSearchViewModel.isRefreshing.observe(this, Observer<Boolean> {
             if (it != null) {
                 if (it && !mRootView.refresh_layout.isRefreshing) {
@@ -98,5 +102,9 @@ class BusSearchFragment : Fragment() {
         mBusSearchFragmentViewModel.getParentRoutes().observe(this, Observer<List<Route>> {
             it?.let { mBusRoutesAdapter.dataSource = it }
         })
+    }
+
+    fun scrollToPosition(position: Int) {
+        (mRootView.recycler_view.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
     }
 }

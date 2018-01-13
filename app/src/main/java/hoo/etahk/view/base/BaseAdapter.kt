@@ -11,7 +11,7 @@ abstract class BaseAdapter<C, D> : RecyclerView.Adapter<BaseViewHolder<C, D>>() 
 
     var context: C? = null
 
-    var dataSource: List<D> = emptyList()
+    open var dataSource: List<D> = emptyList()
         set(value) {
             field = value
             launch(UI) {
