@@ -6,6 +6,7 @@ import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
+import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
@@ -25,16 +26,24 @@ object KmbConnection: BaseConnection {
 
     private const val TAG = "KmbConnection"
 
-    /********************
-     * Get Parent Routes
-     ********************/
-    override fun getParentRoutes() {
-        return
+    override fun getEtaRoutes(company: String): List<String>? {
+        return null
     }
 
-    /*******************
-     * Get Child Routes
-     *******************/
+    override fun getParentRoutes(company: String): HashMap<String, Route>? {
+        return null
+    }
+
+    /*****************************
+     * Get Parent Route (Single) *
+     *****************************/
+    override fun getParentRoute(routeKey: RouteKey): Route? {
+        return null
+    }
+
+    /********************
+     * Get Child Routes *
+     ********************/
     override fun getChildRoutes(parentRoute: Route) {
         for (bound in 1..parentRoute.boundCount) {
             ConnectionHelper.kmb.getBoundVariant(
@@ -142,6 +151,8 @@ object KmbConnection: BaseConnection {
 
                 stops.forEach({ stop ->
                     jobs += launch(CommonPool) {
+                        stop.etaStatus = Constants.EtaStatus.FAILED
+                        stop.etaUpdateTime = t
                         try {
                             val response =
                                     ConnectionHelper.kmbEta.getEta(
@@ -163,20 +174,12 @@ object KmbConnection: BaseConnection {
                                     }
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
-                                    stop.etaUpdateTime = t
                                     //Log.d(TAG, AppHelper.gson.toJson(etaResults))
-                                } else {
-                                    stop.etaStatus = Constants.EtaStatus.FAILED
-                                    stop.etaUpdateTime = t
                                 }
-                            } else {
-                                stop.etaStatus = Constants.EtaStatus.FAILED
-                                stop.etaUpdateTime = t
                             }
                         } catch (e: Exception) {
                             Log.e(TAG, e.toString())
                             stop.etaStatus = Constants.EtaStatus.NETWORK_ERROR
-                            stop.etaUpdateTime = t
                         }
                     }
                 })

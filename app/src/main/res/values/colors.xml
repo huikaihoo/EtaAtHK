@@ -11,9 +11,9 @@
     <color name="colorAllDark">#5D4037</color>
     <color name="colorAllAccent">#795548</color>
 
-    <color name="colorHki">#FF9800</color>
-    <color name="colorHkiDark">#F57C00</color>
-    <color name="colorHkiAccent">#FF9800</color>
+    <color name="colorHki">#9C27B0</color>
+    <color name="colorHkiDark">#7B1FA2</color>
+    <color name="colorHkiAccent">#E040FB</color>
 
     <color name="colorCrossHarbour">#2196F3</color>
     <color name="colorCrossHarbourDark">#1976D2</color>
@@ -31,9 +31,9 @@
     <color name="colorLwbDark">#E64A19</color>
     <color name="colorLwbAccent">#FF5722</color>
 
-    <color name="colorNwfb">#9C27B0</color>
-    <color name="colorNwfbDark">#7B1FA2</color>
-    <color name="colorNwfbAccent">#E040FB</color>
+    <color name="colorNwfb">#FF9800</color>
+    <color name="colorNwfbDark">#F57C00</color>
+    <color name="colorNwfbAccent">#FF9800</color>
 
     <color name="colorCtb">#3F51B5</color>
     <color name="colorCtbDark">#303F9F</color>

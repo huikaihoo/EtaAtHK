@@ -15,14 +15,14 @@ object RoutesRepo {
     private const val TAG = "RoutesRepo"
 
     // Parents routes by type codes
-    fun getParentRoutes(typeCodes: List<Long>): LiveData<List<Route>> {
-        return AppHelper.db.parentRoutesDao().select(typeCodes)
+    fun getParentRoutes(typeCodes: List<Long>, orderBy: Long): LiveData<List<Route>> {
+        return AppHelper.db.parentRoutesDao().select(typeCodes, orderBy)
     }
 
-    fun updateParentRoutes() {
+    fun updateParentRoutes(company: String) {
         launch(CommonPool) {
             // TODO("Only get from remote when data outdated")
-            ConnectionHelper.getParentRoutes()
+            ConnectionHelper.getParentRoutes(company)
         }
     }
 

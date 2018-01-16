@@ -8,12 +8,20 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Stop
+import hoo.etahk.model.diff.BaseDiffCallback
+import hoo.etahk.model.diff.StopDiffCallback
 import hoo.etahk.view.App
-import hoo.etahk.view.base.BaseAdapter
+import hoo.etahk.view.base.BaseDiffAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_stop.view.*
 
-class RouteStopsAdapter : BaseAdapter<RouteFragment, Stop>() {
+class RouteStopsAdapter : BaseDiffAdapter<RouteFragment, Stop>() {
+
+    init {
+        useDiff = false
+    }
+
+    override fun getDiffCallback(oldData: List<Stop>, newData: List<Stop>): BaseDiffCallback<Stop> = StopDiffCallback(oldData, newData)
 
     override fun getItemViewId(position: Int, dataSource: List<Stop>): Int = R.layout.item_stop
 

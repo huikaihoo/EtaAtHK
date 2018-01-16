@@ -2,7 +2,6 @@ package hoo.etahk.model.diff
 
 import hoo.etahk.model.data.Stop
 
-
 class StopDiffCallback(oldData: List<Stop>, newData: List<Stop>): BaseDiffCallback<Stop>(oldData, newData) {
     /**
      * Called by the DiffUtil to decide whether two object represent the same Item.
@@ -15,7 +14,11 @@ class StopDiffCallback(oldData: List<Stop>, newData: List<Stop>): BaseDiffCallba
      * @return True if the two items represent the same object or false if they are different.
      */
     override fun areItemsTheSame(oldItem: Stop, newItem: Stop): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return (oldItem.routeKey.company == newItem.routeKey.company &&
+                oldItem.routeKey.routeNo == newItem.routeKey.routeNo &&
+                oldItem.routeKey.bound == newItem.routeKey.bound &&
+                oldItem.routeKey.variant == newItem.routeKey.variant &&
+                oldItem.seq == newItem.seq)
     }
 
     /**
@@ -39,6 +42,6 @@ class StopDiffCallback(oldData: List<Stop>, newData: List<Stop>): BaseDiffCallba
      * @return True if the contents of the items are the same or false if they are different.
      */
     override fun areContentsTheSame(oldItem: Stop, newItem: Stop): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return false
     }
 }

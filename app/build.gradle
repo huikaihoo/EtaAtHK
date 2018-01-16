@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 def versionMajor = 0
 def versionMinor = 3
-def versionPatch = 11
+def versionPatch = 13
 def versionBuild = 1
 
 def static getCurrentDate() {
@@ -34,6 +34,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    buildTypes.each {
+        it.resValue 'string', 'google_maps_key', google_maps_api_key
     }
 }
 

@@ -1,6 +1,7 @@
 package hoo.etahk.view.search
 
 import android.arch.lifecycle.MutableLiveData
+import hoo.etahk.common.Constants
 import hoo.etahk.model.repo.RoutesRepo
 import hoo.etahk.view.base.RefreshViewModel
 
@@ -13,7 +14,7 @@ class BusSearchViewModel : RefreshViewModel() {
     fun updateParentRoutes() {
         if (!hasUpdateParentRoutes) {
             hasUpdateParentRoutes = true
-            RoutesRepo.updateParentRoutes()
+            RoutesRepo.updateParentRoutes(Constants.Company.BUS)
         }
     }
 }

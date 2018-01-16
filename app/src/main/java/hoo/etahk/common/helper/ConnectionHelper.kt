@@ -5,14 +5,12 @@ import hoo.etahk.common.Constants.NetworkType
 import hoo.etahk.common.Constants.Url
 import hoo.etahk.common.tools.ConnectionFactory
 import hoo.etahk.model.data.Route
+import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.remote.api.GovApi
 import hoo.etahk.remote.api.KmbApi
 import hoo.etahk.remote.api.NwfbApi
-import hoo.etahk.remote.connection.BaseConnection
-import hoo.etahk.remote.connection.GovConnection
-import hoo.etahk.remote.connection.KmbConnection
-import hoo.etahk.remote.connection.NwfbConnection
+import hoo.etahk.remote.connection.*
 import okhttp3.OkHttpClient
 
 object ConnectionHelper: BaseConnection {
@@ -70,6 +68,8 @@ object ConnectionHelper: BaseConnection {
 
     private fun getConnection(company: String): BaseConnection? {
         return when (company) {
+            Company.BUS -> BusConnection
+            Company.GOV -> GovConnection
             Company.KMB -> KmbConnection
             Company.LWB -> KmbConnection
             Company.NWFB -> NwfbConnection
@@ -78,8 +78,16 @@ object ConnectionHelper: BaseConnection {
         }
     }
 
-    override fun getParentRoutes() {
-        GovConnection.getParentRoutes()
+    override fun getEtaRoutes(company: String): List<String>? {
+        return getConnection(company)?.getEtaRoutes()
+    }
+
+    override fun getParentRoutes(company: String): HashMap<String, Route>? {
+        return getConnection(company)?.getParentRoutes()
+    }
+
+    override fun getParentRoute(routeKey: RouteKey): Route? {
+        return getConnection(routeKey.company)?.getParentRoute(routeKey)
     }
 
     override fun getChildRoutes(parentRoute: Route) {

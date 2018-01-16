@@ -10,6 +10,14 @@ import retrofit2.http.Query
 interface NwfbApi {
 
     // Base Url = "http://mobile.nwstbus.com.hk/"
+    @GET("api6/getmmroutelist.php")
+    fun getParentRoutes(@Query("rno") rno: String = "",
+                        @Query("m") m: String,
+                        @Query("l") l: String = "0",
+                        @Query("syscode") syscode: String = "",
+                        @Query("p") p: String = Constants.SharePrefs.NWFB_API_PARAMETER_PLATFORM,
+                        @Query("appversion") appversion: String = Constants.SharePrefs.NWFB_API_PARAMETER_APP_VERSION): Call<ResponseBody>
+
     @GET("api6/getvariantlist.php")
     fun getBoundVariant(@Query("id") id: String = "",
                         @Query("l") l: String = "0",

@@ -56,7 +56,7 @@ class RouteActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         mRouteViewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
-        mRouteViewModel.routeKey = RouteKey(intent.extras.getString(ARG_COMPANY), intent.extras.getString(ARG_ROUTE_NO), -1, -1)
+        mRouteViewModel.routeKey = RouteKey(intent.extras.getString(ARG_COMPANY), intent.extras.getString(ARG_ROUTE_NO), -1L, -1L)
         mRouteViewModel.period = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH
 
         // Create the adapter that will return a fragment for each of the three
@@ -69,7 +69,7 @@ class RouteActivity : AppCompatActivity() {
         tabs.setupWithViewPager(container)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = mRouteViewModel.routeKey!!.routeNo
+        supportActionBar?.title = mRouteViewModel.routeKey!!.getCompanyName() + " " + mRouteViewModel.routeKey!!.routeNo
 
         fab.setOnClickListener { view ->
             mRouteViewModel.insertRoutes()

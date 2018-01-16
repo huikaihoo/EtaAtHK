@@ -20,6 +20,7 @@ class BusSearchFragmentViewModel : ViewModel() {
     }
 
     private fun subscribeToRepo() {
-        mParentRoutes = RoutesRepo.getParentRoutes(BusSearchActivity.searchList[index].routeTypes)
+        val config = BusSearchActivity.searchList[index]
+        mParentRoutes = RoutesRepo.getParentRoutes(config.routeTypes, config.orderBy)
     }
 }

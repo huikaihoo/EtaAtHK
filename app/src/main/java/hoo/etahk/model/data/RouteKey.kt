@@ -19,6 +19,7 @@ import hoo.etahk.common.Constants.RouteType.BUS_HKI_NIGHT
 import hoo.etahk.common.Constants.RouteType.BUS_KL_NT
 import hoo.etahk.common.Constants.RouteType.BUS_KL_NT_NIGHT
 import hoo.etahk.common.Constants.RouteType.NONE
+import hoo.etahk.common.Utils
 
 data class RouteKey (
         val company: String,
@@ -28,6 +29,10 @@ data class RouteKey (
 
     companion object {
         private const val TAG = "RouteKey"
+    }
+
+    fun getCompanyName(): String {
+        return Utils.getStringResourceByName(company.toLowerCase())
     }
 
     var typeCode: Long = NONE

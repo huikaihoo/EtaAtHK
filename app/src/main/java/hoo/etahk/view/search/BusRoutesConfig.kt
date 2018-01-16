@@ -6,7 +6,7 @@ import hoo.etahk.view.App
 data class BusRoutesConfig(
         private val titleResId: Int,
         var routeTypes: List<Long>,
-        var order: Long,
+        var orderBy: Long,
         val color: ThemeColor) {
     val title: String
         get() = App.instance.getString(titleResId)

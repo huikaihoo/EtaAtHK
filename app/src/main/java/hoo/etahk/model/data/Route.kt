@@ -25,8 +25,6 @@ data class Route(
         var eta: Boolean = false,
         var seq: Long = -1L,
         var typeSeq: Long = -1L,
-        var infoBatchUpdate: Boolean = false,
-        var infoUpdateTime: Long = 0L,
         var updateTime: Long = 0L): Comparable<Route> {
 
     val boundCount: Long
@@ -36,7 +34,13 @@ data class Route(
         get() = if (direction > 1L) 1L else direction
 
     fun getParentDesc(): String {
-        return Utils.getStringResourceByName(routeKey.company.toLowerCase())
+        var result = ""
+        companyDetails.forEachIndexed { i, company ->
+            if (i > 0)
+                result += "/"
+            result += Utils.getStringResourceByName(company.toLowerCase())
+        }
+        return result
     }
 
     fun getToByBound(): StringLang {

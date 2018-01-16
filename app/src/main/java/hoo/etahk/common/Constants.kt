@@ -46,6 +46,8 @@ object Constants {
         const val ETA_NWFB_READ_TIMEOUT_VAL = 5000L
         const val ETA_NWFB_WRITE_TIMEOUT_VAL = 5000L
 
+        const val NWFB_API_PARAMETER_TYPE_ALL_BUS = "0"
+        const val NWFB_API_PARAMETER_TYPE_ETA_BUS = "5"
         const val NWFB_API_PARAMETER_PLATFORM = "android"
         const val NWFB_API_PARAMETER_APP_VERSION = "3.3.1"
         const val GOV_API_PARAMETER_PLATFORM = "android"
@@ -55,6 +57,8 @@ object Constants {
     }
 
     object Company {
+        const val BUS = "BUS"
+        const val GOV = "GOV"
         // Support ETA (Bus)
         const val KMB = "KMB"
         const val LWB = "LWB"
@@ -65,6 +69,9 @@ object Constants {
         const val DB = "DB"
         const val PI = "PI"
         const val LRT_FEEDER = "LRTFeeder"
+        // Tram
+        const val TRAM = "TRAM"
+        // MTR Train
         const val MTR = "MTR"
     }
 
@@ -83,10 +90,11 @@ object Constants {
         const val MTR = 100L
     }
 
-    object Ordering {
-        const val NORMAL = 0L
-        const val TYPE_CODE = 1L
-        const val BUS = 2L
+    object OrderBy {
+        const val SEQ = 0L
+        const val TYPE_SEQ = 1L
+        const val TYPE_CODE_TYPE_SEQ = 2L
+        const val BUS = 3L
     }
 
     object Url {
@@ -112,7 +120,18 @@ object Constants {
         const val GOV_ROUTE_RECORD_CIRCULAR = 7
         const val GOV_ROUTE_RECORD_SPECIAL = 9
         const val GOV_ROUTE_RECORD_FARE = 11
+        const val GOV_ROUTE_RECORD_DETAILS = 13
         const val GOV_ROUTE_RECORD_COMPANIES = 15
+
+        const val NWFB_ROUTE_RECORD_SIZE = 11
+        const val NWFB_ROUTE_RECORD_COMPANY = 0
+        const val NWFB_ROUTE_RECORD_ROUTE_NO = 1
+        const val NWFB_ROUTE_RECORD_DIRECTION = 3
+        const val NWFB_ROUTE_RECORD_FROM = 4
+        const val NWFB_ROUTE_RECORD_TO = 5
+        const val NWFB_ROUTE_RECORD_INFO_BOUND_ID = 7
+        const val NWFB_ROUTE_RECORD_INFO_BOUND = 9
+        const val NWFB_ROUTE_RECORD_DETAILS = 10
 
         const val NWFB_VARIANT_RECORD_SIZE = 10
         const val NWFB_VARIANT_RECORD_VARIANT = 0

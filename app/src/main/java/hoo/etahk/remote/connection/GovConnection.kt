@@ -22,7 +22,6 @@ import java.util.*
 object GovConnection: BaseConnection{
 
     private const val TAG = "GovConnection"
-    private val needInfoBatchUpdateCompany = listOf(Constants.Company.NWFB, Constants.Company.CTB)
 
     /***************
      * Shared
@@ -47,10 +46,102 @@ object GovConnection: BaseConnection{
         return timestampStr + hex.toString().toLowerCase() + random
     }
 
+    override fun getEtaRoutes(company: String): List<String>? {
+        return null
+    }
+
     /*********************
      * Get Parent Routes *
      *********************/
-    override fun getParentRoutes() {
+    override fun getParentRoutes(company: String): HashMap<String, Route>? {
+        val t = Utils.getCurrentTimestamp()
+        val temp = HashMap<String, MutableList<Route>>()
+        val result = HashMap<String, Route>()
+
+        val response = ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode()).execute()
+        if (response.isSuccessful) {
+            val separator = Separator("\\|\\*\\|".toRegex(), "\\|\\|".toRegex(), Constants.Route.GOV_ROUTE_RECORD_SIZE)
+
+            //Log.d(TAG, "onResponse ${separator.columnSize}")
+            separator.original = response.body()?.string() ?: ""
+            separator.result.forEach {
+                toRoutes(it, t).forEach { route ->
+                    val key = route.routeKey.company + route.routeKey.routeNo
+                    if (temp.contains(key)) {
+                        val routes = temp[key]!!
+                        routes.add(route)
+                        temp.put(key, routes)
+                    } else {
+                        temp.put(key, mutableListOf(route))
+                    }
+                }
+                //result.putAll(routes.associate{ Pair(it.routeKey.company + it.routeKey.routeNo, it) })
+            }
+            Log.d(TAG, "onResponse ${separator.result.size}")
+
+            for((key, routes) in temp) {
+                if (routes.size == 1) {
+                    result.put(key, routes[0])
+                } else if (routes.size > 1){
+                    result.put(key, mergeVariantRoutes(routes))
+                }
+            }
+        }
+
+        return result
+    }
+
+    private fun mergeVariantRoutes(routes: List<Route>): Route {
+        // 1. Return Non-Special
+        routes.forEach {
+            if (it.specialCode == 0L || it.specialCode == 2L)
+                return it
+        }
+
+        // 2. Return direction > 1
+        routes.forEach {
+            if (it.direction > 1L)
+                return it
+        }
+
+        // 3. Return direction == 0
+        routes.forEach {
+            if (it.direction == 0L)
+                return it
+        }
+
+        // 4. Special Handle (multiple one way non-circular special routes: merge to one)
+        // TODO("Need to Support English")
+        val newFrom = routes[0].from
+        val newTo = routes[0].to
+        var newDirection = 1L
+
+        for (i in routes.indices) {
+            if (i == 0)
+                continue
+
+            val from = routes[i].from
+            val to = routes[i].to
+
+            if (newFrom.value == from.value) {
+                if (to.value != to.value)
+                    newTo.value += " / " + to.value
+            } else if (newTo.value == to.value) {
+                newFrom.value += " / " + from.value
+            } else if (newFrom.value == to.value) {
+                newDirection = 2L
+                if (to.value != from.value)
+                    newTo.value += " / " + from.value
+            } else if (newTo.value == from.value) {
+                newDirection = 2L
+                newFrom.value += " / " + to.value
+            }
+        }
+
+        return routes[0].copy(direction = newDirection, from = newFrom, to = newTo)
+    }
+
+    fun getParentRoutesOld(company: String): HashMap<String, Route>? {
         Log.d(TAG, "Start")
         ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode())
                 .enqueue(object : Callback<ResponseBody> {
@@ -79,6 +170,7 @@ object GovConnection: BaseConnection{
                         }
                     }
                 })
+        return null
     }
 
     private fun toRoutes(records: List<String>, t: Long): List<Route> {
@@ -103,7 +195,7 @@ object GovConnection: BaseConnection{
                         companyDetails = companies,
                         from = StringLang.newInstance(records[Constants.Route.GOV_ROUTE_RECORD_FROM]),
                         to = StringLang.newInstance(records[Constants.Route.GOV_ROUTE_RECORD_TO]),
-                        infoBatchUpdate = needInfoBatchUpdateCompany.contains(company),
+                        details = StringLang.newInstance(records[Constants.Route.GOV_ROUTE_RECORD_DETAILS]),
                         updateTime = t
                 )
                 routes.add(route)
@@ -111,6 +203,10 @@ object GovConnection: BaseConnection{
         }
 
         return routes.toList()
+    }
+
+    override fun getParentRoute(routeKey: RouteKey): Route? {
+        return null
     }
 
     override fun getChildRoutes(parentRoute: Route) {

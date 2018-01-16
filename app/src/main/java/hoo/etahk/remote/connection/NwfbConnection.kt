@@ -9,7 +9,9 @@ import hoo.etahk.common.Utils
 import hoo.etahk.common.Utils.timeStrToMsg
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.common.tools.Separator
 import hoo.etahk.model.data.Route
+import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
@@ -27,7 +29,7 @@ import java.util.*
 
 object NwfbConnection: BaseConnection {
 
-    private const val TAG = "BaseConnection"
+    private const val TAG = "NwfbConnection"
 
     /***************
      * Shared
@@ -41,18 +43,94 @@ object NwfbConnection: BaseConnection {
         return timestamp + random + HASH.md5(timestamp + random + "firstbusmwymwy")
     }
 
-    /********************
-     * Get Parent Routes
-     ********************/
-    override fun getParentRoutes() {
-        return
+    override fun getEtaRoutes(company: String): List<String>? {
+        return null
+    }
+
+    /*********************
+     * Get Parent Routes *
+     *********************/
+    override fun getParentRoutes(company: String): HashMap<String, Route>? {
+        val t = Utils.getCurrentTimestamp()
+        val result = HashMap<String, Route>()
+
+        val response = ConnectionHelper.nwfb.getParentRoutes(
+                m = Constants.SharePrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
+                syscode = getSystemCode())
+                .execute()
+
+        if (response.isSuccessful) {
+            val separator = Separator("\\|\\*\\|<br>".toRegex(), "\\|\\|".toRegex(), Constants.Route.NWFB_ROUTE_RECORD_SIZE)
+
+            Log.d(TAG, "onResponse ${separator.columnSize}")
+            separator.original = response.body()?.string() ?: ""
+            separator.result.forEach {
+                val route = toRoute(it, t)
+                val key = route.routeKey.company + route.routeKey.routeNo
+
+                if (result.contains(key)) {
+                    result.put(key, mergeRoute(it, result[key]!!))
+                } else {
+                    result.put(key, route)
+                }
+            }
+
+            Log.d(TAG, "onResponse ${separator.result.size}")
+        }
+
+        return result
+    }
+
+    private fun toRoute(records: List<String>, t: Long): Route {
+        val company = records[Constants.Route.NWFB_ROUTE_RECORD_COMPANY]
+
+        return Route(
+                routeKey = RouteKey(company = company,
+                        routeNo = records[Constants.Route.NWFB_ROUTE_RECORD_ROUTE_NO],
+                        bound = 0L,
+                        variant = 0L),
+                direction = records[Constants.Route.NWFB_ROUTE_RECORD_DIRECTION].toLong(),
+                specialCode = 0L,
+                companyDetails = listOf(company),
+                from = StringLang.newInstance(records[Constants.Route.NWFB_ROUTE_RECORD_FROM]),
+                to = StringLang.newInstance(records[Constants.Route.NWFB_ROUTE_RECORD_TO]),
+                details = StringLang.newInstance(records[Constants.Route.NWFB_ROUTE_RECORD_DETAILS]),
+                info = Info(boundIds = listOf(records[Constants.Route.NWFB_ROUTE_RECORD_INFO_BOUND_ID]),
+                        bound = records[Constants.Route.NWFB_ROUTE_RECORD_INFO_BOUND]),
+                updateTime = t
+        )
+    }
+
+    private fun mergeRoute(records: List<String>, route: Route): Route {
+        if (route.info.bound == "O") {
+            val boundIds = route.info.boundIds.toMutableList()
+            boundIds.add(records[Constants.Route.NWFB_ROUTE_RECORD_INFO_BOUND_ID])
+            route.info.boundIds = boundIds.toList()
+        } else {
+            route.from = StringLang.newInstance(records[Constants.Route.NWFB_ROUTE_RECORD_FROM])
+            route.to = StringLang.newInstance(records[Constants.Route.NWFB_ROUTE_RECORD_TO])
+            val boundIds = mutableListOf(records[Constants.Route.NWFB_ROUTE_RECORD_INFO_BOUND_ID])
+            boundIds.addAll(route.info.boundIds)
+            route.info.boundIds = boundIds.toList()
+        }
+
+        if (route.direction == 1L && route.info.boundIds.size > 1) {
+            route.direction = route.info.boundIds.size.toLong()
+        }
+
+        return route
+    }
+
+    override fun getParentRoute(routeKey: RouteKey): Route? {
+        return null
     }
 
     /*******************
      * Get Child Routes
      *******************/
     override fun getChildRoutes(parentRoute: Route) {
-        parentRoute.info.boundIds.forEach { boundId ->
+
+        parentRoute.info.boundIds.forEachIndexed { index, boundId ->
             ConnectionHelper.nwfb.getBoundVariant(
                     id = boundId,
                     l = "0",
@@ -72,7 +150,7 @@ object NwfbConnection: BaseConnection {
                                     nwfbResponse.forEach({
                                         val records = it.split("(\\|\\|)|(\\*\\*\\*)".toRegex())
                                         if (records.size >= Constants.Route.NWFB_VARIANT_RECORD_SIZE) {
-                                            routes.add(toChildRoute(parentRoute, records, t))
+                                            routes.add(toChildRoute(parentRoute, (index + 1).toLong(), records, t))
                                         }
                                         //Log.d(TAG, it)
                                     })
@@ -86,9 +164,9 @@ object NwfbConnection: BaseConnection {
         }
     }
 
-    private fun toChildRoute(parentRoute: Route, records: List<String>, t: Long): Route {
+    private fun toChildRoute(parentRoute: Route, bound: Long, records: List<String>, t: Long): Route {
         val infoBound = records[Constants.Route.NWFB_VARIANT_RECORD_INFO_BOUND].trim()
-        val bound = if (parentRoute.boundCount <= 1L || infoBound == "O") 1L else 2L
+        //val bound = if (parentRoute.boundCount <= 1L || infoBound == "O") 1L else 2L
         val from = if (bound == 1L) parentRoute.from else parentRoute.to
         val to = if (bound == 1L) parentRoute.to else parentRoute.from
 
@@ -182,6 +260,8 @@ object NwfbConnection: BaseConnection {
 
                 stops.forEach({ stop ->
                     jobs += launch(CommonPool) {
+                        stop.etaStatus = Constants.EtaStatus.FAILED
+                        stop.etaUpdateTime = t
                         try {
                             val response =
                                     ConnectionHelper.nwfbEta.getEta(
@@ -224,18 +304,11 @@ object NwfbConnection: BaseConnection {
                                     stop.etaResults = etaResults
                                     stop.etaUpdateTime = t
                                     //Log.d(TAG, AppHelper.gson.toJson(stop.etaResults))
-                                } else {
-                                    stop.etaStatus = Constants.EtaStatus.FAILED
-                                    stop.etaUpdateTime = t
                                 }
-                            } else {
-                                stop.etaStatus = Constants.EtaStatus.FAILED
-                                stop.etaUpdateTime = t
                             }
                         } catch (e: Exception) {
                             Log.e(TAG, e.toString())
                             stop.etaStatus = Constants.EtaStatus.NETWORK_ERROR
-                            stop.etaUpdateTime = t
                         }
                     }
                 })

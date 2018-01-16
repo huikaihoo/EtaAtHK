@@ -19,7 +19,7 @@ import android.view.View
 import android.view.WindowManager
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.Constants.Ordering
+import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.tools.ThemeColor
 import kotlinx.android.synthetic.main.activity_search_nav_tab.*
@@ -36,33 +36,36 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         val searchList = listOf(
                 // ALL
                 BusRoutesConfig(R.string.all,
-                        listOf(RouteType.NONE),
-                        Ordering.BUS,
+                        listOf(RouteType.BUS_KL_NT, RouteType.BUS_KL_NT_NIGHT,
+                                RouteType.BUS_HKI, RouteType.BUS_HKI_NIGHT,
+                                RouteType.BUS_CROSS_HARBOUR, RouteType.BUS_CROSS_HARBOUR_NIGHT,
+                                RouteType.BUS_AIRPORT_LANTAU, RouteType.BUS_AIRPORT_LANTAU_NIGHT),
+                        OrderBy.BUS,
                         ThemeColor(R.color.colorAll, R.color.colorAllDark, R.color.colorAllAccent)),
                 // KLN / NT
                 BusRoutesConfig(R.string.kln_nt,
                         listOf(RouteType.BUS_KL_NT, RouteType.BUS_KL_NT_NIGHT),
-                        Ordering.TYPE_CODE,
+                        OrderBy.TYPE_SEQ,
                         ThemeColor(R.color.colorKmb, R.color.colorKmbDark, R.color.colorKmbAccent)),
                 // HK Island
                 BusRoutesConfig(R.string.hki,
                         listOf(RouteType.BUS_HKI, RouteType.BUS_HKI_NIGHT),
-                        Ordering.TYPE_CODE,
+                        OrderBy.TYPE_SEQ,
                         ThemeColor(R.color.colorHki, R.color.colorHkiDark, R.color.colorHkiAccent)),
                 // Cross Harbour
                 BusRoutesConfig(R.string.cross_harbour,
                         listOf(RouteType.BUS_CROSS_HARBOUR, RouteType.BUS_CROSS_HARBOUR_NIGHT),
-                        Ordering.TYPE_CODE,
+                        OrderBy.TYPE_SEQ,
                         ThemeColor(R.color.colorCrossHarbour, R.color.colorCrossHarbourDark, R.color.colorCrossHarbourAccent)),
                 // Lantau + Airport
                 BusRoutesConfig(R.string.airport_lantau,
                         listOf(RouteType.BUS_AIRPORT_LANTAU, RouteType.BUS_AIRPORT_LANTAU_NIGHT),
-                        Ordering.TYPE_CODE,
+                        OrderBy.TYPE_SEQ,
                         ThemeColor(R.color.colorNlb, R.color.colorNlbDark, R.color.colorNlbAccent)),
                 // Overnight
                 BusRoutesConfig(R.string.overnight,
                         listOf(RouteType.BUS_KL_NT_NIGHT, RouteType.BUS_HKI_NIGHT, RouteType.BUS_CROSS_HARBOUR_NIGHT, RouteType.BUS_AIRPORT_LANTAU_NIGHT),
-                        Ordering.TYPE_CODE,
+                        OrderBy.SEQ,
                         ThemeColor(R.color.colorNight, R.color.colorNightDark, R.color.colorNightAccent))
         )
     }

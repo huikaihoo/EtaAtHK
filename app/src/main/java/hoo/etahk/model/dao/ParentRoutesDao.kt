@@ -2,22 +2,55 @@ package hoo.etahk.model.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
+import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.model.data.Route
 
 @Dao
 abstract class ParentRoutesDao {
+
+    companion object {
+        const val PARENT_ROUTE_SELECT =
+                "SELECT * FROM route " +
+                "WHERE typeCode IN (:typeCodes) " +
+                "AND bound = 0 " +
+                "AND variant = 0 "
+    }
 
     // Count
     @Query("SELECT COUNT(*) FROM route WHERE bound = 0")
     abstract fun count(): Int
 
     // Select
-    @Query("SELECT * FROM route " +
-            "WHERE typeCode IN (:typeCodes) " +
-            "AND bound = 0 " +
-            "AND variant = 0 " +
+    @Query(PARENT_ROUTE_SELECT +
+            "ORDER BY " +
+            "CASE WHEN typeCode < 10 THEN typeCode ELSE 10 END, " +
+            "CASE WHEN typeCode < 10 THEN Seq ELSE Seq END, " +
+            "routeNo")
+    protected abstract fun selectOrderByBus(typeCodes: List<Long>): LiveData<List<Route>>
+
+    // Select
+    @Query(PARENT_ROUTE_SELECT +
             "ORDER BY typeCode, seq, routeNo")
-    abstract fun select(typeCodes: List<Long>): LiveData<List<Route>>
+    protected abstract fun selectOrderByTypCodeTypeSeq(typeCodes: List<Long>): LiveData<List<Route>>
+
+    // Select
+    @Query(PARENT_ROUTE_SELECT +
+            "ORDER BY seq, routeNo")
+    protected abstract fun selectOrderByTypeSeq(typeCodes: List<Long>): LiveData<List<Route>>
+
+    // Select
+    @Query(PARENT_ROUTE_SELECT +
+            "ORDER BY seq, routeNo")
+    protected abstract fun selectOrderBySeq(typeCodes: List<Long>): LiveData<List<Route>>
+
+    fun select(typeCodes: List<Long>, orderBy: Long): LiveData<List<Route>> {
+        return when (orderBy) {
+            OrderBy.BUS -> selectOrderByBus(typeCodes)
+            OrderBy.TYPE_CODE_TYPE_SEQ -> selectOrderByTypCodeTypeSeq(typeCodes)
+            OrderBy.TYPE_SEQ -> selectOrderByTypeSeq(typeCodes)
+            else -> selectOrderBySeq(typeCodes)
+        }
+    }
 
     @Query("SELECT * FROM route WHERE company = :company AND routeNo = :routeNo AND bound = 0 LIMIT 1")
     abstract fun select(company: String, routeNo: String): LiveData<Route>

@@ -1,11 +1,9 @@
 package hoo.etahk.common.tools
 
-import android.util.Log
-
 class Separator(val regexRow: Regex,
                 val regexColumn: Regex? = null,
                 val columnSize: Int = 1,
-                val removeBlank: Boolean = true,
+                val removeBlankRow: Boolean = true,
                 val removeInvalidRow: Boolean = true) {
 
     var original: String = ""
@@ -15,7 +13,6 @@ class Separator(val regexRow: Regex,
         private set
 
     private fun process(originalString: String) {
-        Log.d("XXX", originalString)
         val mutableResult = mutableListOf<List<String>>()
 
         if (!originalString.isBlank()) {
@@ -23,7 +20,7 @@ class Separator(val regexRow: Regex,
             if (columnSize <= 1 || regexColumn == null) {
                 // One column per row
                 rows.forEach {
-                    if (!it.isBlank() || !removeBlank) {
+                    if (!it.isBlank() || !removeBlankRow) {
                         mutableResult.add(listOf(it.trim()))
                     }
                 }
@@ -40,7 +37,7 @@ class Separator(val regexRow: Regex,
                             mutableColumns.addAll(Array(columnSize - columns.size, { "" }))
                             mutableResult.add(mutableColumns.toList())
                         }
-                    } else if (!removeBlank){
+                    } else if (!removeBlankRow){
                         mutableResult.add(Array(columnSize, { "" }).toList())
                     }
                 }
