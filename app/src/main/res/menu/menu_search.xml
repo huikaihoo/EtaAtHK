@@ -4,7 +4,7 @@
     tools:context="hoo.etahk.view.search.BusSearchActivity">
 
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/menu_search"
         android:title="@string/search"
         android:orderInCategory="10"
         android:icon="@drawable/ic_fab_search"
@@ -14,7 +14,7 @@
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/menu_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />

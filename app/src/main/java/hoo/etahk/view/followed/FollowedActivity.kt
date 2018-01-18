@@ -16,7 +16,6 @@ import android.view.Menu
 import android.view.MenuItem
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.Constants.Eta
 import hoo.etahk.common.helper.AppHelper
 import kotlinx.android.synthetic.main.activity_nav_tab.*
 import kotlinx.android.synthetic.main.activity_tab.*
@@ -97,7 +96,7 @@ class FollowedActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
-            R.id.action_settings -> return true
+            R.id.menu_settings -> return true
             else -> return super.onOptionsItemSelected(item)
         }
     }

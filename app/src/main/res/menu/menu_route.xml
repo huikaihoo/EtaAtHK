@@ -2,9 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="hoo.etahk.view.route.RouteActivity">
+
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:id="@+id/menu_maps"
+        android:title="@string/maps"
+        android:orderInCategory="110"
+        android:icon="@drawable/ic_menu_maps"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="900"
         android:title="@string/action_settings"
         app:showAsAction="never" />
 </menu>

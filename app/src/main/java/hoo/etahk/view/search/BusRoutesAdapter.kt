@@ -6,6 +6,7 @@ import com.mcxiaoke.koi.ext.Bundle
 import com.mcxiaoke.koi.ext.startActivity
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import hoo.etahk.R
+import hoo.etahk.common.Constants.Argument
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.BaseDiffCallback
@@ -49,9 +50,9 @@ class BusRoutesAdapter : BaseFilterDiffAdapter<BusSearchFragment, Route>(), Fast
 
         private fun startRouteActivity(context: BusSearchFragment?, routeKey: RouteKey){
             context?.activity?.startActivity<RouteActivity>(Bundle {
-                putString(RouteActivity.ARG_COMPANY, routeKey.company)
-                putString(RouteActivity.ARG_ROUTE_NO, routeKey.routeNo)
-                putLong(RouteActivity.ARG_TYPE_CODE, routeKey.typeCode)
+                putString(Argument.ARG_COMPANY, routeKey.company)
+                putString(Argument.ARG_ROUTE_NO, routeKey.routeNo)
+                putLong(Argument.ARG_TYPE_CODE, routeKey.typeCode)
             })
         }
     }

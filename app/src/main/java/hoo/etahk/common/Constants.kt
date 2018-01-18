@@ -56,6 +56,20 @@ object Constants {
         const val GOV_API_PARAMETER_COMPANY_ALL_BUS_MINIBUS = "0"
     }
 
+    object Permission {
+        const val PERMISSIONS_REQUEST_LOCATION = 1
+    }
+
+    object Argument {
+        const val ARG_COMPANY = "company"
+        const val ARG_ROUTE_NO = "route_no"
+        const val ARG_TYPE_CODE = "type_code"
+        const val ACTIONBAR_TITLE = "actionbar_title"
+        const val ACTIONBAR_SUBTITLE = "actionbar_subtitle"
+        const val LATITUDE = "latitude"
+        const val LONGITUDE = "longitude"
+    }
+
     object Company {
         const val BUS = "BUS"
         const val GOV = "GOV"

@@ -8,7 +8,7 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
     <application
-        android:name="hoo.etahk.view.App"
+        android:name=".view.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,43 +22,23 @@
         <meta-data
             android:name="com.samsung.android.sdk.multiwindow.penwindow.enable"
             android:value="true" />
-
-        <activity
-            android:name=".view.followed.FollowedActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-                <!--<category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity android:name=".view.test.MainActivity" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
-        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.test.MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".view.test.BvActivity"
-            android:label="@string/title_activity_bv" />
-
-        <activity
-            android:name=".view.route.RouteActivity"
+            android:name=".view.followed.FollowedActivity"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
 
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
         <activity
             android:name=".view.search.BusSearchActivity"
             android:label="@string/title_bus_search"
@@ -70,6 +50,14 @@
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.route.RouteActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.map.RoutesMapsActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity android:name=".view.test.MainActivity" />
+        <activity android:name=".view.test.BvActivity" />
     </application>
 
 </manifest>

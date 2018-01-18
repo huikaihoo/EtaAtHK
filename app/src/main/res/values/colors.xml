@@ -6,6 +6,7 @@
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorMenuWhite">#F5F5F5</color>
+    <color name="colorSemiTransparentBlack">#59000000</color>
 
     <color name="colorAll">#795548</color>
     <color name="colorAllDark">#5D4037</color>

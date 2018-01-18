@@ -139,7 +139,6 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 } else if (slideOffset != 0f) {
                     // started opening: Enable status bar translucency
                     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-
                 }
                 super.onDrawerSlide(drawerView, slideOffset)
             }
@@ -171,7 +170,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         menuInflater.inflate(R.menu.menu_search, menu)
 
         // Set up SearchMenuItem
-        mSearchMenuItem = menu.findItem(R.id.action_search)
+        mSearchMenuItem = menu.findItem(R.id.menu_search)
 
         mSearchMenuItem?.isVisible = false
         mSearchMenuItem?.setOnActionExpandListener( object : MenuItem.OnActionExpandListener {
@@ -233,7 +232,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         when (item.itemId) {
-            R.id.action_settings ->
+            R.id.menu_settings ->
                 return true
             else ->
                 return super.onOptionsItemSelected(item)
@@ -303,8 +302,6 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                             it.startDelay = 0
                             it.start()
                         }
-
-
                     }
                     false -> {
                         // Invalid from index / No index changes > change color without animation
