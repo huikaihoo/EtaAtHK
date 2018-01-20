@@ -56,6 +56,9 @@
         <activity
             android:name=".view.map.RoutesMapsActivity"
             android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".view.map.StreetViewActivity"
+            android:theme="@style/AppTheme.Transparent" />
         <activity android:name=".view.test.MainActivity" />
         <activity android:name=".view.test.BvActivity" />
     </application>

@@ -5,7 +5,7 @@ import android.arch.persistence.room.*
 import hoo.etahk.model.data.Route
 
 @Dao
-abstract class ChildRoutesDao {
+abstract class ChildRouteDao {
 
     // Count
     @Query("SELECT COUNT(*) FROM route WHERE bound > 0 AND variant > 0")

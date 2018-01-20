@@ -34,7 +34,7 @@ class BvActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         message.setOnClickListener { view ->
-            Snackbar.make(view, "Test Snackbar location" + AppHelper.db.stopsDao().count(), Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Test Snackbar location" + AppHelper.db.stopDao().count(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
     }

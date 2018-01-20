@@ -156,7 +156,7 @@ object NwfbConnection: BaseConnection {
                                     })
 
                                     //Log.d(TAG, AppHelper.gson.toJson(routes))
-                                    AppHelper.db.childRoutesDao().insertOrUpdate(routes, t)
+                                    AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
                                 }
                             }
                         }
@@ -182,7 +182,7 @@ object NwfbConnection: BaseConnection {
                         bound = infoBound,
                         startSeq = records[Constants.Route.NWFB_VARIANT_RECORD_START_SEQ].toLong(),
                         endSeq =  records[Constants.Route.NWFB_VARIANT_RECORD_END_SEQ].toLong()),
-                seq = parentRoute.seq,
+                displaySeq = parentRoute.displaySeq,
                 typeSeq = parentRoute.typeSeq,
                 updateTime = t
         )
@@ -220,7 +220,7 @@ object NwfbConnection: BaseConnection {
                                 })
 
                                 //Log.d(TAG, AppHelper.gson.toJson(stops))
-                                AppHelper.db.stopsDao().insertOrUpdate(route, stops, t)
+                                AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
                                 if (needEtaUpdate)
                                     stops.forEach { updateEta(it) }
                             }
@@ -315,7 +315,7 @@ object NwfbConnection: BaseConnection {
                 jobs.forEach { it.join() }
             }
 
-            AppHelper.db.stopsDao().updateOnReplace(stops)
+            AppHelper.db.stopDao().updateOnReplace(stops)
         } catch (e: Exception) {
             Log.e(TAG, e.toString())
         }
@@ -340,7 +340,7 @@ object NwfbConnection: BaseConnection {
                         stop.etaStatus = Constants.EtaStatus.FAILED
                         stop.etaUpdateTime = t
 
-                        AppHelper.db.stopsDao().update(stop)
+                        AppHelper.db.stopDao().update(stop)
                     }
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>){
                         val t = Utils.getCurrentTimestamp()
@@ -376,7 +376,7 @@ object NwfbConnection: BaseConnection {
                             stop.etaUpdateTime = t
                         }
 
-                        AppHelper.db.stopsDao().update(stop)
+                        AppHelper.db.stopDao().update(stop)
                     }
                 })
     }

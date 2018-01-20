@@ -162,10 +162,10 @@ object GovConnection: BaseConnection{
                             if (routes.size > 0) {
                                 routes.sort()
                                 for (i in routes.indices) {
-                                    routes[i].seq = i + 1L
+                                    routes[i].displaySeq = i + 1L
                                 }
 
-                                AppHelper.db.parentRoutesDao().insertOrUpdate(routes, t)
+                                AppHelper.db.parentRouteDao().insertOrUpdate(routes, t)
                             }
                         }
                     }

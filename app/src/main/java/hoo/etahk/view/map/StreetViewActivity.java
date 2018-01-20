@@ -35,10 +35,10 @@ public class StreetViewActivity extends TransparentActivity implements OnStreetV
                         .findFragmentById(R.id.street_view);
 
         // Get Activity based data
-        mTitle = getIntent().getStringExtra(Argument.ACTIONBAR_TITLE);
-        mSubtitle = getIntent().getStringExtra(Argument.ACTIONBAR_SUBTITLE);
-        mLatLng = new LatLng(getIntent().getDoubleExtra(Argument.LATITUDE, 0),
-                getIntent().getDoubleExtra(Argument.LONGITUDE, 0));
+        mTitle = getIntent().getStringExtra(Argument.ARG_ACTIONBAR_TITLE);
+        mSubtitle = getIntent().getStringExtra(Argument.ARG_ACTIONBAR_SUBTITLE);
+        mLatLng = new LatLng(getIntent().getDoubleExtra(Argument.ARG_LATITUDE, 0),
+                getIntent().getDoubleExtra(Argument.ARG_LONGITUDE, 0));
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(mTitle);

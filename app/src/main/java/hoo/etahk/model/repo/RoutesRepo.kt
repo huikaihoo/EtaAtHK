@@ -16,7 +16,7 @@ object RoutesRepo {
 
     // Parents routes by type codes
     fun getParentRoutes(typeCodes: List<Long>, orderBy: Long): LiveData<List<Route>> {
-        return AppHelper.db.parentRoutesDao().select(typeCodes, orderBy)
+        return AppHelper.db.parentRouteDao().select(typeCodes, orderBy)
     }
 
     fun updateParentRoutes(company: String) {
@@ -28,11 +28,11 @@ object RoutesRepo {
 
     // Parents route by Company and routeNo
     fun getParentRoute(company: String, routeNo: String): LiveData<Route> {
-        return AppHelper.db.parentRoutesDao().select(company, routeNo)
+        return AppHelper.db.parentRouteDao().select(company, routeNo)
     }
 
     fun getChildRoutes(company: String, routeNo: String, bound: Long): LiveData<List<Route>> {
-        return AppHelper.db.childRoutesDao().select(company, routeNo, bound)
+        return AppHelper.db.childRouteDao().select(company, routeNo, bound)
     }
 
     fun updateChildRoutes(parentRoute: Route) {
@@ -53,6 +53,6 @@ object RoutesRepo {
                 from = StringLang("A", ""),
                 to = StringLang("B", ""))
 
-        AppHelper.db.parentRoutesDao().insert(route1)
+        AppHelper.db.parentRouteDao().insert(route1)
     }
 }

@@ -10,6 +10,8 @@ class RouteViewModel: TimerViewModel() {
     private var mParentRoute: LiveData<Route>? = null
     private var hasUpdateChildRoutes = false
 
+    // TODO("Selected Tab Position: Can be port from BusSearchActivity")
+
     var routeKey: RouteKey? = null
         set(value) {
             field = value

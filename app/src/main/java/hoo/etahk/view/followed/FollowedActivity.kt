@@ -55,7 +55,7 @@ class FollowedActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         fab.setOnClickListener { view ->
             mFollowedViewModel?.insertStops()
-            Snackbar.make(view, "Stop Reset" + AppHelper.db.stopsDao().count(), Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Stop Reset" + AppHelper.db.stopDao().count(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 

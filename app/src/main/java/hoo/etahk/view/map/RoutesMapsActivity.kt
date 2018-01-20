@@ -1,23 +1,31 @@
 package hoo.etahk.view.map
 
-import android.content.Context
-import android.content.res.Resources
+import android.Manifest
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v7.widget.ThemedSpinnerAdapter
+import android.support.v4.content.ContextCompat
 import android.view.Menu
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.Adapter
+import android.widget.AdapterView
 import android.widget.Spinner
+import android.widget.TextView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.mcxiaoke.koi.ext.Bundle
+import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
+import hoo.etahk.common.Constants.Argument
+import hoo.etahk.model.data.RouteKey
+import hoo.etahk.model.relation.RouteAndStops
 import hoo.etahk.view.base.BaseMapsActivity
-import kotlinx.android.synthetic.main.item_t_textview.view.*
 
 
 class RoutesMapsActivity : BaseMapsActivity(), OnMapReadyCallback {
@@ -26,69 +34,117 @@ class RoutesMapsActivity : BaseMapsActivity(), OnMapReadyCallback {
         private const val TAG = "RoutesMapsActivity"
     }
 
+    private lateinit var routesMapViewModel: RoutesMapViewModel
+    private lateinit var routesSpinnerAdapter: RoutesSpinnerAdapter
+    private var spinner: Spinner? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
+        routesSpinnerAdapter = RoutesSpinnerAdapter(this)
 
+        routesMapViewModel = ViewModelProviders.of(this).get(RoutesMapViewModel::class.java)
+        routesMapViewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
+
+        supportActionBar?.title = routesMapViewModel.routeKey!!.routeNo
+        supportActionBar?.subtitle = routesMapViewModel.routeKey!!.getCompanyName()
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         super.onMapReady(googleMap)
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        this.googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        // Set up OnInfoWindowClickListener
+        this.googleMap!!.setOnInfoWindowClickListener(GoogleMap.OnInfoWindowClickListener { marker ->
+            val textView = spinner?.selectedView?.findViewById(R.id.title) as TextView?
+            val subtitle = routesMapViewModel.routeKey!!.getCompanyName() + " " +
+                    routesMapViewModel.routeKey!!.routeNo + if (textView != null) " - " + textView.text else ""
+
+            startActivity<StreetViewActivity>(Bundle {
+                putString(Argument.ARG_ACTIONBAR_TITLE, marker.title)
+                putString(Argument.ARG_ACTIONBAR_SUBTITLE, subtitle)
+                putDouble(Argument.ARG_LATITUDE, marker.position.latitude)
+                putDouble(Argument.ARG_LONGITUDE, marker.position.longitude)
+            })
+        })
+        subscribeUiChanges()
+    }
+
+    private fun subscribeUiChanges() {
+        routesMapViewModel.getRouteAndStopsList().observe(this, Observer<List<RouteAndStops>> {
+            it?.let {
+                val isEmptyBefore = routesSpinnerAdapter.dataSource.isEmpty()
+                routesSpinnerAdapter.dataSource = it
+                spinner?.isEnabled = (it.size > 1)
+                if (isEmptyBefore) {
+                    spinner?.setSelection(routesMapViewModel.selectedRoutePosition)
+                    if (routesMapViewModel.selectedRoutePosition < it.size)
+                        showStops(false)
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_maps, menu)
 
-        val spinner = menu.findItem(R.id.menu_spinner).actionView as Spinner
-        spinner.adapter = MyAdapter(this, arrayOf("Section 1", "Section 2", "Section 3"))
+        spinner = menu.findItem(R.id.menu_spinner).actionView as Spinner
+        spinner!!.adapter = routesSpinnerAdapter
+
+        spinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val beforePosition = routesMapViewModel.selectedRoutePosition
+                if (beforePosition != position) {
+                    routesMapViewModel.selectedRoutePosition = position
+                    showStops(true)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<out Adapter>?) {
+
+            }
+        }
+
         return true
     }
 
-    private class MyAdapter(context: Context, objects: Array<String>) : ArrayAdapter<String>(context, R.layout.item_t_textview, objects), ThemedSpinnerAdapter {
-        private val mDropDownHelper: ThemedSpinnerAdapter.Helper = ThemedSpinnerAdapter.Helper(context)
+    private fun showStops(withAnimation: Boolean) {
+        // Clear all markers on maps
+        this.googleMap?.clear()
 
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view: View
+        // Set stops on map
+        val latLngBoundsBuilder = LatLngBounds.Builder()
+        val stops = routesSpinnerAdapter.dataSource[routesMapViewModel.selectedRoutePosition].stops
 
-            if (convertView == null) {
-                // Inflate the drop down using the helper's LayoutInflater
-                val inflater = mDropDownHelper.dropDownViewInflater
-                view = inflater.inflate(R.layout.item_t_textview, parent, false)
-            } else {
-                view = convertView
+        if (stops.isNotEmpty()) {
+            stops.forEachIndexed { i, stop ->
+                val title = (i + 1).toString() + ". " + stop.name.value
+                val markerColor = when(i) {
+                    0 -> BitmapDescriptorFactory.HUE_GREEN
+                    stops.size - 1 -> BitmapDescriptorFactory.HUE_AZURE
+                    else -> BitmapDescriptorFactory.HUE_RED
+                }
+
+                latLngBoundsBuilder.include(stop.location)
+
+                val markerOptions = MarkerOptions().position(stop.location).title(title).icon(BitmapDescriptorFactory.defaultMarker(markerColor))
+                this.googleMap?.addMarker(markerOptions)
             }
 
-            view.title.text = getItem(position)
-            //view.subtitle.text = getItem(position)
+            if (withAnimation)
+                this.googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 50))
+            else
+                this.googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 50))
 
-            return view
-        }
-
-        override fun getDropDownViewTheme(): Resources.Theme? {
-            return mDropDownHelper.dropDownViewTheme
-        }
-
-        override fun setDropDownViewTheme(theme: Resources.Theme?) {
-            mDropDownHelper.dropDownViewTheme = theme
+            // Check for location permission
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+                // TODO("Zoom to nearest stop")
+            }
         }
     }
 }

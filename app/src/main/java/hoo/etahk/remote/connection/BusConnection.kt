@@ -40,13 +40,13 @@ object BusConnection : BaseConnection{
 
                 parentRoutesResult.keys.forEach({ company ->
                     jobs += launch(CommonPool) {
-                        parentRoutesResult.put(company, ConnectionHelper.getParentRoutes(company))
+                        parentRoutesResult[company] = ConnectionHelper.getParentRoutes(company)
                     }
                 })
 
                 etaRoutesResult.keys.forEach({ company ->
                     jobs += launch(CommonPool) {
-                        etaRoutesResult.put(company, ConnectionHelper.getEtaRoutes(company))
+                        etaRoutesResult[company] = ConnectionHelper.getEtaRoutes(company)
                     }
                 })
 
@@ -97,11 +97,11 @@ object BusConnection : BaseConnection{
         if (routes.size > 0) {
             routes.sort()
             for (i in routes.indices) {
-                routes[i].seq = i + 1L
+                routes[i].displaySeq = i + 1L
                 routes[i].updateTime = t
             }
 
-            AppHelper.db.parentRoutesDao().insertOrUpdate(routes, t)
+            AppHelper.db.parentRouteDao().insertOrUpdate(routes, t)
         }
 
         return null

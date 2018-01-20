@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(coordinatorlayout))
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action" + AppHelper.db.stopsDao().count(), Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Replace with your own action" + AppHelper.db.stopDao().count(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 

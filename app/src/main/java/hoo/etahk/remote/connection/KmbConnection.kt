@@ -66,7 +66,7 @@ object KmbConnection: BaseConnection {
                                     }
 
                                     //Log.d(TAG, AppHelper.gson.toJson(routes))
-                                    AppHelper.db.childRoutesDao().insertOrUpdate(routes, t)
+                                    AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
                                 }
                             }
                         }
@@ -84,7 +84,7 @@ object KmbConnection: BaseConnection {
                 from = StringLang(route.originChi?: "", route.originEng?: ""),
                 to = StringLang(route.destinationChi?: "", route.destinationEng?: ""),
                 details = StringLang(route.descChi?: "", route.descEng?: ""),
-                seq = parentRoute.seq,
+                displaySeq = parentRoute.displaySeq,
                 typeSeq = parentRoute.typeSeq,
                 updateTime = t
         )
@@ -113,7 +113,7 @@ object KmbConnection: BaseConnection {
                                 }
 
                                 //Log.d(TAG, AppHelper.gson.toJson(stops))
-                                AppHelper.db.stopsDao().insertOrUpdate(route, stops, t)
+                                AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
                                 if (needEtaUpdate)
                                     stops.forEach { updateEta(it) }
                             }
@@ -134,7 +134,7 @@ object KmbConnection: BaseConnection {
                 updateTime = t
         )
         if (routeStop.x != null && routeStop.y != null)
-            stop.location = Utils.hk1980GridToLatLng(routeStop.x, routeStop.y)
+            stop.location = Utils.hk1980GridToLatLng(routeStop.y, routeStop.x)
         return stop
     }
 
@@ -186,7 +186,7 @@ object KmbConnection: BaseConnection {
                 jobs.forEach { it.join() }
             }
 
-            AppHelper.db.stopsDao().updateOnReplace(stops)
+            AppHelper.db.stopDao().updateOnReplace(stops)
         } catch (e: Exception) {
             Log.e(TAG, e.toString())
         }
@@ -207,7 +207,7 @@ object KmbConnection: BaseConnection {
                         stop.etaStatus = Constants.EtaStatus.FAILED
                         stop.etaUpdateTime = t
 
-                        AppHelper.db.stopsDao().update(stop)
+                        AppHelper.db.stopDao().update(stop)
                     }
 
                     override fun onResponse(call: Call<KmbEtaRes>, response: Response<KmbEtaRes>){
@@ -229,7 +229,7 @@ object KmbConnection: BaseConnection {
                             stop.etaUpdateTime = t
                         }
 
-                        AppHelper.db.stopsDao().update(stop)
+                        AppHelper.db.stopDao().update(stop)
                     }
                 })
     }

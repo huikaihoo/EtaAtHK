@@ -6,7 +6,7 @@ import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.model.data.Route
 
 @Dao
-abstract class ParentRoutesDao {
+abstract class ParentRouteDao {
 
     companion object {
         const val PARENT_ROUTE_SELECT =
@@ -24,23 +24,23 @@ abstract class ParentRoutesDao {
     @Query(PARENT_ROUTE_SELECT +
             "ORDER BY " +
             "CASE WHEN typeCode < 10 THEN typeCode ELSE 10 END, " +
-            "CASE WHEN typeCode < 10 THEN Seq ELSE Seq END, " +
+            "CASE WHEN typeCode < 10 THEN displaySeq ELSE displaySeq END, " +
             "routeNo")
     protected abstract fun selectOrderByBus(typeCodes: List<Long>): LiveData<List<Route>>
 
     // Select
     @Query(PARENT_ROUTE_SELECT +
-            "ORDER BY typeCode, seq, routeNo")
+            "ORDER BY typeCode, displaySeq, routeNo")
     protected abstract fun selectOrderByTypCodeTypeSeq(typeCodes: List<Long>): LiveData<List<Route>>
 
     // Select
     @Query(PARENT_ROUTE_SELECT +
-            "ORDER BY seq, routeNo")
+            "ORDER BY displaySeq, routeNo")
     protected abstract fun selectOrderByTypeSeq(typeCodes: List<Long>): LiveData<List<Route>>
 
     // Select
     @Query(PARENT_ROUTE_SELECT +
-            "ORDER BY seq, routeNo")
+            "ORDER BY displaySeq, routeNo")
     protected abstract fun selectOrderBySeq(typeCodes: List<Long>): LiveData<List<Route>>
 
     fun select(typeCodes: List<Long>, orderBy: Long): LiveData<List<Route>> {

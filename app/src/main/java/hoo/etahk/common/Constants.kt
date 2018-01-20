@@ -64,10 +64,10 @@ object Constants {
         const val ARG_COMPANY = "company"
         const val ARG_ROUTE_NO = "route_no"
         const val ARG_TYPE_CODE = "type_code"
-        const val ACTIONBAR_TITLE = "actionbar_title"
-        const val ACTIONBAR_SUBTITLE = "actionbar_subtitle"
-        const val LATITUDE = "latitude"
-        const val LONGITUDE = "longitude"
+        const val ARG_ACTIONBAR_TITLE = "actionbar_title"
+        const val ARG_ACTIONBAR_SUBTITLE = "actionbar_subtitle"
+        const val ARG_LATITUDE = "latitude"
+        const val ARG_LONGITUDE = "longitude"
     }
 
     object Company {

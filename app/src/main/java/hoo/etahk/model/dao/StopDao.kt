@@ -6,7 +6,7 @@ import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
 
 @Dao
-abstract class StopsDao {
+abstract class StopDao {
 
     // Count
     @Query("SELECT COUNT(*) FROM stop")

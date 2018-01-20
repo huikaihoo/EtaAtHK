@@ -1,5 +1,6 @@
 package hoo.etahk.model.data
 
+import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import hoo.etahk.common.Utils
@@ -17,13 +18,15 @@ data class Route(
         var direction: Long,
         var specialCode: Long = -1L,                    // from gov (parent routes only)
         var companyDetails: List<String>,               // store as json string
+        @ColumnInfo(name = "locFrom")
         var from: StringLang = StringLang(),            // store as json string
+        @ColumnInfo(name = "locTo")
         var to: StringLang = StringLang(),              // store as json string
         var details: StringLang = StringLang(),         // store as json string
         var path: String = "",                          // reserve
         var info: Info = Info(),
         var eta: Boolean = false,
-        var seq: Long = -1L,
+        var displaySeq: Long = -1L,
         var typeSeq: Long = -1L,
         var updateTime: Long = 0L): Comparable<Route> {
 

@@ -18,7 +18,7 @@ abstract class BaseMapsActivity : TransparentActivity(), OnMapReadyCallback {
         private const val TAG = "BaseMapsActivity"
     }
 
-    protected lateinit var googleMap: GoogleMap
+    protected var googleMap: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +46,8 @@ abstract class BaseMapsActivity : TransparentActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
 
-        this.googleMap.setPadding(0, pendingTop, 0, 0)
-        this.googleMap.uiSettings.isZoomControlsEnabled = true
+        this.googleMap!!.setPadding(0, pendingTop, 0, 0)
+        this.googleMap!!.uiSettings.isZoomControlsEnabled = true
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -57,7 +57,7 @@ abstract class BaseMapsActivity : TransparentActivity(), OnMapReadyCallback {
                     PERMISSIONS_REQUEST_LOCATION)
         } else {
             try {
-                this.googleMap.isMyLocationEnabled = true
+                this.googleMap!!.isMyLocationEnabled = true
             } catch (e: SecurityException) {
                 Log.e(TAG, "setMyLocationEnabled failed!")
             }
@@ -71,7 +71,7 @@ abstract class BaseMapsActivity : TransparentActivity(), OnMapReadyCallback {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     // permission was granted
                     try {
-                        this.googleMap.isMyLocationEnabled = true
+                        this.googleMap?.isMyLocationEnabled = true
                     } catch (e: SecurityException) {
                         Log.e(TAG, "setMyLocationEnabled failed!")
                     }

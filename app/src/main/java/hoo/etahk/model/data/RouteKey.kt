@@ -37,6 +37,10 @@ data class RouteKey (
 
     var typeCode: Long = NONE
 
+    // For relationship: Do not touch it!
+    var routeStr: String = company + routeNo + bound.toString() + variant.toString()
+        get() = company +  "_" + routeNo +  "_" + bound.toString() + "_" + variant.toString()
+
     @Ignore
     var prefix: String = ""
         private set
