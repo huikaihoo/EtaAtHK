@@ -22,12 +22,16 @@ object Utils {
         return System.currentTimeMillis() / Time.ONE_SECOND_IN_MILLIS
     }
 
-    fun getThemeColorAccent(context: Context): Int {
-        return getThemeColor(context, R.attr.colorAccent)
+    fun getThemeColorPrimary(context: Context): Int {
+        return getThemeColor(context, R.attr.colorPrimary)
     }
 
-    fun getThemeColorDark(context: Context): Int {
+    fun getThemeColorPrimaryDark(context: Context): Int {
         return getThemeColor(context, R.attr.colorPrimaryDark)
+    }
+
+    fun getThemeColorAccent(context: Context): Int {
+        return getThemeColor(context, R.attr.colorAccent)
     }
 
     private fun getThemeColor(context: Context, resId: Int): Int {

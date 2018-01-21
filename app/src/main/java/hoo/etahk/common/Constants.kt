@@ -19,6 +19,7 @@ object Constants {
     }
 
     object Time {
+        const val PROGRESS_BAR_UPDATE_INTERVAL = 10L
         const val ANIMATION_TIME = 300L
         const val ONE_SECOND_IN_MILLIS = 1000L
         const val ONE_MINUTE_IN_SECONDS = 60L

@@ -3,8 +3,6 @@ package hoo.etahk.view.route
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.PagerAdapter
-import android.view.ViewGroup
 import hoo.etahk.R
 import hoo.etahk.model.data.Route
 import hoo.etahk.view.App
@@ -37,23 +35,5 @@ class RoutePagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
                     1 -> dataSource!!.from.value
                     else -> ""
                 }
-    }
-
-    override fun getItemPosition(`object`: Any): Int {
-        // Causes adapter to reload all Fragments when
-        // notifyDataSetChanged is called
-        return PagerAdapter.POSITION_NONE
-    }
-
-    /**
-     * Here we can finally safely save a reference to the created
-     * Fragment, no matter where it came from (either getItem() or
-     * FragmentManger). Simply save the returned Fragment from
-     * super.instantiateItem() into an appropriate reference depending
-     * on the ViewPager position.
-     */
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val createdFragment = super.instantiateItem(container, position)
-        return createdFragment
     }
 }

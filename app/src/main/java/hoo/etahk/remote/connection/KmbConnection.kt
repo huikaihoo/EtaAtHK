@@ -115,7 +115,7 @@ object KmbConnection: BaseConnection {
                                 //Log.d(TAG, AppHelper.gson.toJson(stops))
                                 AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
                                 if (needEtaUpdate)
-                                    stops.forEach { updateEta(it) }
+                                    updateEta(stops)
                             }
                         }
                     }

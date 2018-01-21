@@ -2,6 +2,7 @@ package hoo.etahk.view.route
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
+import hoo.etahk.common.Constants
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -11,7 +12,7 @@ import hoo.etahk.model.repo.StopsRepo
 class RouteFragmentViewModel : ViewModel() {
     private var mChildRoutes: LiveData<List<Route>>? = null
     private var mStops: LiveData<List<Stop>>? = null
-    private var mlastUpdateEtaTime = 0L
+    private var lastUpdateEtaTime = 0L
     private var hasUpdateStops = false
 
     var routeKey: RouteKey? = null
@@ -20,6 +21,8 @@ class RouteFragmentViewModel : ViewModel() {
             if (value != null)
                 subscribeChildRoutesToRepo()
         }
+
+    var etaStatus = Constants.EtaStatus.LOADING
 
     fun getChildRoutes(): LiveData<List<Route>> {
         return mChildRoutes!!
@@ -41,9 +44,10 @@ class RouteFragmentViewModel : ViewModel() {
     }
 
     fun updateAllEta(time: Long) {
-        //Log.d("XXX", "$mlastUpdateEtaTime $time")
-        if (mStops != null && mlastUpdateEtaTime < time){
-            mlastUpdateEtaTime = time
+        //Log.d("XXX", "$lastUpdateEtaTime $time")
+        if (mStops != null && lastUpdateEtaTime < time){
+            lastUpdateEtaTime = time
+            etaStatus = Constants.EtaStatus.LOADING
             StopsRepo.updateEta(mStops!!.value)
         }
     }

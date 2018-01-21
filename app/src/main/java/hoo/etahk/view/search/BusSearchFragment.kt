@@ -3,7 +3,6 @@ package hoo.etahk.view.search
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -13,10 +12,11 @@ import android.view.ViewGroup
 import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener
 import hoo.etahk.R
 import hoo.etahk.model.data.Route
+import hoo.etahk.view.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_search_tab.*
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
 
-class BusSearchFragment : Fragment() {
+class BusSearchFragment : BaseFragment() {
 
     companion object {
         private const val TAG = "BusSearchFragment"
@@ -75,7 +75,8 @@ class BusSearchFragment : Fragment() {
 
         mRootView.recycler_view.adapter = mBusRoutesAdapter
 
-        mRootView.refresh_layout.isEnabled = false
+        mRootView.refresh_layout.setColorSchemeColors(BusSearchActivity.searchList[mBusSearchFragmentViewModel.index].color.colorPrimary)
+        mRootView.refresh_layout.isRefreshing = mBusRoutesAdapter.dataSource.isEmpty()
 
         subscribeUiChanges()
 
@@ -87,20 +88,14 @@ class BusSearchFragment : Fragment() {
             mBusRoutesAdapter.filter = it?: ""
         })
 
-        mBusSearchViewModel.isRefreshing.observe(this, Observer<Boolean> {
-            if (it != null) {
-                if (it && !mRootView.refresh_layout.isRefreshing) {
-                    mRootView.refresh_layout.isEnabled = true
-                    mRootView.refresh_layout.isRefreshing = true
-                } else if (!it && mRootView.refresh_layout.isRefreshing) {
+        mBusSearchFragmentViewModel.getParentRoutes().observe(this, Observer<List<Route>> {
+            it?.let {
+                if (it.isNotEmpty()) {
                     mRootView.refresh_layout.isRefreshing = false
                     mRootView.refresh_layout.isEnabled = false
                 }
+                mBusRoutesAdapter.dataSource = it
             }
-        })
-
-        mBusSearchFragmentViewModel.getParentRoutes().observe(this, Observer<List<Route>> {
-            it?.let { mBusRoutesAdapter.dataSource = it }
         })
     }
 

@@ -4,8 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 def versionMajor = 0
-def versionMinor = 4
-def versionPatch = 6
+def versionMinor = 5
+def versionPatch = 2
 def versionBuild = 1
 
 def static getCurrentDate() {

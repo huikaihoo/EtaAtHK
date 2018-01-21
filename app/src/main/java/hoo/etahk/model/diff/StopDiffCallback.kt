@@ -42,6 +42,7 @@ class StopDiffCallback(oldData: List<Stop>, newData: List<Stop>): BaseDiffCallba
      * @return True if the contents of the items are the same or false if they are different.
      */
     override fun areContentsTheSame(oldItem: Stop, newItem: Stop): Boolean {
-        return false
+        return (oldItem.etaStatus == newItem.etaStatus &&
+                oldItem.etaUpdateTime == newItem.etaUpdateTime)
     }
 }

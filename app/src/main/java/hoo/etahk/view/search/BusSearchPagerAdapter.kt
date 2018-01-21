@@ -23,10 +23,4 @@ class BusSearchPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getPageTitle(position: Int): CharSequence? {
         return BusSearchActivity.searchList[position].title
     }
-
-//    override fun getItemPosition(`object`: Any): Int {
-//        // Causes adapter to reload all Fragments when
-//        // notifyDataSetChanged is called
-//        return PagerAdapter.POSITION_NONE
-//    }
 }

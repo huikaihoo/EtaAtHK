@@ -3,12 +3,9 @@ package hoo.etahk.view.base
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import hoo.etahk.common.Constants.Time
+import android.os.CountDownTimer
+import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
-import java.util.*
 
 open class TimerViewModel : ViewModel() {
 
@@ -16,37 +13,49 @@ open class TimerViewModel : ViewModel() {
         private const val TAG = "TimerViewModel"
     }
 
+    private val millisLeft = MutableLiveData<Long>()
     private val lastUpdateTime = MutableLiveData<Long>()
-    private var timer :Timer? = null
+    private var timer : CountDownTimer? = null
 
-    var period = 0L
+    var durationInMillis = 0L
         set(value) {
+            if (field != value)
+                lastUpdateTime.value = 0L
             field = value
-            startTimer()
         }
 
     fun getLastUpdateTime(): LiveData<Long> {
         return lastUpdateTime
     }
 
-    private fun startTimer() {
-        if (period > 0) {
-            val periodInMillis = period * Time.ONE_SECOND_IN_MILLIS
+    fun getMillisLeft(): LiveData<Long> {
+        return millisLeft
+    }
 
-            if (timer == null) {
-                timer = Timer()
-                // Update the elapsed time every n second (n = period)
-                timer!!.scheduleAtFixedRate(object : TimerTask() {
-                    override fun run() {
-                        Handler(Looper.getMainLooper()).post({
-                            lastUpdateTime.value = Utils.getCurrentTimestamp() - 1
-                            Log.d(TAG, lastUpdateTime.value.toString())})
-                    }
-                }, Time.ONE_SECOND_IN_MILLIS, periodInMillis)
+    fun startTimer() {
+        timer?.cancel()
+        millisLeft.value = 0L
+
+        timer = object : CountDownTimer(durationInMillis, Constants.Time.PROGRESS_BAR_UPDATE_INTERVAL) {
+            override fun onTick(millisUntilFinished: Long) {
+                millisLeft.value = millisUntilFinished
             }
-        } else {
+
+            override fun onFinish() {
+                millisLeft.value = 0L
+                lastUpdateTime.value = Utils.getCurrentTimestamp() - 1
+            }
+        }
+
+        timer?.start()
+    }
+
+    fun stopTimer() {
+        if (timer != null) {
             timer?.cancel()
-            timer = null
+            millisLeft.value = 0L
+            lastUpdateTime.value = Utils.getCurrentTimestamp() - 1
         }
     }
+
 }

@@ -49,7 +49,7 @@ class RouteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getTheme(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getLong(Argument.ARG_TYPE_CODE)))
-        window.navigationBarColor = Utils.getThemeColorDark(this)
+        window.navigationBarColor = Utils.getThemeColorPrimaryDark(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)
@@ -58,7 +58,7 @@ class RouteActivity : AppCompatActivity() {
 
         mRouteViewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
         mRouteViewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
-        mRouteViewModel.period = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH
+        mRouteViewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -71,6 +71,9 @@ class RouteActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = mRouteViewModel.routeKey!!.getCompanyName() + " " + mRouteViewModel.routeKey!!.routeNo
+
+        progress_bar.max = mRouteViewModel.durationInMillis.toInt()
+        progress_bar.progress = 0
 
         subscribeUiChanges()
     }
@@ -94,6 +97,12 @@ class RouteActivity : AppCompatActivity() {
                 mRouteViewModel.updateChildRoutes(it)
                 mRoutePagerAdapter?.dataSource = it
                 setActionBarSubtitle(it)
+            }
+        })
+
+        mRouteViewModel.getMillisLeft().observe(this, Observer<Long> {
+            it?.let {
+                progress_bar.progress = it.toInt()
             }
         })
     }

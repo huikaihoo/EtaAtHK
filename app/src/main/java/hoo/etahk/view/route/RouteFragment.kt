@@ -3,7 +3,6 @@ package hoo.etahk.view.route
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -13,11 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
+import hoo.etahk.view.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_recycler.view.*
 
-class RouteFragment : Fragment() {
+class RouteFragment : BaseFragment() {
 
     companion object {
         private const val TAG = "RouteFragment"
@@ -52,10 +53,12 @@ class RouteFragment : Fragment() {
         mRouteStopsAdapter.context = this
 
         mRouteViewModel = ViewModelProviders.of(activity!!).get(RouteViewModel::class.java)
-        mRouteFragmentViewModel = ViewModelProviders.of(this).get(RouteFragmentViewModel::class.java)
+        mRouteFragmentViewModel =
+                ViewModelProviders.of(this).get(RouteFragmentViewModel::class.java)
 
         if (mRouteFragmentViewModel.routeKey == null)
-            mRouteFragmentViewModel.routeKey = mRouteViewModel.routeKey?.copy(bound = arguments!!.getLong(ARG_BOUND))
+            mRouteFragmentViewModel.routeKey =
+                    mRouteViewModel.routeKey?.copy(bound = arguments!!.getLong(ARG_BOUND))
 
         mRootView = inflater.inflate(R.layout.fragment_recycler, container, false)
 
@@ -63,13 +66,16 @@ class RouteFragment : Fragment() {
         mRootView.recycler_view.adapter = mRouteStopsAdapter
         mRootView.recycler_view.itemAnimator = DefaultItemAnimator()
         mRootView.recycler_view.addItemDecoration(
-                DividerItemDecoration(activity,
-                        (mRootView.recycler_view.layoutManager as LinearLayoutManager).orientation))
+            DividerItemDecoration(
+                activity,
+                (mRootView.recycler_view.layoutManager as LinearLayoutManager).orientation
+            )
+        )
 
-        mRootView.refresh_layout.isRefreshing = true
+        mRootView.refresh_layout.setColorSchemeColors(Utils.getThemeColorPrimary(activity!!))
+        mRootView.refresh_layout.isRefreshing = mRouteStopsAdapter.dataSource.isEmpty()
         mRootView.refresh_layout.setOnRefreshListener {
-            mRouteViewModel.period = 0
-            mRouteViewModel.period = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH
+            mRouteViewModel.stopTimer()
         }
 
         subscribeUiChanges()
@@ -112,16 +118,16 @@ class RouteFragment : Fragment() {
 
     private fun subscribeStopsChanges() {
         mRouteFragmentViewModel.getStops().observe(this, Observer<List<Stop>> {
-            val size = it?.size?: 0
-            val last = mRouteViewModel.getLastUpdateTime().value?: 0
+            val size = it?.size ?: 0
+            val last = mRouteViewModel.getLastUpdateTime().value ?: 0L
 
             var networkErrorCount = 0
             var updatedCount = 0
 
             it?.forEach { item ->
-                if(item.etaStatus == Constants.EtaStatus.NETWORK_ERROR)
+                if (item.etaStatus == Constants.EtaStatus.NETWORK_ERROR)
                     networkErrorCount++
-                if(item.etaUpdateTime >= 0L && item.etaUpdateTime >= last)
+                if (item.etaUpdateTime >= 0L && item.etaUpdateTime >= last)
                     updatedCount++
             }
 
@@ -129,8 +135,14 @@ class RouteFragment : Fragment() {
 
             it?.let { mRouteStopsAdapter.dataSource = it }
 
-            if (size == updatedCount)
+            if (size == updatedCount) {
                 mRootView.refresh_layout.isRefreshing = false
+
+                if (mRouteFragmentViewModel.etaStatus == Constants.EtaStatus.LOADING) {
+                    mRouteFragmentViewModel.etaStatus = Constants.EtaStatus.SUCCESS
+                    mRouteViewModel.startTimer()
+                }
+            }
 
             // TODO ("Show Network Error Message based on Network Error")
         })

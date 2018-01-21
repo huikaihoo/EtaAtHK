@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import hoo.etahk.R
-import hoo.etahk.common.Constants
 import hoo.etahk.common.helper.AppHelper
 import kotlinx.android.synthetic.main.activity_nav_tab.*
 import kotlinx.android.synthetic.main.activity_tab.*
@@ -51,7 +50,7 @@ class FollowedActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(coordinatorlayout))
 
         mFollowedViewModel = ViewModelProviders.of(this).get(FollowedViewModel::class.java)
-        mFollowedViewModel?.period = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH
+        //mFollowedViewModel?.period = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH
 
         fab.setOnClickListener { view ->
             mFollowedViewModel?.insertStops()
