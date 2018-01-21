@@ -291,6 +291,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
                         colorAnimations[1].addUpdateListener { animator ->
                             window.statusBarColor = animator.animatedValue as Int
+                            window.navigationBarColor = animator.animatedValue as Int
                         }
 
                         colorAnimations[2].addUpdateListener { animator ->

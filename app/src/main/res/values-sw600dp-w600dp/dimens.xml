@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- For 7" and 10" devices (~600dp and ~720dp respectively) -->
+<resources>
+    <dimen name="tab_min_width">96dp</dimen>
+</resources>

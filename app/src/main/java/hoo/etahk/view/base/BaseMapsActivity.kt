@@ -46,7 +46,7 @@ abstract class BaseMapsActivity : TransparentActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
 
-        this.googleMap!!.setPadding(0, pendingTop, 0, 0)
+        this.googleMap!!.setPadding(0, pendingTop, 0, pendingBottom)
         this.googleMap!!.uiSettings.isZoomControlsEnabled = true
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)

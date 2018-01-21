@@ -24,7 +24,8 @@
             app:contentInsetStartWithNavigation="0dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/app_name">
+            tools:title="大巴 888"
+            tools:subtitle="XXX⇄YYY">
 
         </android.support.v7.widget.Toolbar>
 
@@ -37,12 +38,25 @@
             app:tabIndicatorColor="@android:color/white"
             app:tabIndicatorHeight="@dimen/tab_indicator_height" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/black"
+            android:progressBackgroundTint="@android:color/black"
+            android:maxHeight="@dimen/process_bar_height"
+            android:minHeight="@dimen/process_bar_height"
+            android:progress="0"
+            tools:progress="30" />
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

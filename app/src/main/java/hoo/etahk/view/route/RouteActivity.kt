@@ -13,6 +13,7 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Argument
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.RouteType
+import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.view.map.RoutesMapsActivity
@@ -48,6 +49,7 @@ class RouteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getTheme(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getLong(Argument.ARG_TYPE_CODE)))
+        window.navigationBarColor = Utils.getThemeColorDark(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)

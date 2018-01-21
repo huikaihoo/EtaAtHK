@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -16,27 +19,34 @@
         android:textColor="@color/colorMenuWhite"
         style="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
-        android:layout_alignParentTop="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="888" />
 
     <TextView
         android:id="@+id/from_to"
-        android:layout_below="@id/route_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:maxLines="2" />
+        android:maxLines="2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/route_no"
+        tools:text="XXX⇄YYY" />
 
     <TextView
         android:id="@+id/route_desc"
-        android:gravity="end"
-        android:layout_gravity="end"
-        android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/route_no"
+        android:layout_gravity="end"
         android:ellipsize="end"
-        android:maxLines="1" />
+        android:gravity="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/route_no"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="大巴" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

@@ -42,7 +42,7 @@
         <activity
             android:name=".view.search.BusSearchActivity"
             android:label="@string/title_bus_search"
-            android:theme="@style/AppTheme.All">
+            android:theme="@style/AppTheme.Bus">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

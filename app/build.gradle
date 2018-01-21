@@ -91,3 +91,12 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
+task copyFiles(type: Copy) {
+    from 'src/main/res/values-zh/'
+    include 'strings.xml'
+    into 'src/main/res/values-zh-rHK/'
+}
+
+preBuild.dependsOn(copyFiles)
+preBuild.mustRunAfter(copyFiles)

@@ -5,9 +5,9 @@ import android.content.Context
 import android.util.Log
 import android.util.TypedValue
 import com.google.android.gms.maps.model.LatLng
-import hoo.etahk.view.App
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
+import hoo.etahk.view.App
 import java.text.SimpleDateFormat
 import kotlin.math.abs
 
@@ -26,7 +26,11 @@ object Utils {
         return getThemeColor(context, R.attr.colorAccent)
     }
 
-    fun getThemeColor(context: Context, resId: Int): Int {
+    fun getThemeColorDark(context: Context): Int {
+        return getThemeColor(context, R.attr.colorPrimaryDark)
+    }
+
+    private fun getThemeColor(context: Context, resId: Int): Int {
         val value = TypedValue()
         context.theme.resolveAttribute(resId, value, true)
         return value.data
