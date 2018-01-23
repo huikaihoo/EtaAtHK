@@ -16,7 +16,9 @@ import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
 import hoo.etahk.view.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_recycler.view.*
+import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 class RouteFragment : BaseFragment() {
 
@@ -41,110 +43,110 @@ class RouteFragment : BaseFragment() {
         }
     }
 
-    private lateinit var mRootView: View
-    private lateinit var mRouteViewModel: RouteViewModel
-    private lateinit var mRouteFragmentViewModel: RouteFragmentViewModel
-    private var mRouteStopsAdapter: RouteStopsAdapter = RouteStopsAdapter()
-    private var mSubscribeStops = false
-    private var mIgnoreTimer = true
+    private lateinit var rootView: View
+    private lateinit var routeViewModel: RouteViewModel
+    private lateinit var routeFragmentViewModel: RouteFragmentViewModel
+    private var routeStopsAdapter: RouteStopsAdapter = RouteStopsAdapter()
+    private var subscribeStops = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mRouteStopsAdapter.context = this
+        routeStopsAdapter.context = this
 
-        mRouteViewModel = ViewModelProviders.of(activity!!).get(RouteViewModel::class.java)
-        mRouteFragmentViewModel =
+        routeViewModel = ViewModelProviders.of(activity!!).get(RouteViewModel::class.java)
+        routeFragmentViewModel =
                 ViewModelProviders.of(this).get(RouteFragmentViewModel::class.java)
 
-        if (mRouteFragmentViewModel.routeKey == null)
-            mRouteFragmentViewModel.routeKey =
-                    mRouteViewModel.routeKey?.copy(bound = arguments!!.getLong(ARG_BOUND))
+        if (routeFragmentViewModel.routeKey == null)
+            routeFragmentViewModel.routeKey =
+                    routeViewModel.routeKey?.copy(bound = arguments!!.getLong(ARG_BOUND))
 
-        mRootView = inflater.inflate(R.layout.fragment_recycler, container, false)
+        rootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
 
-        mRootView.recycler_view.layoutManager = LinearLayoutManager(activity)
-        mRootView.recycler_view.adapter = mRouteStopsAdapter
-        mRootView.recycler_view.itemAnimator = DefaultItemAnimator()
-        mRootView.recycler_view.addItemDecoration(
+        rootView.recycler_view.layoutManager = LinearLayoutManager(activity)
+        rootView.recycler_view.adapter = routeStopsAdapter
+        rootView.recycler_view.itemAnimator = DefaultItemAnimator()
+        rootView.recycler_view.addItemDecoration(
             DividerItemDecoration(
                 activity,
-                (mRootView.recycler_view.layoutManager as LinearLayoutManager).orientation
+                (rootView.recycler_view.layoutManager as LinearLayoutManager).orientation
             )
         )
 
-        mRootView.refresh_layout.setColorSchemeColors(Utils.getThemeColorPrimary(activity!!))
-        mRootView.refresh_layout.isRefreshing = mRouteStopsAdapter.dataSource.isEmpty()
-        mRootView.refresh_layout.setOnRefreshListener {
-            mRouteViewModel.stopTimer()
+        rootView.refresh_layout.setColorSchemeColors(Utils.getThemeColorPrimary(activity!!))
+        rootView.refresh_layout.isRefreshing = routeStopsAdapter.dataSource.isEmpty()
+        rootView.refresh_layout.setOnRefreshListener {
+            routeViewModel.stopTimer()
         }
 
         subscribeUiChanges()
 
-        return mRootView
+        return rootView
     }
 
     fun updateEta(stops: List<Stop>) {
-        mRootView.refresh_layout.isRefreshing = true
-        mRouteFragmentViewModel.updateEta(stops)
+        launch(UI) {
+            rootView.refresh_layout.isRefreshing = true
+            stops.forEach { it.isLoading = true }
+            routeStopsAdapter.notifyDataSetChanged()
+        }
+        routeFragmentViewModel.updateEta(stops)
     }
 
     private fun subscribeUiChanges() {
-        mIgnoreTimer = true
-
-        mRouteFragmentViewModel.getChildRoutes().observe(this, Observer<List<Route>> {
+        routeFragmentViewModel.getChildRoutes().observe(this, Observer<List<Route>> {
             it?.let {
-                mRouteFragmentViewModel.updateStops(it)
-                if (!mSubscribeStops && it.isNotEmpty()) {
-                    mSubscribeStops = true
-                    mRouteFragmentViewModel.subscribeStopsToRepo()
+                routeFragmentViewModel.updateStops(it)
+                if (!subscribeStops && it.isNotEmpty()) {
+                    subscribeStops = true
+                    routeFragmentViewModel.subscribeStopsToRepo()
                     subscribeStopsChanges()
-                }
-            }
-        })
-
-        mRouteViewModel.getLastUpdateTime().observe(this, Observer<Long> {
-            if (it != null) {
-                // Ignore the update for 1st time / on rotation
-                if (mIgnoreTimer) {
-                    mIgnoreTimer = false
-                } else {
-                    //Log.d("XXX", "time = $it")
-                    mRootView.refresh_layout.isRefreshing = true
-                    mRouteFragmentViewModel.updateAllEta(it)
                 }
             }
         })
     }
 
     private fun subscribeStopsChanges() {
-        mRouteFragmentViewModel.getStops().observe(this, Observer<List<Stop>> {
+        routeFragmentViewModel.getStops().observe(this, Observer<List<Stop>> {
             val size = it?.size ?: 0
-            val last = mRouteViewModel.getLastUpdateTime().value ?: 0L
+            val last = routeViewModel.getLastUpdateTime().value ?: 0L
 
-            var networkErrorCount = 0
+            var errorCount = 0
             var updatedCount = 0
 
             it?.forEach { item ->
-                if (item.etaStatus == Constants.EtaStatus.NETWORK_ERROR)
-                    networkErrorCount++
-                if (item.etaUpdateTime >= 0L && item.etaUpdateTime >= last)
+                if (item.etaStatus != Constants.EtaStatus.SUCCESS) {
+                    errorCount++
+                }
+                if (item.etaUpdateTime >= 0L && item.etaUpdateTime >= last) {
                     updatedCount++
+                }
             }
 
-            Log.d(TAG, "NE=$networkErrorCount U=$updatedCount T=$size")
+            Log.d(TAG, "F=$errorCount U=$updatedCount T=$size")
 
-            it?.let { mRouteStopsAdapter.dataSource = it }
+            it?.let { routeStopsAdapter.dataSource = it }
 
             if (size == updatedCount) {
-                mRootView.refresh_layout.isRefreshing = false
+                rootView.refresh_layout.isRefreshing = false
 
-                if (mRouteFragmentViewModel.etaStatus == Constants.EtaStatus.LOADING) {
-                    mRouteFragmentViewModel.etaStatus = Constants.EtaStatus.SUCCESS
-                    mRouteViewModel.startTimer()
+                if (routeFragmentViewModel.isRefreshingAll) {
+                    routeFragmentViewModel.isRefreshingAll = false
+                    routeViewModel.startTimer()
                 }
             }
 
             // TODO ("Show Network Error Message based on Network Error")
+        })
+
+        routeViewModel.getLastUpdateTime().observe(this, Observer<Long> {
+            if (it != null) {
+                val stops = routeFragmentViewModel.getStops().value
+                if (stops != null && stops.isNotEmpty() && !routeFragmentViewModel.isRefreshingAll){
+                    routeFragmentViewModel.isRefreshingAll = true
+                    updateEta(stops)
+                }
+            }
         })
     }
 }

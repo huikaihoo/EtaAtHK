@@ -23,6 +23,7 @@
 
     <!-- Common -->
     <string name="to">To\u0020</string>
+    <string name="min">min</string>
     <string name="price_2dp" translatable="false">$%.2f</string>
     <string name="arrow_circular" translatable="false">\u0020⟲\u0020</string>
     <string name="arrow_one_way" translatable="false">\u0020→\u0020</string>

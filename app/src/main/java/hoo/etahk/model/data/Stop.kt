@@ -1,9 +1,6 @@
 package hoo.etahk.model.data
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.*
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.common.Constants
 import hoo.etahk.model.json.EtaResult
@@ -45,4 +42,7 @@ data class Stop(
             latitude = value.latitude
             longitude = value.longitude
         }
+
+    @Ignore
+    var isLoading: Boolean = false
 }

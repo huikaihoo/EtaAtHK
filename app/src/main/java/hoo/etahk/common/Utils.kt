@@ -2,8 +2,14 @@ package hoo.etahk.common
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ImageSpan
 import android.util.Log
 import android.util.TypedValue
+import android.widget.TextView
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
@@ -170,5 +176,24 @@ object Utils {
     fun isScheduledOnly(timeStr: String): Boolean {
         // TODO("Need to Support English")
         return timeStr.contains("預定".toRegex())
+    }
+
+    fun appendImageToTextView(textView: TextView,  resId: Int, spannableStringBuilder: SpannableStringBuilder): SpannableStringBuilder {
+        return appendImageToString(Math.round(textView.lineHeight * 0.8).toInt(), textView.currentTextColor, resId, spannableStringBuilder)
+    }
+
+    private fun appendImageToString(size: Int, color: Int, resId: Int, spannableStringBuilder: SpannableStringBuilder): SpannableStringBuilder {
+        var drawable = ContextCompat.getDrawable(App.instance, resId)
+        if (drawable != null) {
+            drawable = DrawableCompat.wrap(drawable)
+            drawable.setBounds(0, 0, size, size)
+            DrawableCompat.setTint(drawable.mutate(), color)
+
+            val imageSpan = ImageSpan(drawable, ImageSpan.ALIGN_BASELINE)
+            val originalLength = spannableStringBuilder.length
+            spannableStringBuilder.append("  ")
+            spannableStringBuilder.setSpan(imageSpan, originalLength, originalLength + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        }
+        return spannableStringBuilder
     }
 }

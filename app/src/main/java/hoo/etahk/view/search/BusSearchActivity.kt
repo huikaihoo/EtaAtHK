@@ -216,7 +216,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
              * suggestions if available, true if the action was handled by the listener.
              */
             override fun onQueryTextChange(newText: String?): Boolean {
-                mBusSearchViewModel.searchText.value = newText?.trim()?.capitalize()
+                mBusSearchViewModel.searchText.value = newText?.trim()?.toUpperCase()
                 return false
             }
 

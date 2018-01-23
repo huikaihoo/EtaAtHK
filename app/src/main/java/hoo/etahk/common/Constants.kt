@@ -6,7 +6,6 @@ object Constants {
 
     enum class EtaStatus {
         NONE,
-        LOADING,
         SUCCESS,
         FAILED,
         NETWORK_ERROR

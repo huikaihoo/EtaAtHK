@@ -18,6 +18,8 @@ import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.view.map.RoutesMapsActivity
 import kotlinx.android.synthetic.main.activity_route.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 class RouteActivity : AppCompatActivity() {
 
@@ -102,7 +104,9 @@ class RouteActivity : AppCompatActivity() {
 
         mRouteViewModel.getMillisLeft().observe(this, Observer<Long> {
             it?.let {
-                progress_bar.progress = it.toInt()
+                launch(UI){
+                    progress_bar.progress = it.toInt()
+                }
             }
         })
     }
