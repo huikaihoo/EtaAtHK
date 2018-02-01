@@ -1,6 +1,7 @@
 package hoo.etahk.model.data
 
 import android.arch.persistence.room.*
+import android.arch.persistence.room.ForeignKey.CASCADE
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.common.Constants
 import hoo.etahk.model.json.EtaResult
@@ -14,7 +15,8 @@ import hoo.etahk.model.json.StringLang
 @Entity(primaryKeys = ["company", "routeNo", "bound", "variant", "seq"],
         foreignKeys = [ForeignKey(entity = Route::class,
                                   parentColumns = ["company", "routeNo", "bound", "variant"],
-                                  childColumns = ["company", "routeNo", "bound", "variant"])])
+                                  childColumns = ["company", "routeNo", "bound", "variant"],
+                                  onDelete = CASCADE)])
 data class Stop(
         @Embedded
         var routeKey: RouteKey,

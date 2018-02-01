@@ -62,7 +62,7 @@ object KmbConnection: BaseConnection {
                                     (kmbBoundVariantRes.data.routes).forEach {
                                         //Log.d(TAG, "${it?.bound} == $bound")
                                         assert(it!!.bound!! == bound)
-                                        routes.add(toChildRoute(parentRoute, it!!, t))
+                                        routes.add(toChildRoute(parentRoute, it, t))
                                     }
 
                                     //Log.d(TAG, AppHelper.gson.toJson(routes))

@@ -17,8 +17,6 @@ import hoo.etahk.view.App
 import java.text.SimpleDateFormat
 import kotlin.math.abs
 
-
-
 object Utils {
     /**
      * Function to return current timestamp in second.

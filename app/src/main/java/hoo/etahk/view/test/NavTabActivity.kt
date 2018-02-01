@@ -1,10 +1,8 @@
 package hoo.etahk.view.test
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -15,11 +13,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import hoo.etahk.R
-import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.model.data.Stop
-import hoo.etahk.view.followed.FollowedViewModel
-import kotlinx.android.synthetic.main.activity_nav_tab.*
-import kotlinx.android.synthetic.main.activity_tab.*
+import hoo.etahk.view.follow.FollowViewModel
+import kotlinx.android.synthetic.main.activity_follow_nav.*
+import kotlinx.android.synthetic.main.activity_follow.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -33,11 +29,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
-    private var mFollowedViewModel: FollowedViewModel? = null
+    private var mFollowViewModel: FollowViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_nav_tab)
+        setContentView(R.layout.activity_follow_nav)
         setSupportActionBar(toolbar)
 
         setSupportActionBar(toolbar)
@@ -46,15 +42,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
-        coordinatorlayout.adapter = mSectionsPagerAdapter
+        container.adapter = mSectionsPagerAdapter
 
-        coordinatorlayout.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
-        tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(coordinatorlayout))
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action" + AppHelper.db.stopDao().count(), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+        container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
+        tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
+//
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action" + AppHelper.db.stopDao().count(), Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show()
+//        }
 
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -63,14 +59,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        mFollowedViewModel = ViewModelProviders.of(this).get(FollowedViewModel::class.java)
+        mFollowViewModel = ViewModelProviders.of(this).get(FollowViewModel::class.java)
         subscribeUiChanges()
     }
 
     private fun subscribeUiChanges() {
-        mFollowedViewModel?.getFollowStops()?.observe(this, Observer<List<Stop>> { stops ->
-            Snackbar.make(main_content, "Model Updated" + stops?.size, Snackbar.LENGTH_LONG)
-        .setAction("Action", null).show() } )
+//        mFollowViewModel?.getFollowStops()?.observe(this, Observer<List<Stop>> { stops ->
+//            Snackbar.make(main_content, "Model Updated" + stops?.size, Snackbar.LENGTH_LONG)
+//        .setAction("Action", null).show() } )
     }
 
     override fun onBackPressed() {

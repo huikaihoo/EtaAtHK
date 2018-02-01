@@ -41,10 +41,10 @@ class RoutesMapsActivity : BaseMapsActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        routesSpinnerAdapter = RoutesSpinnerAdapter(this)
-
         routesMapViewModel = ViewModelProviders.of(this).get(RoutesMapViewModel::class.java)
         routesMapViewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
+
+        routesSpinnerAdapter = RoutesSpinnerAdapter(this)
 
         supportActionBar?.title = routesMapViewModel.routeKey!!.routeNo
         supportActionBar?.subtitle = routesMapViewModel.routeKey!!.getCompanyName()

@@ -9,7 +9,7 @@ class BusSearchViewModel : ViewModel() {
     val searchText: MutableLiveData<String> = MutableLiveData()
     private var hasUpdateParentRoutes = false
 
-    var selectedTabPosition = -1
+    var selectedTabPosition: Int = -1
 
     fun updateParentRoutes() {
         if (!hasUpdateParentRoutes) {

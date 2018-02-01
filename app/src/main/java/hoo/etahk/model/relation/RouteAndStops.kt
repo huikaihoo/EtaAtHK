@@ -7,7 +7,7 @@ import hoo.etahk.model.data.Stop
 
 class RouteAndStops {
     @Embedded
-    var route: Route? = null
+    lateinit var route: Route
 
     @Relation(parentColumn = "routeStr",
               entityColumn = "routeStr")

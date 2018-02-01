@@ -7,6 +7,7 @@ import hoo.etahk.common.tools.ConnectionFactory
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
+import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.remote.api.GovApi
 import hoo.etahk.remote.api.KmbApi
 import hoo.etahk.remote.api.NwfbApi
@@ -105,5 +106,9 @@ object ConnectionHelper: BaseConnection {
     override fun updateEta(stops: List<Stop>) {
         if (stops.isNotEmpty())
             getConnection(stops[0].routeKey.company)?.updateEta(stops)
+    }
+
+    fun updateItemsEta(items: List<ItemAndStop>) {
+
     }
 }

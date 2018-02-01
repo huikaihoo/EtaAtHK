@@ -22,8 +22,8 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.tools.ThemeColor
-import kotlinx.android.synthetic.main.activity_search_nav_tab.*
-import kotlinx.android.synthetic.main.activity_search_tab.*
+import kotlinx.android.synthetic.main.activity_search_nav.*
+import kotlinx.android.synthetic.main.activity_search.*
 
 class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -86,7 +86,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search_nav_tab)
+        setContentView(R.layout.activity_search_nav)
 
         setSupportActionBar(toolbar)
 

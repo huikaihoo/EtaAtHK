@@ -8,8 +8,8 @@
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:paddingLeft="12dp"
-    android:paddingRight="12dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
@@ -19,7 +19,7 @@
         android:fontFamily="sans-serif-condensed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorWhite"
         android:ellipsize="end"
         android:maxLines="1"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
     <TextView
         android:id="@+id/eta_0"
         style="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:textSize="16sp"
         android:fontFamily="sans-serif-condensed"
         android:layout_width="wrap_content"

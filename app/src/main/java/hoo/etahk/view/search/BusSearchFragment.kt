@@ -13,7 +13,7 @@ import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateCh
 import hoo.etahk.R
 import hoo.etahk.model.data.Route
 import hoo.etahk.view.base.BaseFragment
-import kotlinx.android.synthetic.main.activity_search_tab.*
+import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
 
 class BusSearchFragment : BaseFragment() {

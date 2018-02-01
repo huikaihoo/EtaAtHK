@@ -3,6 +3,7 @@ package hoo.etahk.view.route
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -62,18 +63,16 @@ class RouteActivity : AppCompatActivity() {
         mRouteViewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
         mRouteViewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        // Setup Fragment
         mRoutePagerAdapter = RoutePagerAdapter(supportFragmentManager)
-
-        // Set up the ViewPager with the sections adapter.
         container.adapter = mRoutePagerAdapter
-
         tabs.setupWithViewPager(container)
 
+        // Setup Actionbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = mRouteViewModel.routeKey!!.getCompanyName() + " " + mRouteViewModel.routeKey!!.routeNo
 
+        // Setup Progressbar
         progress_bar.max = mRouteViewModel.durationInMillis.toInt()
         progress_bar.progress = 0
 
@@ -99,6 +98,14 @@ class RouteActivity : AppCompatActivity() {
                 mRouteViewModel.updateChildRoutes(it)
                 mRoutePagerAdapter?.dataSource = it
                 setActionBarSubtitle(it)
+                tabs.addOnTabSelectedListener(object : TabLayout.ViewPagerOnTabSelectedListener(container) {
+                    override fun onTabSelected(tab: TabLayout.Tab) {
+                        super.onTabSelected(tab)
+                        if (tabs.tabCount > 0)
+                            mRouteViewModel.selectedTabPosition = tab.position
+                    }
+                })
+                tabs.getTabAt(mRouteViewModel.selectedTabPosition)?.select()
             }
         })
 

@@ -10,7 +10,7 @@ class RouteViewModel: TimerViewModel() {
     private var mParentRoute: LiveData<Route>? = null
     private var hasUpdateChildRoutes = false
 
-    // TODO("Selected Tab Position: Can be port from BusSearchActivity")
+    var selectedTabPosition: Int = 0
 
     var routeKey: RouteKey? = null
         set(value) {
@@ -18,10 +18,6 @@ class RouteViewModel: TimerViewModel() {
             if (value != null)
                 subscribeToRepo()
         }
-
-    fun insertRoutes() {
-        RoutesRepo.insertRoute()
-    }
 
     fun getParentRoute(): LiveData<Route> {
         return mParentRoute!!
