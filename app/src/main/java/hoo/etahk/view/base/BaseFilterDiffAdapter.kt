@@ -47,8 +47,8 @@ abstract class BaseFilterDiffAdapter<C, D> : BaseDiffAdapter<C, D>() {
 
     override fun getItemCount() = dataSourceFiltered.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): BaseViewHolder<C, D> {
-        return instantiateViewHolder(LayoutInflater.from(parent?.context).inflate(viewType, parent, false), viewType)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<C, D> {
+        return instantiateViewHolder(LayoutInflater.from(parent.context).inflate(viewType, parent, false), viewType)
     }
 
     override fun getItemViewType(position: Int): Int {

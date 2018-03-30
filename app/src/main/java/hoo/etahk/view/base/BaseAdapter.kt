@@ -21,8 +21,8 @@ abstract class BaseAdapter<C, D> : RecyclerView.Adapter<BaseViewHolder<C, D>>() 
 
     override fun getItemCount() = dataSource.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): BaseViewHolder<C, D> {
-        return instantiateViewHolder(LayoutInflater.from(parent?.context).inflate(viewType, parent, false), viewType)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<C, D> {
+        return instantiateViewHolder(LayoutInflater.from(parent.context).inflate(viewType, parent, false), viewType)
     }
 
     override fun getItemViewType(position: Int): Int {
