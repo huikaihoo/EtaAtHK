@@ -41,7 +41,7 @@ object Constants {
         const val ETA_KMB_READ_TIMEOUT_VAL = 3500L
         const val ETA_KMB_WRITE_TIMEOUT_VAL = 3500L
         // NWFB Eta
-        const val ETA_NWFB_MAX_REQUESTS_PER_HOST_VAL = 3
+        const val ETA_NWFB_MAX_REQUESTS_PER_HOST_VAL = 4
         const val ETA_NWFB_CONNECTION_TIMEOUT_VAL = 5000L
         const val ETA_NWFB_READ_TIMEOUT_VAL = 5000L
         const val ETA_NWFB_WRITE_TIMEOUT_VAL = 5000L
@@ -49,7 +49,7 @@ object Constants {
         const val NWFB_API_PARAMETER_TYPE_ALL_BUS = "0"
         const val NWFB_API_PARAMETER_TYPE_ETA_BUS = "5"
         const val NWFB_API_PARAMETER_PLATFORM = "android"
-        const val NWFB_API_PARAMETER_APP_VERSION = "3.3.1"
+        const val NWFB_API_PARAMETER_APP_VERSION = "3.4.2"
         const val GOV_API_PARAMETER_PLATFORM = "android"
         const val GOV_API_PARAMETER_APP_VERSION = "3.6"
         const val GOV_API_PARAMETER_COMPANY_ALL_BUS = "-1"

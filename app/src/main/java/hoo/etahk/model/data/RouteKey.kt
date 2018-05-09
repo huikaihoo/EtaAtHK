@@ -113,8 +113,10 @@ data class RouteKey (
                 BUS_CROSS_HARBOUR
             } else if (company == DB || company == PI) {
                 BUS_AIRPORT_LANTAU
-            } else if (routeNo == "629"){   // Start of: # M P T X
+            } else if (routeNo == "629") {   // Start of: # M P T X
                 BUS_HKI
+            } else if (company == CTB && (routeNo == "20" || routeNo == "22")) {
+                BUS_KL_NT
             } else if (h == 1L || h == 3L || h == 6L || h == 9L) {
                 BUS_CROSS_HARBOUR
             } else if (company == KMB || company == LRT_FEEDER || t == 70L || t == 79L) {

@@ -103,6 +103,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
         // Set up the ViewPager with the sections adapter.
         container.adapter = mBusSearchPagerAdapter
+        container.offscreenPageLimit = searchList.size
 
         tabs.setupWithViewPager(container)
         tabs.addOnTabSelectedListener(object : TabLayout.ViewPagerOnTabSelectedListener(container) {

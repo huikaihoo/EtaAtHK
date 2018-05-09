@@ -1,6 +1,7 @@
 package hoo.etahk.common.tools
 
 import android.util.Log
+import android.webkit.WebSettings
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import hoo.etahk.common.Constants.AppMode
 import hoo.etahk.common.Constants.Company
@@ -8,6 +9,7 @@ import hoo.etahk.common.Constants.NetworkType
 import hoo.etahk.common.Constants.SharePrefs
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
+import hoo.etahk.view.App
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -52,6 +54,18 @@ object ConnectionFactory {
                 }
             else -> builder
         }
+
+        /**
+         * Source: https://www.jianshu.com/p/4132b381f07e
+         */
+        builder.addInterceptor( { chain ->
+            val request = chain.request()
+                .newBuilder()
+                .removeHeader("User-Agent")
+                .addHeader("User-Agent", WebSettings.getDefaultUserAgent(App.instance))
+                .build()
+            chain.proceed(request)
+        } )
 
         builder = when (SharedPrefsHelper.getAppMode()) {
             AppMode.DEV -> builder.addNetworkInterceptor(StethoInterceptor())

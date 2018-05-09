@@ -125,14 +125,18 @@ class RouteFragment : BaseFragment() {
 
             Log.d(TAG, "F=$errorCount U=$updatedCount T=$size")
 
-            it?.let { routeStopsAdapter.dataSource = it }
+            if (size == errorCount) {
+                rootView.refresh_layout.isRefreshing = true
+            } else {
+                it?.let { routeStopsAdapter.dataSource = it }
 
-            if (size == updatedCount) {
-                rootView.refresh_layout.isRefreshing = false
+                if (size == updatedCount && errorCount <= 0) {
+                    rootView.refresh_layout.isRefreshing = false
 
-                if (routeFragmentViewModel.isRefreshingAll) {
-                    routeFragmentViewModel.isRefreshingAll = false
-                    routeViewModel.startTimer()
+                    if (routeFragmentViewModel.isRefreshingAll) {
+                        routeFragmentViewModel.isRefreshingAll = false
+                        routeViewModel.startTimer()
+                    }
                 }
             }
 

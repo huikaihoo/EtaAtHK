@@ -49,11 +49,11 @@ abstract class BaseMapsActivity : TransparentActivity(), OnMapReadyCallback {
         this.googleMap!!.setPadding(0, pendingTop, 0, pendingBottom)
         this.googleMap!!.uiSettings.isZoomControlsEnabled = true
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION )
                 != PackageManager.PERMISSION_GRANTED) {
             // Request the permission.
             ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION ),
                     PERMISSIONS_REQUEST_LOCATION)
         } else {
             try {
