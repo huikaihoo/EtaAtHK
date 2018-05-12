@@ -5,7 +5,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
     <string name="title_activity_tabbed">TabbedActivity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
@@ -20,9 +19,31 @@
     <!-- Menu -->
     <string name="search">Search</string>
     <string name="maps">Maps</string>
+    <string name="settings">Settings</string>
+
+    <string name="location_options">Location Options</string>
+    <string name="add_location">Add Location</string>
+    <string name="edit_c_location">Edit Current Location</string>
+    <string name="remove_c_location">Remove Current Location</string>
+    <string name="sort_locations">Sort Locations</string>
+
+    <string name="group_options">Group Options</string>
+    <string name="add_group">Add Group</string>
+    <string name="rename_c_group">Rename Current Group</string>
+    <string name="remove_c_group">Delete Current Location</string>
+    <string name="sort_groups">Sort Groups</string>
+
+    <string name="enable_sort">Enable Sorting</string>
+
+    <string name="rename">Rename</string>
+    <string name="move_to">Move to</string>
+    <string name="remove">Remove</string>
+
+    <string name="add_to_follow_stop">Add to following stops</string>
 
     <!-- Common -->
-    <string name="to">To\u0020</string>
+    <string name="to_prefix">To\u0020</string>
+    <string name="to_middle">\u0020to\u0020</string>
     <string name="min">min</string>
     <string name="price_2dp" translatable="false">$%.2f</string>
     <string name="arrow_circular" translatable="false">\u0020⟲\u0020</string>
@@ -50,7 +71,22 @@
     <string name="airport_lantau">Airport/Lantau</string>
     <string name="overnight">Overnight</string>
 
+    <!-- Location / Group Name -->
+    <string name="home">Home</string>
+    <string name="work">Work</string>
+
     <!-- Stop Item -->
     <string name="eta_msg_no_eta_service">No ETA Service</string>
     <string name="eta_msg_not_in_service_hours">Not in service hours</string>
+
+    <!-- Dialog -->
+    <string name="title_select_groups_to_add">Select group(s) you want to add:</string>
+    <string name="title_select_groups_to_move">Select group you want to move to:</string>
+    <string name="title_conform_delete_item">Are you sure to delete the selected stop?</string>
+    <string name="content_conform_delete">Be Careful! This action cannot be undone.</string>
+
+    <!-- Message -->
+    <string name="msg_add_to_follow_stop_success">Added to following stops successfully</string>
+    <string name="msg_move_follow_stop_success">Move the following stop successfully</string>
+    <string name="msg_one_item_removed">One item is removed</string>
 </resources>

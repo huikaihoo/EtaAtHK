@@ -2,10 +2,12 @@ package hoo.etahk.view.follow
 
 import android.annotation.SuppressLint
 import android.text.SpannableStringBuilder
+import android.view.MotionEvent
 import android.view.View
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.view.ItemTouchHelperAdapter
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.ItemDiffCallback
 import hoo.etahk.model.relation.ItemAndStop
@@ -13,8 +15,9 @@ import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseDiffAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_stop.view.*
+import java.util.*
 
-class FollowItemsAdapter : BaseDiffAdapter<FollowFragment, ItemAndStop>() {
+class FollowItemsAdapter : BaseDiffAdapter<FollowFragment, ItemAndStop>(), ItemTouchHelperAdapter {
 
     init {
         useDiff = false
@@ -39,7 +42,7 @@ class FollowItemsAdapter : BaseDiffAdapter<FollowFragment, ItemAndStop>() {
                 val etaResults = stop.etaResults
 
                 itemView.stop_name.text = stop.name.value
-                itemView.stop_desc.text = stop.routeKey.getCompanyName() + " " + stop.routeKey.routeNo + " " + App.instance.getString(R.string.to) + stop.to.value
+                itemView.stop_desc.text = stop.routeKey.getCompanyName() + " " + stop.routeKey.routeNo + " " + App.instance.getString(R.string.to_prefix) + stop.to.value
                 if (stop.fare > 0) {
                     itemView.fare.text = App.instance.getString(R.string.price_2dp).format(stop.fare)
                 }
@@ -62,6 +65,9 @@ class FollowItemsAdapter : BaseDiffAdapter<FollowFragment, ItemAndStop>() {
                         } else if (etaStatus != Constants.EtaStatus.SUCCESS) {
                             text = Utils.appendImageToTextView(tv, R.drawable.ic_text_failed, text)
                         }
+                        if (etaResults[i].valid && !etaResults[i].gps) {
+                            text = Utils.appendImageToTextView(tv, R.drawable.ic_text_gps_off, text)
+                        }
                         if (etaResults[i].wifi) {
                             text = Utils.appendImageToTextView(tv, R.drawable.ic_text_wifi, text)
                         }
@@ -70,9 +76,64 @@ class FollowItemsAdapter : BaseDiffAdapter<FollowFragment, ItemAndStop>() {
                     }
                 }
 
+                itemView.setOnTouchListener { v, event ->
+                    val isItemsDisplaySeqChanged = context?.isItemsDisplaySeqChanged ?: false
+                    if (isItemsDisplaySeqChanged && event.action == MotionEvent.ACTION_DOWN) {
+                        context?.isItemsDisplaySeqChanged = false
+                        context?.updateItemsDisplaySeq(dataSource)
+                    }
+                    false
+                }
                 itemView.setOnClickListener { context?.updateEta(listOf(item)) }
+                itemView.setOnLongClickListener { context?.showItemPopupMenu(itemView, item); true }
             }
         }
 
+    }
+
+    /**
+     * Called when an item has been dragged far enough to trigger a move. This is called every time
+     * an item is shifted, and **not** at the end of a "drop" event.<br></br>
+     * <br></br>
+     * Implementations should call [RecyclerView.Adapter.notifyItemMoved] after
+     * adjusting the underlying data to reflect this move.
+     *
+     * @param fromPosition The start position of the moved item.
+     * @param toPosition   Then resolved position of the moved item.
+     *
+     * @see RecyclerView.getAdapterPositionFor
+     * @see RecyclerView.ViewHolder.getAdapterPosition
+     */
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(dataSource, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(dataSource, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+
+        context?.isItemsDisplaySeqChanged = true
+    }
+
+    /**
+     * Called when an item has been dismissed by a swipe.<br></br>
+     * <br></br>
+     * Implementations should call [RecyclerView.Adapter.notifyItemRemoved] after
+     * adjusting the underlying data to reflect this removal.
+     *
+     * @param position The position of the item dismissed.
+     *
+     * @see RecyclerView.getAdapterPositionFor
+     * @see RecyclerView.ViewHolder.getAdapterPosition
+     */
+    override fun onItemDismiss(position: Int) {
+        val newDataSource = dataSource.toMutableList()
+        newDataSource.removeAt(position)
+        dataSource = newDataSource.toList()
+        //notifyItemRemoved(position)
     }
 }

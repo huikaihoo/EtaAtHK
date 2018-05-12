@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 def versionMajor = 0
 def versionMinor = 6
 def versionPatch = 6
-def versionBuild = 1
+def versionBuild = 8
 
 def static getCurrentDate() {
     def date = new Date()
@@ -80,6 +80,7 @@ dependencies {
 
     // Kotlin library for android
     implementation 'com.mcxiaoke.koi:core:0.5.5'
+    implementation 'androidx.core:core-ktx:0.3'
 
     // RecyclerView-FastScroll
     implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'

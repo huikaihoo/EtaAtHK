@@ -127,7 +127,7 @@ object KmbConnection: BaseConnection {
                 routeKey = route.routeKey.copy(),
                 seq = routeStop.seq?: 0,
                 name = StringLang(routeStop.cName?: "", routeStop.eName?: "", routeStop.sCName?: ""),
-                to = route.getToByBound(),
+                to = route.to,
                 details = StringLang(routeStop.cLocation?: "", routeStop.eLocation?: "", routeStop.sCLocation?: ""),
                 fare = routeStop.airFare?: 0.0,
                 info = Info(stopId = routeStop.bsiCode ?: ""),

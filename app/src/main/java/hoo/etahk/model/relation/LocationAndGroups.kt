@@ -5,6 +5,7 @@ import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.Relation
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.FollowLocation
+
 class LocationAndGroups {
     @Embedded
     lateinit var location: FollowLocation
@@ -12,7 +13,12 @@ class LocationAndGroups {
     @Relation(parentColumn = "Id",
               entityColumn = "locationId")
     var groups: List<FollowGroup> = listOf()
-        get() = field.sorted()
+        get() {
+            field.forEach {
+                it.locationName = location.name
+            }
+            return field.sorted()
+        }
 
     @Ignore
     var selectedGroupPosition: Int = 0

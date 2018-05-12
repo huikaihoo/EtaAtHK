@@ -3,7 +3,11 @@ package hoo.etahk.view.follow
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.PagerAdapter
+import hoo.etahk.R
 import hoo.etahk.model.relation.LocationAndGroups
+import hoo.etahk.view.App
+
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -27,6 +31,10 @@ class FollowPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return dataSource!!.groups[position].name
+        return App.instance.getString(R.string.to_prefix) + dataSource!!.groups[position].name
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+        return PagerAdapter.POSITION_NONE
     }
 }

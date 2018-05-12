@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ef84d1bd485645427c6f31821ea10db1",
+    "identityHash": "2d92827d6888d67d7141d139a2477d0d",
     "entities": [
       {
         "tableName": "Route",
@@ -281,7 +281,7 @@
       },
       {
         "tableName": "FollowLocation",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `icon` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `distance` REAL NOT NULL, `pin` INTEGER NOT NULL, `displaySeq` INTEGER NOT NULL, `updateTime` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `icon` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `distance` REAL NOT NULL, `pin` INTEGER NOT NULL, `defaultGroupId` INTEGER NOT NULL, `displaySeq` INTEGER NOT NULL, `updateTime` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "Id",
@@ -322,6 +322,12 @@
           {
             "fieldPath": "pin",
             "columnName": "pin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "defaultGroupId",
+            "columnName": "defaultGroupId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -528,7 +534,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ef84d1bd485645427c6f31821ea10db1\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2d92827d6888d67d7141d139a2477d0d\")"
     ]
   }
 }

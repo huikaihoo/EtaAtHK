@@ -162,7 +162,7 @@ object Utils {
         return timeStr.replace("　".toRegex(), " ")
                 .replace("班次".toRegex(), "")
                 .replace("時段".toRegex(), "")
-                .replace("九巴預定".toRegex(), "九巴 預定")
+                .replace("預定".toRegex(), "")
                 .replace("距離.*公里".toRegex(), "")
                 .trim()
     }

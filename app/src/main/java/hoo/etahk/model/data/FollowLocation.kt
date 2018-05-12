@@ -14,6 +14,7 @@ data class FollowLocation(
         var longitude: Double = 0.0,
         var distance: Double = 0.0,
         var pin: Boolean = false,
+        var defaultGroupId: Long = -1L,     // reserve
         var displaySeq: Long,
         var updateTime: Long = 0L) {
 

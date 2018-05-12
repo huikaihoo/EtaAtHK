@@ -1,10 +1,7 @@
 package hoo.etahk.model.data
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.*
 import android.arch.persistence.room.ForeignKey.CASCADE
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
 
 @Entity(indices = [Index(value = ["locationId"],
                           name = "idx_location_id")],
@@ -25,4 +22,7 @@ data class FollowGroup(
      * if it's greater than [other].
      */
     override fun compareTo(other: FollowGroup) = displaySeq.compareTo(other.displaySeq)
+
+    @Ignore
+    var locationName: String = ""
 }

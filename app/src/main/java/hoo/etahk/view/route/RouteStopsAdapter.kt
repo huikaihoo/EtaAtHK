@@ -83,6 +83,9 @@ class RouteStopsAdapter : BaseDiffAdapter<RouteFragment, Stop>() {
                     } else if (etaStatus != Constants.EtaStatus.SUCCESS) {
                         text = Utils.appendImageToTextView(tv, R.drawable.ic_text_failed, text)
                     }
+                    if (etaResults[i].valid && !etaResults[i].gps) {
+                        text = Utils.appendImageToTextView(tv, R.drawable.ic_text_gps_off, text)
+                    }
                     if (etaResults[i].wifi) {
                         text = Utils.appendImageToTextView(tv, R.drawable.ic_text_wifi, text)
                     }
@@ -92,6 +95,7 @@ class RouteStopsAdapter : BaseDiffAdapter<RouteFragment, Stop>() {
             }
 
             itemView.setOnClickListener { context?.updateEta(listOf(stop)) }
+            itemView.setOnLongClickListener { context?.showStopPopupMenu(itemView, stop); true }
         }
     }
 }

@@ -16,6 +16,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun stopDao(): StopDao
     abstract fun routeStopsDao(): RouteStopsDao
     // Follow Location / Group / Item
+    abstract fun locationDao(): LocationDao
+    abstract fun groupDao(): GroupDao
+    abstract fun itemDao(): ItemDao
     abstract fun locationGroupsDao(): LocationGroupsDao
     abstract fun itemStopDao(): ItemStopDao
 }

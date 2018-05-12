@@ -66,6 +66,8 @@ class RouteActivity : AppCompatActivity() {
         // Setup Fragment
         mRoutePagerAdapter = RoutePagerAdapter(supportFragmentManager)
         container.adapter = mRoutePagerAdapter
+        container.offscreenPageLimit = 3
+
         tabs.setupWithViewPager(container)
 
         // Setup Actionbar

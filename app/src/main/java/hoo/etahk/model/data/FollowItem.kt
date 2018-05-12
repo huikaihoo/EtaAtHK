@@ -16,7 +16,7 @@ data class FollowItem(
         @Embedded
         var routeKey: RouteKey,
         var seq: Long = -1L,
-        var header: String,
+        var header: String = "",
         var displaySeq: Long,
         var updateTime: Long = 0L) {
 

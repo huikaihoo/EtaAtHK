@@ -1,6 +1,7 @@
 package hoo.etahk.model.repo
 
 import android.arch.lifecycle.LiveData
+import hoo.etahk.common.Constants
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
@@ -39,10 +40,24 @@ object StopsRepo {
     }
 
     // ETA
-    fun updateEta(stops: List<Stop>?) {
+    fun updateEta(stops: List<Stop>?, sameCompany: Boolean = true) {
         launch(CommonPool) {
-            if (stops != null && stops.isNotEmpty())
-                ConnectionHelper.updateEta(stops)
+            if (stops != null && stops.isNotEmpty()) {
+                if (sameCompany) {
+                    ConnectionHelper.updateEta(stops)
+                } else {
+                    val map = stops.groupBy {
+                            when (it.routeKey.company) {
+                                Constants.Company.LWB -> Constants.Company.KMB
+                                Constants.Company.CTB -> Constants.Company.NWFB
+                                else -> it.routeKey.company
+                             }
+                         }
+                    map.forEach { company, stopsByCompany ->
+                        ConnectionHelper.updateEta(stopsByCompany)
+                    }
+                }
+            }
         }
     }
 

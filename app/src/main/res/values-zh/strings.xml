@@ -6,9 +6,31 @@
     <!-- Menu -->
     <string name="search">搜尋</string>
     <string name="maps">地圖</string>
+    <string name="settings">設定</string>
+
+    <string name="location_options">地點選項</string>
+    <string name="add_location">新增地點</string>
+    <string name="edit_c_location">編輯地點</string>
+    <string name="remove_c_location">移除地點</string>
+    <string name="sort_locations">編輯地點排序</string>
+
+    <string name="group_options">組別選項</string>
+    <string name="add_group">新增組別</string>
+    <string name="rename_c_group">重新命名組別</string>
+    <string name="remove_c_group">移除組別</string>
+    <string name="sort_groups">編輯組別排序</string>
+
+    <string name="enable_sort">編輯排序</string>
+
+    <string name="rename">重新命名</string>
+    <string name="move_to">移動至</string>
+    <string name="remove">移除</string>
+
+    <string name="add_to_follow_stop">加入至追蹤車站</string>
 
     <!-- Common -->
-    <string name="to">往\u0020</string>
+    <string name="to_prefix">往\u0020</string>
+    <string name="to_middle">\u0020往\u0020</string>
     <string name="min">分鐘</string>
 
     <!-- Company -->
@@ -32,7 +54,23 @@
     <string name="airport_lantau">機場/大嶼山</string>
     <string name="overnight">通宵</string>
 
+    <!-- Location / Group Name -->
+    <string name="home">屋企</string>
+    <string name="work">公司</string>
+
     <!-- Stop Item -->
     <string name="eta_msg_no_eta_service">沒有到站時間服務</string>
     <string name="eta_msg_not_in_service_hours">服務時間已過</string>
+    
+    <!-- Dialog -->
+    <string name="title_select_groups_to_add">選擇要加入的組別：</string>
+    <string name="title_select_groups_to_move">選擇要移動到的組別：</string>
+    <string name="title_conform_delete_item">要移除選取的車站嗎？</string>
+    <string name="content_conform_delete">注意！這個動作無法復原</string>
+
+    <!-- Message -->
+    <string name="msg_add_to_follow_stop_success">成功加入至追蹤車站</string>
+    <string name="msg_move_follow_stop_success">成功移動追蹤車站</string>
+    <string name="msg_one_item_removed">已移除一個項目</string>
+
 </resources>

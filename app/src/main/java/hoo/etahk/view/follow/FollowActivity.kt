@@ -16,8 +16,6 @@ import android.widget.Adapter
 import android.widget.AdapterView
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.model.data.FollowLocation
 import hoo.etahk.model.relation.LocationAndGroups
 import kotlinx.android.synthetic.main.activity_follow.*
 import kotlinx.android.synthetic.main.activity_follow_nav.*
@@ -37,9 +35,9 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
      * may be best to switch to a
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
-    private lateinit var followSpinnerAdapter: FollowSpinnerAdapter
-    private lateinit var followPagerAdapter: FollowPagerAdapter
-    private lateinit var followViewModel: FollowViewModel
+    private lateinit var spinnerAdapter: FollowSpinnerAdapter
+    private lateinit var pagerAdapter: FollowPagerAdapter
+    private lateinit var viewModel: FollowViewModel
     private var onTabSelectedListener: TabLayout.ViewPagerOnTabSelectedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,30 +47,35 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        followViewModel = ViewModelProviders.of(this).get(FollowViewModel::class.java)
-        followViewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
+        viewModel = ViewModelProviders.of(this).get(FollowViewModel::class.java)
+        viewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
+        viewModel.enableSorting.value = false
 
         // Setup Spinner
-        followSpinnerAdapter = FollowSpinnerAdapter(this)
-        spinner.adapter = followSpinnerAdapter
+        spinnerAdapter = FollowSpinnerAdapter(this)
+        spinner.adapter = spinnerAdapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val beforePosition = followViewModel.selectedLocationPosition
+                val beforePosition = viewModel.selectedLocationPosition
                 if (beforePosition != position) {
-                    followViewModel.selectedLocationPosition = position
-                    updateFragments(followSpinnerAdapter.dataSource[position])
+                    if (viewModel.keepSpinnerSelection) {
+                        spinner.setSelection(viewModel.selectedLocationPosition)
+                    } else {
+                        viewModel.selectedLocationPosition = position
+                        updateFragments(spinnerAdapter.dataSource[position])
+                    }
                 }
+                viewModel.keepSpinnerSelection = false
             }
 
             override fun onNothingSelected(parent: AdapterView<out Adapter>?) {
 
             }
         }
-        spinner.setSelection(followViewModel.selectedLocationPosition)
 
         // Setup Fragment
-        followPagerAdapter = FollowPagerAdapter(supportFragmentManager)
-        container.adapter = followPagerAdapter
+        pagerAdapter = FollowPagerAdapter(supportFragmentManager)
+        container.adapter = pagerAdapter
         tabs.setupWithViewPager(container)
 
         val toggle = ActionBarDrawerToggle(
@@ -83,32 +86,33 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         nav_view.setNavigationItemSelectedListener(this)
 
         // Setup Progressbar
-        progress_bar.max = followViewModel.durationInMillis.toInt()
+        progress_bar.max = viewModel.durationInMillis.toInt()
         progress_bar.progress = 0
 
-        if (AppHelper.db.locationGroupsDao().count() <= 0) {
-            AppHelper.db.locationGroupsDao().insert(FollowLocation(name = "Home", displaySeq = 1))
-        }
+        viewModel.initLocationsAndGroups()
 
         subscribeUiChanges()
     }
 
     private fun subscribeUiChanges() {
-        followViewModel.getFollowLocations().observe(this, Observer<List<LocationAndGroups>> {
+        viewModel.getFollowLocations().observe(this, Observer<List<LocationAndGroups>> {
             it?.let {
-                val isEmptyBefore = followSpinnerAdapter.dataSource.isEmpty()
-                followSpinnerAdapter.dataSource = it
-                if (isEmptyBefore) {
-                    spinner?.setSelection(followViewModel.selectedLocationPosition)
-                    if (it.isNotEmpty()){
-                        followViewModel.selectedLocationPosition = 0
-                        updateFragments(it[followViewModel.selectedLocationPosition])
-                    }
+                viewModel.keepSpinnerSelection = true
+                spinnerAdapter.dataSource = it
+
+                if (viewModel.selectedLocationPosition >= it.size) {
+                    viewModel.selectedLocationPosition = 0
+                } else {
+                    viewModel.selectedLocationPosition = viewModel.selectedLocationPosition
+                    container.offscreenPageLimit = it.size
                 }
+
+                if (it.isNotEmpty())
+                    updateFragments(it[viewModel.selectedLocationPosition])
             }
         })
 
-        followViewModel.getMillisLeft().observe(this, Observer<Long> {
+        viewModel.getMillisLeft().observe(this, Observer<Long> {
             it?.let {
                 launch(UI){
                     progress_bar.progress = it.toInt()
@@ -128,7 +132,7 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 Log.d(TAG, "S ${locationAndGroups.location.Id} ${locationAndGroups.selectedGroupPosition}")
             }
         }
-        followPagerAdapter.dataSource = locationAndGroups
+        pagerAdapter.dataSource = locationAndGroups
         tabs.getTabAt(locationAndGroups.selectedGroupPosition)?.select()
         tabs.addOnTabSelectedListener(onTabSelectedListener!!)
     }
@@ -143,7 +147,7 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.menu_follow, menu)
         return true
     }
 
@@ -151,9 +155,15 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
-            R.id.menu_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
+
+        return when (item.itemId) {
+            R.id.menu_sort_items -> {
+                item.isChecked = !item.isChecked
+                viewModel.enableSorting.value = item.isChecked
+                true
+            }
+            R.id.menu_settings -> true
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

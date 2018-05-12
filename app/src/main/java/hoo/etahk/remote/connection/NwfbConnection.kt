@@ -414,13 +414,18 @@ object NwfbConnection: BaseConnection {
 
         val msg = (records[Eta.NWFB_ETA_RECORD_ETA_TIME] + " " + timeStrToMsg(records[Eta.NWFB_ETA_RECORD_MSG])).trim()
 
-        val distance = records[Eta.NWFB_ETA_RECORD_DISTANCE].toLong()
+        var distance = records[Eta.NWFB_ETA_RECORD_DISTANCE].toLong()
+
+        if (distance <= 0L && msg.contains("已到達")) {
+            distance = 1
+        }
 
         return EtaResult(
                 company = records[Eta.NWFB_ETA_RECORD_COMPANY].trim(),
                 etaTime = Utils.timeStrToTimestamp(records[Eta.NWFB_ETA_RECORD_ETA_TIME]),
                 msg = msg,
                 scheduleOnly = (distance <= 0),
+                gps = (distance > 0),
                 distance = distance)
     }
 }

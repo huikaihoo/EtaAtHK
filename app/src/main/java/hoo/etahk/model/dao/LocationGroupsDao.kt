@@ -1,16 +1,13 @@
 package hoo.etahk.model.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
-import hoo.etahk.model.data.FollowLocation
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Query
+import android.arch.persistence.room.Transaction
 import hoo.etahk.model.relation.LocationAndGroups
 
 @Dao
 abstract class LocationGroupsDao {
-
-    // Count
-    @Query("SELECT COUNT(*) FROM followLocation")
-    abstract fun count(): Int
 
     // Select
     @Transaction
@@ -21,16 +18,7 @@ abstract class LocationGroupsDao {
     @Query("SELECT * FROM followLocation ORDER BY ABS(displaySeq)")
     abstract fun selectAll(): LiveData<List<LocationAndGroups>>
 
-    // Insert / Update (list)
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract fun insert(location: FollowLocation)
-
-    @Update(onConflict = OnConflictStrategy.IGNORE)
-    abstract fun update(location: FollowLocation)
-
     @Transaction
-    open fun insertOrUpdate(location: FollowLocation) {
-        insert(location)
-        update(location)
-    }
+    @Query("SELECT * FROM followLocation where displaySeq >= 0 ORDER BY displaySeq")
+    abstract fun selectOnce(): List<LocationAndGroups>
 }

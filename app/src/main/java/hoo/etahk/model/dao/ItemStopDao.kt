@@ -14,9 +14,11 @@ abstract class ItemStopDao {
     @Query("SELECT * FROM followItem WHERE groupId = :groupId and displaySeq > 0 ORDER BY displaySeq")
     abstract fun select(groupId: Long): LiveData<List<ItemAndStop>>
 
-    // Select
     @Transaction
     @Query("SELECT * FROM followItem WHERE groupId = :groupId ORDER BY ABS(displaySeq)")
     abstract fun selectAll(groupId: Long): LiveData<List<ItemAndStop>>
+
+    @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM FollowItem WHERE groupId = :groupId")
+    abstract fun nextItemDisplaySeq(groupId: Long): Long
 }
 
