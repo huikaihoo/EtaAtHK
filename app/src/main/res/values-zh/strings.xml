@@ -23,10 +23,11 @@
     <string name="enable_sort">編輯排序</string>
 
     <string name="rename">重新命名</string>
-    <string name="move_to">移動至</string>
+    <string name="move_to">移動至...</string>
     <string name="remove">移除</string>
 
     <string name="add_to_follow_stop">加入至追蹤車站</string>
+    <string name="view_route">檢視路線</string>
 
     <!-- Common -->
     <string name="to_prefix">往\u0020</string>

@@ -14,7 +14,7 @@
     android:paddingBottom="8dp">
 
     <TextView
-        android:id="@+id/stop_name"
+        android:id="@+id/stop_title"
         style="@style/TextAppearance.AppCompat.Medium"
         android:fontFamily="sans-serif-condensed"
         android:layout_width="wrap_content"
@@ -35,8 +35,8 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        app:layout_constraintBaseline_toBaselineOf="@+id/stop_name"
-        app:layout_constraintStart_toEndOf="@+id/stop_name"
+        app:layout_constraintBaseline_toBaselineOf="@+id/stop_title"
+        app:layout_constraintStart_toEndOf="@+id/stop_title"
         app:layout_constraintEnd_toStartOf="@+id/barrier_0"
         tools:text="$99.99" />
 
@@ -51,7 +51,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/barrier_1_2"
-        app:layout_constraintTop_toBottomOf="@id/stop_name"
+        app:layout_constraintTop_toBottomOf="@id/stop_title"
         tools:text="QQQQQ QQQ, RRRR RRRRRRR RRRRRRRRR RRRRRRRRRR" />
 
     <android.support.constraint.Barrier

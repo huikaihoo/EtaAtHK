@@ -56,6 +56,10 @@ class RouteFragment : BaseFragment() {
     private var routeStopsAdapter: RouteStopsAdapter = RouteStopsAdapter()
     private var subscribeStops = false
 
+    var isGotoSeqUsed
+        get() = viewModel.isGotoSeqUsed
+        set(value) { viewModel.isGotoSeqUsed = value }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         routeStopsAdapter.context = this
@@ -179,6 +183,21 @@ class RouteFragment : BaseFragment() {
             } else {
                 it?.let { routeStopsAdapter.dataSource = it }
 
+                if (size > 0 && !viewModel.isGotoSeqUsed) {
+                    val gotoBound = activity!!.intent.extras.getLong(Constants.Argument.ARG_GOTO_BOUND)
+                    val gotoSeq = activity!!.intent.extras.getLong(Constants.Argument.ARG_GOTO_SEQ)
+                    if (gotoBound == fragmentViewModel.routeKey!!.bound && gotoSeq > 0) {
+                        launch (UI){
+                            for (i in it?.indices!! ) {
+                                if (it[i].seq == gotoSeq) {
+                                    Log.d(TAG, "GotoSeqUsed ${gotoSeq} ${i}")
+                                    val layoutManager = rootView.recycler_view.layoutManager as LinearLayoutManager
+                                    layoutManager.scrollToPositionWithOffset(i, 0)
+                                }
+                            }
+                        }
+                    }
+                }
                 if (size == updatedCount && errorCount <= 0) {
                     rootView.refresh_layout.isRefreshing = false
 
@@ -188,7 +207,6 @@ class RouteFragment : BaseFragment() {
                     }
                 }
             }
-
             // TODO ("Show Network Error Message based on Network Error")
         })
 

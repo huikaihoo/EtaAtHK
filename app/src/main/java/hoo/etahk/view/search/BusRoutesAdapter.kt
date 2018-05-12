@@ -53,6 +53,8 @@ class BusRoutesAdapter : BaseFilterDiffAdapter<BusSearchFragment, Route>(), Fast
                 putString(Argument.ARG_COMPANY, routeKey.company)
                 putString(Argument.ARG_ROUTE_NO, routeKey.routeNo)
                 putLong(Argument.ARG_TYPE_CODE, routeKey.typeCode)
+                putLong(Argument.ARG_GOTO_BOUND, -1L)
+                putLong(Argument.ARG_GOTO_SEQ, -1L)
             })
         }
     }

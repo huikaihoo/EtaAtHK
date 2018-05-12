@@ -36,10 +36,12 @@ class RouteStopsAdapter : BaseDiffAdapter<RouteFragment, Stop>() {
             val etaStatus = stop.etaStatus
             val etaResults = stop.etaResults
 
-            itemView.stop_name.text = "${position + 1}. ${stop.name.value}"
+            itemView.stop_title.text = "${position + 1}. ${stop.name.value}"
             itemView.stop_desc.text = stop.details.value
             if (stop.fare > 0 && dataSource.size > (position + 1)) {
                 itemView.fare.text = App.instance.getString(R.string.price_2dp).format(stop.fare)
+            } else {
+                itemView.fare.text = ""
             }
 
             // ETA Text Color
@@ -62,7 +64,7 @@ class RouteStopsAdapter : BaseDiffAdapter<RouteFragment, Stop>() {
                 false -> ContextCompat.getColor(App.instance, R.color.colorWhite)
             }
 
-            itemView.stop_name.setTextColor(color)
+            itemView.stop_title.setTextColor(color)
             itemView.eta_0.setTextColor(color)
 
             // ETA Result
@@ -91,6 +93,13 @@ class RouteStopsAdapter : BaseDiffAdapter<RouteFragment, Stop>() {
                     }
                     text.append(etaResults[i].getDisplayMsg())
                     tv.text = text
+                }
+            }
+
+            if (context == null || !context.isGotoSeqUsed) {
+                itemView.setOnTouchListener { v, event ->
+                    context?.isGotoSeqUsed = true
+                    false
                 }
             }
 

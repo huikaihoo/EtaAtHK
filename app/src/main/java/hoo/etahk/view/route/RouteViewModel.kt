@@ -19,6 +19,9 @@ class RouteViewModel: TimerViewModel() {
                 subscribeToRepo()
         }
 
+    var isGotoBoundUsed: Boolean = false
+    var isGotoSeqUsed: Boolean = false
+
     fun getParentRoute(): LiveData<Route> {
         return mParentRoute!!
     }

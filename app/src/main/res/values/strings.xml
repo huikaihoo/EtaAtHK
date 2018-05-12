@@ -36,10 +36,11 @@
     <string name="enable_sort">Enable Sorting</string>
 
     <string name="rename">Rename</string>
-    <string name="move_to">Move to</string>
+    <string name="move_to">Move to ...</string>
     <string name="remove">Remove</string>
 
     <string name="add_to_follow_stop">Add to following stops</string>
+    <string name="view_route">View route</string>
 
     <!-- Common -->
     <string name="to_prefix">To\u0020</string>

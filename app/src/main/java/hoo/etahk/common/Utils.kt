@@ -153,6 +153,10 @@ object Utils {
         return result
     }
 
+    fun replaceSpecialCharacters(str: String): String {
+        return str.replace("\uE473".toRegex(), "邨")
+    }
+
     /**
      * Function to return valid ETA Result's message from EAT Time String
      * @return message in ETAResult

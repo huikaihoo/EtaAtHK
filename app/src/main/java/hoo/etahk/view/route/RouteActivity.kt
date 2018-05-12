@@ -1,5 +1,6 @@
 package hoo.etahk.view.route
 
+import android.app.ActivityManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -47,35 +48,39 @@ class RouteActivity : AppCompatActivity() {
      * may be best to switch to a
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
-    private var mRoutePagerAdapter: RoutePagerAdapter? = null
-    private lateinit var mRouteViewModel: RouteViewModel
+    private var pagerAdapter: RoutePagerAdapter? = null
+    private lateinit var viewModel: RouteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getTheme(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getLong(Argument.ARG_TYPE_CODE)))
         window.navigationBarColor = Utils.getThemeColorPrimaryDark(this)
+        setTaskDescription(ActivityManager.TaskDescription(null, null, Utils.getThemeColorPrimaryDark(this)))
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)
 
         setSupportActionBar(toolbar)
 
-        mRouteViewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
-        mRouteViewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
-        mRouteViewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
+        viewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
+        viewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
+        viewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
+
+        intent.extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
+        intent.extras.putLong(Argument.ARG_GOTO_SEQ, -1L)
 
         // Setup Fragment
-        mRoutePagerAdapter = RoutePagerAdapter(supportFragmentManager)
-        container.adapter = mRoutePagerAdapter
+        pagerAdapter = RoutePagerAdapter(supportFragmentManager)
+        container.adapter = pagerAdapter
         container.offscreenPageLimit = 3
 
         tabs.setupWithViewPager(container)
 
         // Setup Actionbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = mRouteViewModel.routeKey!!.getCompanyName() + " " + mRouteViewModel.routeKey!!.routeNo
+        supportActionBar?.title = viewModel.routeKey!!.getCompanyName() + " " + viewModel.routeKey!!.routeNo
 
         // Setup Progressbar
-        progress_bar.max = mRouteViewModel.durationInMillis.toInt()
+        progress_bar.max = viewModel.durationInMillis.toInt()
         progress_bar.progress = 0
 
         subscribeUiChanges()
@@ -95,23 +100,30 @@ class RouteActivity : AppCompatActivity() {
     }
 
     private fun subscribeUiChanges() {
-        mRouteViewModel.getParentRoute().observe(this, Observer<Route> {
+        viewModel.getParentRoute().observe(this, Observer<Route> {
             it?.let {
-                mRouteViewModel.updateChildRoutes(it)
-                mRoutePagerAdapter?.dataSource = it
+                viewModel.updateChildRoutes(it)
+                pagerAdapter?.dataSource = it
                 setActionBarSubtitle(it)
                 tabs.addOnTabSelectedListener(object : TabLayout.ViewPagerOnTabSelectedListener(container) {
                     override fun onTabSelected(tab: TabLayout.Tab) {
                         super.onTabSelected(tab)
                         if (tabs.tabCount > 0)
-                            mRouteViewModel.selectedTabPosition = tab.position
+                            viewModel.selectedTabPosition = tab.position
                     }
                 })
-                tabs.getTabAt(mRouteViewModel.selectedTabPosition)?.select()
+                if (!viewModel.isGotoBoundUsed) {
+                    val gotoBound = intent.extras.getLong(Argument.ARG_GOTO_BOUND)
+                    if (gotoBound > 0) {
+                        viewModel.isGotoBoundUsed = true
+                        viewModel.selectedTabPosition = if (gotoBound >= 2L) 1 else 0
+                    }
+                }
+                tabs.getTabAt(viewModel.selectedTabPosition)?.select()
             }
         })
 
-        mRouteViewModel.getMillisLeft().observe(this, Observer<Long> {
+        viewModel.getMillisLeft().observe(this, Observer<Long> {
             it?.let {
                 launch(UI){
                     progress_bar.progress = it.toInt()
@@ -134,9 +146,9 @@ class RouteActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_maps -> {
                 startActivity<RoutesMapsActivity>(Bundle {
-                    putString(Argument.ARG_COMPANY, mRouteViewModel.routeKey?.company)
-                    putString(Argument.ARG_ROUTE_NO, mRouteViewModel.routeKey?.routeNo)
-                    putLong(Argument.ARG_TYPE_CODE, mRouteViewModel.routeKey?.typeCode?: RouteType.NONE)
+                    putString(Argument.ARG_COMPANY, viewModel.routeKey?.company)
+                    putString(Argument.ARG_ROUTE_NO, viewModel.routeKey?.routeNo)
+                    putLong(Argument.ARG_TYPE_CODE, viewModel.routeKey?.typeCode?: RouteType.NONE)
                 })
                 true
             }

@@ -26,6 +26,8 @@ object Constants {
     }
 
     object SharePrefs {
+        const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.40 Safari/537.36"
+
         const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
         const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
 
@@ -64,6 +66,8 @@ object Constants {
         const val ARG_COMPANY = "company"
         const val ARG_ROUTE_NO = "route_no"
         const val ARG_TYPE_CODE = "type_code"
+        const val ARG_GOTO_BOUND = "goto_bound"
+        const val ARG_GOTO_SEQ = "goto_seq"
         const val ARG_ACTIONBAR_TITLE = "actionbar_title"
         const val ARG_ACTIONBAR_SUBTITLE = "actionbar_subtitle"
         const val ARG_LATITUDE = "latitude"

@@ -35,16 +35,18 @@ class FollowItemsAdapter : BaseDiffAdapter<FollowFragment, ItemAndStop>(), ItemT
         override fun onBind(context: FollowFragment?, position: Int, dataSource: List<ItemAndStop>) {
             val item = dataSource[position]
 
-            itemView.stop_name.text = "..."
+            itemView.stop_title.text = "..."
 
             dataSource[position].stop?.let { stop ->
                 val etaStatus = stop.etaStatus
                 val etaResults = stop.etaResults
 
-                itemView.stop_name.text = stop.name.value
-                itemView.stop_desc.text = stop.routeKey.getCompanyName() + " " + stop.routeKey.routeNo + " " + App.instance.getString(R.string.to_prefix) + stop.to.value
+                itemView.stop_title.text = stop.routeKey.getCompanyName() + " " + stop.routeKey.routeNo
+                itemView.stop_desc.text = stop.name.value + " " + App.instance.getString(R.string.to_prefix) + stop.to.value
                 if (stop.fare > 0) {
                     itemView.fare.text = App.instance.getString(R.string.price_2dp).format(stop.fare)
+                } else {
+                    itemView.fare.text = ""
                 }
 
                 // ETA Result

@@ -2,6 +2,7 @@ package hoo.etahk.model
 
 import android.arch.persistence.room.TypeConverter
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
@@ -69,7 +70,7 @@ class Converters {
 
     @TypeConverter
     fun stringLangToString(item: StringLang): String {
-        return AppHelper.gson.toJson(item)
+        return Utils.replaceSpecialCharacters(AppHelper.gson.toJson(item))
     }
 
     // EtaStatus

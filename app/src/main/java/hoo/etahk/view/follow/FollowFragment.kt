@@ -16,6 +16,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.mcxiaoke.koi.ext.Bundle
+import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
@@ -26,6 +28,7 @@ import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseFragment
+import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.fragment_recycler.view.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -134,6 +137,17 @@ class FollowFragment : BaseFragment() {
             popup.inflate(R.menu.popup_follow_item)
             popup.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
+                    R.id.popup_view -> {
+                        item.stop?.let {
+                            activity?.startActivity<RouteActivity>(Bundle {
+                                putString(Constants.Argument.ARG_COMPANY, it.routeKey.company)
+                                putString(Constants.Argument.ARG_ROUTE_NO, it.routeKey.routeNo)
+                                putLong(Constants.Argument.ARG_TYPE_CODE, it.routeKey.typeCode)
+                                putLong(Constants.Argument.ARG_GOTO_BOUND, it.routeKey.bound)
+                                putLong(Constants.Argument.ARG_GOTO_SEQ, it.seq)
+                            })
+                        }
+                    }
                     R.id.popup_move -> {
                         val locationAndGroups = fragmentViewModel.getAllFollowLocations()
                         val groupList = mutableListOf<FollowGroup>()
