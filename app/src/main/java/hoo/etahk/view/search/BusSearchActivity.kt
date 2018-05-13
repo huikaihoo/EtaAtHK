@@ -21,9 +21,10 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.common.Constants.RouteType
+import hoo.etahk.common.Utils
 import hoo.etahk.common.tools.ThemeColor
-import kotlinx.android.synthetic.main.activity_search_nav.*
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.activity_search_nav.*
 
 class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -271,7 +272,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         when (to in 0..searchList.size) {
             true -> {
                 // Change Task list color
-                setTaskDescription(ActivityManager.TaskDescription(null, null, searchList[to].color.colorPrimaryDark))
+                setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_notification), searchList[to].color.colorPrimaryDark))
                 when (from in 0..searchList.size || from == to) {
                     true -> {
                         /**

@@ -2,6 +2,8 @@ package hoo.etahk.common
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.text.Spannable
@@ -16,6 +18,8 @@ import hoo.etahk.common.Constants.Time
 import hoo.etahk.view.App
 import java.text.SimpleDateFormat
 import kotlin.math.abs
+
+
 
 object Utils {
     /**
@@ -197,5 +201,23 @@ object Utils {
             spannableStringBuilder.setSpan(imageSpan, originalLength, originalLength + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
         }
         return spannableStringBuilder
+    }
+
+    /**
+     * Source: https://stackoverflow.com/questions/33696488/getting-bitmap-from-vector-drawable
+     */
+    fun getBitmapFromVectorDrawable(context: Context, drawableId: Int): Bitmap {
+        var drawable = ContextCompat.getDrawable(context, drawableId)
+        drawable = DrawableCompat.wrap(drawable!!).mutate()
+
+        val bitmap = Bitmap.createBitmap(
+            drawable!!.intrinsicWidth,
+            drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+
+        return bitmap
     }
 }

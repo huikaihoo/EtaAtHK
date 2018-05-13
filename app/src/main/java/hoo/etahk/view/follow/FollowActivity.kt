@@ -1,5 +1,6 @@
 package hoo.etahk.view.follow
 
+import android.app.ActivityManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.widget.Adapter
 import android.widget.AdapterView
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.model.relation.LocationAndGroups
 import kotlinx.android.synthetic.main.activity_follow.*
 import kotlinx.android.synthetic.main.activity_follow_nav.*
@@ -92,6 +94,11 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         viewModel.initLocationsAndGroups()
 
         subscribeUiChanges()
+    }
+
+    override fun onResume() {
+        setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_notification), Utils.getThemeColorPrimaryDark(this)))
+        super.onResume()
     }
 
     private fun subscribeUiChanges() {
