@@ -6,7 +6,12 @@
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorMenuWhite">#F5F5F5</color>
+    <color name="colorMenuGrey">#424242</color>
+    <color name="colorBgGrey">#212121</color>
     <color name="colorSemiTransparentBlack">#59000000</color>
+
+    <color name="colorNavItemBlack">#8A000000</color>
+    <color name="colorNavItemWhite">#1EFFFFFF</color>
 
     <color name="colorAll">#795548</color>
     <color name="colorAllDark">#5D4037</color>

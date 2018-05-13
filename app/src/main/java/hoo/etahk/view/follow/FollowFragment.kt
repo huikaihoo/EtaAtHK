@@ -210,7 +210,7 @@ class FollowFragment : BaseFragment() {
         viewModel.getSelectedLocation().observe(this, Observer<LocationAndGroups> {
             it?.let {
                 val position = arguments!!.getInt(ARG_POSITION)
-                //Log.d(TAG, "subscribeUiChanges XX")
+                Log.d(TAG, "subscribeUiChanges ${position}")
                 if (position < it.groups.size && it.groups[position].Id?: 0L > 0L ) {
                     if (fragmentViewModel.groupId != it.groups[position].Id) {
                         //Log.d(TAG, "subscribeUiChanges XX ${it.groups[position].Id}")

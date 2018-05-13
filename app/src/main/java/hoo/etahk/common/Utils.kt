@@ -159,6 +159,7 @@ object Utils {
 
     fun replaceSpecialCharacters(str: String): String {
         return str.replace("\uE473".toRegex(), "邨")
+                .replace("\uE2B4".toRegex(), "璧")
     }
 
     /**

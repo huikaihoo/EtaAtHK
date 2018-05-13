@@ -3,6 +3,7 @@ package hoo.etahk.view.follow
 import android.app.ActivityManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
@@ -13,12 +14,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.Adapter
 import android.widget.AdapterView
+import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.model.relation.LocationAndGroups
+import hoo.etahk.view.search.BusSearchActivity
 import kotlinx.android.synthetic.main.activity_follow.*
 import kotlinx.android.synthetic.main.activity_follow_nav.*
 import kotlinx.coroutines.experimental.android.UI
@@ -43,6 +47,8 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private var onTabSelectedListener: TabLayout.ViewPagerOnTabSelectedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_launcher_large), Utils.getThemeColorPrimaryDark(this)))
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_follow_nav)
 
@@ -80,12 +86,24 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         container.adapter = pagerAdapter
         tabs.setupWithViewPager(container)
 
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
+        val toggle = object: ActionBarDrawerToggle(
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                if (slideOffset == 0f) {
+                    // drawer closed: Disable status bar translucence
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                    //changeColor(mBusSearchViewModel.selectedTabPosition, mBusSearchViewModel.selectedTabPosition)
+                } else if (slideOffset != 0f) {
+                    // started opening: Enable status bar translucency
+                    window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                }
+                super.onDrawerSlide(drawerView, slideOffset)
+            }
+        }
+        drawer.addDrawerListener(toggle)
         toggle.syncState()
 
-        nav_view.setNavigationItemSelectedListener(this)
+        nav.setNavigationItemSelectedListener(this)
 
         // Setup Progressbar
         progress_bar.max = viewModel.durationInMillis.toInt()
@@ -97,7 +115,7 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
     override fun onResume() {
-        setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_notification), Utils.getThemeColorPrimaryDark(this)))
+        nav.menu.findItem(R.id.nav_follow).isChecked = true
         super.onResume()
     }
 
@@ -145,8 +163,8 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -177,27 +195,24 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
+            R.id.nav_follow -> {
+                startActivity<FollowActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             }
-            R.id.nav_gallery -> {
+            R.id.nav_bus -> {
+                startActivity<BusSearchActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+            }
+            R.id.nav_tram -> {
 
             }
-            R.id.nav_slideshow -> {
+            R.id.nav_mtr -> {
 
             }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
+            R.id.nav_settings -> {
 
             }
         }
 
-        drawer_layout.closeDrawer(GravityCompat.START)
+        drawer.closeDrawer(GravityCompat.START)
         return true
     }
 }

@@ -11,11 +11,14 @@
         android:name=".view.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/app_name_full"
         android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="3" />
         <meta-data
             android:name="com.samsung.android.sdk.multiwindow.enable"
             android:value="true" />
@@ -41,12 +44,6 @@
             android:name=".view.search.BusSearchActivity"
             android:label="@string/title_bus_search"
             android:theme="@style/AppTheme.Bus">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".view.route.RouteActivity"

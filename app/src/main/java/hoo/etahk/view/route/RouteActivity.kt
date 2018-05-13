@@ -54,7 +54,7 @@ class RouteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getTheme(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getLong(Argument.ARG_TYPE_CODE)))
         window.navigationBarColor = Utils.getThemeColorPrimaryDark(this)
-        setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_notification), Utils.getThemeColorPrimaryDark(this)))
+        setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_launcher_large), Utils.getThemeColorPrimaryDark(this)))
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)

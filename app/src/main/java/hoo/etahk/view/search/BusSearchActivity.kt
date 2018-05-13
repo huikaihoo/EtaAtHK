@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.app.ActivityManager
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -17,12 +18,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.Utils
 import hoo.etahk.common.tools.ThemeColor
+import hoo.etahk.view.follow.FollowActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.activity_search_nav.*
 
@@ -79,11 +82,11 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
      * may be best to switch to a
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
-    private var mBusSearchPagerAdapter: BusSearchPagerAdapter? = null
-    private lateinit var mBusSearchViewModel: BusSearchViewModel
+    private var pagerAdapter: BusSearchPagerAdapter? = null
+    private lateinit var viewModel: BusSearchViewModel
 
-    private var mSearchMenuItem: MenuItem? = null
-    private var mSearchView: SearchView? = null
+    private var searchMenuItem: MenuItem? = null
+    private var searchView: SearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,19 +94,19 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
         setSupportActionBar(toolbar)
 
-        mBusSearchViewModel = ViewModelProviders.of(this).get(BusSearchViewModel::class.java)
-        mBusSearchViewModel.updateParentRoutes()
+        viewModel = ViewModelProviders.of(this).get(BusSearchViewModel::class.java)
+        viewModel.updateParentRoutes()
 
-        if (mBusSearchViewModel.selectedTabPosition == -1)
-            mBusSearchViewModel.selectedTabPosition = 0 // TODO(" Pass argument to Activity to set the default open tab")
-        changeColor(mBusSearchViewModel.selectedTabPosition, mBusSearchViewModel.selectedTabPosition)
+        if (viewModel.selectedTabPosition == -1)
+            viewModel.selectedTabPosition = 0 // TODO(" Pass argument to Activity to set the default open tab")
+        changeColor(viewModel.selectedTabPosition, viewModel.selectedTabPosition)
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mBusSearchPagerAdapter = BusSearchPagerAdapter(supportFragmentManager)
+        pagerAdapter = BusSearchPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
-        container.adapter = mBusSearchPagerAdapter
+        container.adapter = pagerAdapter
         container.offscreenPageLimit = searchList.size
 
         tabs.setupWithViewPager(container)
@@ -111,24 +114,24 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             override fun onTabSelected(tab: TabLayout.Tab) {
                 super.onTabSelected(tab)
 
-                val oldTabPosition = mBusSearchViewModel.selectedTabPosition
+                val oldTabPosition = viewModel.selectedTabPosition
                 val newTabPosition = tab.position
 
                 if (oldTabPosition in 0..searchList.size) {
                     changeColor(oldTabPosition, newTabPosition)
                 }
 
-                mBusSearchViewModel.selectedTabPosition = newTabPosition
+                viewModel.selectedTabPosition = newTabPosition
             }
         })
-        tabs.getTabAt(mBusSearchViewModel.selectedTabPosition)?.select()
+        tabs.getTabAt(viewModel.selectedTabPosition)?.select()
 
         supportActionBar?.title = getString(R.string.title_bus_search)
 
         fab.setOnClickListener {
             appbar.setExpanded(true, true)
-            mSearchMenuItem?.expandActionView()
-            mSearchView?.requestFocus()
+            searchMenuItem?.expandActionView()
+            searchView?.requestFocus()
         }
 
         val toggle = object: ActionBarDrawerToggle(
@@ -137,7 +140,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 if (slideOffset == 0f) {
                     // drawer closed: Disable status bar translucence
                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                    changeColor(mBusSearchViewModel.selectedTabPosition, mBusSearchViewModel.selectedTabPosition)
+                    //changeColor(viewModel.selectedTabPosition, viewModel.selectedTabPosition)
                 } else if (slideOffset != 0f) {
                     // started opening: Enable status bar translucency
                     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -153,8 +156,13 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         subscribeUiChanges()
     }
 
+    override fun onResume() {
+        nav.menu.findItem(R.id.nav_bus).isChecked = true
+        super.onResume()
+    }
+
     private fun subscribeUiChanges() {
-//        mBusSearchViewModel?.getFollowStops()?.observe(this, Observer<List<Stop>> { stops ->
+//        viewModel?.getFollowStops()?.observe(this, Observer<List<Stop>> { stops ->
 //            Snackbar.make(main_content, "Model Updated" + stops?.size, Snackbar.LENGTH_LONG)
 //        .setAction("Action", null).show() } )
     }
@@ -172,10 +180,10 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         menuInflater.inflate(R.menu.menu_search, menu)
 
         // Set up SearchMenuItem
-        mSearchMenuItem = menu.findItem(R.id.menu_search)
+        searchMenuItem = menu.findItem(R.id.menu_search)
 
-        mSearchMenuItem?.isVisible = false
-        mSearchMenuItem?.setOnActionExpandListener( object : MenuItem.OnActionExpandListener {
+        searchMenuItem?.isVisible = false
+        searchMenuItem?.setOnActionExpandListener( object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(menuItem: MenuItem): Boolean {
                 fab.hide()
                 return true
@@ -187,12 +195,12 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             }
         })
 
-        mSearchView = mSearchMenuItem?.actionView as SearchView
-        mSearchView?.inputType = (InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS or
+        searchView = searchMenuItem?.actionView as SearchView
+        searchView?.inputType = (InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS or
                 InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS or
                 InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
 
-        mSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             /**
              * Called when the user submits the query. This could be due to a key press on the
              * keyboard or due to pressing a submit button.
@@ -218,7 +226,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
              * suggestions if available, true if the action was handled by the listener.
              */
             override fun onQueryTextChange(newText: String?): Boolean {
-                mBusSearchViewModel.searchText.value = newText?.trim()?.toUpperCase()
+                viewModel.searchText.value = newText?.trim()?.toUpperCase()
                 return false
             }
 
@@ -244,22 +252,19 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
+            R.id.nav_follow -> {
+                startActivity<FollowActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             }
-            R.id.nav_gallery -> {
+            R.id.nav_bus -> {
+                startActivity<BusSearchActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+            }
+            R.id.nav_tram -> {
 
             }
-            R.id.nav_slideshow -> {
+            R.id.nav_mtr -> {
 
             }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
+            R.id.nav_settings -> {
 
             }
         }
@@ -272,7 +277,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         when (to in 0..searchList.size) {
             true -> {
                 // Change Task list color
-                setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_notification), searchList[to].color.colorPrimaryDark))
+                setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_launcher_large), searchList[to].color.colorPrimaryDark))
                 when (from in 0..searchList.size || from == to) {
                     true -> {
                         /**

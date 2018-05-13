@@ -14,8 +14,8 @@ import android.view.Menu
 import android.view.MenuItem
 import hoo.etahk.R
 import hoo.etahk.view.follow.FollowViewModel
-import kotlinx.android.synthetic.main.activity_follow_nav.*
 import kotlinx.android.synthetic.main.activity_follow.*
+import kotlinx.android.synthetic.main.activity_follow_nav.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -53,11 +53,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //        }
 
         val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer.addDrawerListener(toggle)
         toggle.syncState()
 
-        nav_view.setNavigationItemSelectedListener(this)
+        nav.setNavigationItemSelectedListener(this)
 
         mFollowViewModel = ViewModelProviders.of(this).get(FollowViewModel::class.java)
         subscribeUiChanges()
@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -96,27 +96,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
+            R.id.nav_follow -> {
                 // Handle the camera action
             }
-            R.id.nav_gallery -> {
+            R.id.nav_bus -> {
 
             }
-            R.id.nav_slideshow -> {
+            R.id.nav_tram -> {
 
             }
-            R.id.nav_manage -> {
+            R.id.nav_mtr -> {
 
             }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
+            R.id.nav_settings -> {
 
             }
         }
 
-        drawer_layout.closeDrawer(GravityCompat.START)
+        drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
