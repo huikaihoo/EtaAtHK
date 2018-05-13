@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
-abstract class BaseFilterDiffAdapter<C, D> : BaseDiffAdapter<C, D>() {
+abstract class FilterDiffAdapter<C, D> : DiffAdapter<C, D>() {
 
     var filter: String = ""
         set(value) {

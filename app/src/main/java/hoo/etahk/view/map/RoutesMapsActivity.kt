@@ -25,29 +25,29 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants.Argument
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.relation.RouteAndStops
-import hoo.etahk.view.base.BaseMapsActivity
+import hoo.etahk.view.base.MapsActivity
 
 
-class RoutesMapsActivity : BaseMapsActivity(), OnMapReadyCallback {
+class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
 
     companion object {
         private const val TAG = "RoutesMapsActivity"
     }
 
-    private lateinit var routesMapViewModel: RoutesMapViewModel
-    private lateinit var routesSpinnerAdapter: RoutesSpinnerAdapter
+    private lateinit var viewModel: RoutesMapViewModel
+    private lateinit var spinnerAdapter: RoutesSpinnerAdapter
     private var spinner: Spinner? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        routesMapViewModel = ViewModelProviders.of(this).get(RoutesMapViewModel::class.java)
-        routesMapViewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
+        viewModel = ViewModelProviders.of(this).get(RoutesMapViewModel::class.java)
+        viewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
 
-        routesSpinnerAdapter = RoutesSpinnerAdapter(this)
+        spinnerAdapter = RoutesSpinnerAdapter(this)
 
-        supportActionBar?.title = routesMapViewModel.routeKey!!.routeNo
-        supportActionBar?.subtitle = routesMapViewModel.routeKey!!.getCompanyName()
+        supportActionBar?.title = viewModel.routeKey!!.routeNo
+        supportActionBar?.subtitle = viewModel.routeKey!!.getCompanyName()
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -60,8 +60,8 @@ class RoutesMapsActivity : BaseMapsActivity(), OnMapReadyCallback {
         // Set up OnInfoWindowClickListener
         this.googleMap!!.setOnInfoWindowClickListener(GoogleMap.OnInfoWindowClickListener { marker ->
             val textView = spinner?.selectedView?.findViewById(R.id.title) as TextView?
-            val subtitle = routesMapViewModel.routeKey!!.getCompanyName() + " " +
-                    routesMapViewModel.routeKey!!.routeNo + if (textView != null) " - " + textView.text else ""
+            val subtitle = viewModel.routeKey!!.getCompanyName() + " " +
+                    viewModel.routeKey!!.routeNo + if (textView != null) " - " + textView.text else ""
 
             startActivity<StreetViewActivity>(Bundle {
                 putString(Argument.ARG_ACTIONBAR_TITLE, marker.title)
@@ -74,14 +74,14 @@ class RoutesMapsActivity : BaseMapsActivity(), OnMapReadyCallback {
     }
 
     private fun subscribeUiChanges() {
-        routesMapViewModel.getRouteAndStopsList().observe(this, Observer<List<RouteAndStops>> {
+        viewModel.getRouteAndStopsList().observe(this, Observer<List<RouteAndStops>> {
             it?.let {
-                val isEmptyBefore = routesSpinnerAdapter.dataSource.isEmpty()
-                routesSpinnerAdapter.dataSource = it
+                val isEmptyBefore = spinnerAdapter.dataSource.isEmpty()
+                spinnerAdapter.dataSource = it
                 spinner?.isEnabled = (it.size > 1)
                 if (isEmptyBefore) {
-                    spinner?.setSelection(routesMapViewModel.selectedRoutePosition)
-                    if (routesMapViewModel.selectedRoutePosition < it.size)
+                    spinner?.setSelection(viewModel.selectedRoutePosition)
+                    if (viewModel.selectedRoutePosition < it.size)
                         showStops(false)
                 }
             }
@@ -93,13 +93,13 @@ class RoutesMapsActivity : BaseMapsActivity(), OnMapReadyCallback {
         menuInflater.inflate(R.menu.menu_maps, menu)
 
         spinner = menu.findItem(R.id.menu_spinner).actionView as Spinner
-        spinner!!.adapter = routesSpinnerAdapter
+        spinner!!.adapter = spinnerAdapter
 
         spinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val beforePosition = routesMapViewModel.selectedRoutePosition
+                val beforePosition = viewModel.selectedRoutePosition
                 if (beforePosition != position) {
-                    routesMapViewModel.selectedRoutePosition = position
+                    viewModel.selectedRoutePosition = position
                     showStops(true)
                 }
             }
@@ -118,7 +118,7 @@ class RoutesMapsActivity : BaseMapsActivity(), OnMapReadyCallback {
 
         // Set stops on map
         val latLngBoundsBuilder = LatLngBounds.Builder()
-        val stops = routesSpinnerAdapter.dataSource[routesMapViewModel.selectedRoutePosition].stops
+        val stops = spinnerAdapter.dataSource[viewModel.selectedRoutePosition].stops
 
         if (stops.isNotEmpty()) {
             stops.forEachIndexed { i, stop ->

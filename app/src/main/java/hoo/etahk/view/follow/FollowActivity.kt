@@ -1,34 +1,25 @@
 package hoo.etahk.view.follow
 
-import android.app.ActivityManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowManager
 import android.widget.Adapter
 import android.widget.AdapterView
-import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.Utils
 import hoo.etahk.model.relation.LocationAndGroups
-import hoo.etahk.view.search.BusSearchActivity
+import hoo.etahk.view.base.NavActivity
 import kotlinx.android.synthetic.main.activity_follow.*
 import kotlinx.android.synthetic.main.activity_follow_nav.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
-class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class FollowActivity : NavActivity() {
 
     companion object {
         private const val TAG = "FollowActivity"
@@ -47,8 +38,6 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private var onTabSelectedListener: TabLayout.ViewPagerOnTabSelectedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_launcher_large), Utils.getThemeColorPrimaryDark(this)))
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_follow_nav)
 
@@ -86,24 +75,7 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         container.adapter = pagerAdapter
         tabs.setupWithViewPager(container)
 
-        val toggle = object: ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                if (slideOffset == 0f) {
-                    // drawer closed: Disable status bar translucence
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                    //changeColor(mBusSearchViewModel.selectedTabPosition, mBusSearchViewModel.selectedTabPosition)
-                } else if (slideOffset != 0f) {
-                    // started opening: Enable status bar translucency
-                    window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                }
-                super.onDrawerSlide(drawerView, slideOffset)
-            }
-        }
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
-
-        nav.setNavigationItemSelectedListener(this)
+        super.initNavigationDrawer()
 
         // Setup Progressbar
         progress_bar.max = viewModel.durationInMillis.toInt()
@@ -162,14 +134,6 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         tabs.addOnTabSelectedListener(onTabSelectedListener!!)
     }
 
-    override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_follow, menu)
@@ -190,29 +154,5 @@ class FollowActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.menu_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_follow -> {
-                startActivity<FollowActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-            }
-            R.id.nav_bus -> {
-                startActivity<BusSearchActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-            }
-            R.id.nav_tram -> {
-
-            }
-            R.id.nav_mtr -> {
-
-            }
-            R.id.nav_settings -> {
-
-            }
-        }
-
-        drawer.closeDrawer(GravityCompat.START)
-        return true
     }
 }

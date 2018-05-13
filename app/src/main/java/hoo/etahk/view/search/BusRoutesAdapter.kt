@@ -12,12 +12,12 @@ import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.ParentRouteDiffCallback
 import hoo.etahk.view.App
-import hoo.etahk.view.base.BaseFilterDiffAdapter
 import hoo.etahk.view.base.BaseViewHolder
+import hoo.etahk.view.base.FilterDiffAdapter
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.item_route.view.*
 
-class BusRoutesAdapter : BaseFilterDiffAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
+class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
 
     init {
         useDiff = false

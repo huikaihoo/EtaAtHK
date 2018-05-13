@@ -11,8 +11,8 @@ import hoo.etahk.model.repo.RoutesRepo
 import hoo.etahk.model.repo.StopsRepo
 
 class RouteFragmentViewModel : ViewModel() {
-    private var mChildRoutes: LiveData<List<Route>>? = null
-    private var mStops: LiveData<List<Stop>>? = null
+    private var childRoutes: LiveData<List<Route>>? = null
+    private var stops: LiveData<List<Stop>>? = null
     private var hasUpdateStops = false
 
     var routeKey: RouteKey? = null
@@ -33,11 +33,11 @@ class RouteFragmentViewModel : ViewModel() {
     }
 
     fun getChildRoutes(): LiveData<List<Route>> {
-        return mChildRoutes!!
+        return childRoutes!!
     }
 
     fun getStops(): LiveData<List<Stop>> {
-        return mStops!!
+        return stops!!
     }
 
     fun updateStops(childRoutes: List<Route>, needEtaUpdate: Boolean = true) {
@@ -53,11 +53,11 @@ class RouteFragmentViewModel : ViewModel() {
     }
 
     private fun subscribeChildRoutesToRepo() {
-        mChildRoutes = RoutesRepo.getChildRoutes(routeKey!!.company, routeKey!!.routeNo, routeKey!!.bound)
+        childRoutes = RoutesRepo.getChildRoutes(routeKey!!.company, routeKey!!.routeNo, routeKey!!.bound)
     }
 
     fun subscribeStopsToRepo() {
         // TODO("Support variant")
-        mStops = StopsRepo.getStops(mChildRoutes!!.value!![0])
+        stops = StopsRepo.getStops(childRoutes!!.value!![0])
     }
 }

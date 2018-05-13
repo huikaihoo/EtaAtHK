@@ -2,34 +2,24 @@ package hoo.etahk.view.search
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
-import android.app.ActivityManager
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
-import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.common.Constants.RouteType
-import hoo.etahk.common.Utils
 import hoo.etahk.common.tools.ThemeColor
-import hoo.etahk.view.follow.FollowActivity
+import hoo.etahk.view.base.NavActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.activity_search_nav.*
 
-class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class BusSearchActivity : NavActivity() {
 
     companion object {
         private const val TAG = "BusSearchActivity"
@@ -72,6 +62,10 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                         OrderBy.SEQ,
                         ThemeColor(R.color.colorNight, R.color.colorNightDark, R.color.colorNightAccent))
         )
+    }
+
+    init {
+        autoSetTaskDescription = false
     }
 
     /**
@@ -134,24 +128,7 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             searchView?.requestFocus()
         }
 
-        val toggle = object: ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                if (slideOffset == 0f) {
-                    // drawer closed: Disable status bar translucence
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                    //changeColor(viewModel.selectedTabPosition, viewModel.selectedTabPosition)
-                } else if (slideOffset != 0f) {
-                    // started opening: Enable status bar translucency
-                    window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                }
-                super.onDrawerSlide(drawerView, slideOffset)
-            }
-        }
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
-
-        nav.setNavigationItemSelectedListener(this)
+        super.initNavigationDrawer()
 
         subscribeUiChanges()
     }
@@ -165,14 +142,6 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 //        viewModel?.getFollowStops()?.observe(this, Observer<List<Stop>> { stops ->
 //            Snackbar.make(main_content, "Model Updated" + stops?.size, Snackbar.LENGTH_LONG)
 //        .setAction("Action", null).show() } )
-    }
-
-    override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -239,45 +208,18 @@ class BusSearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        when (item.itemId) {
-            R.id.menu_settings ->
-                return true
-            else ->
-                return super.onOptionsItemSelected(item)
+
+        return when (item.itemId) {
+            R.id.menu_settings -> true
+            else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_follow -> {
-                startActivity<FollowActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-            }
-            R.id.nav_bus -> {
-                startActivity<BusSearchActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-            }
-            R.id.nav_tram -> {
-
-            }
-            R.id.nav_mtr -> {
-
-            }
-            R.id.nav_settings -> {
-
-            }
-        }
-
-        drawer.closeDrawer(GravityCompat.START)
-        return true
     }
 
     private fun changeColor(from: Int, to: Int) {
         when (to in 0..searchList.size) {
             true -> {
                 // Change Task list color
-                setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_launcher_large), searchList[to].color.colorPrimaryDark))
+                super.setTaskDescription(searchList[to].color.colorPrimaryDark)
                 when (from in 0..searchList.size || from == to) {
                     true -> {
                         /**

@@ -47,7 +47,7 @@
             <item
                 android:id="@+id/menu_remove_group"
                 android:orderInCategory="130"
-                android:title="@string/remove_c_location"
+                android:title="@string/remove_c_group"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/menu_sort_groups"

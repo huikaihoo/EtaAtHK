@@ -7,7 +7,7 @@ import hoo.etahk.model.repo.RoutesRepo
 import hoo.etahk.view.base.TimerViewModel
 
 class RouteViewModel: TimerViewModel() {
-    private var mParentRoute: LiveData<Route>? = null
+    private var parentRoute: LiveData<Route>? = null
     private var hasUpdateChildRoutes = false
 
     var selectedTabPosition: Int = 0
@@ -23,7 +23,7 @@ class RouteViewModel: TimerViewModel() {
     var isGotoSeqUsed: Boolean = false
 
     fun getParentRoute(): LiveData<Route> {
-        return mParentRoute!!
+        return parentRoute!!
     }
 
     fun updateChildRoutes(parentRoute: Route) {
@@ -34,6 +34,6 @@ class RouteViewModel: TimerViewModel() {
     }
 
     private fun subscribeToRepo() {
-        mParentRoute = RoutesRepo.getParentRoute(routeKey!!.company, routeKey!!.routeNo)
+        parentRoute = RoutesRepo.getParentRoute(routeKey!!.company, routeKey!!.routeNo)
     }
 }

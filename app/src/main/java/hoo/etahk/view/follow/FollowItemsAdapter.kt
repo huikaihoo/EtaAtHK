@@ -12,12 +12,12 @@ import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.ItemDiffCallback
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.view.App
-import hoo.etahk.view.base.BaseDiffAdapter
+import hoo.etahk.view.base.DiffAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_stop.view.*
 import java.util.*
 
-class FollowItemsAdapter : BaseDiffAdapter<FollowFragment, ItemAndStop>(), ItemTouchHelperAdapter {
+class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouchHelperAdapter {
 
     init {
         useDiff = false

@@ -12,11 +12,11 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.StopDiffCallback
 import hoo.etahk.view.App
-import hoo.etahk.view.base.BaseDiffAdapter
+import hoo.etahk.view.base.DiffAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_stop.view.*
 
-class RouteStopsAdapter : BaseDiffAdapter<RouteFragment, Stop>() {
+class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
     init {
         useDiff = false

@@ -1,11 +1,9 @@
 package hoo.etahk.view.route
 
-import android.app.ActivityManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.mcxiaoke.koi.ext.Bundle
@@ -18,12 +16,13 @@ import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
+import hoo.etahk.view.base.BaseActivity
 import hoo.etahk.view.map.RoutesMapsActivity
 import kotlinx.android.synthetic.main.activity_route.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
-class RouteActivity : AppCompatActivity() {
+class RouteActivity : BaseActivity() {
 
     companion object {
         fun getTheme(company: String, typeCode: Long): Int {
@@ -40,6 +39,10 @@ class RouteActivity : AppCompatActivity() {
         }
     }
 
+    init {
+        autoSetTaskDescription = false
+    }
+
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
      * fragments for each of the sections. We use a
@@ -54,7 +57,7 @@ class RouteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getTheme(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getLong(Argument.ARG_TYPE_CODE)))
         window.navigationBarColor = Utils.getThemeColorPrimaryDark(this)
-        setTaskDescription(ActivityManager.TaskDescription(null, Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_launcher_large), Utils.getThemeColorPrimaryDark(this)))
+        super.setTaskDescription()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route)

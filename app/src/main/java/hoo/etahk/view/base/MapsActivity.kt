@@ -12,10 +12,10 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants.Permission.PERMISSIONS_REQUEST_LOCATION
 import kotlinx.android.synthetic.main.activity_maps.*
 
-abstract class BaseMapsActivity : TransparentActivity(), OnMapReadyCallback {
+abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback {
 
     companion object {
-        private const val TAG = "BaseMapsActivity"
+        private const val TAG = "MapsActivity"
     }
 
     protected var googleMap: GoogleMap? = null

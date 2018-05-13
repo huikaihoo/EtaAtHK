@@ -5,7 +5,7 @@ import hoo.etahk.model.diff.BaseDiffCallback
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
-abstract class BaseDiffAdapter<C, D> : BaseAdapter<C, D>() {
+abstract class DiffAdapter<C, D> : BaseAdapter<C, D>() {
 
     var useDiff = true
 

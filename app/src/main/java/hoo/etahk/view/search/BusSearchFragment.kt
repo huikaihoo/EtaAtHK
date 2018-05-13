@@ -39,31 +39,31 @@ class BusSearchFragment : BaseFragment() {
         }
     }
 
-    private lateinit var mRootView: View
-    private lateinit var mBusSearchViewModel: BusSearchViewModel
-    private lateinit var mBusSearchFragmentViewModel: BusSearchFragmentViewModel
-    private var mBusRoutesAdapter: BusRoutesAdapter = BusRoutesAdapter()
+    private lateinit var rootView: View
+    private lateinit var viewModel: BusSearchViewModel
+    private lateinit var fragmentViewModel: BusSearchFragmentViewModel
+    private var busRoutesAdapter: BusRoutesAdapter = BusRoutesAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mBusRoutesAdapter.context = this
+        busRoutesAdapter.context = this
 
-        mBusSearchViewModel = ViewModelProviders.of(activity!!).get(BusSearchViewModel::class.java)
-        mBusSearchFragmentViewModel = ViewModelProviders.of(this).get(BusSearchFragmentViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(BusSearchViewModel::class.java)
+        fragmentViewModel = ViewModelProviders.of(this).get(BusSearchFragmentViewModel::class.java)
 
-        mBusSearchFragmentViewModel.index = arguments!!.getInt(ARG_INDEX)
+        fragmentViewModel.index = arguments!!.getInt(ARG_INDEX)
 
-        mRootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
+        rootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
 
-        mRootView.recycler_view.layoutManager = LinearLayoutManager(activity)
-        mRootView.recycler_view.itemAnimator = DefaultItemAnimator()
-        mRootView.recycler_view.addItemDecoration(
+        rootView.recycler_view.layoutManager = LinearLayoutManager(activity)
+        rootView.recycler_view.itemAnimator = DefaultItemAnimator()
+        rootView.recycler_view.addItemDecoration(
                 DividerItemDecoration(activity,
-                        (mRootView.recycler_view.layoutManager as LinearLayoutManager).orientation))
+                        (rootView.recycler_view.layoutManager as LinearLayoutManager).orientation))
 
-        mRootView.recycler_view.setPopupBgColor(BusSearchActivity.searchList[mBusSearchFragmentViewModel.index].color.colorPrimaryAccent)
-        mRootView.recycler_view.setThumbColor(BusSearchActivity.searchList[mBusSearchFragmentViewModel.index].color.colorPrimaryAccent)
-        mRootView.recycler_view.setStateChangeListener(object: OnFastScrollStateChangeListener{
+        rootView.recycler_view.setPopupBgColor(BusSearchActivity.searchList[fragmentViewModel.index].color.colorPrimaryAccent)
+        rootView.recycler_view.setThumbColor(BusSearchActivity.searchList[fragmentViewModel.index].color.colorPrimaryAccent)
+        rootView.recycler_view.setStateChangeListener(object: OnFastScrollStateChangeListener{
             override fun onFastScrollStop() {
                 (activity as BusSearchActivity).fab.show()
             }
@@ -73,33 +73,33 @@ class BusSearchFragment : BaseFragment() {
 
         })
 
-        mRootView.recycler_view.adapter = mBusRoutesAdapter
+        rootView.recycler_view.adapter = busRoutesAdapter
 
-        mRootView.refresh_layout.setColorSchemeColors(BusSearchActivity.searchList[mBusSearchFragmentViewModel.index].color.colorPrimary)
-        mRootView.refresh_layout.isRefreshing = mBusRoutesAdapter.dataSource.isEmpty()
+        rootView.refresh_layout.setColorSchemeColors(BusSearchActivity.searchList[fragmentViewModel.index].color.colorPrimary)
+        rootView.refresh_layout.isRefreshing = busRoutesAdapter.dataSource.isEmpty()
 
         subscribeUiChanges()
 
-        return mRootView
+        return rootView
     }
 
     private fun subscribeUiChanges() {
-        mBusSearchViewModel.searchText.observe(this, Observer<String> {
-            mBusRoutesAdapter.filter = it?: ""
+        viewModel.searchText.observe(this, Observer<String> {
+            busRoutesAdapter.filter = it?: ""
         })
 
-        mBusSearchFragmentViewModel.getParentRoutes().observe(this, Observer<List<Route>> {
+        fragmentViewModel.getParentRoutes().observe(this, Observer<List<Route>> {
             it?.let {
                 if (it.isNotEmpty()) {
-                    mRootView.refresh_layout.isRefreshing = false
-                    mRootView.refresh_layout.isEnabled = false
+                    rootView.refresh_layout.isRefreshing = false
+                    rootView.refresh_layout.isEnabled = false
                 }
-                mBusRoutesAdapter.dataSource = it
+                busRoutesAdapter.dataSource = it
             }
         })
     }
 
     fun scrollToPosition(position: Int) {
-        (mRootView.recycler_view.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
+        (rootView.recycler_view.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
     }
 }
