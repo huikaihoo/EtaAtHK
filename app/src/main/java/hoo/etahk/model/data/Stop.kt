@@ -47,4 +47,7 @@ data class Stop(
 
     @Ignore
     var isLoading: Boolean = false
+
+    @Ignore
+    var displayEta: Boolean = true
 }

@@ -246,19 +246,17 @@ class FollowFragment : BaseFragment() {
 
             it?.let { followItemsAdapter.dataSource = it }
 
-            if (size == updatedCount) {
-                if (fragmentViewModel.isEtaInit) {
-                    rootView.refresh_layout.isRefreshing = false
+            if (!fragmentViewModel.isEtaInit && size > 0) {
+                fragmentViewModel.isEtaInit = true
+                fragmentViewModel.isRefreshingAll = true
+                updateEta(it!!)
+            } else if (size == updatedCount) {
+                rootView.refresh_layout.isRefreshing = false
 
-                    if (fragmentViewModel.isRefreshingAll) {
-                        Log.d(TAG, "Start timer")
-                        fragmentViewModel.isRefreshingAll = false
-                        viewModel.startTimer()
-                    }
-                } else if (size > 0) {
-                    fragmentViewModel.isEtaInit = true
-                    fragmentViewModel.isRefreshingAll = true
-                    updateEta(it!!)
+                if (fragmentViewModel.isRefreshingAll) {
+                    Log.d(TAG, "Start timer")
+                    fragmentViewModel.isRefreshingAll = false
+                    viewModel.startTimer()
                 }
             }
 

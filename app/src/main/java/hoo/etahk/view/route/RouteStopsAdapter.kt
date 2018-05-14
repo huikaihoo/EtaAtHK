@@ -12,8 +12,8 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.StopDiffCallback
 import hoo.etahk.view.App
-import hoo.etahk.view.base.DiffAdapter
 import hoo.etahk.view.base.BaseViewHolder
+import hoo.etahk.view.base.DiffAdapter
 import kotlinx.android.synthetic.main.item_stop.view.*
 
 class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
@@ -68,31 +68,37 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
             itemView.eta_0.setTextColor(color)
 
             // ETA Result
-            for (i in 0..2) {
-                val tv = when (i) {
-                    0 -> itemView.eta_0
-                    1 -> itemView.eta_1
-                    2 -> itemView.eta_2
-                    else -> null
-                }
+            if (!stop.displayEta || etaResults.isEmpty()) {
+                itemView.eta_0.text = App.instance.getString(R.string.eta_msg_loading)
+                itemView.eta_1.text = ""
+                itemView.eta_2.text = ""
+            } else {
+                for (i in 0..2) {
+                    val tv = when (i) {
+                        0 -> itemView.eta_0
+                        1 -> itemView.eta_1
+                        2 -> itemView.eta_2
+                        else -> null
+                    }
 
-                tv?.text = ""
+                    tv?.text = ""
 
-                if (tv != null && i < etaResults.size) {
-                    var text = SpannableStringBuilder()
-                    if (stop.isLoading) {
-                        text = Utils.appendImageToTextView(tv, R.drawable.ic_text_loading, text)
-                    } else if (etaStatus != Constants.EtaStatus.SUCCESS) {
-                        text = Utils.appendImageToTextView(tv, R.drawable.ic_text_failed, text)
+                    if (tv != null && i < etaResults.size) {
+                        var text = SpannableStringBuilder()
+                        if (stop.isLoading) {
+                            text = Utils.appendImageToTextView(tv, R.drawable.ic_text_loading, text)
+                        } else if (etaStatus != Constants.EtaStatus.SUCCESS) {
+                            text = Utils.appendImageToTextView(tv, R.drawable.ic_text_failed, text)
+                        }
+                        if (etaResults[i].valid && !etaResults[i].gps) {
+                            text = Utils.appendImageToTextView(tv, R.drawable.ic_text_gps_off, text)
+                        }
+                        if (etaResults[i].wifi) {
+                            text = Utils.appendImageToTextView(tv, R.drawable.ic_text_wifi, text)
+                        }
+                        text.append(etaResults[i].getDisplayMsg())
+                        tv.text = text
                     }
-                    if (etaResults[i].valid && !etaResults[i].gps) {
-                        text = Utils.appendImageToTextView(tv, R.drawable.ic_text_gps_off, text)
-                    }
-                    if (etaResults[i].wifi) {
-                        text = Utils.appendImageToTextView(tv, R.drawable.ic_text_wifi, text)
-                    }
-                    text.append(etaResults[i].getDisplayMsg())
-                    tv.text = text
                 }
             }
 

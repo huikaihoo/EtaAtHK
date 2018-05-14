@@ -86,6 +86,8 @@
     <!-- Stop Item -->
     <string name="eta_msg_no_eta_service">No ETA Service</string>
     <string name="eta_msg_not_in_service_hours">Not in service hours</string>
+    <string name="eta_msg_no_eta_info">No ETA Information</string>
+    <string name="eta_msg_loading">Loading\u2026</string>
 
     <!-- Dialog -->
     <string name="title_select_groups_to_add">Select group(s) you want to add:</string>

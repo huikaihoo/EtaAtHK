@@ -69,6 +69,8 @@
     <!-- Stop Item -->
     <string name="eta_msg_no_eta_service">沒有到站時間服務</string>
     <string name="eta_msg_not_in_service_hours">服務時間已過</string>
+    <string name="eta_msg_no_eta_info">沒有到站時間資訊</string>
+    <string name="eta_msg_loading">載入中\u2026</string>
     
     <!-- Dialog -->
     <string name="title_select_groups_to_add">選擇要加入的組別：</string>

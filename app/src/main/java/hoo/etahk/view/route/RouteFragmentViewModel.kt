@@ -15,6 +15,8 @@ class RouteFragmentViewModel : ViewModel() {
     private var stops: LiveData<List<Stop>>? = null
     private var hasUpdateStops = false
 
+    var isEtaInit = false
+
     var routeKey: RouteKey? = null
         set(value) {
             field = value

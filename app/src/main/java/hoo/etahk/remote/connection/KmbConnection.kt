@@ -1,6 +1,7 @@
 package hoo.etahk.remote.connection
 
 import android.util.Log
+import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
@@ -14,6 +15,7 @@ import hoo.etahk.model.json.StringLang
 import hoo.etahk.remote.response.KmbBoundVariantRes
 import hoo.etahk.remote.response.KmbEtaRes
 import hoo.etahk.remote.response.KmbStopsRes
+import hoo.etahk.view.App
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
@@ -167,15 +169,25 @@ object KmbConnection: BaseConnection {
                                 val kmbEtaRes = response.body()
                                 //Log.d(TAG, kmbEtaRes.toString())
 
+                                val etaResults = mutableListOf<EtaResult>()
+
                                 if (kmbEtaRes?.response != null && (kmbEtaRes.response).isNotEmpty()) {
-                                    val etaResults = mutableListOf<EtaResult>()
                                     (kmbEtaRes.response).forEach {
                                         etaResults.add(toEtaResult(stop, it))
                                     }
+                                    //Log.d(TAG, AppHelper.gson.toJson(etaResults))
+                                } else {
+                                    etaResults.add(toEtaResult(stop, App.instance.getString(R.string.eta_msg_no_eta_info)))
+                                }
+
+                                if (!etaResults.isEmpty()) {
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
-                                    //Log.d(TAG, AppHelper.gson.toJson(etaResults))
+                                    //Log.d(TAG, AppHelper.gson.toJson(stop.etaResults))
                                 }
+
+                                stop.etaStatus = Constants.EtaStatus.SUCCESS
+                                stop.etaResults = etaResults
                             }
                         } catch (e: Exception) {
                             Log.e(TAG, e.toString())
@@ -244,5 +256,15 @@ object KmbConnection: BaseConnection {
                 variant = response.busServiceType,
                 wifi = (response.wifi != null && response.wifi == "Y")
         )
+    }
+
+    // ETA with message only (no time)
+    private fun toEtaResult(stop: Stop, msg: String): EtaResult {
+        return EtaResult(
+            company = stop.routeKey.company,
+            etaTime = -1L,
+            msg = msg,
+            scheduleOnly = false,
+            distance = -1L)
     }
 }

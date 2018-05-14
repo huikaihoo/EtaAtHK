@@ -174,15 +174,19 @@ class RouteFragment : BaseFragment() {
                 if (item.etaUpdateTime >= 0L && item.etaUpdateTime >= last) {
                     updatedCount++
                 }
+                if (!fragmentViewModel.isEtaInit) {
+                    item.displayEta = false
+                }
             }
 
             Log.d(TAG, "F=$errorCount U=$updatedCount T=$size")
 
-            if (size == errorCount) {
-                rootView.refresh_layout.isRefreshing = true
-            } else {
-                it?.let { routeStopsAdapter.dataSource = it }
+            it?.let { routeStopsAdapter.dataSource = it }
 
+            if (!fragmentViewModel.isEtaInit && size > 0) {
+                fragmentViewModel.isEtaInit = true
+                fragmentViewModel.isRefreshingAll = true
+            } else {
                 if (size > 0 && !viewModel.isGotoSeqUsed) {
                     val gotoBound = activity!!.intent.extras.getLong(Constants.Argument.ARG_GOTO_BOUND)
                     val gotoSeq = activity!!.intent.extras.getLong(Constants.Argument.ARG_GOTO_SEQ)

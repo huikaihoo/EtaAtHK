@@ -384,13 +384,13 @@ object NwfbConnection: BaseConnection {
     // ETA Related
     private fun getInvalidMsg(responseStr: String): String {
         return when (responseStr.contains("\\|DISABLED\\|".toRegex())) {
-            true -> App.Companion.instance.getString(R.string.eta_msg_no_eta_service)
+            true -> App.instance.getString(R.string.eta_msg_no_eta_service)
             false -> {
                 when (responseStr.contains("\\|HTML\\|".toRegex())) {
                     true -> when (responseStr.contains("服務時間已過")) {
-                        true -> App.Companion.instance.getString(R.string.eta_msg_not_in_service_hours)
+                        true -> App.instance.getString(R.string.eta_msg_not_in_service_hours)
                         // TODO("Extract ETA message")
-                        false -> App.Companion.instance.getString(R.string.eta_msg_no_eta_service)
+                        false -> App.instance.getString(R.string.eta_msg_no_eta_service)
                     }
                     false -> ""
                 }
