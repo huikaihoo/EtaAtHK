@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat
 import kotlin.math.abs
 
 
-
 object Utils {
     /**
      * Function to return current timestamp in second.
@@ -28,6 +27,10 @@ object Utils {
      */
     fun getCurrentTimestamp(): Long {
         return System.currentTimeMillis() / Time.ONE_SECOND_IN_MILLIS
+    }
+
+    fun getValidUpdateTimestamp(): Long {
+        return getCurrentTimestamp() - Constants.SharePrefs.DEFAULT_OUTDATED_TIME * Time.ONE_DAY_IN_SECONDS
     }
 
     fun getThemeColorPrimary(context: Context): Int {

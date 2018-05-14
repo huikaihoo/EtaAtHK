@@ -6,6 +6,7 @@
 
     <!-- Navigation Drawer -->
     <string name="nav_follow">追蹤車站</string>
+    <string name="nav_history">常用路線</string>
     <string name="nav_bus">巴士</string>
     <string name="nav_tram">電車</string>
     <string name="nav_mtr">港鐵</string>

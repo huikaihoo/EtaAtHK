@@ -1,6 +1,8 @@
 package hoo.etahk.model.repo
 
 import android.arch.lifecycle.LiveData
+import android.util.Log
+import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
@@ -21,8 +23,10 @@ object RoutesRepo {
 
     fun updateParentRoutes(company: String) {
         launch(CommonPool) {
-            // TODO("Only get from remote when data outdated")
-            ConnectionHelper.getParentRoutes(company)
+            if (AppHelper.db.parentRouteDao().lastUpdate() < Utils.getValidUpdateTimestamp()) {
+                Log.d(TAG, "updateParentRoutes ${company}")
+                ConnectionHelper.getParentRoutes(company)
+            }
         }
     }
 
@@ -37,8 +41,10 @@ object RoutesRepo {
 
     fun updateChildRoutes(parentRoute: Route) {
         launch(CommonPool) {
-            // TODO("Only get from remote when data outdated")
-            ConnectionHelper.getChildRoutes(parentRoute)
+            if (AppHelper.db.childRouteDao().lastUpdate(parentRoute.routeKey.company, parentRoute.routeKey.routeNo) < Utils.getValidUpdateTimestamp()) {
+                Log.d(TAG, "updateChildRoutes ${parentRoute.routeKey.company} ${parentRoute.routeKey.routeNo}")
+                ConnectionHelper.getChildRoutes(parentRoute)
+            }
         }
     }
 

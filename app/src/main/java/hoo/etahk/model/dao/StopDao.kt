@@ -12,6 +12,17 @@ abstract class StopDao {
     @Query("SELECT COUNT(*) FROM stop")
     abstract fun count(): Int
 
+    @Query("SELECT IFNULL(MIN(updateTime), 0) FROM stop " +
+            "WHERE company = :company " +
+            "AND routeNo = :routeNo " +
+            "AND bound = :bound " +
+            "AND variant = :variant " +
+            "ORDER BY seq")
+    abstract fun lastUpdate(company: String,
+                            routeNo: String,
+                            bound: Long,
+                            variant: Long): Long
+
     // Select
     @Query("SELECT * FROM stop " +
             "WHERE company = :company " +
@@ -23,6 +34,17 @@ abstract class StopDao {
                         routeNo: String,
                         bound: Long,
                         variant: Long): LiveData<List<Stop>>
+
+    @Query("SELECT * FROM stop " +
+            "WHERE company = :company " +
+            "AND routeNo = :routeNo " +
+            "AND bound = :bound " +
+            "AND variant = :variant " +
+            "ORDER BY seq")
+    abstract fun selectOnce(company: String,
+                            routeNo: String,
+                            bound: Long,
+                            variant: Long): List<Stop>
 
 //    @Query("SELECT * FROM stop " +
 //            "WHERE company = :company " +

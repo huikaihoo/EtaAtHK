@@ -1,7 +1,9 @@
 package hoo.etahk.model.repo
 
 import android.arch.lifecycle.LiveData
+import android.util.Log
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
@@ -34,9 +36,26 @@ object StopsRepo {
 
     fun updateStops(route: Route, needEtaUpdate: Boolean){
         launch(CommonPool) {
-            // TODO("Only get from remote when data outdated")
-            ConnectionHelper.getStops(route, needEtaUpdate)
+            if (AppHelper.db.stopDao().lastUpdate(
+                    route.routeKey.company,
+                    route.routeKey.routeNo,
+                    route.routeKey.bound,
+                    route.routeKey.variant) < Utils.getValidUpdateTimestamp()) {
+                Log.d(TAG, "updateStops ${route.routeKey.company} ${route.routeKey.routeNo} ${route.routeKey.bound} ${route.routeKey.variant}")
+                ConnectionHelper.getStops(route, needEtaUpdate)
+            } else if (needEtaUpdate) {
+                updateEta(route)
+            }
         }
+    }
+
+    fun updateEta(route: Route) {
+        val stops = AppHelper.db.stopDao().selectOnce(
+                        route.routeKey.company,
+                        route.routeKey.routeNo,
+                        route.routeKey.bound,
+                        route.routeKey.variant)
+        updateEta(stops)
     }
 
     // ETA
@@ -59,10 +78,5 @@ object StopsRepo {
                 }
             }
         }
-    }
-
-    // Followed Stops
-    fun getFollowedStops(): LiveData<List<Stop>> {
-        return AppHelper.db.stopDao().selectAll()
     }
 }

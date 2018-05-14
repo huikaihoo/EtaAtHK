@@ -20,6 +20,9 @@ abstract class ParentRouteDao {
     @Query("SELECT COUNT(*) FROM route WHERE bound = 0")
     abstract fun count(): Int
 
+    @Query("SELECT IFNULL(MIN(updateTime), 0) FROM route WHERE bound = 0")
+    abstract fun lastUpdate(): Long
+
     // Select
     @Query(PARENT_ROUTE_SELECT +
             "ORDER BY " +

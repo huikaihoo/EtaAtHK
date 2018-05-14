@@ -30,6 +30,7 @@ object Constants {
 
         const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
         const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
+        const val DEFAULT_OUTDATED_TIME = 1
 
         const val DEFAULT_MAX_REQUESTS_VAL = 64
         const val DEFAULT_MAX_REQUESTS_PER_HOST_VAL = 5
@@ -43,7 +44,7 @@ object Constants {
         const val ETA_KMB_READ_TIMEOUT_VAL = 3500L
         const val ETA_KMB_WRITE_TIMEOUT_VAL = 3500L
         // NWFB Eta
-        const val ETA_NWFB_MAX_REQUESTS_PER_HOST_VAL = 4
+        const val ETA_NWFB_MAX_REQUESTS_PER_HOST_VAL = 3
         const val ETA_NWFB_CONNECTION_TIMEOUT_VAL = 5000L
         const val ETA_NWFB_READ_TIMEOUT_VAL = 5000L
         const val ETA_NWFB_WRITE_TIMEOUT_VAL = 5000L

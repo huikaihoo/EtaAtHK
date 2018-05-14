@@ -29,7 +29,7 @@ class RoutesSpinnerAdapter(context: Context): BaseArrayAdapter<RouteAndStops>(co
 
         val route = getItem(position).route
 
-        val directionArrow = App.Companion.instance.getString(
+        val directionArrow = App.instance.getString(
             when (route.direction) {
                 0L -> R.string.arrow_circular
                 else -> R.string.arrow_one_way

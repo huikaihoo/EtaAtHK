@@ -19,6 +19,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="nav_follow">Following Stops</string>
+    <string name="nav_history">Common Routes</string>
     <string name="nav_bus">Bus</string>
     <string name="nav_tram">Tram</string>
     <string name="nav_mtr">MTR</string>

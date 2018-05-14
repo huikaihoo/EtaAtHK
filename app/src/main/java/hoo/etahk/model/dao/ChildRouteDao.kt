@@ -11,8 +11,11 @@ abstract class ChildRouteDao {
     @Query("SELECT COUNT(*) FROM route WHERE bound > 0 AND variant > 0")
     abstract fun count(): Int
 
+    @Query("SELECT IFNULL(MIN(updateTime), 0) FROM route WHERE company = :company AND routeNo = :routeNo AND bound > 0 AND variant > 0")
+    abstract fun lastUpdate(company: String, routeNo: String): Long
+
     // Select
-    @Query("SELECT * FROM route WHERE company = :company AND routeNo = :routeNo AND  bound > 0 AND variant > 0 ORDER BY bound, variant")
+    @Query("SELECT * FROM route WHERE company = :company AND routeNo = :routeNo AND bound > 0 AND variant > 0 ORDER BY bound, variant")
     abstract fun select(company: String, routeNo: String): LiveData<List<Route>>
 
     @Query("SELECT * FROM route " +
