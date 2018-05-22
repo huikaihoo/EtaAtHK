@@ -23,6 +23,9 @@ abstract class ParentRouteDao {
     @Query("SELECT IFNULL(MIN(updateTime), 0) FROM route WHERE bound = 0")
     abstract fun lastUpdate(): Long
 
+    @Query("SELECT IFNULL(MIN(updateTime), 0) FROM route WHERE bound = 0")
+    abstract fun lastUpdateForDisplay(): LiveData<Long>
+
     // Select
     @Query(PARENT_ROUTE_SELECT +
             "ORDER BY " +

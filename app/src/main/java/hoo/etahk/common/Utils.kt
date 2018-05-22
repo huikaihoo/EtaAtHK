@@ -17,6 +17,7 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
 import hoo.etahk.view.App
 import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.abs
 
 
@@ -31,6 +32,19 @@ object Utils {
 
     fun getValidUpdateTimestamp(): Long {
         return getCurrentTimestamp() - Constants.SharePrefs.DEFAULT_OUTDATED_TIME * Time.ONE_DAY_IN_SECONDS
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getDateTimeString(t: Long?): String {
+        if (t != null && t > 0) {
+            try {
+                val sdf = SimpleDateFormat("yyyyMMdd HH:mm:ss")
+                val strDate = Date(t * Time.ONE_SECOND_IN_MILLIS)
+                return sdf.format(strDate)
+            } catch (e: Exception) {
+            }
+        }
+        return ""
     }
 
     fun getThemeColorPrimary(context: Context): Int {

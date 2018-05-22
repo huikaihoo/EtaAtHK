@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/ic_shortcut_tram_c" />
+
+    <item
+        android:drawable="@drawable/ic_nav_tram"
+        android:top="10.2dp"
+        android:bottom="10.2dp"
+        android:left="10.2dp"
+        android:right="10.2dp" />
+
+</layer-list>

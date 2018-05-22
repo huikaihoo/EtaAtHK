@@ -5,11 +5,19 @@
     <string name="title_bus_search">巴士路線</string>
 
     <!-- Navigation Drawer -->
+    <string name="last_update">路線更新：</string>
+
     <string name="nav_follow">追蹤車站</string>
     <string name="nav_history">常用路線</string>
     <string name="nav_bus">巴士</string>
     <string name="nav_tram">電車</string>
     <string name="nav_mtr">港鐵</string>
+
+    <!-- Shortcut -->
+    <string name="sc_follow_s">追蹤車站</string>
+    <string name="sc_follow_l">追蹤車站</string>
+    <string name="sc_bus_s">巴士</string>
+    <string name="sc_bus_l">巴士</string>
 
     <!-- Menu -->
     <string name="search">搜尋</string>
@@ -29,6 +37,7 @@
     <string name="sort_groups">編輯組別排序</string>
 
     <string name="enable_sort">編輯排序</string>
+    <string name="create_shortcut">建立捷徑</string>
 
     <string name="rename">重新命名</string>
     <string name="move_to">移動至\u2026</string>

@@ -1,7 +1,12 @@
 package hoo.etahk.view.follow
 
+import android.app.PendingIntent
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.util.Log
@@ -18,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_follow.*
 import kotlinx.android.synthetic.main.activity_follow_nav.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+
 
 class FollowActivity : NavActivity() {
 
@@ -149,6 +155,36 @@ class FollowActivity : NavActivity() {
             R.id.menu_sort_items -> {
                 item.isChecked = !item.isChecked
                 viewModel.enableSorting.value = item.isChecked
+                true
+            }
+            R.id.menu_add_shortcut -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val shortcutManager = getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager
+
+                    //check if device supports Pin Shortcut or not
+                    if (shortcutManager.isRequestPinShortcutSupported) {
+                        // Assumes there's already a shortcut with the ID "open_website".
+                        // The shortcut must be enabled.
+                        val pinShortcutInfo = ShortcutInfo.Builder(this, "follow").build()
+
+                        // Create the PendingIntent object only if your app needs to be notified
+                        // that the user allowed the shortcut to be pinned. Note that, if the
+                        // pinning operation fails, your app isn't notified. We assume here that the
+                        // app has implemented a method called createShortcutResultIntent() that
+                        // returns a broadcast intent.
+                        val pinnedShortcutCallbackIntent = shortcutManager.createShortcutResultIntent(pinShortcutInfo)
+
+                        // Configure the intent so that your app's broadcast receiver gets
+                        // the callback successfully.
+                        val successCallback = PendingIntent.getBroadcast(this, 0, pinnedShortcutCallbackIntent, 0)
+
+                        //finally ask user to add the shortcut to home screen
+                        shortcutManager.requestPinShortcut(
+                            pinShortcutInfo,
+                            successCallback.intentSender
+                        )
+                    }
+                }
                 true
             }
             R.id.menu_settings -> true

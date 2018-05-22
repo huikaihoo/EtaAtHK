@@ -16,6 +16,10 @@ object RoutesRepo {
 
     private const val TAG = "RoutesRepo"
 
+    fun getLastUpdate(): LiveData<Long> {
+        return AppHelper.db.parentRouteDao().lastUpdateForDisplay()
+    }
+
     // Parents routes by type codes
     fun getParentRoutes(typeCodes: List<Long>, orderBy: Long): LiveData<List<Route>> {
         return AppHelper.db.parentRouteDao().select(typeCodes, orderBy)

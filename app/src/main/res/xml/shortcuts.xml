@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="bus"
+        android:icon="@drawable/ic_shortcut_bus"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/sc_bus_s"
+        android:shortcutLongLabel="@string/sc_bus_l">
+        <intent
+            android:targetPackage="hoo.etahk"
+            android:action="android.intent.action.VIEW"
+            android:targetClass="hoo.etahk.view.search.BusSearchActivity">
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <!-- For adding shortcut in app manually -->
+    <shortcut
+        android:shortcutId="follow"
+        android:icon="@drawable/ic_shortcut_follow"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/sc_follow_s"
+        android:shortcutLongLabel="@string/sc_follow_l">
+        <intent
+            android:targetPackage="hoo.etahk"
+            android:action="android.intent.action.VIEW"
+            android:targetClass="hoo.etahk.view.follow.FollowActivity">
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+s
+</shortcuts>

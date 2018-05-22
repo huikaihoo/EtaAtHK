@@ -266,7 +266,7 @@ class FollowFragment : BaseFragment() {
         viewModel.getLastUpdateTime().observe(this, Observer<Long> {
             if (it != null) {
                 val items = fragmentViewModel.getFollowItems().value
-                if (items != null && items.isNotEmpty() && !fragmentViewModel.isRefreshingAll){
+                if (items != null && items.isNotEmpty() && !fragmentViewModel.isRefreshingAll) {
                     fragmentViewModel.isRefreshingAll = true
                     updateEta(items)
                 }

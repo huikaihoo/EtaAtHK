@@ -41,6 +41,7 @@
 
         <TextView
             android:id="@+id/nav_last_update"
+            android:fontFamily="sans-serif-condensed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="路線更新：20180513 13:00" />

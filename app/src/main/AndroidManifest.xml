@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
 
     <application
         android:name=".view.App"
@@ -39,6 +40,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".view.search.BusSearchActivity"
@@ -56,6 +61,23 @@
             android:theme="@style/AppTheme.Transparent" />
         <activity android:name=".view.test.MainActivity" />
         <activity android:name=".view.test.BvActivity" />
+        <activity android:name=".view.test.ShortcutActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <!-- Shortcut in widget list -->
+        <activity-alias
+            android:name=".CreateShortcuts"
+            android:label="@string/sc_follow_l"
+            android:icon="@drawable/ic_shortcut_follow"
+            android:targetActivity=".view.test.ShortcutActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
     </application>
 
 </manifest>

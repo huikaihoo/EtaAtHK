@@ -18,11 +18,19 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="last_update">Last Update:\u0020</string>
+
     <string name="nav_follow">Following Stops</string>
     <string name="nav_history">Common Routes</string>
     <string name="nav_bus">Bus</string>
     <string name="nav_tram">Tram</string>
     <string name="nav_mtr">MTR</string>
+
+    <!-- Shortcut -->
+    <string name="sc_follow_s">Following</string>
+    <string name="sc_follow_l">Following Stops</string>
+    <string name="sc_bus_s">Bus</string>
+    <string name="sc_bus_l">Bus</string>
 
     <!-- Menu -->
     <string name="search">Search</string>
@@ -42,6 +50,7 @@
     <string name="sort_groups">Sort Groups</string>
 
     <string name="enable_sort">Enable Sorting</string>
+    <string name="create_shortcut">Create Shortcut</string>
 
     <string name="rename">Rename</string>
     <string name="move_to">Move to \u2026</string>
