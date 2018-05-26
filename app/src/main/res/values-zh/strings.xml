@@ -47,6 +47,7 @@
     <string name="view_route">檢視路線</string>
 
     <!-- Common -->
+    <string name="clear">清除</string>
     <string name="to_prefix">往\u0020</string>
     <string name="to_middle">\u0020往\u0020</string>
     <string name="min">分鐘</string>
@@ -83,14 +84,30 @@
     <string name="eta_msg_loading">載入中\u2026</string>
     
     <!-- Dialog -->
+    <string name="title_add_location">加入新的地點</string>
+    <string name="title_add_group">加入新的組別</string>
+    <string name="title_rename_location">重新命名地點</string>
+    <string name="title_rename_group">重新命名組別</string>
     <string name="title_select_groups_to_add">選擇要加入的組別：</string>
     <string name="title_select_groups_to_move">選擇要移動到的組別：</string>
+    <string name="title_conform_delete_location">要移除目前的地點嗎？</string>
+    <string name="title_conform_delete_group">要移除目前的組別嗎？</string>
     <string name="title_conform_delete_item">要移除選取的車站嗎？</string>
+    <string name="hint_location_name">地點名稱</string>
+    <string name="hint_group_name">組別名稱</string>
+    <string name="hint_new_location_name">新的地點名稱</string>
+    <string name="hint_new_group_name">新的組別名稱</string>
     <string name="content_conform_delete">注意！這個動作無法復原</string>
 
     <!-- Message -->
+    <string name="msg_add_location_success">成功新增一個地點</string>
+    <string name="msg_add_group_success">成功新增一個組別</string>
     <string name="msg_add_to_follow_stop_success">成功加入至追蹤車站</string>
+    <string name="msg_one_location_renamed">成功重新命名一個地點</string>
+    <string name="msg_one_group_renamed">成功重新命名一個組別</string>
     <string name="msg_move_follow_stop_success">成功移動追蹤車站</string>
+    <string name="msg_one_location_removed">已移除一個地點</string>
+    <string name="msg_one_group_removed">已移除一個組別</string>
     <string name="msg_one_item_removed">已移除一個項目</string>
 
 </resources>

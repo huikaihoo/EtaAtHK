@@ -11,6 +11,8 @@ abstract class GroupDao {
     abstract fun count(): Int
 
     // Select
+    @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM FollowGroup WHERE locationId = :locationId")
+    abstract fun nextDisplaySeq(locationId: Long): Long
 
     // Insert / Update
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -24,4 +26,8 @@ abstract class GroupDao {
         insert(group)
         update(group)
     }
+
+    // Delete
+    @Delete
+    abstract fun delete(item: FollowGroup)
 }

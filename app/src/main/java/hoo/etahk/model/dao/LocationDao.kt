@@ -14,6 +14,9 @@ abstract class LocationDao {
     @Query("SELECT * FROM FollowLocation WHERE displaySeq > 0 ORDER BY displaySeq")
     abstract fun selectOnce(): List<FollowLocation>
 
+    @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM FollowLocation")
+    abstract fun nextDisplaySeq(): Long
+
     // Insert / Update
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract fun insert(location: FollowLocation)
@@ -26,4 +29,8 @@ abstract class LocationDao {
         insert(location)
         update(location)
     }
+
+    // Delete
+    @Delete
+    abstract fun delete(item: FollowLocation)
 }

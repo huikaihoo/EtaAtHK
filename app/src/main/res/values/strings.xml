@@ -60,6 +60,7 @@
     <string name="view_route">View route</string>
 
     <!-- Common -->
+    <string name="clear">Clear</string>
     <string name="to_prefix">To\u0020</string>
     <string name="to_middle">\u0020to\u0020</string>
     <string name="min">min</string>
@@ -100,13 +101,29 @@
     <string name="eta_msg_loading">Loading\u2026</string>
 
     <!-- Dialog -->
+    <string name="title_add_location">Add new location</string>
+    <string name="title_add_group">Add new group</string>
+    <string name="title_rename_location">Rename location</string>
+    <string name="title_rename_group">Rename group</string>
     <string name="title_select_groups_to_add">Select group(s) you want to add:</string>
     <string name="title_select_groups_to_move">Select group you want to move to:</string>
+    <string name="title_conform_delete_location">Are you sure to delete current location?</string>
+    <string name="title_conform_delete_group">Are you sure to delete current group?</string>
     <string name="title_conform_delete_item">Are you sure to delete the selected stop?</string>
+    <string name="hint_location_name">Location Name</string>
+    <string name="hint_group_name">Group Name</string>
+    <string name="hint_new_location_name">New Location Name</string>
+    <string name="hint_new_group_name">New Group Name</string>
     <string name="content_conform_delete">Be Careful! This action cannot be undone.</string>
 
     <!-- Message -->
+    <string name="msg_add_location_success">New location is added successfully</string>
+    <string name="msg_add_group_success">New group is added successfully</string>
     <string name="msg_add_to_follow_stop_success">Added to following stops successfully</string>
+    <string name="msg_one_location_renamed">One location is renamed</string>
+    <string name="msg_one_group_renamed">One group is renamed</string>
     <string name="msg_move_follow_stop_success">Move the following stop successfully</string>
+    <string name="msg_one_location_removed">One location is removed</string>
+    <string name="msg_one_group_removed">One group is removed</string>
     <string name="msg_one_item_removed">One item is removed</string>
 </resources>

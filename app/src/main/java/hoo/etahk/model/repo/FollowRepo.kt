@@ -47,6 +47,50 @@ object FollowRepo {
         return AppHelper.db.locationGroupsDao().selectOnce()
     }
 
+    fun insertLocation(name: String) {
+        launch(CommonPool) {
+            val location = FollowLocation(
+                name = name,
+                displaySeq = AppHelper.db.locationDao().nextDisplaySeq())
+            AppHelper.db.locationDao().insert(location)
+        }
+    }
+
+    fun updateLocation(location: FollowLocation) {
+        launch(CommonPool) {
+            AppHelper.db.locationDao().update(location)
+        }
+    }
+
+    fun deleteLocation(location: FollowLocation) {
+        launch(CommonPool) {
+            AppHelper.db.locationDao().delete(location)
+        }
+    }
+
+    fun insertGroup(locationId: Long, name: String) {
+        launch(CommonPool) {
+            val group = FollowGroup(
+                locationId = locationId,
+                name = name,
+                displaySeq = AppHelper.db.groupDao().nextDisplaySeq(locationId))
+
+            AppHelper.db.groupDao().insert(group)
+        }
+    }
+
+    fun updateGroup(group: FollowGroup) {
+        launch(CommonPool) {
+            AppHelper.db.groupDao().update(group)
+        }
+    }
+
+    fun deleteGroup(group: FollowGroup) {
+        launch(CommonPool) {
+            AppHelper.db.groupDao().delete(group)
+        }
+    }
+
     fun getItems(groupId: Long): LiveData<List<ItemAndStop>> {
         return AppHelper.db.itemStopDao().select(groupId)
     }
@@ -57,7 +101,7 @@ object FollowRepo {
                 groupId = groupId,
                 routeKey = stop.routeKey,
                 seq = stop.seq,
-                displaySeq = AppHelper.db.itemStopDao().nextItemDisplaySeq(groupId))
+                displaySeq = AppHelper.db.itemStopDao().nextDisplaySeq(groupId))
 
             AppHelper.db.itemDao().insert(item)
         }
@@ -66,7 +110,7 @@ object FollowRepo {
     fun updateItems(items: List<FollowItem>, newDisplaySeq: Boolean = false) {
         launch(CommonPool) {
             if (newDisplaySeq && items.isNotEmpty()) {
-                var displaySeq = AppHelper.db.itemStopDao().nextItemDisplaySeq(items[0].groupId)
+                var displaySeq = AppHelper.db.itemStopDao().nextDisplaySeq(items[0].groupId)
                 items.forEach { it.displaySeq = displaySeq++ }
             }
             AppHelper.db.itemDao().update(items)
