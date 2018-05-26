@@ -1,11 +1,13 @@
 package hoo.etahk.remote.connection
 
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.model.data.Path
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -92,9 +94,9 @@ object KmbConnection: BaseConnection {
         )
     }
 
-    /***************
-     * Get Stops
-     ***************/
+    /***********************
+     * Get Paths and Stops *
+     ***********************/
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
         ConnectionHelper.kmbStop.getStops(
                 route = route.routeKey.routeNo,
@@ -108,6 +110,27 @@ object KmbConnection: BaseConnection {
                             val kmbStopsRes = response.body()
                             //Log.d(TAG, kmbStopsRes.toString())
 
+                            // Add Paths to database
+                            if (kmbStopsRes?.data?.route?.lineGeometry != null && (kmbStopsRes.data.route.lineGeometry).isNotEmpty()) {
+                                val paths = mutableListOf<Path>()
+
+                                val strPaths = kmbStopsRes.data.route.lineGeometry.replace("{paths:", "").replace("}", "")
+                                val arrPaths = AppHelper.gson.fromJson(strPaths, Array<Array<DoubleArray>>::class.java)
+
+                                var seq = 0L
+                                arrPaths.forEachIndexed { section, arrPaths2 ->
+                                    arrPaths2.forEach { point ->
+                                        if (point.size == 2) {
+                                            val latLng = Utils.hk1980GridToLatLng(point[1], point[0])
+                                            paths.add(toPath(route, latLng, seq++, section.toLong(), t))
+                                        }
+                                    }
+                                }
+
+                                AppHelper.db.pathDao().insertOrUpdate(route, paths, t)
+                            }
+
+                            // Add Stops to database
                             if (kmbStopsRes?.data?.routeStops != null && (kmbStopsRes.data.routeStops).isNotEmpty()) {
                                 val stops = mutableListOf<Stop>()
                                 (kmbStopsRes.data.routeStops).forEach {
@@ -122,6 +145,17 @@ object KmbConnection: BaseConnection {
                         }
                     }
                 })
+    }
+
+    private fun toPath(route: Route, latLng: LatLng, seq: Long, section: Long, t: Long): Path {
+        val path = Path(
+            routeKey = route.routeKey.copy(),
+            seq = seq,
+            section = section,
+            updateTime = t
+        )
+        path.location = latLng
+        return path
     }
 
     private fun toStop(route: Route, routeStop: KmbStopsRes.RouteStop, t: Long): Stop {

@@ -19,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.mcxiaoke.koi.ext.Bundle
 import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
@@ -82,7 +83,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
                 if (isEmptyBefore) {
                     spinner?.setSelection(viewModel.selectedRoutePosition)
                     if (viewModel.selectedRoutePosition < it.size)
-                        showStops(false)
+                        showPathsAndStops(false)
                 }
             }
         })
@@ -100,7 +101,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
                 val beforePosition = viewModel.selectedRoutePosition
                 if (beforePosition != position) {
                     viewModel.selectedRoutePosition = position
-                    showStops(true)
+                    showPathsAndStops(true)
                 }
             }
 
@@ -112,12 +113,25 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         return true
     }
 
-    private fun showStops(withAnimation: Boolean) {
+    private fun showPathsAndStops(withAnimation: Boolean) {
         // Clear all markers on maps
         this.googleMap?.clear()
 
-        // Set stops on map
         val latLngBoundsBuilder = LatLngBounds.Builder()
+
+        // Set paths on map
+        val paths = spinnerAdapter.dataSource[viewModel.selectedRoutePosition].paths
+
+        if (paths.isNotEmpty()) {
+            val polylineOptions = PolylineOptions()
+            paths.forEachIndexed { i, path ->
+                polylineOptions.add(path.location)
+                latLngBoundsBuilder.include(path.location)
+            }
+            this.googleMap?.addPolyline(polylineOptions)
+        }
+
+        // Set stops on map
         val stops = spinnerAdapter.dataSource[viewModel.selectedRoutePosition].stops
 
         if (stops.isNotEmpty()) {

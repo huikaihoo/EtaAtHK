@@ -6,7 +6,7 @@ import android.arch.persistence.room.TypeConverters
 import hoo.etahk.model.dao.*
 import hoo.etahk.model.data.*
 
-@Database(entities = [Route::class, Stop::class,
+@Database(entities = [Route::class, Stop::class, Path::class,
                       FollowLocation::class, FollowGroup::class, FollowItem::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -14,6 +14,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun parentRouteDao(): ParentRouteDao
     abstract fun childRouteDao(): ChildRouteDao
     abstract fun stopDao(): StopDao
+    abstract fun pathDao(): PathDao
     abstract fun routeStopsDao(): RouteStopsDao
     // Follow Location / Group / Item
     abstract fun locationDao(): LocationDao

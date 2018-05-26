@@ -32,6 +32,14 @@ interface NwfbApi {
                  @Query("p") p: String = Constants.SharePrefs.NWFB_API_PARAMETER_PLATFORM,
                  @Query("appversion") appversion: String = Constants.SharePrefs.NWFB_API_PARAMETER_APP_VERSION): Call<ResponseBody>
 
+    @GET("api6/getline_multi2.php")
+    fun getPaths(@Query("r") rdv: String = "",
+                 @Query("bound") bound: String = "",
+                 @Query("l") l: String = "0",
+                 @Query("syscode") syscode: String = "",
+                 @Query("p") p: String = Constants.SharePrefs.NWFB_API_PARAMETER_PLATFORM,
+                 @Query("appversion") appversion: String = Constants.SharePrefs.NWFB_API_PARAMETER_APP_VERSION): Call<ResponseBody>
+
     @GET("api6/getnextbus2.php")
     fun getEta(@Query("stopid") stopid: String = "",
                @Query("service_no") service_no: String = "",

@@ -1,6 +1,7 @@
 package hoo.etahk.remote.connection
 
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.mcxiaoke.koi.HASH
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -10,6 +11,7 @@ import hoo.etahk.common.Utils.timeStrToMsg
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.Separator
+import hoo.etahk.model.data.Path
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -192,6 +194,39 @@ object NwfbConnection: BaseConnection {
      * Get Stops
      ***************/
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
+
+        ConnectionHelper.nwfbStop.getPaths(
+                rdv = route.info.rdv,
+                bound = route.info.bound,
+                l = "0",
+                syscode = getSystemCode())
+                .enqueue(object : Callback<ResponseBody> {
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        launch(CommonPool) {
+                            val t = Utils.getCurrentTimestamp()
+                            val responseStr = response.body()?.string()
+                            //Log.d(TAG, responseStr)
+
+                            if (!responseStr.isNullOrBlank()) {
+                                val paths = mutableListOf<Path>()
+                                val nwfbResponse = responseStr!!.split("\\|\\|".toRegex())
+
+                                var seq = 0L
+                                nwfbResponse.forEach({
+                                    val records = it.split(",")
+                                    if (records.size == 2) {
+                                        val latLng = LatLng(records[0].toDouble()+0.000194, records[1].toDouble()-0.000070)
+                                        paths.add(toPath(route, latLng, seq++, t))
+                                    }
+                                })
+
+                                AppHelper.db.pathDao().insertOrUpdate(route, paths, t)
+                            }
+                        }
+                    }
+                })
+
         val info = "1|*|${route.routeKey.company}||${route.info.rdv}||${route.info.startSeq}||${route.info.endSeq}"
         //Log.d(TAG, "info=[$info]")
 
@@ -227,6 +262,16 @@ object NwfbConnection: BaseConnection {
                         }
                     }
                 })
+    }
+
+    private fun toPath(route: Route, latLng: LatLng, seq: Long, t: Long): Path {
+        val path = Path(
+            routeKey = route.routeKey.copy(),
+            seq = seq,
+            updateTime = t
+        )
+        path.location = latLng
+        return path
     }
 
     private fun toStop(route: Route, records: List<String>, t: Long): Stop {

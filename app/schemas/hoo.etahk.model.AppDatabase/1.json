@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2d92827d6888d67d7141d139a2477d0d",
+    "identityHash": "070fc05c0607c22d5910f0a2d24a63fd",
     "entities": [
       {
         "tableName": "Route",
@@ -203,6 +203,108 @@
             "fieldPath": "etaUpdateTime",
             "columnName": "etaUpdateTime",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateTime",
+            "columnName": "updateTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "routeKey.typeCode",
+            "columnName": "typeCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "routeKey.routeStr",
+            "columnName": "routeStr",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "routeKey.company",
+            "columnName": "company",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "routeKey.routeNo",
+            "columnName": "routeNo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "routeKey.bound",
+            "columnName": "bound",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "routeKey.variant",
+            "columnName": "variant",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "company",
+            "routeNo",
+            "bound",
+            "variant",
+            "seq"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Route",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "company",
+              "routeNo",
+              "bound",
+              "variant"
+            ],
+            "referencedColumns": [
+              "company",
+              "routeNo",
+              "bound",
+              "variant"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Path",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`seq` INTEGER NOT NULL, `section` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `updateTime` INTEGER NOT NULL, `typeCode` INTEGER NOT NULL, `routeStr` TEXT NOT NULL, `company` TEXT NOT NULL, `routeNo` TEXT NOT NULL, `bound` INTEGER NOT NULL, `variant` INTEGER NOT NULL, PRIMARY KEY(`company`, `routeNo`, `bound`, `variant`, `seq`), FOREIGN KEY(`company`, `routeNo`, `bound`, `variant`) REFERENCES `Route`(`company`, `routeNo`, `bound`, `variant`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "seq",
+            "columnName": "seq",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "section",
+            "columnName": "section",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
             "notNull": true
           },
           {
@@ -534,7 +636,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2d92827d6888d67d7141d139a2477d0d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"070fc05c0607c22d5910f0a2d24a63fd\")"
     ]
   }
 }
