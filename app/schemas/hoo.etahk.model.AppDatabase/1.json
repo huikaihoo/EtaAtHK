@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "070fc05c0607c22d5910f0a2d24a63fd",
+    "identityHash": "44b8bbf5ada84e8fbc736168297b751a",
     "entities": [
       {
         "tableName": "Route",
@@ -632,11 +632,151 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "Misc",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT, `miscType` TEXT NOT NULL, `relationStr` TEXT NOT NULL, `dataStrA` TEXT NOT NULL, `dataStrB` TEXT NOT NULL, `dataStrC` TEXT NOT NULL, `dataIntA` INTEGER NOT NULL, `dataIntB` INTEGER NOT NULL, `dataIntC` INTEGER NOT NULL, `dataDoubleA` REAL NOT NULL, `dataDoubleB` REAL NOT NULL, `dataDoubleC` REAL NOT NULL, `dataBooleanA` INTEGER NOT NULL, `dataBooleanB` INTEGER NOT NULL, `dataBooleanC` INTEGER NOT NULL, `extra` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `freq` INTEGER NOT NULL, `displaySeq` INTEGER NOT NULL, `updateTime` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "miscType",
+            "columnName": "miscType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "relationStr",
+            "columnName": "relationStr",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataStrA",
+            "columnName": "dataStrA",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataStrB",
+            "columnName": "dataStrB",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataStrC",
+            "columnName": "dataStrC",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataIntA",
+            "columnName": "dataIntA",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataIntB",
+            "columnName": "dataIntB",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataIntC",
+            "columnName": "dataIntC",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataDoubleA",
+            "columnName": "dataDoubleA",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataDoubleB",
+            "columnName": "dataDoubleB",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataDoubleC",
+            "columnName": "dataDoubleC",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataBooleanA",
+            "columnName": "dataBooleanA",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataBooleanB",
+            "columnName": "dataBooleanB",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataBooleanC",
+            "columnName": "dataBooleanC",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "extra",
+            "columnName": "extra",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "freq",
+            "columnName": "freq",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "displaySeq",
+            "columnName": "displaySeq",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateTime",
+            "columnName": "updateTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "Id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"070fc05c0607c22d5910f0a2d24a63fd\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"44b8bbf5ada84e8fbc736168297b751a\")"
     ]
   }
 }

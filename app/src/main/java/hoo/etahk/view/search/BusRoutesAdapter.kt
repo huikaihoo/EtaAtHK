@@ -33,19 +33,22 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
 
         @SuppressLint("SetTextI18n")
         override fun onBind(context: BusSearchFragment?, position: Int, dataSource: List<Route>) {
-            val item = dataSource[position]
+            val route = dataSource[position]
             val directionArrow = App.instance.getString(
-                    when (item.direction) {
+                    when (route.direction) {
                         0L -> R.string.arrow_circular
                         1L -> R.string.arrow_one_way
                         else -> R.string.arrow_two_ways
                     })
 
-            itemView.route_no.text = item.routeKey.routeNo
-            itemView.from_to.text = item.from.value + directionArrow + item.to.value
-            itemView.route_desc.text = item.getParentDesc()
+            itemView.route_no.text = route.routeKey.routeNo
+            itemView.from_to.text = route.from.value + directionArrow + route.to.value
+            itemView.route_desc.text = route.getParentDesc()
 
-            itemView.setOnClickListener { startRouteActivity(context, item.routeKey) }
+            itemView.setOnClickListener { startRouteActivity(context, route.routeKey) }
+            if (route.companyDetails.size > 1) {
+                itemView.setOnLongClickListener { context?.showRoutePopupMenu(itemView, route); true }
+            }
         }
 
         private fun startRouteActivity(context: BusSearchFragment?, routeKey: RouteKey){

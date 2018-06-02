@@ -6,13 +6,19 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PopupMenu
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.mcxiaoke.koi.ext.Bundle
+import com.mcxiaoke.koi.ext.startActivity
 import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener
 import hoo.etahk.R
+import hoo.etahk.common.Constants
 import hoo.etahk.model.data.Route
 import hoo.etahk.view.base.BaseFragment
+import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
 
@@ -81,6 +87,26 @@ class BusSearchFragment : BaseFragment() {
         subscribeUiChanges()
 
         return rootView
+    }
+
+    fun showRoutePopupMenu(view: View, route: Route) {
+        val popup = PopupMenu(activity!!, view, Gravity.END)
+        popup.inflate(R.menu.popup_bus_search_route)
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.popup_view -> {
+                    activity?.startActivity<RouteActivity>(Bundle {
+                        putString(Constants.Argument.ARG_COMPANY, route.companyDetails[1])
+                        putString(Constants.Argument.ARG_ROUTE_NO, route.routeKey.routeNo)
+                        putLong(Constants.Argument.ARG_TYPE_CODE, route.routeKey.typeCode)
+                        putLong(Constants.Argument.ARG_GOTO_BOUND, -1L)
+                        putLong(Constants.Argument.ARG_GOTO_SEQ, -1L)
+                    })
+                }
+            }
+            true
+        }
+        popup.show()
     }
 
     private fun subscribeUiChanges() {

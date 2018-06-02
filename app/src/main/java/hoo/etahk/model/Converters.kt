@@ -5,6 +5,7 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.json.EtaResult
+import hoo.etahk.model.json.Extra
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 import org.json.JSONObject
@@ -82,5 +83,27 @@ class Converters {
     @TypeConverter
     fun etaStatusToString(item: Constants.EtaStatus): String {
         return item.toString()
+    }
+
+    // MiscType
+    @TypeConverter
+    fun stringToMiscType(value: String): Constants.MiscType {
+        return Constants.MiscType.valueOf(value)
+    }
+
+    @TypeConverter
+    fun miscTypeToString(item: Constants.MiscType): String {
+        return item.toString()
+    }
+
+    // Info
+    @TypeConverter
+    fun stringToExtra(value: String): Extra {
+        return AppHelper.gson.fromJson(value, Extra::class.java)
+    }
+
+    @TypeConverter
+    fun extraToString(item: Extra): String {
+        return AppHelper.gson.toJson(item)
     }
 }

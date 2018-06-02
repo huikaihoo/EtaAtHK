@@ -7,7 +7,8 @@ import hoo.etahk.model.dao.*
 import hoo.etahk.model.data.*
 
 @Database(entities = [Route::class, Stop::class, Path::class,
-                      FollowLocation::class, FollowGroup::class, FollowItem::class], version = 1)
+                      FollowLocation::class, FollowGroup::class, FollowItem::class,
+                      Misc::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     // Route and Stop
@@ -22,4 +23,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
     abstract fun locationGroupsDao(): LocationGroupsDao
     abstract fun itemStopDao(): ItemStopDao
+    // Misc
+    abstract fun miscDao(): MiscDao
 }

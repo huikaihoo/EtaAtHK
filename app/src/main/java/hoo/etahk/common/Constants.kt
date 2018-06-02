@@ -11,6 +11,14 @@ object Constants {
         NETWORK_ERROR
     }
 
+    enum class MiscType {
+        NONE,
+        ROUTE_FAVOURITE,
+        ROUTE_HISTORY,
+        ROUTE_SEARCH,
+        FOLLOW_LOCATION_HISTORY
+    }
+
     object AppMode {
         const val DEV = 0L
         const val BETA = 1L
@@ -33,7 +41,7 @@ object Constants {
         const val DEFAULT_OUTDATED_TIME = 1
 
         const val DEFAULT_MAX_REQUESTS_VAL = 64
-        const val DEFAULT_MAX_REQUESTS_PER_HOST_VAL = 5
+        const val DEFAULT_MAX_REQUESTS_PER_HOST_VAL = 4
         // Stop
         const val STOP_CONNECTION_TIMEOUT_VAL = 10000L
         const val STOP_READ_TIMEOUT_VAL = 10000L
@@ -44,10 +52,10 @@ object Constants {
         const val ETA_KMB_READ_TIMEOUT_VAL = 3500L
         const val ETA_KMB_WRITE_TIMEOUT_VAL = 3500L
         // NWFB Eta
-        const val ETA_NWFB_MAX_REQUESTS_PER_HOST_VAL = 3
-        const val ETA_NWFB_CONNECTION_TIMEOUT_VAL = 5000L
-        const val ETA_NWFB_READ_TIMEOUT_VAL = 5000L
-        const val ETA_NWFB_WRITE_TIMEOUT_VAL = 5000L
+        const val ETA_NWFB_MAX_REQUESTS_PER_HOST_VAL = 2
+        const val ETA_NWFB_CONNECTION_TIMEOUT_VAL = 7000L
+        const val ETA_NWFB_READ_TIMEOUT_VAL = 7000L
+        const val ETA_NWFB_WRITE_TIMEOUT_VAL = 7000L
 
         const val NWFB_API_PARAMETER_TYPE_ALL_BUS = "0"
         const val NWFB_API_PARAMETER_TYPE_ETA_BUS = "5"

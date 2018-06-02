@@ -192,6 +192,7 @@ object Utils {
                 .replace("時段".toRegex(), "")
                 .replace("預定".toRegex(), "")
                 .replace("距離.*公里".toRegex(), "")
+                .replace("未開出".toRegex(), "")
                 .trim()
     }
 
