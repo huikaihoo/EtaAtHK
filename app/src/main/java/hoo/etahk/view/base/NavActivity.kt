@@ -17,6 +17,7 @@ import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.view.App
+import hoo.etahk.view.fh.FHActivity
 import hoo.etahk.view.follow.FollowActivity
 import hoo.etahk.view.search.BusSearchActivity
 import kotlinx.android.synthetic.main.nav_header.view.*
@@ -101,6 +102,9 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
         when (item.itemId) {
             R.id.nav_follow -> {
                 startActivity<FollowActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+            }
+            R.id.nav_fh -> {
+                startActivity<FHActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             }
             R.id.nav_bus -> {
                 startActivity<BusSearchActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)

@@ -3,6 +3,7 @@ package hoo.etahk.view.search
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -91,7 +92,12 @@ class BusSearchFragment : BaseFragment() {
 
     fun showRoutePopupMenu(view: View, route: Route) {
         val popup = PopupMenu(activity!!, view, Gravity.END)
-        popup.inflate(R.menu.popup_bus_search_route)
+        if (route.companyDetails.size <= 1) {
+            popup.inflate(R.menu.popup_search_route)
+        } else {
+            popup.inflate(R.menu.popup_search_route_bus)
+        }
+
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.popup_view -> {
@@ -102,6 +108,10 @@ class BusSearchFragment : BaseFragment() {
                         putLong(Constants.Argument.ARG_GOTO_BOUND, -1L)
                         putLong(Constants.Argument.ARG_GOTO_SEQ, -1L)
                     })
+                }
+                R.id.popup_add -> {
+                    fragmentViewModel.insertRouteFavourite(route.routeKey)
+                    Snackbar.make(view, R.string.msg_add_to_favourite_success, Snackbar.LENGTH_SHORT).show()
                 }
             }
             true

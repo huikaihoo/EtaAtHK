@@ -3,6 +3,8 @@ package hoo.etahk.view.search
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import hoo.etahk.model.data.Route
+import hoo.etahk.model.data.RouteKey
+import hoo.etahk.model.repo.MiscRepo
 import hoo.etahk.model.repo.RoutesRepo
 
 class BusSearchFragmentViewModel : ViewModel() {
@@ -17,6 +19,10 @@ class BusSearchFragmentViewModel : ViewModel() {
 
     fun getParentRoutes(): LiveData<List<Route>> {
         return parentRoutes!!
+    }
+
+    fun insertRouteFavourite(routeKey: RouteKey) {
+        MiscRepo.insertRouteFavourite(routeKey)
     }
 
     private fun subscribeToRepo() {

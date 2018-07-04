@@ -2,6 +2,8 @@
     <string name="app_name">ETA@HK</string>
     <string name="app_name_full">ETA@HK</string>
     <string name="title_bus_search">Bus Routes</string>
+    <string name="title_favourite">Favourite</string>
+    <string name="title_history">History</string>
 
     <string name="title_activity_tabbed">TabbedActivity</string>
     <string name="tab_text_1">Tab 1</string>
@@ -21,7 +23,7 @@
     <string name="last_update">Last Update:\u0020</string>
 
     <string name="nav_follow">Following Stops</string>
-    <string name="nav_history">Common Routes</string>
+    <string name="nav_fh">Common Routes</string>
     <string name="nav_bus">Bus</string>
     <string name="nav_tram">Tram</string>
     <string name="nav_mtr">MTR</string>
@@ -56,6 +58,7 @@
     <string name="move_to">Move to \u2026</string>
     <string name="remove">Remove</string>
 
+    <string name="add_to_favourite">Add to favourite</string>
     <string name="view_another_company">View in another company</string>
     <string name="add_to_follow_stop">Add to following stops</string>
     <string name="view_route">View route</string>
@@ -127,4 +130,5 @@
     <string name="msg_one_location_removed">One location is removed</string>
     <string name="msg_one_group_removed">One group is removed</string>
     <string name="msg_one_item_removed">One item is removed</string>
+    <string name="msg_add_to_favourite_success">Added to favourite successfully</string>
 </resources>

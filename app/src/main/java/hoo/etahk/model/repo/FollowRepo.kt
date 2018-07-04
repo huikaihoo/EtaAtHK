@@ -2,6 +2,7 @@ package hoo.etahk.model.repo
 
 import android.arch.lifecycle.LiveData
 import hoo.etahk.R
+import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.FollowGroup
@@ -32,7 +33,8 @@ object FollowRepo {
                         AppHelper.db.groupDao().insert(FollowGroup(
                             locationId = it.Id!!,
                             name = groupName,
-                            displaySeq = 1L))
+                            displaySeq = 1L,
+                            updateTime = Utils.getCurrentTimestamp()))
                     }
                 }
             }
@@ -51,13 +53,15 @@ object FollowRepo {
         launch(CommonPool) {
             val location = FollowLocation(
                 name = name,
-                displaySeq = AppHelper.db.locationDao().nextDisplaySeq())
+                displaySeq = AppHelper.db.locationDao().nextDisplaySeq(),
+                updateTime = Utils.getCurrentTimestamp())
             AppHelper.db.locationDao().insert(location)
         }
     }
 
     fun updateLocation(location: FollowLocation) {
         launch(CommonPool) {
+            location.updateTime = Utils.getCurrentTimestamp()
             AppHelper.db.locationDao().update(location)
         }
     }
@@ -73,7 +77,8 @@ object FollowRepo {
             val group = FollowGroup(
                 locationId = locationId,
                 name = name,
-                displaySeq = AppHelper.db.groupDao().nextDisplaySeq(locationId))
+                displaySeq = AppHelper.db.groupDao().nextDisplaySeq(locationId),
+                updateTime = Utils.getCurrentTimestamp())
 
             AppHelper.db.groupDao().insert(group)
         }
@@ -81,6 +86,7 @@ object FollowRepo {
 
     fun updateGroup(group: FollowGroup) {
         launch(CommonPool) {
+            group.updateTime = Utils.getCurrentTimestamp()
             AppHelper.db.groupDao().update(group)
         }
     }
@@ -101,7 +107,8 @@ object FollowRepo {
                 groupId = groupId,
                 routeKey = stop.routeKey,
                 seq = stop.seq,
-                displaySeq = AppHelper.db.itemStopDao().nextDisplaySeq(groupId))
+                displaySeq = AppHelper.db.itemStopDao().nextDisplaySeq(groupId),
+                updateTime = Utils.getCurrentTimestamp())
 
             AppHelper.db.itemDao().insert(item)
         }
@@ -109,9 +116,13 @@ object FollowRepo {
 
     fun updateItems(items: List<FollowItem>, newDisplaySeq: Boolean = false) {
         launch(CommonPool) {
+            val t  = Utils.getCurrentTimestamp()
             if (newDisplaySeq && items.isNotEmpty()) {
                 var displaySeq = AppHelper.db.itemStopDao().nextDisplaySeq(items[0].groupId)
-                items.forEach { it.displaySeq = displaySeq++ }
+                items.forEach {
+                    it.displaySeq = displaySeq++
+                    it.updateTime = t
+                }
             }
             AppHelper.db.itemDao().update(items)
         }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "44b8bbf5ada84e8fbc736168297b751a",
+    "identityHash": "64dfecb71853c48aa41243e9197c892f",
     "entities": [
       {
         "tableName": "Route",
@@ -635,7 +635,7 @@
       },
       {
         "tableName": "Misc",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT, `miscType` TEXT NOT NULL, `relationStr` TEXT NOT NULL, `dataStrA` TEXT NOT NULL, `dataStrB` TEXT NOT NULL, `dataStrC` TEXT NOT NULL, `dataIntA` INTEGER NOT NULL, `dataIntB` INTEGER NOT NULL, `dataIntC` INTEGER NOT NULL, `dataDoubleA` REAL NOT NULL, `dataDoubleB` REAL NOT NULL, `dataDoubleC` REAL NOT NULL, `dataBooleanA` INTEGER NOT NULL, `dataBooleanB` INTEGER NOT NULL, `dataBooleanC` INTEGER NOT NULL, `extra` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `freq` INTEGER NOT NULL, `displaySeq` INTEGER NOT NULL, `updateTime` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT, `miscType` TEXT NOT NULL, `relationStr` TEXT NOT NULL, `dataStrA` TEXT, `dataStrB` TEXT, `dataStrC` TEXT, `dataIntA` INTEGER, `dataIntB` INTEGER, `dataIntC` INTEGER, `dataDoubleA` REAL, `dataDoubleB` REAL, `dataDoubleC` REAL, `dataBooleanA` INTEGER, `dataBooleanB` INTEGER, `dataBooleanC` INTEGER, `extra` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `freq` INTEGER NOT NULL, `displaySeq` INTEGER NOT NULL, `updateTime` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "Id",
@@ -659,73 +659,73 @@
             "fieldPath": "dataStrA",
             "columnName": "dataStrA",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataStrB",
             "columnName": "dataStrB",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataStrC",
             "columnName": "dataStrC",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataIntA",
             "columnName": "dataIntA",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataIntB",
             "columnName": "dataIntB",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataIntC",
             "columnName": "dataIntC",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataDoubleA",
             "columnName": "dataDoubleA",
             "affinity": "REAL",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataDoubleB",
             "columnName": "dataDoubleB",
             "affinity": "REAL",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataDoubleC",
             "columnName": "dataDoubleC",
             "affinity": "REAL",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataBooleanA",
             "columnName": "dataBooleanA",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataBooleanB",
             "columnName": "dataBooleanB",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dataBooleanC",
             "columnName": "dataBooleanC",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "extra",
@@ -776,7 +776,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"44b8bbf5ada84e8fbc736168297b751a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"64dfecb71853c48aa41243e9197c892f\")"
     ]
   }
 }

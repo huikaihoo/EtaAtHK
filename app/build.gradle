@@ -66,7 +66,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 
     // Google Service
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
@@ -74,8 +74,8 @@ dependencies {
     // ViewModel + LiveData + Room + Paging
     implementation "android.arch.lifecycle:extensions:1.1.1"
     kapt "android.arch.lifecycle:compiler:1.1.1"
-    implementation "android.arch.persistence.room:runtime:1.1.0"
-    kapt "android.arch.persistence.room:compiler:1.1.0"
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
     //implementation "android.arch.paging:runtime:1.0.0-alpha5"
 
     // Kotlin library for android
@@ -101,7 +101,7 @@ dependencies {
 
     // Testing
     testImplementation 'android.arch.core:core-testing:1.1.1'
-    testImplementation 'android.arch.persistence.room:testing:1.1.0'
+    testImplementation 'android.arch.persistence.room:testing:1.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

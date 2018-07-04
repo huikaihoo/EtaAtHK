@@ -11,10 +11,9 @@
             android:icon="@drawable/ic_nav_follow"
             android:title="@string/nav_follow" />
         <item
-            android:id="@+id/nav_history"
-            android:icon="@drawable/ic_nav_bookmark"
-            android:title="@string/nav_history"
-            android:enabled="false" />
+            android:id="@+id/nav_fh"
+            android:icon="@drawable/ic_nav_favourite"
+            android:title="@string/nav_fh" />
     </group>
 
     <group

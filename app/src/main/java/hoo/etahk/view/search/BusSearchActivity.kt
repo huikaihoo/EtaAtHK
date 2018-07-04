@@ -125,8 +125,6 @@ class BusSearchActivity : NavActivity() {
         })
         tabs.getTabAt(viewModel.selectedTabPosition)?.select()
 
-        supportActionBar?.title = getString(R.string.title_bus_search)
-
         fab.setOnClickListener {
             appbar.setExpanded(true, true)
             searchMenuItem?.expandActionView()

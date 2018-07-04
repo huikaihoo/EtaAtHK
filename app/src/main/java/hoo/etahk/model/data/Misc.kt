@@ -11,28 +11,25 @@ data class Misc(
         @PrimaryKey(autoGenerate = true)
         var Id: Long? = null,
         var miscType: Constants.MiscType = Constants.MiscType.NONE,
-        var dataStrA: String,
-        var dataStrB: String,
-        var dataStrC: String,
-        var dataIntA: Int,
-        var dataIntB: Int,
-        var dataIntC: Int,
-        var dataDoubleA: Double,
-        var dataDoubleB: Double,
-        var dataDoubleC: Double,
-        var dataBooleanA: Boolean,
-        var dataBooleanB: Boolean,
-        var dataBooleanC: Boolean,
+        var relationStr: String = "", // For relationship: Do not touch it!
+        var dataStrA: String? = null,
+        var dataStrB: String? = null,
+        var dataStrC: String? = null,
+        var dataIntA: Int? = null,
+        var dataIntB: Int? = null,
+        var dataIntC: Int? = null,
+        var dataDoubleA: Double? = null,
+        var dataDoubleB: Double? = null,
+        var dataDoubleC: Double? = null,
+        var dataBooleanA: Boolean? = null,
+        var dataBooleanB: Boolean? = null,
+        var dataBooleanC: Boolean? = null,
         var extra: Extra = Extra(),
         var latitude: Double = 0.0,
         var longitude: Double = 0.0,
-        var freq: Long,
-        var displaySeq: Long,
+        var freq: Long = -1L,
+        var displaySeq: Long = -1L,
         var updateTime: Long = 0L) {
-
-    // For relationship: Do not touch it!
-    var relationStr: String = ""
-        get() = ""
 
     var location
         get() = LatLng(latitude, longitude)

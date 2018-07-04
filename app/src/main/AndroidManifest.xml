@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 
     <application
         android:name=".view.App"
@@ -48,10 +48,12 @@
         <activity
             android:name=".view.search.BusSearchActivity"
             android:label="@string/title_bus_search"
-            android:theme="@style/AppTheme.Bus">
-        </activity>
+            android:theme="@style/AppTheme.Bus" />
         <activity
             android:name=".view.route.RouteActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.fh.FHActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.map.RoutesMapsActivity"
@@ -65,13 +67,11 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
-        </activity>
-
-        <!-- Shortcut in widget list -->
+        </activity> <!-- Shortcut in widget list -->
         <activity-alias
             android:name=".CreateShortcuts"
-            android:label="@string/sc_follow_l"
             android:icon="@drawable/ic_shortcut_follow"
+            android:label="@string/sc_follow_l"
             android:targetActivity=".view.test.ShortcutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />

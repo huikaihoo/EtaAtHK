@@ -46,9 +46,7 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
             itemView.route_desc.text = route.getParentDesc()
 
             itemView.setOnClickListener { startRouteActivity(context, route.routeKey) }
-            if (route.companyDetails.size > 1) {
-                itemView.setOnLongClickListener { context?.showRoutePopupMenu(itemView, route); true }
-            }
+            itemView.setOnLongClickListener { context?.showRoutePopupMenu(itemView, route); true }
         }
 
         private fun startRouteActivity(context: BusSearchFragment?, routeKey: RouteKey){
