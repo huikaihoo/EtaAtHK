@@ -39,6 +39,7 @@ object Constants {
         const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
         const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
         const val DEFAULT_OUTDATED_TIME = 1
+        const val DEFAULT_PAGE_SIZE = 20;
 
         const val DEFAULT_MAX_REQUESTS_VAL = 64
         const val DEFAULT_MAX_REQUESTS_PER_HOST_VAL = 4
@@ -63,6 +64,7 @@ object Constants {
         const val NWFB_API_PARAMETER_APP_VERSION = "3.4.2"
         const val GOV_API_PARAMETER_PLATFORM = "android"
         const val GOV_API_PARAMETER_APP_VERSION = "3.6"
+        const val GOV_API_2_PARAMETER_APP_VERSION = "1.0"
         const val GOV_API_PARAMETER_COMPANY_ALL_BUS = "-1"
         const val GOV_API_PARAMETER_COMPANY_ALL_BUS_MINIBUS = "0"
     }
@@ -130,6 +132,7 @@ object Constants {
         const val KMB_ETA_FEED_URL = "http://etadatafeed.kmb.hk:1933/"
         const val NWFB_URL = "http://mobile.nwstbus.com.hk/"
         const val GOV_URL = "http://app1.hketransport.td.gov.hk/"
+        const val GOV2_URL = "http://cms.hkemobility.gov.hk/"
     }
 
     object NetworkType {

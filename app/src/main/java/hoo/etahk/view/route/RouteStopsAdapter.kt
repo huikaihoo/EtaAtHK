@@ -96,6 +96,9 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                         if (etaResults[i].wifi) {
                             text = Utils.appendImageToTextView(tv, R.drawable.ic_text_wifi, text)
                         }
+                        if (etaResults[i].valid && etaResults[i].capacity >= 0L) {
+                            text = Utils.appendImageToTextView(tv, Utils.getCapacityResId(etaResults[i].capacity), text)
+                        }
                         text.append(etaResults[i].getDisplayMsg())
                         tv.text = text
                     }

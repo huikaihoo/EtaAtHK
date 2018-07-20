@@ -12,8 +12,8 @@ import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.ItemDiffCallback
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.view.App
-import hoo.etahk.view.base.DiffAdapter
 import hoo.etahk.view.base.BaseViewHolder
+import hoo.etahk.view.base.DiffAdapter
 import kotlinx.android.synthetic.main.item_stop.view.*
 import java.util.*
 
@@ -72,6 +72,9 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
                         }
                         if (etaResults[i].wifi) {
                             text = Utils.appendImageToTextView(tv, R.drawable.ic_text_wifi, text)
+                        }
+                        if (etaResults[i].valid && etaResults[i].capacity >= 0L) {
+                            text = Utils.appendImageToTextView(tv, Utils.getCapacityResId(etaResults[i].capacity), text)
                         }
                         text.append(etaResults[i].getDisplayMsg())
                         tv.text = text

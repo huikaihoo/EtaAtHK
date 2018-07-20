@@ -205,6 +205,32 @@ object Utils {
         return timeStr.contains("預定".toRegex())
     }
 
+    fun phaseCapacity(capacityStr: String): Long {
+        return when (capacityStr.toUpperCase()) {
+            "N" -> -1
+            "E" -> 0
+            "F" -> 10
+            else -> capacityStr.toLong()
+        }
+    }
+
+    fun getCapacityResId(capacity: Long): Int{
+        return when (capacity) {
+            0L -> R.drawable.ic_text_capacity_0
+            1L -> R.drawable.ic_text_capacity_1
+            2L -> R.drawable.ic_text_capacity_2
+            3L -> R.drawable.ic_text_capacity_3
+            4L -> R.drawable.ic_text_capacity_4
+            5L -> R.drawable.ic_text_capacity_5
+            6L -> R.drawable.ic_text_capacity_6
+            7L -> R.drawable.ic_text_capacity_7
+            8L -> R.drawable.ic_text_capacity_8
+            9L -> R.drawable.ic_text_capacity_9
+            10L -> R.drawable.ic_text_capacity_10
+            else -> R.drawable.ic_text_capacity_0
+        }
+    }
+
     fun appendImageToTextView(textView: TextView,  resId: Int, spannableStringBuilder: SpannableStringBuilder): SpannableStringBuilder {
         return appendImageToString(Math.round(textView.lineHeight * 0.8).toInt(), textView.currentTextColor, resId, spannableStringBuilder)
     }
