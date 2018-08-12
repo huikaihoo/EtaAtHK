@@ -1,5 +1,6 @@
 package hoo.etahk.remote.connection
 
+import android.util.Base64
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.mcxiaoke.koi.HASH
@@ -28,6 +29,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 object NwfbConnection: BaseConnection {
 
@@ -37,12 +41,47 @@ object NwfbConnection: BaseConnection {
      * Shared
      ***************/
     fun getSystemCode(): String {
-        val random = String.format("%04d", Random().nextInt(1000))
-        var timestamp = Utils.getCurrentTimestamp().toString()
+        var random = Random().nextInt(1000).toString()
+        random += "0".repeat(4 - random.length)
 
+        var timestamp = Utils.getCurrentTimestamp().toString()
         timestamp = timestamp.substring(timestamp.length - 6)
 
-        return timestamp + random + HASH.md5(timestamp + random + "firstbusmwymwy")
+        return (timestamp + random + HASH.md5(timestamp + random + "firstbusmwymwy")).toUpperCase()
+    }
+
+    fun getSystemCode2(): String {
+        // Get Random String
+        var random = Random().nextInt(10000).toString()
+        random += "0".repeat(5 - random.length)
+
+        val timestamp = Utils.getCurrentTimestamp().toString()
+        var timestampStr = (timestamp.substring(2, 3) + timestamp.substring(9, 10)
+                + timestamp.substring(4, 5) + timestamp.substring(6, 7)
+                + timestamp.substring(3, 4) + timestamp.substring(0, 1)
+                + timestamp.substring(8, 9) + timestamp.substring(7, 8)
+                + timestamp.substring(5, 6) + timestamp.substring(1, 2))
+
+        random = timestampStr + HASH.sha256((timestampStr + "siwmytnw" + random).toByteArray()).toLowerCase() + random
+
+        // Encrypt Random String
+        val keySpec = SecretKeySpec("siwmytnwinfomwyy".toByteArray(), "AES")
+        val ivParameterSpec = IvParameterSpec("a20330efd3f6060e".toByteArray())
+
+        val instance = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        instance.init(Cipher.ENCRYPT_MODE, keySpec, ivParameterSpec)
+
+        val encryptedStr =  String(HASH.encodeHex(instance.doFinal(random.toByteArray()), false))
+
+        // Process Encrypted String
+        val bytes = ByteArray(encryptedStr.length / 2)
+        var i = 0
+        while (i < encryptedStr.length) {
+            bytes[i / 2] = ((Character.digit(encryptedStr[i], 16) shl 4) + Character.digit(encryptedStr[i + 1], 16)).toByte()
+            i += 2
+        }
+
+        return Base64.encodeToString(bytes, Base64.NO_WRAP).replace("=".toRegex(), "")
     }
 
     override fun getEtaRoutes(company: String): List<String>? {
@@ -149,13 +188,13 @@ object NwfbConnection: BaseConnection {
                                     val routes = mutableListOf<Route>()
                                     val nwfbResponse = responseStr!!.split("<br>")
 
-                                    nwfbResponse.forEach({
+                                    nwfbResponse.forEach {
                                         val records = it.split("(\\|\\|)|(\\*\\*\\*)".toRegex())
                                         if (records.size >= Constants.Route.NWFB_VARIANT_RECORD_SIZE) {
                                             routes.add(toChildRoute(parentRoute, (index + 1).toLong(), records, t))
                                         }
                                         //Log.d(TAG, it)
-                                    })
+                                    }
 
                                     //Log.d(TAG, AppHelper.gson.toJson(routes))
                                     AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
@@ -213,13 +252,13 @@ object NwfbConnection: BaseConnection {
                                 val nwfbResponse = responseStr!!.split("\\|\\|".toRegex())
 
                                 var seq = 0L
-                                nwfbResponse.forEach({
+                                nwfbResponse.forEach {
                                     val records = it.split(",")
                                     if (records.size == 2) {
                                         val latLng = LatLng(records[0].toDouble()+0.000194, records[1].toDouble()-0.000070)
                                         paths.add(toPath(route, latLng, seq++, t))
                                     }
-                                })
+                                }
 
                                 AppHelper.db.pathDao().insertOrUpdate(route, paths, t)
                             }
@@ -246,13 +285,13 @@ object NwfbConnection: BaseConnection {
                                 val stops = mutableListOf<Stop>()
                                 val nwfbResponse = responseStr!!.split("<br>")
 
-                                nwfbResponse.forEach({
+                                nwfbResponse.forEach {
                                     val records = it.split("\\|\\|".toRegex())
                                     if (records.size >= Constants.Stop.NWFB_STOP_RECORD_SIZE) {
                                         stops.add(toStop(route, records, t))
                                     }
                                     //Log.d(TAG, it)
-                                })
+                                }
 
                                 //Log.d(TAG, AppHelper.gson.toJson(stops))
                                 AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
@@ -303,7 +342,7 @@ object NwfbConnection: BaseConnection {
             runBlocking {
                 val jobs = arrayListOf<Job>()
 
-                stops.forEach({ stop ->
+                stops.forEach { stop ->
                     jobs += launch(CommonPool) {
                         stop.etaStatus = Constants.EtaStatus.FAILED
                         stop.etaUpdateTime = t
@@ -319,7 +358,8 @@ object NwfbConnection: BaseConnection {
                                             stopseq = stop.seq.toString(),
                                             rdv = stop.info.rdv,
                                             showtime = "Y",
-                                            syscode = getSystemCode()).execute()
+                                            syscode = getSystemCode(),
+                                            syscode2 = getSystemCode2()).execute()
 
                             if (response.isSuccessful) {
                                 var responseStr = response.body()?.string()
@@ -335,13 +375,13 @@ object NwfbConnection: BaseConnection {
                                     responseStr = responseStr!!.replace(".*\\|##\\|".toRegex(), "")
                                     val nwfbResponse = responseStr.split("<br>")
 
-                                    nwfbResponse.forEach({
+                                    nwfbResponse.forEach {
                                         val records = it.split("(\\|\\|)|(\\|\\^\\|)".toRegex())
                                         if(records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
                                             etaResults.add(toEtaResult(records))
                                         }
                                         //Log.d(TAG, it)
-                                    })
+                                    }
                                 }
 
                                 if (!etaResults.isEmpty()) {
@@ -356,7 +396,7 @@ object NwfbConnection: BaseConnection {
                             stop.etaStatus = Constants.EtaStatus.NETWORK_ERROR
                         }
                     }
-                })
+                }
                 jobs.forEach { it.join() }
             }
 
@@ -402,13 +442,13 @@ object NwfbConnection: BaseConnection {
                             responseStr = responseStr!!.replace(".*\\|##\\|".toRegex(), "")
                             val nwfbResponse = responseStr.split("<br>")
 
-                            nwfbResponse.forEach({
+                            nwfbResponse.forEach {
                                 val records = it.split("(\\|\\|)|(\\|\\^\\|)".toRegex())
                                 if(records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
                                     etaResults.add(toEtaResult(records))
                                 }
                                 //Log.d(TAG, it)
-                            })
+                            }
                         }
 
                         if (!etaResults.isEmpty()) {
@@ -457,20 +497,25 @@ object NwfbConnection: BaseConnection {
     private fun toEtaResult(records: List<String>): EtaResult {
         assert(records.size >= Eta.NWFB_ETA_RECORD_SIZE)
 
-        val msg = (records[Eta.NWFB_ETA_RECORD_ETA_TIME] + " " + timeStrToMsg(records[Eta.NWFB_ETA_RECORD_MSG])).trim()
+        var msg = (records[Eta.NWFB_ETA_RECORD_ETA_TIME] + " " + timeStrToMsg(records[Eta.NWFB_ETA_RECORD_MSG])).trim()
 
         var distance = records[Eta.NWFB_ETA_RECORD_DISTANCE].toLong()
-
         if (distance <= 0L && msg.contains("已到達")) {
             distance = 1
         }
+
+        val gps = !msg.contains("非實時")
+
+        msg = msg.replace("已到達".toRegex(), "")
+                .replace("非實時".toRegex(), "")
+                .trim()
 
         return EtaResult(
                 company = records[Eta.NWFB_ETA_RECORD_COMPANY].trim(),
                 etaTime = Utils.timeStrToTimestamp(records[Eta.NWFB_ETA_RECORD_ETA_TIME]),
                 msg = msg,
                 scheduleOnly = (distance <= 0),
-                gps = (distance > 0),
+                gps = (gps && distance > 0),
                 distance = distance)
     }
 }

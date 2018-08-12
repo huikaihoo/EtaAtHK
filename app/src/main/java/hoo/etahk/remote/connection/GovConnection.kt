@@ -27,8 +27,9 @@ object GovConnection: BaseConnection{
      * Shared
      ***************/
     fun getSystemCode(): String {
-        val hexes = "0123456789ABCDEF"
-        val random = String.format("%05d", Random().nextInt(10000))
+        var random = Random().nextInt(10000).toString()
+        random += "0".repeat(5 - random.length)
+
         val timestamp = Utils.getCurrentTimestamp().toString()
         val timestampStr = (timestamp.substring(2, 3) + timestamp.substring(9, 10)
                 + timestamp.substring(4, 5) + timestamp.substring(6, 7)
@@ -36,14 +37,7 @@ object GovConnection: BaseConnection{
                 + timestamp.substring(8, 9) + timestamp.substring(7, 8)
                 + timestamp.substring(5, 6) + timestamp.substring(1, 2))
 
-        val raw = HASH.sha256Bytes((timestampStr + "mmtydwtd" + random).toByteArray())
-        val hex = StringBuilder(raw.size * 2)
-
-        for (b in raw) {
-            hex.append(hexes[(b.toInt() and 240) shr 4]).append(hexes[b.toInt() and 15])
-        }
-
-        return timestampStr + hex.toString().toLowerCase() + random
+        return timestampStr + HASH.sha256((timestampStr + "mmtydwtd" + random).toByteArray()).toLowerCase() + random
     }
 
     override fun getEtaRoutes(company: String): List<String>? {

@@ -61,10 +61,10 @@ object Constants {
         const val NWFB_API_PARAMETER_TYPE_ALL_BUS = "0"
         const val NWFB_API_PARAMETER_TYPE_ETA_BUS = "5"
         const val NWFB_API_PARAMETER_PLATFORM = "android"
-        const val NWFB_API_PARAMETER_APP_VERSION = "3.4.2"
+        const val NWFB_API_PARAMETER_APP_VERSION = "3.5"
         const val GOV_API_PARAMETER_PLATFORM = "android"
         const val GOV_API_PARAMETER_APP_VERSION = "3.6"
-        const val GOV_API_2_PARAMETER_APP_VERSION = "1.0"
+        const val GOV2_API_PARAMETER_APP_VERSION = "1.0"
         const val GOV_API_PARAMETER_COMPANY_ALL_BUS = "-1"
         const val GOV_API_PARAMETER_COMPANY_ALL_BUS_MINIBUS = "0"
     }

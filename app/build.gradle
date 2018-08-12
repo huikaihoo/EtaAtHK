@@ -4,8 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 def versionMajor = 0
-def versionMinor = 6
-def versionPatch = 6
+def versionMinor = 7
+def versionPatch = 4
 def versionBuild = 8
 
 def static getCurrentDate() {
@@ -46,6 +46,9 @@ android {
     }
     buildTypes.each {
         it.resValue 'string', 'google_maps_key', google_maps_api_key
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -99,10 +102,13 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
 
-    // Testing
+    // Unit Test
     testImplementation 'android.arch.core:core-testing:1.1.1'
     testImplementation 'android.arch.persistence.room:testing:1.1.1'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:3.8'
+
+    // Android Unit Test
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

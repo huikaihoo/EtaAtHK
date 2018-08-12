@@ -50,7 +50,9 @@ interface NwfbApi {
                @Query("stopseq") stopseq: String = "",
                @Query("rdv") rdv: String = "",
                @Query("showtime") showtime: String = "Y",
+               @Query("removeRepeatedSuspend") removeRepeatedSuspend2: String = "Y",
                @Query("syscode") syscode: String = "",
                @Query("p") p: String = Constants.SharePrefs.NWFB_API_PARAMETER_PLATFORM,
-               @Query("appversion") appversion: String = Constants.SharePrefs.NWFB_API_PARAMETER_APP_VERSION): Call<ResponseBody>
+               @Query("version") appversion: String = Constants.SharePrefs.NWFB_API_PARAMETER_APP_VERSION,
+               @Query("syscode2", encoded = true) syscode2: String = ""): Call<ResponseBody>
 }
