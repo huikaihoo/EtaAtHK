@@ -2,7 +2,6 @@ package hoo.etahk.view.follow
 
 import android.annotation.SuppressLint
 import android.text.SpannableStringBuilder
-import android.view.MotionEvent
 import android.view.View
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -81,14 +80,6 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
                     }
                 }
 
-                itemView.setOnTouchListener { v, event ->
-                    val isItemsDisplaySeqChanged = context?.isItemsDisplaySeqChanged ?: false
-                    if (isItemsDisplaySeqChanged && event.action == MotionEvent.ACTION_DOWN) {
-                        context?.isItemsDisplaySeqChanged = false
-                        context?.updateItemsDisplaySeq(dataSource)
-                    }
-                    false
-                }
                 itemView.setOnClickListener { context?.updateEta(listOf(item)) }
                 itemView.setOnLongClickListener { context?.showItemPopupMenu(itemView, item); true }
             }
@@ -122,6 +113,7 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
         notifyItemMoved(fromPosition, toPosition)
 
         context?.isItemsDisplaySeqChanged = true
+        context?.updateItemsDisplaySeq(dataSource)
     }
 
     /**
@@ -139,6 +131,6 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
         val newDataSource = dataSource.toMutableList()
         newDataSource.removeAt(position)
         dataSource = newDataSource.toList()
-        //notifyItemRemoved(position)
+        notifyItemRemoved(position)
     }
 }

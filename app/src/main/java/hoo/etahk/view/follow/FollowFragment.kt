@@ -97,6 +97,7 @@ class FollowFragment : BaseFragment() {
         rootView.refresh_layout.isRefreshing = false
         fragmentViewModel.isRefreshingAll = followItemsAdapter.dataSource.isEmpty()
         rootView.refresh_layout.setOnRefreshListener {
+            isItemsDisplaySeqChanged = false
             viewModel.stopTimer()
         }
 
@@ -210,7 +211,7 @@ class FollowFragment : BaseFragment() {
         viewModel.getSelectedLocation().observe(this, Observer<LocationAndGroups> {
             it?.let {
                 val position = arguments!!.getInt(ARG_POSITION)
-                Log.d(TAG, "subscribeUiChanges ${position}")
+                Log.d(TAG, "subscribeUiChanges $position")
                 if (position < it.groups.size && it.groups[position].Id?: 0L > 0L ) {
                     if (fragmentViewModel.groupId != it.groups[position].Id) {
                         //Log.d(TAG, "subscribeUiChanges XX ${it.groups[position].Id}")
@@ -225,45 +226,48 @@ class FollowFragment : BaseFragment() {
 
     private fun subscribeItemsChanges() {
         fragmentViewModel.getFollowItems().observe(this, Observer<List<ItemAndStop>> {
-            val size = it?.size ?: 0
-            val last = viewModel.getLastUpdateTime().value ?: 0L
+            if (!isItemsDisplaySeqChanged) {
+                val size = it?.size ?: 0
+                val last = viewModel.getLastUpdateTime().value ?: 0L
 
-            var errorCount = 0
-            var updatedCount = 0
+                var errorCount = 0
+                var updatedCount = 0
 
-            it?.forEach { item ->
-                item.stop?.let { stop ->
-                    if (stop.etaStatus != Constants.EtaStatus.SUCCESS) {
-                        errorCount++
-                    }
-                    if (stop.etaUpdateTime >= 0L && stop.etaUpdateTime >= last) {
-                        updatedCount++
+                it?.forEach { item ->
+                    item.stop?.let { stop ->
+                        if (stop.etaStatus != Constants.EtaStatus.SUCCESS) {
+                            errorCount++
+                        }
+                        if (stop.etaUpdateTime >= 0L && stop.etaUpdateTime >= last) {
+                            updatedCount++
+                        }
                     }
                 }
-            }
 
-            Log.d(TAG, "F=$errorCount U=$updatedCount T=$size")
+                Log.d(TAG, "F=$errorCount U=$updatedCount T=$size")
 
-            it?.let { followItemsAdapter.dataSource = it }
+                it?.let { followItemsAdapter.dataSource = it }
 
-            if (!fragmentViewModel.isEtaInit && size > 0) {
-                fragmentViewModel.isEtaInit = true
-                fragmentViewModel.isRefreshingAll = true
-                updateEta(it!!)
-            } else if (size == updatedCount) {
-                rootView.refresh_layout.isRefreshing = false
+                if (!fragmentViewModel.isEtaInit && size > 0) {
+                    fragmentViewModel.isEtaInit = true
+                    fragmentViewModel.isRefreshingAll = true
+                    updateEta(it!!)
+                } else if (size == updatedCount) {
+                    rootView.refresh_layout.isRefreshing = false
 
-                if (fragmentViewModel.isRefreshingAll) {
-                    Log.d(TAG, "Start timer")
-                    fragmentViewModel.isRefreshingAll = false
-                    viewModel.startTimer()
+                    if (fragmentViewModel.isRefreshingAll) {
+                        Log.d(TAG, "Start timer")
+                        fragmentViewModel.isRefreshingAll = false
+                        viewModel.startTimer()
+                    }
                 }
-            }
 
-            // TODO ("Show Network Error Message based on Network Error")
+                // TODO ("Show Network Error Message based on Network Error")
+            }
         })
 
         viewModel.getLastUpdateTime().observe(this, Observer<Long> {
+            isItemsDisplaySeqChanged = false
             if (it != null) {
                 val items = fragmentViewModel.getFollowItems().value
                 if (items != null && items.isNotEmpty() && !fragmentViewModel.isRefreshingAll) {
