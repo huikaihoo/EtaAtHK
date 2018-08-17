@@ -39,7 +39,7 @@ object Constants {
         const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
         const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
         const val DEFAULT_OUTDATED_TIME = 1
-        const val DEFAULT_PAGE_SIZE = 20;
+        const val DEFAULT_PAGE_SIZE = 20
 
         const val DEFAULT_MAX_REQUESTS_VAL = 64
         const val DEFAULT_MAX_REQUESTS_PER_HOST_VAL = 4

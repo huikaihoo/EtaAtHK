@@ -86,6 +86,7 @@ class RouteActivity : BaseActivity() {
         progress_bar.max = viewModel.durationInMillis.toInt()
         progress_bar.progress = 0
 
+
         subscribeUiChanges()
     }
 

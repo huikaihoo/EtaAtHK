@@ -57,9 +57,6 @@ abstract class StopDao {
 //                            bound: Long,
 //                            variant: Long): List<Stop>
 
-    @Query("SELECT * FROM stop LIMIT 10")
-    abstract fun selectAll(): LiveData<List<Stop>>
-
     // Insert / Update (single)
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)
 //    abstract fun insert(stop: Stop)

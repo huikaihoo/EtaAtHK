@@ -25,4 +25,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun itemStopDao(): ItemStopDao
     // Misc
     abstract fun miscDao(): MiscDao
+    abstract fun miscFavouriteDao(): MiscFavouriteDao
+    abstract fun miscHistoryDao(): MiscHistoryDao
 }

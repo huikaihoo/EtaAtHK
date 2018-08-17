@@ -3,6 +3,7 @@ package hoo.etahk.view.route
 import android.arch.lifecycle.LiveData
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
+import hoo.etahk.model.repo.MiscRepo
 import hoo.etahk.model.repo.RoutesRepo
 import hoo.etahk.view.base.TimerViewModel
 
@@ -35,5 +36,6 @@ class RouteViewModel: TimerViewModel() {
 
     private fun subscribeToRepo() {
         parentRoute = RoutesRepo.getParentRoute(routeKey!!.company, routeKey!!.routeNo)
+        MiscRepo.insertOrUpdateRouteHistory(routeKey!!)
     }
 }

@@ -46,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_behavior=".common.view.BottomNavigationBehavior"
         app:menu="@menu/nav_b_fh" />
+    <!--app:layout_behavior=".common.view.BottomNavigationBehavior"-->
 
 </android.support.design.widget.CoordinatorLayout>
