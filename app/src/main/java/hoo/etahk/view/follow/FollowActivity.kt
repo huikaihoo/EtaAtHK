@@ -1,13 +1,8 @@
 package hoo.etahk.view.follow
 
-import android.app.PendingIntent
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.DialogInterface
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
@@ -18,8 +13,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
+import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.base.NavActivity
 import hoo.etahk.view.dialog.InputDialog
@@ -190,10 +187,10 @@ class FollowActivity : NavActivity() {
                 AlertDialog.Builder(this)
                     .setTitle(R.string.title_conform_delete_location)
                     .setMessage(R.string.content_conform_delete)
-                    .setPositiveButton(android.R.string.ok, { dialog, which ->
+                    .setPositiveButton(android.R.string.ok) { dialog, which ->
                         viewModel.deleteLocation(location.location)
                         Snackbar.make(container, R.string.msg_one_location_removed, Snackbar.LENGTH_SHORT).show()
-                    })
+                    }
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
                 true
@@ -219,11 +216,10 @@ class FollowActivity : NavActivity() {
                     inputDialog.setTitle(R.string.title_rename_group)
                         .setHint(R.string.hint_new_group_name)
                         .setText(group.name)
-                        .setPositiveButton(listener = DialogInterface.OnClickListener {dialog, which ->
+                        .setPositiveButton(listener = DialogInterface.OnClickListener { dialog, which ->
                             group.name = inputDialog.view.input.text.toString()
                             viewModel.updateGroup(group)
                             Snackbar.make(container, R.string.msg_one_group_renamed, Snackbar.LENGTH_SHORT).show()
-
                         })
                         .show()
                 }
@@ -238,14 +234,14 @@ class FollowActivity : NavActivity() {
                     AlertDialog.Builder(this)
                         .setTitle(R.string.title_conform_delete_group)
                         .setMessage(R.string.content_conform_delete)
-                        .setPositiveButton(android.R.string.ok, { dialog, which ->
+                        .setPositiveButton(android.R.string.ok) { dialog, which ->
                             viewModel.deleteGroup(group)
                             Snackbar.make(
                                 container,
                                 R.string.msg_one_group_removed,
                                 Snackbar.LENGTH_SHORT
                             ).show()
-                        })
+                        }
                         .setNegativeButton(android.R.string.cancel, null)
                         .show()
                 }
@@ -257,33 +253,14 @@ class FollowActivity : NavActivity() {
                 true
             }
             R.id.menu_add_shortcut -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val shortcutManager = getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager
-
-                    //check if device supports Pin Shortcut or not
-                    if (shortcutManager.isRequestPinShortcutSupported) {
-                        // Assumes there's already a shortcut with the ID "open_website".
-                        // The shortcut must be enabled.
-                        val pinShortcutInfo = ShortcutInfo.Builder(this, "follow").build()
-
-                        // Create the PendingIntent object only if your app needs to be notified
-                        // that the user allowed the shortcut to be pinned. Note that, if the
-                        // pinning operation fails, your app isn't notified. We assume here that the
-                        // app has implemented a method called createShortcutResultIntent() that
-                        // returns a broadcast intent.
-                        val pinnedShortcutCallbackIntent = shortcutManager.createShortcutResultIntent(pinShortcutInfo)
-
-                        // Configure the intent so that your app's broadcast receiver gets
-                        // the callback successfully.
-                        val successCallback = PendingIntent.getBroadcast(this, 0, pinnedShortcutCallbackIntent, 0)
-
-                        //finally ask user to add the shortcut to home screen
-                        shortcutManager.requestPinShortcut(
-                            pinShortcutInfo,
-                            successCallback.intentSender
-                        )
-                    }
-                }
+                Utils.createShortcut(
+                    this,
+                    TAG,
+                    R.string.sc_follow_s,
+                    R.string.sc_follow_l,
+                    R.drawable.ic_shortcut_follow,
+                    newIntent<FollowActivity>(0)
+                )
                 true
             }
             R.id.menu_settings -> true

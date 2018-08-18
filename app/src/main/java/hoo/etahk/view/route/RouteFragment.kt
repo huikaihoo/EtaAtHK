@@ -121,19 +121,19 @@ class RouteFragment : BaseFragment() {
                     lateinit var positiveButton: Button
                     val dialog = AlertDialog.Builder(activity!!)
                         .setTitle(R.string.title_select_groups_to_add)
-                        .setMultiChoiceItems(displayList, checkedList, { dialog, position, checked ->
+                        .setMultiChoiceItems(displayList, checkedList) { dialog, position, checked ->
                             checkedList[position] = checked
                             checkedCnt += if (checked) 1 else -1
                             positiveButton.isEnabled = (checkedCnt > 0)
-                        })
-                        .setPositiveButton(android.R.string.ok, { dialog, which ->
+                        }
+                        .setPositiveButton(android.R.string.ok) { dialog, which ->
                             for(i in checkedList.indices) {
                                 if (checkedList[i]) {
                                     fragmentViewModel.insertFollowItem(groupList[i].Id!!, stop)
                                 }
                             }
-                            Snackbar.make(view, R.string.msg_add_to_follow_stop_success, Snackbar.LENGTH_SHORT).show()
-                        })
+                            Snackbar.make(this@RouteFragment.rootView, R.string.msg_add_to_follow_stop_success, Snackbar.LENGTH_SHORT).show()
+                        }
                         .setNegativeButton(android.R.string.cancel, null)
                         .show()
 

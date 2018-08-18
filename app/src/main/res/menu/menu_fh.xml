@@ -1,24 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="hoo.etahk.view.search.BusSearchActivity">
-
-    <item
-        android:id="@+id/menu_search"
-        android:title="@string/search"
-        android:orderInCategory="10"
-        android:icon="@drawable/ic_fab_search"
-        android:textAllCaps="true"
-        android:visible="true"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+    tools:context="hoo.etahk.view.fh.FHActivity">
 
     <item
         android:id="@+id/menu_add_shortcut"
         android:orderInCategory="910"
         android:title="@string/create_shortcut"
         app:showAsAction="never" />
-
+    
     <item
         android:id="@+id/menu_settings"
         android:orderInCategory="920"

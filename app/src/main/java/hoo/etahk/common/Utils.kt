@@ -1,11 +1,20 @@
 package hoo.etahk.common
 
 import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.pm.ShortcutInfoCompat
+import android.support.v4.content.pm.ShortcutManagerCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.graphics.drawable.IconCompat
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ImageSpan
@@ -266,5 +275,100 @@ object Utils {
         drawable.draw(canvas)
 
         return bitmap
+    }
+
+    fun createShortcut(context: Context,
+                       shortcutId: String,
+                       shortLabelResId: Int,
+                       longLabelResId: Int,
+                       iconResId: Int,
+                       intent: Intent) {
+        createShortcut(context, shortcutId, context.getString(shortLabelResId), context.getString(longLabelResId), iconResId, intent)
+    }
+
+    fun createShortcut(context: Context,
+                       shortcutId: String,
+                       label: String,
+                       iconResId: Int,
+                       intent: Intent) {
+        createShortcut(context, shortcutId, label, label, iconResId, intent)
+    }
+
+    /**
+     * Source: https://developer.android.com/guide/topics/ui/shortcuts/creating-shortcuts
+     */
+    private fun createShortcut(context: Context,
+                               shortcutId: String,
+                               shortLabel: String,
+                               longLabel: String,
+                               iconResId: Int,
+                               intent: Intent) {
+
+        intent.action = Intent.ACTION_VIEW
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val shortcutManager = context.getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager
+
+            //check if device supports Pin Shortcut or not
+            if (shortcutManager.isRequestPinShortcutSupported) {
+
+                val pinShortcutInfo =
+                    ShortcutInfo.Builder(context, shortcutId)
+                        .setShortLabel(shortLabel)
+                        .setLongLabel(longLabel)
+                        .setIcon(Icon.createWithResource(context, iconResId))
+                        .setIntent(intent)
+                        .build()
+
+                // Create the PendingIntent object only if your app needs to be notified
+                // that the user allowed the shortcut to be pinned. Note that, if the
+                // pinning operation fails, your app isn't notified. We assume here that the
+                // app has implemented a method called createShortcutResultIntent() that
+                // returns a broadcast intent.
+                val pinnedShortcutCallbackIntent =
+                    shortcutManager.createShortcutResultIntent(pinShortcutInfo)
+
+                // Configure the intent so that your app's broadcast receiver gets
+                // the callback successfully.
+                val successCallback =
+                    PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
+
+                //finally ask user to add the shortcut to home screen
+                shortcutManager.requestPinShortcut(
+                    pinShortcutInfo,
+                    successCallback.intentSender
+                )
+            }
+        } else {
+            if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+                val pinShortcutInfo =
+                    ShortcutInfoCompat.Builder(context, shortcutId)
+                        .setShortLabel(shortLabel)
+                        .setLongLabel(longLabel)
+                        .setIcon(IconCompat.createWithResource(context, iconResId))
+                        .setIntent(intent)
+                        .build()
+
+                // Create the PendingIntent object only if your app needs to be notified
+                // that the user allowed the shortcut to be pinned. Note that, if the
+                // pinning operation fails, your app isn't notified. We assume here that the
+                // app has implemented a method called createShortcutResultIntent() that
+                // returns a broadcast intent.
+                val pinnedShortcutCallbackIntent =
+                    ShortcutManagerCompat.createShortcutResultIntent(context, pinShortcutInfo)
+
+                // Configure the intent so that your app's broadcast receiver gets
+                // the callback successfully.
+                val successCallback =
+                    PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
+
+                //finally ask user to add the shortcut to home screen
+                ShortcutManagerCompat.requestPinShortcut(
+                    context,
+                    pinShortcutInfo,
+                    successCallback.intentSender
+                )
+            }
+        }
     }
 }

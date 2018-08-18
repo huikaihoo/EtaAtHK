@@ -18,6 +18,10 @@
     <!-- Shortcut -->
     <string name="sc_follow_s">追蹤車站</string>
     <string name="sc_follow_l">追蹤車站</string>
+    <string name="sc_favourite_s">我的最愛</string>
+    <string name="sc_favourite_l">我的最愛</string>
+    <string name="sc_history_s">歷史</string>
+    <string name="sc_history_l">歷史</string>
     <string name="sc_bus_s">巴士</string>
     <string name="sc_bus_l">巴士</string>
 

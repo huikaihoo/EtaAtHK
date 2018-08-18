@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="favourite"
+        android:icon="@drawable/ic_shortcut_favourite"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/sc_favourite_s"
+        android:shortcutLongLabel="@string/sc_favourite_l">
+        <intent
+            android:targetPackage="hoo.etahk"
+            android:action="android.intent.action.VIEW"
+            android:targetClass="hoo.etahk.view.fh.FHActivity">
+            <extra android:name="misc_type" android:value="ROUTE_FAVOURITE" />
+        </intent>
+    </shortcut>
 
     <shortcut
         android:shortcutId="bus"
@@ -12,21 +25,5 @@
             android:action="android.intent.action.VIEW"
             android:targetClass="hoo.etahk.view.search.BusSearchActivity">
         </intent>
-        <categories android:name="android.shortcut.conversation" />
-    </shortcut>
-
-    <!-- For adding shortcut in app manually -->
-    <shortcut
-        android:shortcutId="follow"
-        android:icon="@drawable/ic_shortcut_follow"
-        android:enabled="true"
-        android:shortcutShortLabel="@string/sc_follow_s"
-        android:shortcutLongLabel="@string/sc_follow_l">
-        <intent
-            android:targetPackage="hoo.etahk"
-            android:action="android.intent.action.VIEW"
-            android:targetClass="hoo.etahk.view.follow.FollowActivity">
-        </intent>
-        <categories android:name="android.shortcut.conversation" />
     </shortcut>
 </shortcuts>

@@ -9,7 +9,11 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import com.mcxiaoke.koi.ext.Bundle
+import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
+import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.model.relation.RouteFavouriteEx
 import hoo.etahk.model.relation.RouteHistoryEx
 import hoo.etahk.view.base.NavActivity
@@ -36,6 +40,7 @@ class FHActivity : NavActivity() {
         historyAdapter.context = this
 
         viewModel = ViewModelProviders.of(this).get(FHViewModel::class.java)
+        viewModel.currentType = Constants.MiscType.valueOf(intent.extras.getString(Constants.Argument.ARG_MISC_TYPE))
 
         super.initNavigationDrawer()
 
@@ -49,8 +54,14 @@ class FHActivity : NavActivity() {
         )
 
         showContent()
+
+        bnv.selectedItemId = if (viewModel.currentType == Constants.MiscType.ROUTE_HISTORY) R.id.nav_history else R.id.nav_favourite
         bnv.setOnNavigationItemSelectedListener { item ->
-            viewModel.currentItemId = item.itemId
+            viewModel.currentType = when (item.itemId) {
+                R.id.nav_favourite -> Constants.MiscType.ROUTE_FAVOURITE
+                R.id.nav_history -> Constants.MiscType.ROUTE_HISTORY
+                else -> Constants.MiscType.NONE
+            }
             showContent()
         }
 
@@ -58,13 +69,13 @@ class FHActivity : NavActivity() {
     }
 
     private fun showContent(): Boolean {
-        return when (viewModel.currentItemId) {
-            R.id.nav_favourite -> {
+        return when (viewModel.currentType) {
+            Constants.MiscType.ROUTE_FAVOURITE -> {
                 toolbar.title = getString(R.string.title_favourite)
                 recycler_view.adapter = favouriteAdapter
                 true
             }
-            R.id.nav_history -> {
+            Constants.MiscType.ROUTE_HISTORY -> {
                 toolbar.title = getString(R.string.title_history)
                 recycler_view.adapter = historyAdapter
                 true
@@ -92,7 +103,7 @@ class FHActivity : NavActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.menu_fh, menu)
         return true
     }
 
@@ -100,9 +111,38 @@ class FHActivity : NavActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
-            R.id.menu_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.menu_add_shortcut -> {
+                val intent = newIntent<FHActivity>(0, Bundle {
+                    putString(Constants.Argument.ARG_MISC_TYPE, viewModel.currentType.toString())
+                })
+
+                when (viewModel.currentType) {
+                    Constants.MiscType.ROUTE_FAVOURITE -> {
+                        Utils.createShortcut(
+                            this,
+                            TAG + "_" + viewModel.currentType.toString(),
+                            R.string.sc_favourite_s,
+                            R.string.sc_favourite_l,
+                            R.drawable.ic_shortcut_favourite,
+                            intent
+                        )
+                    }
+                    Constants.MiscType.ROUTE_HISTORY -> {
+                        Utils.createShortcut(
+                            this,
+                            TAG + "_" + viewModel.currentType.toString(),
+                            R.string.sc_favourite_s,
+                            R.string.sc_favourite_l,
+                            R.drawable.ic_shortcut_history,
+                            intent
+                        )
+                    }
+                }
+                true
+            }
+            R.id.menu_settings -> true
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

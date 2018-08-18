@@ -17,6 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- Application meta-data -->
         <meta-data
             android:name="android.max_aspect"
             android:value="3" />
@@ -30,6 +32,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <!-- Main Activity -->
         <activity
             android:name=".view.follow.FollowActivity"
             android:label="@string/app_name"
@@ -48,36 +51,83 @@
         <activity
             android:name=".view.search.BusSearchActivity"
             android:label="@string/title_bus_search"
-            android:theme="@style/AppTheme.Bus" />
+            android:theme="@style/AppTheme.Bus">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.route.RouteActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.fh.FHActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.map.RoutesMapsActivity"
             android:theme="@style/AppTheme.Transparent" />
         <activity
             android:name=".view.map.StreetViewActivity"
             android:theme="@style/AppTheme.Transparent" />
+
+        <!-- Test -->
         <activity android:name=".view.test.MainActivity" />
         <activity android:name=".view.test.BvActivity" />
-        <activity android:name=".view.test.ShortcutActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity> <!-- Shortcut in widget list -->
+
+        <!-- Shortcut -->
+        <activity android:name=".view.ShortcutsActivity"/>
         <activity-alias
-            android:name=".CreateShortcuts"
-            android:icon="@drawable/ic_shortcut_follow"
-            android:label="@string/sc_follow_l"
-            android:targetActivity=".view.test.ShortcutActivity">
+            android:name=".Shortcut.Bus"
+            android:label="@string/sc_bus_l"
+            android:icon="@drawable/ic_shortcut_bus"
+            android:targetActivity=".view.ShortcutsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
+        <activity-alias
+            android:name=".Shortcut.History"
+            android:label="@string/sc_history_l"
+            android:icon="@drawable/ic_shortcut_history"
+            android:targetActivity=".view.ShortcutsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".Shortcut.Favourite"
+            android:label="@string/sc_favourite_l"
+            android:icon="@drawable/ic_shortcut_favourite"
+            android:targetActivity=".view.ShortcutsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".Shortcut.Follow"
+            android:label="@string/sc_follow_l"
+            android:icon="@drawable/ic_shortcut_follow"
+            android:targetActivity=".view.ShortcutsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
     </application>
 
 </manifest>

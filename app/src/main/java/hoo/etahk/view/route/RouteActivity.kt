@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout
 import android.view.Menu
 import android.view.MenuItem
 import com.mcxiaoke.koi.ext.Bundle
+import com.mcxiaoke.koi.ext.newIntent
 import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -25,6 +26,8 @@ import kotlinx.coroutines.experimental.launch
 class RouteActivity : BaseActivity() {
 
     companion object {
+        private const val TAG = "RouteActivity"
+
         fun getTheme(company: String, typeCode: Long): Int {
             val isOvernight = (typeCode / RouteType.BUS_NIGHT * RouteType.BUS_NIGHT) == RouteType.BUS_NIGHT
             return when {
@@ -154,6 +157,34 @@ class RouteActivity : BaseActivity() {
                     putString(Argument.ARG_ROUTE_NO, viewModel.routeKey?.routeNo)
                     putLong(Argument.ARG_TYPE_CODE, viewModel.routeKey?.typeCode?: RouteType.NONE)
                 })
+                true
+            }
+            R.id.menu_add_shortcut -> {
+                val intent = newIntent<RouteActivity>(0, Bundle {
+                    putString(Constants.Argument.ARG_COMPANY, viewModel.routeKey?.company)
+                    putString(Constants.Argument.ARG_ROUTE_NO, viewModel.routeKey?.routeNo)
+                    putLong(Constants.Argument.ARG_TYPE_CODE, viewModel.routeKey?.typeCode?: RouteType.NONE)
+                    putLong(Constants.Argument.ARG_GOTO_BOUND, -1L)
+                    putLong(Constants.Argument.ARG_GOTO_SEQ, -1L)
+                })
+
+                val theme = getTheme(viewModel.routeKey?.company?: "", viewModel.routeKey?.typeCode?: RouteType.NONE)
+                val shortcutResId = when (theme) {
+                    R.style.AppTheme_Kmb -> R.drawable.ic_shortcut_bus_kmb
+                    R.style.AppTheme_Lwb -> R.drawable.ic_shortcut_bus_lwb
+                    R.style.AppTheme_Nwfb  -> R.drawable.ic_shortcut_bus_nwfb
+                    R.style.AppTheme_Ctb -> R.drawable.ic_shortcut_bus_ctb
+                    R.style.AppTheme_Nlb -> R.drawable.ic_shortcut_bus_nlb
+                    else -> R.drawable.ic_shortcut_bus_night
+                }
+
+                Utils.createShortcut(
+                    this,
+                    TAG + "_" + viewModel.routeKey?.routeStr,
+                    viewModel.routeKey!!.getCompanyName() + " " + viewModel.routeKey!!.routeNo,
+                    shortcutResId,
+                    intent
+                )
                 true
             }
             R.id.menu_settings -> true

@@ -83,6 +83,7 @@ object Constants {
         const val ARG_ACTIONBAR_SUBTITLE = "actionbar_subtitle"
         const val ARG_LATITUDE = "latitude"
         const val ARG_LONGITUDE = "longitude"
+        const val ARG_MISC_TYPE = "misc_type"
     }
 
     object Company {

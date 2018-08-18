@@ -11,6 +11,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_add_shortcut"
+        android:orderInCategory="910"
+        android:title="@string/create_shortcut"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_settings"
         android:orderInCategory="920"
         android:title="@string/settings"
