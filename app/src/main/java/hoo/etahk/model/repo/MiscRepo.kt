@@ -17,8 +17,6 @@ import kotlinx.coroutines.experimental.launch
 
 object MiscRepo {
 
-    private const val TAG = "MiscRepo"
-
     fun getRouteFavourite(): LiveData<PagedList<RouteFavouriteEx>> {
         return LivePagedListBuilder(
             AppHelper.db.miscFavouriteDao().selectDS(),

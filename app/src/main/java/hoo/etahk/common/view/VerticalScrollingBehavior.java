@@ -43,9 +43,9 @@ public abstract class VerticalScrollingBehavior<V extends View> extends Coordina
         int SCROLL_NONE = 0;
     }
 
-    /*
+    /**
        @return Overscroll direction: SCROLL_DIRECTION_UP, CROLL_DIRECTION_DOWN, SCROLL_NONE
-   */
+    */
     @ScrollDirection
     public int getOverScrollDirection() {
         return mOverScrollDirection;
@@ -55,7 +55,6 @@ public abstract class VerticalScrollingBehavior<V extends View> extends Coordina
     /**
      * @return Scroll direction: SCROLL_DIRECTION_UP, SCROLL_DIRECTION_DOWN, SCROLL_NONE
      */
-
     @ScrollDirection
     public int getScrollDirection() {
         return mScrollDirection;

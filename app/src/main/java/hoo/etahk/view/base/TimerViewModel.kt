@@ -9,10 +9,6 @@ import hoo.etahk.common.Utils
 
 open class TimerViewModel : ViewModel() {
 
-    companion object {
-        private const val TAG = "TimerViewModel"
-    }
-
     private val millisLeft = MutableLiveData<Long>()
     private val lastUpdateTime = MutableLiveData<Long>()
     private var timer : CountDownTimer? = null

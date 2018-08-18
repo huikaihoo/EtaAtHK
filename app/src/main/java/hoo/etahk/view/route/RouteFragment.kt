@@ -9,7 +9,6 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -26,11 +25,12 @@ import hoo.etahk.view.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 
-class RouteFragment : BaseFragment() {
+class RouteFragment : BaseFragment(), AnkoLogger {
 
     companion object {
-        private const val TAG = "RouteFragment"
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -179,7 +179,7 @@ class RouteFragment : BaseFragment() {
                 }
             }
 
-            Log.d(TAG, "F=$errorCount U=$updatedCount T=$size")
+            debug("F=$errorCount U=$updatedCount T=$size")
 
             it?.let { routeStopsAdapter.dataSource = it }
 
@@ -194,7 +194,7 @@ class RouteFragment : BaseFragment() {
                         launch (UI){
                             for (i in it?.indices!! ) {
                                 if (it[i].seq == gotoSeq) {
-                                    Log.d(TAG, "GotoSeqUsed ${gotoSeq} ${i}")
+                                    debug("GotoSeqUsed ${gotoSeq} ${i}")
                                     val layoutManager = rootView.recycler_view.layoutManager as LinearLayoutManager
                                     layoutManager.scrollToPositionWithOffset(i, 0)
                                 }

@@ -1,7 +1,6 @@
 package hoo.etahk.model.data
 
 import android.arch.persistence.room.Ignore
-import android.util.Log
 import hoo.etahk.common.Constants.Company.CTB
 import hoo.etahk.common.Constants.Company.DB
 import hoo.etahk.common.Constants.Company.KMB
@@ -20,16 +19,14 @@ import hoo.etahk.common.Constants.RouteType.BUS_KL_NT
 import hoo.etahk.common.Constants.RouteType.BUS_KL_NT_NIGHT
 import hoo.etahk.common.Constants.RouteType.NONE
 import hoo.etahk.common.Utils
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.error
 
 data class RouteKey (
         val company: String,
         val routeNo: String,
         var bound: Long,
-        var variant: Long): Comparable<RouteKey> {
-
-    companion object {
-        private const val TAG = "RouteKey"
-    }
+        var variant: Long): Comparable<RouteKey>, AnkoLogger {
 
     fun getCompanyName(): String {
         return Utils.getStringResourceByName(company.toLowerCase())
@@ -84,7 +81,7 @@ data class RouteKey (
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, e.toString())
+            error("splitRouteNo failed!", e)
         }
     }
 

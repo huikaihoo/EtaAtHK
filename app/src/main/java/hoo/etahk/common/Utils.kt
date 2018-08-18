@@ -120,8 +120,7 @@ object Utils {
         while (fa - fb > fd || fa - fb < -1 * fd) {
             fa = fb
             fb = ((delta_N + M0) / m0 / a + A2 * Math.sin(2 * fa) - A4 * Math.sin(4 * fa)) / A0
-            k = k + 1
-            if (k > 1000) {
+            if (++k > 1000) {
                 Log.d("hk1980GridToLatLng", "The equation does not converge. Computation Stopped.")
                 fb = 0.0
                 break

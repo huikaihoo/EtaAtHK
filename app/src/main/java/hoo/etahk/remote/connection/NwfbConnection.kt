@@ -1,7 +1,6 @@
 package hoo.etahk.remote.connection
 
 import android.util.Base64
-import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.mcxiaoke.koi.HASH
 import hoo.etahk.R
@@ -25,6 +24,9 @@ import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.ResponseBody
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
+import org.jetbrains.anko.error
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,9 +35,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-object NwfbConnection: BaseConnection {
-
-    private const val TAG = "NwfbConnection"
+object NwfbConnection: BaseConnection, AnkoLogger {
 
     /***************
      * Shared
@@ -103,7 +103,7 @@ object NwfbConnection: BaseConnection {
         if (response.isSuccessful) {
             val separator = Separator("\\|\\*\\|<br>".toRegex(), "\\|\\|".toRegex(), Constants.Route.NWFB_ROUTE_RECORD_SIZE)
 
-            Log.d(TAG, "onResponse ${separator.columnSize}")
+            debug("onResponse ${separator.columnSize}")
             separator.original = response.body()?.string() ?: ""
             separator.result.forEach {
                 val route = toRoute(it, t)
@@ -116,7 +116,7 @@ object NwfbConnection: BaseConnection {
                 }
             }
 
-            Log.d(TAG, "onResponse ${separator.result.size}")
+            debug("onResponse ${separator.result.size}")
         }
 
         return result
@@ -182,7 +182,7 @@ object NwfbConnection: BaseConnection {
                             launch(CommonPool) {
                                 val t = Utils.getCurrentTimestamp()
                                 val responseStr = response.body()?.string()
-                                //Log.d(TAG, responseStr)
+                                //debug(responseStr)
 
                                 if (!responseStr.isNullOrBlank()) {
                                     val routes = mutableListOf<Route>()
@@ -193,10 +193,10 @@ object NwfbConnection: BaseConnection {
                                         if (records.size >= Constants.Route.NWFB_VARIANT_RECORD_SIZE) {
                                             routes.add(toChildRoute(parentRoute, (index + 1).toLong(), records, t))
                                         }
-                                        //Log.d(TAG, it)
+                                        //debug(it)
                                     }
 
-                                    //Log.d(TAG, AppHelper.gson.toJson(routes))
+                                    //debug(AppHelper.gson.toJson(routes))
                                     AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
                                 }
                             }
@@ -245,7 +245,7 @@ object NwfbConnection: BaseConnection {
                         launch(CommonPool) {
                             val t = Utils.getCurrentTimestamp()
                             val responseStr = response.body()?.string()
-                            //Log.d(TAG, responseStr)
+                            //debug(responseStr)
 
                             if (!responseStr.isNullOrBlank()) {
                                 val paths = mutableListOf<Path>()
@@ -267,7 +267,7 @@ object NwfbConnection: BaseConnection {
                 })
 
         val info = "1|*|${route.routeKey.company}||${route.info.rdv}||${route.info.startSeq}||${route.info.endSeq}"
-        //Log.d(TAG, "info=[$info]")
+        //debug("info=[$info]")
 
         ConnectionHelper.nwfbStop.getStops(
                 info = info,
@@ -279,7 +279,7 @@ object NwfbConnection: BaseConnection {
                         launch(CommonPool) {
                             val t = Utils.getCurrentTimestamp()
                             val responseStr = response.body()?.string()
-                            //Log.d(TAG, responseStr)
+                            //debug(responseStr)
 
                             if (!responseStr.isNullOrBlank()) {
                                 val stops = mutableListOf<Stop>()
@@ -290,10 +290,10 @@ object NwfbConnection: BaseConnection {
                                     if (records.size >= Constants.Stop.NWFB_STOP_RECORD_SIZE) {
                                         stops.add(toStop(route, records, t))
                                     }
-                                    //Log.d(TAG, it)
+                                    //debug(it)
                                 }
 
-                                //Log.d(TAG, AppHelper.gson.toJson(stops))
+                                //debug(AppHelper.gson.toJson(stops))
                                 AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
                                 if (needEtaUpdate)
                                     updateEta(stops)
@@ -363,7 +363,7 @@ object NwfbConnection: BaseConnection {
 
                             if (response.isSuccessful) {
                                 var responseStr = response.body()?.string()
-                                //Log.d(TAG, responseStr)
+                                //debug(responseStr)
 
                                 val etaResults = mutableListOf<EtaResult>()
                                 val msg = getInvalidMsg(responseStr ?: "")
@@ -380,7 +380,7 @@ object NwfbConnection: BaseConnection {
                                         if(records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
                                             etaResults.add(toEtaResult(records))
                                         }
-                                        //Log.d(TAG, it)
+                                        //debug(it)
                                     }
                                 }
 
@@ -388,11 +388,11 @@ object NwfbConnection: BaseConnection {
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
                                     stop.etaUpdateTime = t
-                                    //Log.d(TAG, AppHelper.gson.toJson(stop.etaResults))
+                                    //debug(AppHelper.gson.toJson(stop.etaResults))
                                 }
                             }
                         } catch (e: Exception) {
-                            Log.e(TAG, e.toString())
+                            error("updateEta::stops.forEach failed!", e)
                             stop.etaStatus = Constants.EtaStatus.NETWORK_ERROR
                         }
                     }
@@ -402,7 +402,7 @@ object NwfbConnection: BaseConnection {
 
             AppHelper.db.stopDao().updateOnReplace(stops)
         } catch (e: Exception) {
-            Log.e(TAG, e.toString())
+            error("updateEta failed!", e)
         }
     }
 
@@ -430,7 +430,7 @@ object NwfbConnection: BaseConnection {
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>){
                         val t = Utils.getCurrentTimestamp()
                         var responseStr = response.body()?.string()
-                        //Log.d(TAG, responseStr)
+                        //debug(responseStr)
 
                         val etaResults = mutableListOf<EtaResult>()
                         val msg = getInvalidMsg(responseStr ?: "")
@@ -447,7 +447,7 @@ object NwfbConnection: BaseConnection {
                                 if(records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
                                     etaResults.add(toEtaResult(records))
                                 }
-                                //Log.d(TAG, it)
+                                //debug(it)
                             }
                         }
 
@@ -455,7 +455,7 @@ object NwfbConnection: BaseConnection {
                             stop.etaStatus = Constants.EtaStatus.SUCCESS
                             stop.etaResults = etaResults
                             stop.etaUpdateTime = t
-                            //Log.d(TAG, AppHelper.gson.toJson(stop.etaResults))
+                            //debug(AppHelper.gson.toJson(stop.etaResults))
                         } else {
                             stop.etaStatus = Constants.EtaStatus.FAILED
                             stop.etaUpdateTime = t

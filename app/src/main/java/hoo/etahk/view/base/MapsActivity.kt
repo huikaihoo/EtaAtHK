@@ -5,18 +5,15 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Permission.PERMISSIONS_REQUEST_LOCATION
 import kotlinx.android.synthetic.main.activity_maps.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.error
 
-abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback {
-
-    companion object {
-        private const val TAG = "MapsActivity"
-    }
+abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback, AnkoLogger {
 
     protected var googleMap: GoogleMap? = null
 
@@ -59,7 +56,7 @@ abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback {
             try {
                 this.googleMap!!.isMyLocationEnabled = true
             } catch (e: SecurityException) {
-                Log.e(TAG, "setMyLocationEnabled failed!")
+                error("onMapReady::setMyLocationEnabled failed!", e)
             }
         }
     }
@@ -73,7 +70,7 @@ abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback {
                     try {
                         this.googleMap?.isMyLocationEnabled = true
                     } catch (e: SecurityException) {
-                        Log.e(TAG, "setMyLocationEnabled failed!")
+                        error("onRequestPermissionsResult::setMyLocationEnabled failed!", e)
                     }
                 } else {
                     // permission denied

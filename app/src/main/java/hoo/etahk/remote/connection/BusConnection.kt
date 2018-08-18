@@ -1,6 +1,5 @@
 package hoo.etahk.remote.connection
 
-import android.util.Log
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
@@ -12,10 +11,11 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
+import org.jetbrains.anko.error
 
-object BusConnection : BaseConnection{
-
-    private const val TAG = "BusConnection"
+object BusConnection : BaseConnection, AnkoLogger {
 
     override fun getEtaRoutes(company: String): List<String>? {
         return null
@@ -38,26 +38,26 @@ object BusConnection : BaseConnection{
             runBlocking {
                 val jobs = arrayListOf<Job>()
 
-                parentRoutesResult.keys.forEach({ company ->
+                parentRoutesResult.keys.forEach { company ->
                     jobs += launch(CommonPool) {
                         parentRoutesResult[company] = ConnectionHelper.getParentRoutes(company)
                     }
-                })
+                }
 
-                etaRoutesResult.keys.forEach({ company ->
+                etaRoutesResult.keys.forEach { company ->
                     jobs += launch(CommonPool) {
                         etaRoutesResult[company] = ConnectionHelper.getEtaRoutes(company)
                     }
-                })
+                }
 
                 jobs.forEach { it.join() }
             }
         } catch (e: Exception) {
-            Log.e(TAG, e.toString())
+            error("getParentRoutes failed!", e)
         }
 
-        Log.d(TAG, "onResponse ${parentRoutesResult[Company.GOV]?.size}")
-        Log.d(TAG, "onResponse ${parentRoutesResult[Company.NWFB]?.size}")
+        debug("onResponse ${parentRoutesResult[Company.GOV]?.size}")
+        debug("onResponse ${parentRoutesResult[Company.NWFB]?.size}")
 
         parentRoutesResult.values.forEach { if (it == null || it.isEmpty()) return null }
         //etaRoutesResult.values.forEach { if (it == null) return null }

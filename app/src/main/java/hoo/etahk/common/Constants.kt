@@ -2,8 +2,6 @@ package hoo.etahk.common
 
 object Constants {
 
-    const val PACKAGE_NAME = "hoo.etahk"
-
     enum class EtaStatus {
         NONE,
         SUCCESS,

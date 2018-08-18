@@ -9,11 +9,6 @@ import hoo.etahk.model.relation.RouteHistoryEx
 import hoo.etahk.model.repo.MiscRepo
 
 class FHViewModel : ViewModel() {
-
-    companion object {
-        private const val TAG = "FHViewModel"
-    }
-
     var currentType: MiscType = MiscType.ROUTE_FAVOURITE
     val favouritePagedList: LiveData<PagedList<RouteFavouriteEx>>? = MiscRepo.getRouteFavourite()
     val historyPagedList: LiveData<PagedList<RouteHistoryEx>>? = MiscRepo.getRouteHistory()

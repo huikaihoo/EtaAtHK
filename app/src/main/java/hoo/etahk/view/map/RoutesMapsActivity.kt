@@ -20,20 +20,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import com.mcxiaoke.koi.ext.Bundle
-import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Argument
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.relation.RouteAndStops
 import hoo.etahk.view.base.MapsActivity
+import org.jetbrains.anko.startActivity
 
 
 class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
-
-    companion object {
-        private const val TAG = "RoutesMapsActivity"
-    }
 
     private lateinit var viewModel: RoutesMapViewModel
     private lateinit var spinnerAdapter: RoutesSpinnerAdapter
@@ -59,18 +54,18 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         super.onMapReady(googleMap)
 
         // Set up OnInfoWindowClickListener
-        this.googleMap!!.setOnInfoWindowClickListener(GoogleMap.OnInfoWindowClickListener { marker ->
+        this.googleMap!!.setOnInfoWindowClickListener { marker ->
             val textView = spinner?.selectedView?.findViewById(R.id.title) as TextView?
             val subtitle = viewModel.routeKey!!.getCompanyName() + " " +
                     viewModel.routeKey!!.routeNo + if (textView != null) " - " + textView.text else ""
 
-            startActivity<StreetViewActivity>(Bundle {
-                putString(Argument.ARG_ACTIONBAR_TITLE, marker.title)
-                putString(Argument.ARG_ACTIONBAR_SUBTITLE, subtitle)
-                putDouble(Argument.ARG_LATITUDE, marker.position.latitude)
-                putDouble(Argument.ARG_LONGITUDE, marker.position.longitude)
-            })
-        })
+            startActivity<StreetViewActivity>(
+                Argument.ARG_ACTIONBAR_TITLE to marker.title,
+                Argument.ARG_ACTIONBAR_SUBTITLE to subtitle,
+                Argument.ARG_LATITUDE to marker.position.latitude,
+                Argument.ARG_LONGITUDE to marker.position.longitude
+            )
+        }
         subscribeUiChanges()
     }
 
@@ -139,14 +134,18 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
                 val title = (i + 1).toString() + ". " + stop.name.value
                 val markerColor = when(i) {
                     0 -> BitmapDescriptorFactory.HUE_GREEN
-                    stops.size - 1 -> BitmapDescriptorFactory.HUE_AZURE
-                    else -> BitmapDescriptorFactory.HUE_RED
+                    stops.size - 1 -> BitmapDescriptorFactory.HUE_RED
+                    else -> BitmapDescriptorFactory.HUE_AZURE
                 }
 
                 latLngBoundsBuilder.include(stop.location)
 
                 val markerOptions = MarkerOptions().position(stop.location).title(title).icon(BitmapDescriptorFactory.defaultMarker(markerColor))
-                this.googleMap?.addMarker(markerOptions)
+                val marker = this.googleMap?.addMarker(markerOptions)
+
+                if (i == 0) {
+                    marker?.showInfoWindow()
+                }
             }
 
             if (withAnimation)

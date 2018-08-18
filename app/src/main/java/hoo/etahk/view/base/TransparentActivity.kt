@@ -5,19 +5,16 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.DisplayMetrics
-import android.util.Log
 import android.util.TypedValue
 import android.view.MenuItem
 import com.mcxiaoke.koi.ext.find
 import com.mcxiaoke.koi.utils.nougatOrNewer
 import hoo.etahk.R
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 
-abstract class TransparentActivity : AppCompatActivity() {
-
-    companion object {
-        private const val TAG = "TransparentActivity"
-    }
-
+abstract class TransparentActivity : AppCompatActivity(), AnkoLogger {
+    
     /**
      * @return Pending Top of GoogleMap UI component
      */
@@ -105,7 +102,7 @@ abstract class TransparentActivity : AppCompatActivity() {
             val displayHeight = displayMetrics.heightPixels + statusBarHeight + navigationBarHeight
             val displayWidth = displayMetrics.widthPixels
 
-            Log.d(TAG, "$realHeight $realWidth $displayHeight $displayWidth")
+            debug("$realHeight $realWidth $displayHeight $displayWidth")
             return (displayHeight >= realHeight) || (displayWidth >= realWidth)
         }
 
@@ -113,15 +110,10 @@ abstract class TransparentActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-        when (id) {
-            android.R.id.home -> {
-                onBackPressed()
-                return true
-            }
+        return when (item.itemId) {
+            R.id.menu_settings -> true
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun isInMultiWindowMode(): Boolean {

@@ -2,8 +2,6 @@ package hoo.etahk.view.fh
 
 import android.annotation.SuppressLint
 import android.view.View
-import com.mcxiaoke.koi.ext.Bundle
-import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
@@ -15,6 +13,7 @@ import hoo.etahk.view.base.BasePagedAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.item_route.view.*
+import org.jetbrains.anko.startActivity
 
 class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistoryDiffCallback()) {
 
@@ -52,13 +51,13 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
         }
 
         private fun startRouteActivity(context: FHActivity?, routeKey: RouteKey){
-            context?.startActivity<RouteActivity>(Bundle {
-                putString(Constants.Argument.ARG_COMPANY, routeKey.company)
-                putString(Constants.Argument.ARG_ROUTE_NO, routeKey.routeNo)
-                putLong(Constants.Argument.ARG_TYPE_CODE, routeKey.typeCode)
-                putLong(Constants.Argument.ARG_GOTO_BOUND, -1L)
-                putLong(Constants.Argument.ARG_GOTO_SEQ, -1L)
-            })
+            context?.startActivity<RouteActivity>(
+                Constants.Argument.ARG_COMPANY to routeKey.company,
+                Constants.Argument.ARG_ROUTE_NO to routeKey.routeNo,
+                Constants.Argument.ARG_TYPE_CODE to routeKey.typeCode,
+                Constants.Argument.ARG_GOTO_BOUND to -1L,
+                Constants.Argument.ARG_GOTO_SEQ to -1L
+            )
         }
     }
 }

@@ -20,7 +20,7 @@ abstract class DiffAdapter<C, D> : BaseAdapter<C, D>() {
             }
         }
 
-    open protected fun dispatchUpdates(diffResult: DiffUtil.DiffResult) {
+    protected open fun dispatchUpdates(diffResult: DiffUtil.DiffResult) {
         diffResult.dispatchUpdatesTo(this)
     }
 

@@ -6,10 +6,6 @@ import hoo.etahk.model.repo.RoutesRepo
 
 class NavViewModel : ViewModel() {
 
-    companion object {
-        private const val TAG = "NavViewModel"
-    }
-
     private var lastUpdate: LiveData<Long>? = null
 
     fun getLastUpdate(): LiveData<Long> {

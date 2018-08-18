@@ -2,11 +2,9 @@ package hoo.etahk.view.search
 
 import android.annotation.SuppressLint
 import android.view.View
-import com.mcxiaoke.koi.ext.Bundle
-import com.mcxiaoke.koi.ext.startActivity
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import hoo.etahk.R
-import hoo.etahk.common.Constants.Argument
+import hoo.etahk.common.Constants
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.BaseDiffCallback
@@ -16,6 +14,7 @@ import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.base.FilterDiffAdapter
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.item_route.view.*
+import org.jetbrains.anko.startActivity
 
 class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
 
@@ -50,13 +49,13 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
         }
 
         private fun startRouteActivity(context: BusSearchFragment?, routeKey: RouteKey){
-            context?.activity?.startActivity<RouteActivity>(Bundle {
-                putString(Argument.ARG_COMPANY, routeKey.company)
-                putString(Argument.ARG_ROUTE_NO, routeKey.routeNo)
-                putLong(Argument.ARG_TYPE_CODE, routeKey.typeCode)
-                putLong(Argument.ARG_GOTO_BOUND, -1L)
-                putLong(Argument.ARG_GOTO_SEQ, -1L)
-            })
+            context?.activity?.startActivity<RouteActivity>(
+                Constants.Argument.ARG_COMPANY to routeKey.company,
+                Constants.Argument.ARG_ROUTE_NO to routeKey.routeNo,
+                Constants.Argument.ARG_TYPE_CODE to routeKey.typeCode,
+                Constants.Argument.ARG_GOTO_BOUND to -1L,
+                Constants.Argument.ARG_GOTO_SEQ to -1L
+            )
         }
     }
 

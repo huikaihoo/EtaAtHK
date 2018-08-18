@@ -1,6 +1,5 @@
 package hoo.etahk.remote.connection
 
-import android.util.Log
 import com.mcxiaoke.koi.HASH
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
@@ -14,14 +13,14 @@ import hoo.etahk.model.json.StringLang
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import okhttp3.ResponseBody
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-object GovConnection: BaseConnection{
-
-    private const val TAG = "GovConnection"
+object GovConnection: BaseConnection, AnkoLogger {
 
     /***************
      * Shared
@@ -56,7 +55,7 @@ object GovConnection: BaseConnection{
         if (response.isSuccessful) {
             val separator = Separator("\\|\\*\\|".toRegex(), "\\|\\|".toRegex(), Constants.Route.GOV_ROUTE_RECORD_SIZE)
 
-            //Log.d(TAG, "onResponse ${separator.columnSize}")
+            //debug("onResponse ${separator.columnSize}")
             separator.original = response.body()?.string() ?: ""
             separator.result.forEach {
                 toRoutes(it, t).forEach { route ->
@@ -71,7 +70,7 @@ object GovConnection: BaseConnection{
                 }
                 //result.putAll(routes.associate{ Pair(it.routeKey.company + it.routeKey.routeNo, it) })
             }
-            Log.d(TAG, "onResponse ${separator.result.size}")
+            debug("onResponse ${separator.result.size}")
 
             for((key, routes) in temp) {
                 if (routes.size == 1) {
@@ -136,7 +135,7 @@ object GovConnection: BaseConnection{
     }
 
     fun getParentRoutesOld(company: String): HashMap<String, Route>? {
-        Log.d(TAG, "Start")
+        debug("Start")
         ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode())
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
@@ -146,12 +145,12 @@ object GovConnection: BaseConnection{
                             val routes = mutableListOf<Route>()
                             val separator = Separator("\\|\\*\\|".toRegex(), "\\|\\|".toRegex(), Constants.Route.GOV_ROUTE_RECORD_SIZE)
 
-                            //Log.d(TAG, "onResponse ${separator.columnSize}")
+                            //debug("onResponse ${separator.columnSize}")
                             separator.original = response.body()?.string() ?: ""
                             separator.result.forEach {
                                 routes.addAll(toRoutes(it, t))
                             }
-                            Log.d(TAG, "onResponse ${separator.result.size}")
+                            debug("onResponse ${separator.result.size}")
 
                             if (routes.size > 0) {
                                 routes.sort()

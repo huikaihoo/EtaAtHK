@@ -10,14 +10,11 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.mcxiaoke.koi.ext.Bundle
-import com.mcxiaoke.koi.ext.startActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
@@ -33,11 +30,13 @@ import kotlinx.android.synthetic.main.fragment_recycler.view.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
+import org.jetbrains.anko.startActivity
 
-class FollowFragment : BaseFragment() {
+class FollowFragment : BaseFragment(), AnkoLogger {
 
     companion object {
-        private const val TAG = "FollowFragment"
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -140,13 +139,13 @@ class FollowFragment : BaseFragment() {
                 when (menuItem.itemId) {
                     R.id.popup_view -> {
                         item.stop?.let {
-                            activity?.startActivity<RouteActivity>(Bundle {
-                                putString(Constants.Argument.ARG_COMPANY, it.routeKey.company)
-                                putString(Constants.Argument.ARG_ROUTE_NO, it.routeKey.routeNo)
-                                putLong(Constants.Argument.ARG_TYPE_CODE, it.routeKey.typeCode)
-                                putLong(Constants.Argument.ARG_GOTO_BOUND, it.routeKey.bound)
-                                putLong(Constants.Argument.ARG_GOTO_SEQ, it.seq)
-                            })
+                            activity?.startActivity<RouteActivity>(
+                                Constants.Argument.ARG_COMPANY to it.routeKey.company,
+                                Constants.Argument.ARG_ROUTE_NO to it.routeKey.routeNo,
+                                Constants.Argument.ARG_TYPE_CODE to it.routeKey.typeCode,
+                                Constants.Argument.ARG_GOTO_BOUND to it.routeKey.bound,
+                                Constants.Argument.ARG_GOTO_SEQ to it.seq
+                            )
                         }
                     }
                     R.id.popup_move -> {
@@ -170,15 +169,15 @@ class FollowFragment : BaseFragment() {
                         lateinit var positiveButton: Button
                         val dialog = AlertDialog.Builder(activity!!)
                             .setTitle(R.string.title_select_groups_to_move)
-                            .setSingleChoiceItems(displayList, selectedIndex, { dialog, which ->
+                            .setSingleChoiceItems(displayList, selectedIndex) { dialog, which ->
                                 selectedIndex = which
                                 positiveButton.isEnabled = (selectedIndex >= 0)
-                            })
-                            .setPositiveButton(android.R.string.ok, { dialog, which ->
+                            }
+                            .setPositiveButton(android.R.string.ok) { dialog, which ->
                                 item.item.groupId = groupList[selectedIndex].Id!!
                                 fragmentViewModel.updateFollowItems(listOf(item.item), true)
                                 Snackbar.make(view, R.string.msg_move_follow_stop_success, Snackbar.LENGTH_SHORT).show()
-                            })
+                            }
                             .setNegativeButton(android.R.string.cancel, null)
                             .show()
 
@@ -189,10 +188,10 @@ class FollowFragment : BaseFragment() {
                         AlertDialog.Builder(activity!!)
                             .setTitle(R.string.title_conform_delete_item)
                             .setMessage(R.string.content_conform_delete)
-                            .setPositiveButton(android.R.string.ok, { dialog, which ->
+                            .setPositiveButton(android.R.string.ok) { dialog, which ->
                                 fragmentViewModel.deleteFollowItem(item.item)
                                 Snackbar.make(view, R.string.msg_one_item_removed, Snackbar.LENGTH_SHORT).show()
-                            })
+                            }
                             .setNegativeButton(android.R.string.cancel, null)
                             .show()
                     }
@@ -211,10 +210,10 @@ class FollowFragment : BaseFragment() {
         viewModel.getSelectedLocation().observe(this, Observer<LocationAndGroups> {
             it?.let {
                 val position = arguments!!.getInt(ARG_POSITION)
-                Log.d(TAG, "subscribeUiChanges $position")
+                debug("subscribeUiChanges $position")
                 if (position < it.groups.size && it.groups[position].Id?: 0L > 0L ) {
                     if (fragmentViewModel.groupId != it.groups[position].Id) {
-                        //Log.d(TAG, "subscribeUiChanges XX ${it.groups[position].Id}")
+                        //debug("subscribeUiChanges XX ${it.groups[position].Id}")
                         fragmentViewModel.removeObservers(this)
                         fragmentViewModel.groupId = it.groups[position].Id
                         subscribeItemsChanges()
@@ -244,7 +243,7 @@ class FollowFragment : BaseFragment() {
                     }
                 }
 
-                Log.d(TAG, "F=$errorCount U=$updatedCount T=$size")
+                debug("F=$errorCount U=$updatedCount T=$size")
 
                 it?.let { followItemsAdapter.dataSource = it }
 
@@ -256,7 +255,7 @@ class FollowFragment : BaseFragment() {
                     rootView.refresh_layout.isRefreshing = false
 
                     if (fragmentViewModel.isRefreshingAll) {
-                        Log.d(TAG, "Start timer")
+                        debug("Start timer")
                         fragmentViewModel.isRefreshingAll = false
                         viewModel.startTimer()
                     }

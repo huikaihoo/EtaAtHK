@@ -1,6 +1,5 @@
 package hoo.etahk.common.view;
 
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;

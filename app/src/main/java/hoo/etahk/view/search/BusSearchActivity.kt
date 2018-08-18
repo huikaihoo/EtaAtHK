@@ -20,13 +20,11 @@ import hoo.etahk.common.tools.ThemeColor
 import hoo.etahk.view.base.NavActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.activity_search_nav.*
+import org.jetbrains.anko.AnkoLogger
 
-class BusSearchActivity : NavActivity() {
+class BusSearchActivity : NavActivity(), AnkoLogger {
 
     companion object {
-        private const val TAG = "BusSearchActivity"
-        private const val ARG_SELECTED_TAB = "selected_tab"
-
         val availableIndices = listOf(0, 1, 2, 3, 4, 5)
 
         val searchList = listOf(
@@ -213,7 +211,7 @@ class BusSearchActivity : NavActivity() {
             R.id.menu_add_shortcut -> {
                 Utils.createShortcut(
                     this,
-                    TAG,
+                    loggerTag,
                     R.string.sc_bus_s,
                     R.string.sc_bus_l,
                     R.drawable.ic_shortcut_bus,

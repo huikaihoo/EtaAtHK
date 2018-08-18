@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -25,13 +24,12 @@ import kotlinx.android.synthetic.main.activity_follow_nav.*
 import kotlinx.android.synthetic.main.dialog_input.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 
 
-class FollowActivity : NavActivity() {
+class FollowActivity : NavActivity(), AnkoLogger {
 
-    companion object {
-        private const val TAG = "FollowActivity"
-    }
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
      * fragments for each of the sections. We use a
@@ -134,7 +132,7 @@ class FollowActivity : NavActivity() {
                 super.onTabSelected(tab)
                 if (tabs.tabCount > 0)
                     locationAndGroups.selectedGroupPosition = tab.position
-                Log.d(TAG, "S ${locationAndGroups.location.Id} ${locationAndGroups.selectedGroupPosition}")
+                debug("S ${locationAndGroups.location.Id} ${locationAndGroups.selectedGroupPosition}")
             }
         }
         pagerAdapter.dataSource = locationAndGroups
@@ -255,7 +253,7 @@ class FollowActivity : NavActivity() {
             R.id.menu_add_shortcut -> {
                 Utils.createShortcut(
                     this,
-                    TAG,
+                    loggerTag,
                     R.string.sc_follow_s,
                     R.string.sc_follow_l,
                     R.drawable.ic_shortcut_follow,

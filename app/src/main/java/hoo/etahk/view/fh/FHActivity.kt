@@ -19,12 +19,9 @@ import hoo.etahk.model.relation.RouteHistoryEx
 import hoo.etahk.view.base.NavActivity
 import kotlinx.android.synthetic.main.activity_fh.*
 import kotlinx.android.synthetic.main.activity_fh_nav.*
+import org.jetbrains.anko.AnkoLogger
 
-class FHActivity : NavActivity() {
-
-    companion object {
-        private const val TAG = "FHActivity"
-    }
+class FHActivity : NavActivity(), AnkoLogger {
 
     private var favouriteAdapter: FavouriteAdapter = FavouriteAdapter()
     private var historyAdapter: HistoryAdapter = HistoryAdapter()
@@ -86,12 +83,12 @@ class FHActivity : NavActivity() {
 
     private fun subscribeUiChanges() {
         viewModel.favouritePagedList?.observe(this, Observer<PagedList<RouteFavouriteEx>> {
-            //Log.d(TAG, it.toString())
+            //debug(it.toString())
             favouriteAdapter.submitList(it)
         })
 
         viewModel.historyPagedList?.observe(this, Observer<PagedList<RouteHistoryEx>> {
-            //Log.d(TAG, it.toString())
+            //debug(it.toString())
             historyAdapter.submitList(it)
         })
     }
@@ -121,7 +118,7 @@ class FHActivity : NavActivity() {
                     Constants.MiscType.ROUTE_FAVOURITE -> {
                         Utils.createShortcut(
                             this,
-                            TAG + "_" + viewModel.currentType.toString(),
+                            loggerTag + "_" + viewModel.currentType.toString(),
                             R.string.sc_favourite_s,
                             R.string.sc_favourite_l,
                             R.drawable.ic_shortcut_favourite,
@@ -131,7 +128,7 @@ class FHActivity : NavActivity() {
                     Constants.MiscType.ROUTE_HISTORY -> {
                         Utils.createShortcut(
                             this,
-                            TAG + "_" + viewModel.currentType.toString(),
+                            loggerTag + "_" + viewModel.currentType.toString(),
                             R.string.sc_favourite_s,
                             R.string.sc_favourite_l,
                             R.drawable.ic_shortcut_history,

@@ -1,7 +1,6 @@
 package hoo.etahk.model.repo
 
 import android.arch.lifecycle.LiveData
-import android.util.Log
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
@@ -11,10 +10,10 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.RouteAndStops
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 
-object StopsRepo {
-
-    private const val TAG = "StopsRepo"
+object StopsRepo: AnkoLogger {
 
     // RouteStops
     fun getRouteStops(company: String, routeNo: String): LiveData<List<RouteAndStops>> {
@@ -41,7 +40,7 @@ object StopsRepo {
                     route.routeKey.routeNo,
                     route.routeKey.bound,
                     route.routeKey.variant) < Utils.getValidUpdateTimestamp()) {
-                Log.d(TAG, "updateStops ${route.routeKey.company} ${route.routeKey.routeNo} ${route.routeKey.bound} ${route.routeKey.variant}")
+                debug("updateStops ${route.routeKey.company} ${route.routeKey.routeNo} ${route.routeKey.bound} ${route.routeKey.variant}")
                 ConnectionHelper.getStops(route, needEtaUpdate)
             } else if (needEtaUpdate) {
                 updateEta(route)
