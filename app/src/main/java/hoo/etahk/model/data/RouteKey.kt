@@ -19,14 +19,13 @@ import hoo.etahk.common.Constants.RouteType.BUS_KL_NT
 import hoo.etahk.common.Constants.RouteType.BUS_KL_NT_NIGHT
 import hoo.etahk.common.Constants.RouteType.NONE
 import hoo.etahk.common.Utils
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.error
+import hoo.etahk.common.extensions.loge
 
 data class RouteKey (
         val company: String,
         val routeNo: String,
         var bound: Long,
-        var variant: Long): Comparable<RouteKey>, AnkoLogger {
+        var variant: Long): Comparable<RouteKey> {
 
     fun getCompanyName(): String {
         return Utils.getStringResourceByName(company.toLowerCase())
@@ -81,7 +80,7 @@ data class RouteKey (
                 }
             }
         } catch (e: Exception) {
-            error("splitRouteNo failed!", e)
+            loge("splitRouteNo failed!", e)
         }
     }
 

@@ -8,6 +8,8 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Eta
 import hoo.etahk.common.Utils
 import hoo.etahk.common.Utils.timeStrToMsg
+import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.Separator
@@ -24,9 +26,6 @@ import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.ResponseBody
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
-import org.jetbrains.anko.error
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,7 +34,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-object NwfbConnection: BaseConnection, AnkoLogger {
+object NwfbConnection: BaseConnection {
 
     /***************
      * Shared
@@ -103,7 +102,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
         if (response.isSuccessful) {
             val separator = Separator("\\|\\*\\|<br>".toRegex(), "\\|\\|".toRegex(), Constants.Route.NWFB_ROUTE_RECORD_SIZE)
 
-            debug("onResponse ${separator.columnSize}")
+            logd("onResponse ${separator.columnSize}")
             separator.original = response.body()?.string() ?: ""
             separator.result.forEach {
                 val route = toRoute(it, t)
@@ -116,7 +115,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                 }
             }
 
-            debug("onResponse ${separator.result.size}")
+            logd("onResponse ${separator.result.size}")
         }
 
         return result
@@ -182,7 +181,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                             launch(CommonPool) {
                                 val t = Utils.getCurrentTimestamp()
                                 val responseStr = response.body()?.string()
-                                //debug(responseStr)
+                                //logd(responseStr)
 
                                 if (!responseStr.isNullOrBlank()) {
                                     val routes = mutableListOf<Route>()
@@ -193,10 +192,10 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                                         if (records.size >= Constants.Route.NWFB_VARIANT_RECORD_SIZE) {
                                             routes.add(toChildRoute(parentRoute, (index + 1).toLong(), records, t))
                                         }
-                                        //debug(it)
+                                        //logd(it)
                                     }
 
-                                    //debug(AppHelper.gson.toJson(routes))
+                                    //logd(AppHelper.gson.toJson(routes))
                                     AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
                                 }
                             }
@@ -245,7 +244,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                         launch(CommonPool) {
                             val t = Utils.getCurrentTimestamp()
                             val responseStr = response.body()?.string()
-                            //debug(responseStr)
+                            //logd(responseStr)
 
                             if (!responseStr.isNullOrBlank()) {
                                 val paths = mutableListOf<Path>()
@@ -267,7 +266,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                 })
 
         val info = "1|*|${route.routeKey.company}||${route.info.rdv}||${route.info.startSeq}||${route.info.endSeq}"
-        //debug("info=[$info]")
+        //logd("info=[$info]")
 
         ConnectionHelper.nwfbStop.getStops(
                 info = info,
@@ -279,7 +278,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                         launch(CommonPool) {
                             val t = Utils.getCurrentTimestamp()
                             val responseStr = response.body()?.string()
-                            //debug(responseStr)
+                            //logd(responseStr)
 
                             if (!responseStr.isNullOrBlank()) {
                                 val stops = mutableListOf<Stop>()
@@ -290,10 +289,10 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                                     if (records.size >= Constants.Stop.NWFB_STOP_RECORD_SIZE) {
                                         stops.add(toStop(route, records, t))
                                     }
-                                    //debug(it)
+                                    //logd(it)
                                 }
 
-                                //debug(AppHelper.gson.toJson(stops))
+                                //logd(AppHelper.gson.toJson(stops))
                                 AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
                                 if (needEtaUpdate)
                                     updateEta(stops)
@@ -363,7 +362,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
 
                             if (response.isSuccessful) {
                                 var responseStr = response.body()?.string()
-                                //debug(responseStr)
+                                //logd(responseStr)
 
                                 val etaResults = mutableListOf<EtaResult>()
                                 val msg = getInvalidMsg(responseStr ?: "")
@@ -380,7 +379,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                                         if(records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
                                             etaResults.add(toEtaResult(records))
                                         }
-                                        //debug(it)
+                                        //logd(it)
                                     }
                                 }
 
@@ -388,11 +387,11 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
                                     stop.etaUpdateTime = t
-                                    //debug(AppHelper.gson.toJson(stop.etaResults))
+                                    //logd(AppHelper.gson.toJson(stop.etaResults))
                                 }
                             }
                         } catch (e: Exception) {
-                            error("updateEta::stops.forEach failed!", e)
+                            loge("updateEta::stops.forEach failed!", e)
                             stop.etaStatus = Constants.EtaStatus.NETWORK_ERROR
                         }
                     }
@@ -402,7 +401,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
 
             AppHelper.db.stopDao().updateOnReplace(stops)
         } catch (e: Exception) {
-            error("updateEta failed!", e)
+            loge("updateEta failed!", e)
         }
     }
 
@@ -430,7 +429,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>){
                         val t = Utils.getCurrentTimestamp()
                         var responseStr = response.body()?.string()
-                        //debug(responseStr)
+                        //logd(responseStr)
 
                         val etaResults = mutableListOf<EtaResult>()
                         val msg = getInvalidMsg(responseStr ?: "")
@@ -447,7 +446,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                                 if(records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
                                     etaResults.add(toEtaResult(records))
                                 }
-                                //debug(it)
+                                //logd(it)
                             }
                         }
 
@@ -455,7 +454,7 @@ object NwfbConnection: BaseConnection, AnkoLogger {
                             stop.etaStatus = Constants.EtaStatus.SUCCESS
                             stop.etaResults = etaResults
                             stop.etaUpdateTime = t
-                            //debug(AppHelper.gson.toJson(stop.etaResults))
+                            //logd(AppHelper.gson.toJson(stop.etaResults))
                         } else {
                             stop.etaStatus = Constants.EtaStatus.FAILED
                             stop.etaUpdateTime = t

@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.relation.RouteAndStops
-import hoo.etahk.model.repo.StopsRepo
+import hoo.etahk.transfer.repo.StopsRepo
 
 class RoutesMapViewModel : ViewModel() {
     private var routeAndStopsList: LiveData<List<RouteAndStops>>? = null

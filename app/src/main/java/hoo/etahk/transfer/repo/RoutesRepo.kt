@@ -1,7 +1,8 @@
-package hoo.etahk.model.repo
+package hoo.etahk.transfer.repo
 
 import android.arch.lifecycle.LiveData
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
@@ -10,10 +11,8 @@ import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 
-object RoutesRepo: AnkoLogger {
+object RoutesRepo {
 
     fun getLastUpdate(): LiveData<Long> {
         return AppHelper.db.parentRouteDao().lastUpdateForDisplay()
@@ -27,7 +26,7 @@ object RoutesRepo: AnkoLogger {
     fun updateParentRoutes(company: String) {
         launch(CommonPool) {
             if (AppHelper.db.parentRouteDao().lastUpdate() < Utils.getValidUpdateTimestamp()) {
-                debug("updateParentRoutes ${company}")
+                logd("updateParentRoutes ${company}")
                 ConnectionHelper.getParentRoutes(company)
             }
         }
@@ -45,7 +44,7 @@ object RoutesRepo: AnkoLogger {
     fun updateChildRoutes(parentRoute: Route) {
         launch(CommonPool) {
             if (AppHelper.db.childRouteDao().lastUpdate(parentRoute.routeKey.company, parentRoute.routeKey.routeNo) < Utils.getValidUpdateTimestamp()) {
-                debug("updateChildRoutes ${parentRoute.routeKey.company} ${parentRoute.routeKey.routeNo}")
+                logd("updateChildRoutes ${parentRoute.routeKey.company} ${parentRoute.routeKey.routeNo}")
                 ConnectionHelper.getChildRoutes(parentRoute)
             }
         }

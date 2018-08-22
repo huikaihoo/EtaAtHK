@@ -17,6 +17,7 @@ import android.widget.Button
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.logd
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
@@ -25,10 +26,8 @@ import hoo.etahk.view.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 
-class RouteFragment : BaseFragment(), AnkoLogger {
+class RouteFragment : BaseFragment() {
 
     companion object {
         /**
@@ -179,7 +178,7 @@ class RouteFragment : BaseFragment(), AnkoLogger {
                 }
             }
 
-            debug("F=$errorCount U=$updatedCount T=$size")
+            logd("F=$errorCount U=$updatedCount T=$size")
 
             it?.let { routeStopsAdapter.dataSource = it }
 
@@ -194,7 +193,7 @@ class RouteFragment : BaseFragment(), AnkoLogger {
                         launch (UI){
                             for (i in it?.indices!! ) {
                                 if (it[i].seq == gotoSeq) {
-                                    debug("GotoSeqUsed ${gotoSeq} ${i}")
+                                    logd("GotoSeqUsed ${gotoSeq} ${i}")
                                     val layoutManager = rootView.recycler_view.layoutManager as LinearLayoutManager
                                     layoutManager.scrollToPositionWithOffset(i, 0)
                                 }

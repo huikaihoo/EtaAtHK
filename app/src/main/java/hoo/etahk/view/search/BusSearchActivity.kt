@@ -16,13 +16,13 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.tag
 import hoo.etahk.common.tools.ThemeColor
 import hoo.etahk.view.base.NavActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.activity_search_nav.*
-import org.jetbrains.anko.AnkoLogger
 
-class BusSearchActivity : NavActivity(), AnkoLogger {
+class BusSearchActivity : NavActivity() {
 
     companion object {
         val availableIndices = listOf(0, 1, 2, 3, 4, 5)
@@ -211,7 +211,7 @@ class BusSearchActivity : NavActivity(), AnkoLogger {
             R.id.menu_add_shortcut -> {
                 Utils.createShortcut(
                     this,
-                    loggerTag,
+                    tag(),
                     R.string.sc_bus_s,
                     R.string.sc_bus_l,
                     R.drawable.ic_shortcut_bus,
@@ -219,7 +219,6 @@ class BusSearchActivity : NavActivity(), AnkoLogger {
                 )
                 true
             }
-            R.id.menu_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }

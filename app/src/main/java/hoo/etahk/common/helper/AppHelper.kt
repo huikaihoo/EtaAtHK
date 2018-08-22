@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import hoo.etahk.common.Constants.DATABASE_NAME
 import hoo.etahk.model.AppDatabase
 
 
@@ -24,7 +25,7 @@ object AppHelper {
                 .serializeNulls()
                 .create()
 
-        db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
+        db = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build()

@@ -2,7 +2,7 @@ package hoo.etahk.view.base
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import hoo.etahk.model.repo.RoutesRepo
+import hoo.etahk.transfer.repo.RoutesRepo
 
 class NavViewModel : ViewModel() {
 

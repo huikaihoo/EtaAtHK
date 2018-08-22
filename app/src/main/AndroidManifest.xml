@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 
@@ -76,58 +77,66 @@
         <activity
             android:name=".view.map.StreetViewActivity"
             android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".view.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Test -->
         <activity android:name=".view.test.MainActivity" />
         <activity android:name=".view.test.BvActivity" />
 
         <!-- Shortcut -->
-        <activity android:name=".view.ShortcutsActivity"/>
+        <activity android:name=".view.ShortcutsActivity" />
+
         <activity-alias
-            android:name=".Shortcut.Bus"
-            android:label="@string/sc_bus_l"
-            android:icon="@drawable/ic_shortcut_bus"
+            android:name=".Shortcut.Follow"
+            android:icon="@drawable/ic_shortcut_follow"
+            android:label="@string/sc_follow_l"
             android:targetActivity=".view.ShortcutsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".Shortcut.History"
-            android:label="@string/sc_history_l"
-            android:icon="@drawable/ic_shortcut_history"
-            android:targetActivity=".view.ShortcutsActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
         <activity-alias
             android:name=".Shortcut.Favourite"
-            android:label="@string/sc_favourite_l"
             android:icon="@drawable/ic_shortcut_favourite"
+            android:label="@string/sc_favourite_l"
             android:targetActivity=".view.ShortcutsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".Shortcut.Follow"
-            android:label="@string/sc_follow_l"
-            android:icon="@drawable/ic_shortcut_follow"
+            android:name=".Shortcut.History"
+            android:icon="@drawable/ic_shortcut_history"
+            android:label="@string/sc_history_l"
             android:targetActivity=".view.ShortcutsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
+        <activity-alias
+            android:name=".Shortcut.Bus"
+            android:icon="@drawable/ic_shortcut_bus"
+            android:label="@string/sc_bus_l"
+            android:targetActivity=".view.ShortcutsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
     </application>
 
 </manifest>

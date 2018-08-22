@@ -11,6 +11,13 @@ abstract class MiscDao {
     @Query("SELECT COUNT(*) FROM Misc")
     abstract fun count(): Int
 
+    // Export / Import
+    @Query("SELECT * FROM Misc ORDER BY Id")
+    abstract fun exportData(): List<Misc>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun importData(items: List<Misc>)
+
     // Select
     @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM Misc WHERE miscType = :miscType")
     abstract fun nextDisplaySeq(miscType: Constants.MiscType): Long
@@ -25,5 +32,8 @@ abstract class MiscDao {
     // Delete
     @Delete
     abstract fun delete(item: Misc)
+
+    @Query("DELETE FROM Misc")
+    abstract fun deleteAll()
 }
 

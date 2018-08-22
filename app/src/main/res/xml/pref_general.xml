@@ -1,0 +1,61 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="@string/pref_backup_restore"
+        android:title="@string/pref_category_title_backup_restore"
+        android:order="10">
+
+        <Preference
+            android:key="@string/pref_backup"
+            android:title="@string/pref_title_backup"
+            android:summary="@string/pref_summary_backup"
+            android:persistent="false" />
+
+        <Preference
+            android:key="@string/pref_restore"
+            android:title="@string/pref_title_restore"
+            android:summary="@string/pref_summary_restore"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/pref_about"
+        android:title="@string/pref_category_title_about"
+        android:order="120">
+
+        <Preference
+            android:key="@string/pref_app_name"
+            android:title="@string/app_name"
+            android:summary="@string/pref_summary_app_name"
+            android:persistent="false" />
+
+        <Preference
+            android:key="@string/pref_app_version"
+            android:title="@string/pref_title_app_version"
+            android:persistent="false" />
+
+        <PreferenceScreen
+            android:key="@string/pref_licenses"
+            android:title="@string/pref_title_licenses"
+            android:summary="@string/pref_summary_licenses"
+            android:persistent="false">
+
+            <!--<intent-->
+                <!--android:action="android.intent.action.VIEW"-->
+                <!--android:targetClass="hoo.hktranseta.main.WebViewActivity"-->
+                <!--android:targetPackage="hoo.hktranseta"-->
+                <!--android:data="@string/open_source_licenses_path">-->
+                <!--<extra-->
+                    <!--android:name="title"-->
+                    <!--android:value="@string/open_source_licenses" />-->
+                <!--<extra-->
+                    <!--android:name="url"-->
+                    <!--android:value="@string/open_source_licenses_path" />-->
+            <!--</intent>-->
+
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

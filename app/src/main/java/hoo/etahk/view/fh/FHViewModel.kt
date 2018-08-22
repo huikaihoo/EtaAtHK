@@ -6,7 +6,7 @@ import android.arch.paging.PagedList
 import hoo.etahk.common.Constants.MiscType
 import hoo.etahk.model.relation.RouteFavouriteEx
 import hoo.etahk.model.relation.RouteHistoryEx
-import hoo.etahk.model.repo.MiscRepo
+import hoo.etahk.transfer.repo.MiscRepo
 
 class FHViewModel : ViewModel() {
     var currentType: MiscType = MiscType.ROUTE_FAVOURITE

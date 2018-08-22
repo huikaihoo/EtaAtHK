@@ -5,6 +5,7 @@
     <string name="title_bus_search">巴士路線</string>
     <string name="title_favourite">我的最愛</string>
     <string name="title_history">歷史</string>
+    <string name="title_settings">設定</string>
 
     <!-- Navigation Drawer -->
     <string name="last_update">路線更新：</string>
@@ -29,6 +30,8 @@
     <string name="search">搜尋</string>
     <string name="maps">地圖</string>
     <string name="settings">設定</string>
+    <string name="play_store">Play 商店</string>
+    <string name="github">GitHub</string>
 
     <string name="location_options">地點選項</string>
     <string name="add_location">新增地點</string>
@@ -119,4 +122,15 @@
     <string name="msg_one_item_removed">已移除一個項目</string>
     <string name="msg_add_to_favourite_success">成功加入至最愛路線</string>
 
+    <!-- Settings -->
+    <string name="pref_category_title_backup_restore">備份和還原</string>
+    <string name="pref_title_backup">備份</string>
+    <string name="pref_summary_backup">備份所有個人資料及設定</string>
+    <string name="pref_title_restore">還原</string>
+    <string name="pref_summary_restore">從備份還原個人資料及設定</string>
+
+    <string name="pref_category_title_about">關於</string>
+    <string name="pref_title_app_version">程式版本</string>
+    <string name="pref_title_licenses">開放原始碼授權</string>
+    <string name="pref_summary_licenses">開放原始碼軟件的授權詳細資料</string>
 </resources>

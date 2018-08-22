@@ -14,14 +14,14 @@ import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.tag
 import hoo.etahk.model.relation.RouteFavouriteEx
 import hoo.etahk.model.relation.RouteHistoryEx
 import hoo.etahk.view.base.NavActivity
 import kotlinx.android.synthetic.main.activity_fh.*
 import kotlinx.android.synthetic.main.activity_fh_nav.*
-import org.jetbrains.anko.AnkoLogger
 
-class FHActivity : NavActivity(), AnkoLogger {
+class FHActivity : NavActivity() {
 
     private var favouriteAdapter: FavouriteAdapter = FavouriteAdapter()
     private var historyAdapter: HistoryAdapter = HistoryAdapter()
@@ -83,12 +83,12 @@ class FHActivity : NavActivity(), AnkoLogger {
 
     private fun subscribeUiChanges() {
         viewModel.favouritePagedList?.observe(this, Observer<PagedList<RouteFavouriteEx>> {
-            //debug(it.toString())
+            //logd(it.toString())
             favouriteAdapter.submitList(it)
         })
 
         viewModel.historyPagedList?.observe(this, Observer<PagedList<RouteHistoryEx>> {
-            //debug(it.toString())
+            //logd(it.toString())
             historyAdapter.submitList(it)
         })
     }
@@ -118,7 +118,7 @@ class FHActivity : NavActivity(), AnkoLogger {
                     Constants.MiscType.ROUTE_FAVOURITE -> {
                         Utils.createShortcut(
                             this,
-                            loggerTag + "_" + viewModel.currentType.toString(),
+                            tag() + "_" + viewModel.currentType.toString(),
                             R.string.sc_favourite_s,
                             R.string.sc_favourite_l,
                             R.drawable.ic_shortcut_favourite,
@@ -128,7 +128,7 @@ class FHActivity : NavActivity(), AnkoLogger {
                     Constants.MiscType.ROUTE_HISTORY -> {
                         Utils.createShortcut(
                             this,
-                            loggerTag + "_" + viewModel.currentType.toString(),
+                            tag() + "_" + viewModel.currentType.toString(),
                             R.string.sc_favourite_s,
                             R.string.sc_favourite_l,
                             R.drawable.ic_shortcut_history,
@@ -138,7 +138,6 @@ class FHActivity : NavActivity(), AnkoLogger {
                 }
                 true
             }
-            R.id.menu_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }

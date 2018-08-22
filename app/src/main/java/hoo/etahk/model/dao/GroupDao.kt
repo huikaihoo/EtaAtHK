@@ -10,8 +10,15 @@ abstract class GroupDao {
     @Query("SELECT COUNT(*) FROM followGroup")
     abstract fun count(): Int
 
+    // Export / Import
+    @Query("SELECT * FROM followGroup ORDER BY Id")
+    abstract fun exportData(): List<FollowGroup>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun importData(followGroups: List<FollowGroup>)
+
     // Select
-    @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM FollowGroup WHERE locationId = :locationId")
+    @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM followGroup WHERE locationId = :locationId")
     abstract fun nextDisplaySeq(locationId: Long): Long
 
     // Insert / Update
@@ -30,4 +37,7 @@ abstract class GroupDao {
     // Delete
     @Delete
     abstract fun delete(item: FollowGroup)
+
+    @Query("DELETE FROM followGroup")
+    abstract fun deleteAll()
 }

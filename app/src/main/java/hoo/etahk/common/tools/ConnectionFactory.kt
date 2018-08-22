@@ -5,14 +5,13 @@ import hoo.etahk.common.Constants.AppMode
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.NetworkType
 import hoo.etahk.common.Constants.SharePrefs
+import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
@@ -86,7 +85,7 @@ object ConnectionFactory {
     /**
      * Source: https://www.jianshu.com/p/d878daad0fbd
      */
-    class RetryInterceptor(var maxRetry: Long) : Interceptor, AnkoLogger {
+    class RetryInterceptor(var maxRetry: Long) : Interceptor {
 
         private var retryCnt = 0L
 
@@ -97,7 +96,7 @@ object ConnectionFactory {
 
             while (!response.isSuccessful && retryCnt < maxRetry) {
                 retryCnt++
-                debug("retryCnt = $retryCnt")
+                logd("retryCnt = $retryCnt")
                 response = chain.proceed(request)
             }
 

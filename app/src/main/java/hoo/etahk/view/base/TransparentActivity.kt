@@ -2,7 +2,6 @@ package hoo.etahk.view.base
 
 import android.graphics.drawable.ColorDrawable
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.DisplayMetrics
 import android.util.TypedValue
@@ -10,11 +9,14 @@ import android.view.MenuItem
 import com.mcxiaoke.koi.ext.find
 import com.mcxiaoke.koi.utils.nougatOrNewer
 import hoo.etahk.R
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
+import hoo.etahk.common.extensions.logd
 
-abstract class TransparentActivity : AppCompatActivity(), AnkoLogger {
-    
+abstract class TransparentActivity : BaseActivity() {
+
+    init {
+        autoSetTaskDescription = false
+    }
+
     /**
      * @return Pending Top of GoogleMap UI component
      */
@@ -102,7 +104,7 @@ abstract class TransparentActivity : AppCompatActivity(), AnkoLogger {
             val displayHeight = displayMetrics.heightPixels + statusBarHeight + navigationBarHeight
             val displayWidth = displayMetrics.widthPixels
 
-            debug("$realHeight $realWidth $displayHeight $displayWidth")
+            logd("$realHeight $realWidth $displayHeight $displayWidth")
             return (displayHeight >= realHeight) || (displayWidth >= realWidth)
         }
 

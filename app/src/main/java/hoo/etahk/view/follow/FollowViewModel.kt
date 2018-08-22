@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.FollowLocation
 import hoo.etahk.model.relation.LocationAndGroups
-import hoo.etahk.model.repo.FollowRepo
+import hoo.etahk.transfer.repo.FollowRepo
 import hoo.etahk.view.base.TimerViewModel
 
 class FollowViewModel : TimerViewModel() {

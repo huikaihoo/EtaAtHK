@@ -7,8 +7,8 @@ import hoo.etahk.model.data.FollowItem
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
-import hoo.etahk.model.repo.FollowRepo
-import hoo.etahk.model.repo.StopsRepo
+import hoo.etahk.transfer.repo.FollowRepo
+import hoo.etahk.transfer.repo.StopsRepo
 
 class FollowFragmentViewModel : ViewModel() {
     private var followItems: LiveData<List<ItemAndStop>>? = null

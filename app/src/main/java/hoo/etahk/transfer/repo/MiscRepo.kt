@@ -1,4 +1,4 @@
-package hoo.etahk.model.repo
+package hoo.etahk.transfer.repo
 
 import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListBuilder

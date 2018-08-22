@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="hoo.etahk.view.search.BusSearchActivity">
+
+    <item
+        android:id="@+id/menu_play_store"
+        android:title="@string/play_store"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_menu_play_store"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_github"
+        android:title="@string/github"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_menu_github"
+        app:showAsAction="always" />
+</menu>

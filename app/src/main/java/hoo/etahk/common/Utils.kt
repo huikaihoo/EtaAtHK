@@ -44,10 +44,10 @@ object Utils {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun getDateTimeString(t: Long?): String {
+    fun getDateTimeString(t: Long?, pattern: String = Constants.Time.PATTERN_DISPLAY): String {
         if (t != null && t > 0) {
             try {
-                val sdf = SimpleDateFormat("yyyyMMdd HH:mm:ss")
+                val sdf = SimpleDateFormat(pattern)
                 val strDate = Date(t * Time.ONE_SECOND_IN_MILLIS)
                 return sdf.format(strDate)
             } catch (e: Exception) {

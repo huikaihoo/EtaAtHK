@@ -1,4 +1,4 @@
-package hoo.etahk.model.repo
+package hoo.etahk.transfer.repo
 
 import android.arch.lifecycle.LiveData
 import hoo.etahk.R
@@ -107,7 +107,7 @@ object FollowRepo {
                 groupId = groupId,
                 routeKey = stop.routeKey,
                 seq = stop.seq,
-                displaySeq = AppHelper.db.itemStopDao().nextDisplaySeq(groupId),
+                displaySeq = AppHelper.db.itemDao().nextDisplaySeq(groupId),
                 updateTime = Utils.getCurrentTimestamp())
 
             AppHelper.db.itemDao().insert(item)
@@ -118,7 +118,7 @@ object FollowRepo {
         launch(CommonPool) {
             val t  = Utils.getCurrentTimestamp()
             if (newDisplaySeq && items.isNotEmpty()) {
-                var displaySeq = AppHelper.db.itemStopDao().nextDisplaySeq(items[0].groupId)
+                var displaySeq = AppHelper.db.itemDao().nextDisplaySeq(items[0].groupId)
                 items.forEach {
                     it.displaySeq = displaySeq++
                     it.updateTime = t

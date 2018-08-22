@@ -6,9 +6,9 @@ import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.LocationAndGroups
-import hoo.etahk.model.repo.FollowRepo
-import hoo.etahk.model.repo.RoutesRepo
-import hoo.etahk.model.repo.StopsRepo
+import hoo.etahk.transfer.repo.FollowRepo
+import hoo.etahk.transfer.repo.RoutesRepo
+import hoo.etahk.transfer.repo.StopsRepo
 
 class RouteFragmentViewModel : ViewModel() {
     private var childRoutes: LiveData<List<Route>>? = null

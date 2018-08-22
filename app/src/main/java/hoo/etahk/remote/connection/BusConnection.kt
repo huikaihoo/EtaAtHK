@@ -2,6 +2,8 @@ package hoo.etahk.remote.connection
 
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
@@ -11,11 +13,8 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
-import org.jetbrains.anko.error
 
-object BusConnection : BaseConnection, AnkoLogger {
+object BusConnection : BaseConnection {
 
     override fun getEtaRoutes(company: String): List<String>? {
         return null
@@ -53,11 +52,11 @@ object BusConnection : BaseConnection, AnkoLogger {
                 jobs.forEach { it.join() }
             }
         } catch (e: Exception) {
-            error("getParentRoutes failed!", e)
+            loge("getParentRoutes failed!", e)
         }
 
-        debug("onResponse ${parentRoutesResult[Company.GOV]?.size}")
-        debug("onResponse ${parentRoutesResult[Company.NWFB]?.size}")
+        logd("onResponse ${parentRoutesResult[Company.GOV]?.size}")
+        logd("onResponse ${parentRoutesResult[Company.NWFB]?.size}")
 
         parentRoutesResult.values.forEach { if (it == null || it.isEmpty()) return null }
         //etaRoutesResult.values.forEach { if (it == null) return null }

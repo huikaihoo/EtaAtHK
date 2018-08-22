@@ -18,6 +18,7 @@ import android.widget.Button
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.view.ItemTouchHelperCallback
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.FollowItem
@@ -30,11 +31,9 @@ import kotlinx.android.synthetic.main.fragment_recycler.view.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 import org.jetbrains.anko.startActivity
 
-class FollowFragment : BaseFragment(), AnkoLogger {
+class FollowFragment : BaseFragment() {
 
     companion object {
         /**
@@ -210,10 +209,10 @@ class FollowFragment : BaseFragment(), AnkoLogger {
         viewModel.getSelectedLocation().observe(this, Observer<LocationAndGroups> {
             it?.let {
                 val position = arguments!!.getInt(ARG_POSITION)
-                debug("subscribeUiChanges $position")
+                logd("subscribeUiChanges $position")
                 if (position < it.groups.size && it.groups[position].Id?: 0L > 0L ) {
                     if (fragmentViewModel.groupId != it.groups[position].Id) {
-                        //debug("subscribeUiChanges XX ${it.groups[position].Id}")
+                        //logd("subscribeUiChanges XX ${it.groups[position].Id}")
                         fragmentViewModel.removeObservers(this)
                         fragmentViewModel.groupId = it.groups[position].Id
                         subscribeItemsChanges()
@@ -243,7 +242,7 @@ class FollowFragment : BaseFragment(), AnkoLogger {
                     }
                 }
 
-                debug("F=$errorCount U=$updatedCount T=$size")
+                logd("F=$errorCount U=$updatedCount T=$size")
 
                 it?.let { followItemsAdapter.dataSource = it }
 
@@ -255,7 +254,7 @@ class FollowFragment : BaseFragment(), AnkoLogger {
                     rootView.refresh_layout.isRefreshing = false
 
                     if (fragmentViewModel.isRefreshingAll) {
-                        debug("Start timer")
+                        logd("Start timer")
                         fragmentViewModel.isRefreshingAll = false
                         viewModel.startTimer()
                     }

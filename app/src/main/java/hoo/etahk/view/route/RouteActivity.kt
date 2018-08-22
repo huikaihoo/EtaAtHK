@@ -12,6 +12,7 @@ import hoo.etahk.common.Constants.Argument
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.tag
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.view.base.BaseActivity
@@ -19,11 +20,10 @@ import hoo.etahk.view.map.RoutesMapsActivity
 import kotlinx.android.synthetic.main.activity_route.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 
-class RouteActivity : BaseActivity(), AnkoLogger {
+class RouteActivity : BaseActivity() {
 
     companion object {
         fun getTheme(company: String, typeCode: Long): Int {
@@ -178,16 +178,11 @@ class RouteActivity : BaseActivity(), AnkoLogger {
 
                 Utils.createShortcut(
                     this,
-                    loggerTag + "_" + viewModel.routeKey?.routeStr,
+                    tag() + "_" + viewModel.routeKey?.routeStr,
                     viewModel.routeKey!!.getCompanyName() + " " + viewModel.routeKey!!.routeNo,
                     shortcutResId,
                     intent
                 )
-                true
-            }
-            R.id.menu_settings -> true
-            android.R.id.home -> {
-                onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)

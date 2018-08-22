@@ -7,13 +7,13 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.MapStyleOptions
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Permission.PERMISSIONS_REQUEST_LOCATION
+import hoo.etahk.common.extensions.loge
 import kotlinx.android.synthetic.main.activity_maps.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.error
 
-abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback, AnkoLogger {
+abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback {
 
     protected var googleMap: GoogleMap? = null
 
@@ -43,8 +43,12 @@ abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback, AnkoLog
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
 
-        this.googleMap!!.setPadding(0, pendingTop, 0, pendingBottom)
-        this.googleMap!!.uiSettings.isZoomControlsEnabled = true
+        googleMap.setPadding(0, pendingTop, 0, pendingBottom)
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_dark))
+
+        googleMap.isIndoorEnabled = false
+        googleMap.isBuildingsEnabled = true
+        googleMap.uiSettings.isZoomControlsEnabled = true
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION )
                 != PackageManager.PERMISSION_GRANTED) {
@@ -54,9 +58,9 @@ abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback, AnkoLog
                     PERMISSIONS_REQUEST_LOCATION)
         } else {
             try {
-                this.googleMap!!.isMyLocationEnabled = true
+                googleMap.isMyLocationEnabled = true
             } catch (e: SecurityException) {
-                error("onMapReady::setMyLocationEnabled failed!", e)
+                loge("onMapReady::setMyLocationEnabled failed!", e)
             }
         }
     }
@@ -70,7 +74,7 @@ abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback, AnkoLog
                     try {
                         this.googleMap?.isMyLocationEnabled = true
                     } catch (e: SecurityException) {
-                        error("onRequestPermissionsResult::setMyLocationEnabled failed!", e)
+                        loge("onRequestPermissionsResult::setMyLocationEnabled failed!", e)
                     }
                 } else {
                     // permission denied

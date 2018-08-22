@@ -4,6 +4,7 @@ import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Path
@@ -21,13 +22,11 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.error
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object KmbConnection: BaseConnection, AnkoLogger {
+object KmbConnection: BaseConnection {
 
     override fun getEtaRoutes(company: String): List<String>? {
         return null
@@ -58,17 +57,17 @@ object KmbConnection: BaseConnection, AnkoLogger {
                             launch(CommonPool) {
                                 val t = Utils.getCurrentTimestamp()
                                 val kmbBoundVariantRes = response.body()
-                                //debug(kmbBoundVariantRes.toString())
+                                //logd(kmbBoundVariantRes.toString())
 
                                 if (kmbBoundVariantRes?.data?.routes != null && (kmbBoundVariantRes.data.routes).isNotEmpty()) {
                                     val routes = mutableListOf<Route>()
                                     (kmbBoundVariantRes.data.routes).forEach {
-                                        //debug("${it?.bound} == $bound")
+                                        //logd("${it?.bound} == $bound")
                                         assert(it!!.bound!! == bound)
                                         routes.add(toChildRoute(parentRoute, it, t))
                                     }
 
-                                    //debug(AppHelper.gson.toJson(routes))
+                                    //logd(AppHelper.gson.toJson(routes))
                                     AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
                                 }
                             }
@@ -107,7 +106,7 @@ object KmbConnection: BaseConnection, AnkoLogger {
                         launch(CommonPool) {
                             val t = Utils.getCurrentTimestamp()
                             val kmbStopsRes = response.body()
-                            //debug(kmbStopsRes.toString())
+                            //logd(kmbStopsRes.toString())
 
                             // Add Paths to database
                             if (kmbStopsRes?.data?.route?.lineGeometry != null && (kmbStopsRes.data.route.lineGeometry).isNotEmpty()) {
@@ -136,7 +135,7 @@ object KmbConnection: BaseConnection, AnkoLogger {
                                     stops.add(toStop(route, it!!, t))
                                 }
 
-                                //debug(AppHelper.gson.toJson(stops))
+                                //logd(AppHelper.gson.toJson(stops))
                                 AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
                                 if (needEtaUpdate)
                                     updateEta(stops)
@@ -200,7 +199,7 @@ object KmbConnection: BaseConnection, AnkoLogger {
 
                             if (response.isSuccessful) {
                                 val kmbEtaRes = response.body()
-                                //debug(kmbEtaRes.toString())
+                                //logd(kmbEtaRes.toString())
 
                                 val etaResults = mutableListOf<EtaResult>()
 
@@ -208,7 +207,7 @@ object KmbConnection: BaseConnection, AnkoLogger {
                                     (kmbEtaRes.response).forEach {
                                         etaResults.add(toEtaResult(stop, it))
                                     }
-                                    //debug(AppHelper.gson.toJson(etaResults))
+                                    //logd(AppHelper.gson.toJson(etaResults))
                                 } else {
                                     etaResults.add(toEtaResult(stop, App.instance.getString(R.string.eta_msg_no_eta_info)))
                                 }
@@ -216,14 +215,14 @@ object KmbConnection: BaseConnection, AnkoLogger {
                                 if (!etaResults.isEmpty()) {
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
-                                    //debug(AppHelper.gson.toJson(stop.etaResults))
+                                    //logd(AppHelper.gson.toJson(stop.etaResults))
                                 }
 
                                 stop.etaStatus = Constants.EtaStatus.SUCCESS
                                 stop.etaResults = etaResults
                             }
                         } catch (e: Exception) {
-                            error("updateEta::stops.forEach failed!", e)
+                            loge("updateEta::stops.forEach failed!", e)
                             stop.etaStatus = Constants.EtaStatus.NETWORK_ERROR
                         }
                     }
@@ -233,7 +232,7 @@ object KmbConnection: BaseConnection, AnkoLogger {
 
             AppHelper.db.stopDao().updateOnReplace(stops)
         } catch (e: Exception) {
-            error("updateEta failed!", e)
+            loge("updateEta failed!", e)
         }
     }
 
@@ -258,7 +257,7 @@ object KmbConnection: BaseConnection, AnkoLogger {
                     override fun onResponse(call: Call<KmbEtaRes>, response: Response<KmbEtaRes>){
                         val t = Utils.getCurrentTimestamp()
                         val kmbEtaRes = response.body()
-                        //debug(kmbEtaRes.toString())
+                        //logd(kmbEtaRes.toString())
 
                         if (kmbEtaRes?.response != null && (kmbEtaRes.response).isNotEmpty()) {
                             val etaResults = mutableListOf<EtaResult>()
@@ -268,7 +267,7 @@ object KmbConnection: BaseConnection, AnkoLogger {
                             stop.etaStatus = Constants.EtaStatus.SUCCESS
                             stop.etaResults = etaResults
                             stop.etaUpdateTime = t
-                            //debug(AppHelper.gson.toJson(etaResults))
+                            //logd(AppHelper.gson.toJson(etaResults))
                         } else {
                             stop.etaStatus = Constants.EtaStatus.FAILED
                             stop.etaUpdateTime = t

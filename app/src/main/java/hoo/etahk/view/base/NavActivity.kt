@@ -22,6 +22,7 @@ import hoo.etahk.view.App
 import hoo.etahk.view.fh.FHActivity
 import hoo.etahk.view.follow.FollowActivity
 import hoo.etahk.view.search.BusSearchActivity
+import hoo.etahk.view.settings.SettingsActivity
 import kotlinx.android.synthetic.main.nav_header.view.*
 
 abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -120,7 +121,7 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
 
             }
             R.id.nav_settings -> {
-
+                startActivity<SettingsActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             }
         }
 

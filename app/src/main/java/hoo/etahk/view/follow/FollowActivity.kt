@@ -16,6 +16,8 @@ import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.extensions.tag
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.base.NavActivity
 import hoo.etahk.view.dialog.InputDialog
@@ -24,11 +26,9 @@ import kotlinx.android.synthetic.main.activity_follow_nav.*
 import kotlinx.android.synthetic.main.dialog_input.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 
 
-class FollowActivity : NavActivity(), AnkoLogger {
+class FollowActivity : NavActivity() {
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -132,7 +132,7 @@ class FollowActivity : NavActivity(), AnkoLogger {
                 super.onTabSelected(tab)
                 if (tabs.tabCount > 0)
                     locationAndGroups.selectedGroupPosition = tab.position
-                debug("S ${locationAndGroups.location.Id} ${locationAndGroups.selectedGroupPosition}")
+                logd("S ${locationAndGroups.location.Id} ${locationAndGroups.selectedGroupPosition}")
             }
         }
         pagerAdapter.dataSource = locationAndGroups
@@ -253,7 +253,7 @@ class FollowActivity : NavActivity(), AnkoLogger {
             R.id.menu_add_shortcut -> {
                 Utils.createShortcut(
                     this,
-                    loggerTag,
+                    tag(),
                     R.string.sc_follow_s,
                     R.string.sc_follow_l,
                     R.drawable.ic_shortcut_follow,
@@ -261,7 +261,6 @@ class FollowActivity : NavActivity(), AnkoLogger {
                 )
                 true
             }
-            R.id.menu_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }

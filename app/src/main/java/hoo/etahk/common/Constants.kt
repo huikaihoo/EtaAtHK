@@ -2,6 +2,9 @@ package hoo.etahk.common
 
 object Constants {
 
+    const val DATABASE_NAME = "db"
+    const val DATABASE_VERSION = 1
+
     enum class EtaStatus {
         NONE,
         SUCCESS,
@@ -29,6 +32,9 @@ object Constants {
         const val ONE_SECOND_IN_MILLIS = 1000L
         const val ONE_MINUTE_IN_SECONDS = 60L
         const val ONE_DAY_IN_SECONDS = 86400L
+
+        const val PATTERN_DISPLAY = "yyyyMMdd HH:mm:ss"
+        const val PATTERN_BACKUP_FILE = "yyyyMMdd_HHmmss"
     }
 
     object SharePrefs {

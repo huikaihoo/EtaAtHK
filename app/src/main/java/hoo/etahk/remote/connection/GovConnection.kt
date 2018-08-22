@@ -3,6 +3,7 @@ package hoo.etahk.remote.connection
 import com.mcxiaoke.koi.HASH
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.Separator
@@ -13,14 +14,12 @@ import hoo.etahk.model.json.StringLang
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import okhttp3.ResponseBody
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-object GovConnection: BaseConnection, AnkoLogger {
+object GovConnection: BaseConnection {
 
     /***************
      * Shared
@@ -55,7 +54,7 @@ object GovConnection: BaseConnection, AnkoLogger {
         if (response.isSuccessful) {
             val separator = Separator("\\|\\*\\|".toRegex(), "\\|\\|".toRegex(), Constants.Route.GOV_ROUTE_RECORD_SIZE)
 
-            //debug("onResponse ${separator.columnSize}")
+            //logd("onResponse ${separator.columnSize}")
             separator.original = response.body()?.string() ?: ""
             separator.result.forEach {
                 toRoutes(it, t).forEach { route ->
@@ -70,7 +69,7 @@ object GovConnection: BaseConnection, AnkoLogger {
                 }
                 //result.putAll(routes.associate{ Pair(it.routeKey.company + it.routeKey.routeNo, it) })
             }
-            debug("onResponse ${separator.result.size}")
+            logd("onResponse ${separator.result.size}")
 
             for((key, routes) in temp) {
                 if (routes.size == 1) {
@@ -134,8 +133,8 @@ object GovConnection: BaseConnection, AnkoLogger {
         return routes[0].copy(direction = newDirection, from = newFrom, to = newTo)
     }
 
+    @Deprecated("Use 'getParentRoutes(company: String): HashMap<String, Route>?' instead.")
     fun getParentRoutesOld(company: String): HashMap<String, Route>? {
-        debug("Start")
         ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode())
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
@@ -145,12 +144,12 @@ object GovConnection: BaseConnection, AnkoLogger {
                             val routes = mutableListOf<Route>()
                             val separator = Separator("\\|\\*\\|".toRegex(), "\\|\\|".toRegex(), Constants.Route.GOV_ROUTE_RECORD_SIZE)
 
-                            //debug("onResponse ${separator.columnSize}")
+                            //logd("onResponse ${separator.columnSize}")
                             separator.original = response.body()?.string() ?: ""
                             separator.result.forEach {
                                 routes.addAll(toRoutes(it, t))
                             }
-                            debug("onResponse ${separator.result.size}")
+                            logd("onResponse ${separator.result.size}")
 
                             if (routes.size > 0) {
                                 routes.sort()

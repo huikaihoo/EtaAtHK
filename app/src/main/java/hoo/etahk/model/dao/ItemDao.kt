@@ -10,8 +10,15 @@ abstract class ItemDao {
     @Query("SELECT COUNT(*) FROM followItem")
     abstract fun count(): Int
 
+    // Export / Import
+    @Query("SELECT * FROM followItem ORDER BY Id")
+    abstract fun exportData(): List<FollowItem>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun importData(followGroups: List<FollowItem>)
+
     // Select
-    @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM FollowItem WHERE groupId = :groupId")
+    @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM followItem WHERE groupId = :groupId")
     abstract fun nextDisplaySeq(groupId: Long): Long
 
     // Insert / Update (single)
@@ -25,5 +32,8 @@ abstract class ItemDao {
     // Delete
     @Delete
     abstract fun delete(item: FollowItem)
+
+    @Query("DELETE FROM followItem")
+    abstract fun deleteAll()
 }
 

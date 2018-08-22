@@ -4,6 +4,7 @@
     <string name="title_bus_search">Bus Routes</string>
     <string name="title_favourite">Favourite</string>
     <string name="title_history">History</string>
+    <string name="title_settings">Settings</string>
 
     <string name="title_activity_tabbed">TabbedActivity</string>
     <string name="tab_text_1">Tab 1</string>
@@ -48,6 +49,8 @@
     <string name="search">Search</string>
     <string name="maps">Maps</string>
     <string name="settings">Settings</string>
+    <string name="play_store">Play Store</string>
+    <string name="github">GitHub</string>
 
     <string name="location_options">Location Options</string>
     <string name="add_location">Add Location</string>
@@ -141,4 +144,28 @@
     <string name="msg_one_group_removed">One group is removed</string>
     <string name="msg_one_item_removed">One item is removed</string>
     <string name="msg_add_to_favourite_success">Added to favourite successfully</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="pref_backup_restore" translatable="false">backup_restore</string>
+    <string name="pref_backup" translatable="false">backup</string>
+    <string name="pref_restore" translatable="false">restore</string>
+    <string name="pref_about" translatable="false">about</string>
+    <string name="pref_app_name" translatable="false">app_name</string>
+    <string name="pref_app_version" translatable="false">app_version</string>
+    <string name="pref_licenses" translatable="false">licenses</string>
+
+    <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018</string>
+    <string name="open_source_licenses_path" translatable="false">file:///android_asset/licenses.html</string>
+
+    <string name="pref_category_title_backup_restore">Backup and Restore</string>
+    <string name="pref_title_backup">Backup</string>
+    <string name="pref_summary_backup">Backup all personal data and settings</string>
+    <string name="pref_title_restore">Restore</string>
+    <string name="pref_summary_restore">Restore personal data and settings from backup</string>
+
+    <string name="pref_category_title_about">About</string>
+    <string name="pref_title_app_version">App version</string>
+    <string name="pref_title_licenses">Open source licenses</string>
+    <string name="pref_summary_licenses">License details for open source software</string>
 </resources>

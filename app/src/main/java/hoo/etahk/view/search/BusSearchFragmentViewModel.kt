@@ -4,8 +4,8 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
-import hoo.etahk.model.repo.MiscRepo
-import hoo.etahk.model.repo.RoutesRepo
+import hoo.etahk.transfer.repo.MiscRepo
+import hoo.etahk.transfer.repo.RoutesRepo
 
 class BusSearchFragmentViewModel : ViewModel() {
     private var parentRoutes: LiveData<List<Route>>? = null

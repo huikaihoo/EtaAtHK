@@ -54,7 +54,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         super.onMapReady(googleMap)
 
         // Set up OnInfoWindowClickListener
-        this.googleMap!!.setOnInfoWindowClickListener { marker ->
+        googleMap.setOnInfoWindowClickListener { marker ->
             val textView = spinner?.selectedView?.findViewById(R.id.title) as TextView?
             val subtitle = viewModel.routeKey!!.getCompanyName() + " " +
                     viewModel.routeKey!!.routeNo + if (textView != null) " - " + textView.text else ""
@@ -118,7 +118,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         val paths = spinnerAdapter.dataSource[viewModel.selectedRoutePosition].paths
 
         if (paths.isNotEmpty()) {
-            val polylineOptions = PolylineOptions()
+            val polylineOptions = PolylineOptions().color(getColor(R.color.colorLineRed))
             paths.forEachIndexed { i, path ->
                 polylineOptions.add(path.location)
                 latLngBoundsBuilder.include(path.location)

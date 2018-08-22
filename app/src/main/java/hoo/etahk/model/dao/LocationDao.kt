@@ -10,12 +10,19 @@ abstract class LocationDao {
     @Query("SELECT COUNT(*) FROM followLocation")
     abstract fun count(): Int
 
-    // Select
-    @Query("SELECT * FROM FollowLocation WHERE displaySeq > 0 ORDER BY displaySeq")
-    abstract fun selectOnce(): List<FollowLocation>
+    // Export / Import
+    @Query("SELECT * FROM followLocation ORDER BY Id")
+    abstract fun exportData(): List<FollowLocation>
 
-    @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM FollowLocation")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun importData(items: List<FollowLocation>)
+
+    // Select
+    @Query("SELECT IFNULL(MAX(displaySeq)+1, 1) FROM followLocation")
     abstract fun nextDisplaySeq(): Long
+
+    @Query("SELECT * FROM followLocation WHERE displaySeq > 0 ORDER BY displaySeq")
+    abstract fun selectOnce(): List<FollowLocation>
 
     // Insert / Update
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -33,4 +40,7 @@ abstract class LocationDao {
     // Delete
     @Delete
     abstract fun delete(item: FollowLocation)
+
+    @Query("DELETE FROM followLocation")
+    abstract fun deleteAll()
 }
