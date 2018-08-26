@@ -123,6 +123,8 @@
     <string name="msg_add_to_favourite_success">成功加入至最愛路線</string>
 
     <!-- Settings -->
+    <string name="pref_category_title_general">一般</string>
+    <string name="pref_title_update_routes">立即更新路線資料</string>
     <string name="pref_category_title_backup_restore">備份和還原</string>
     <string name="pref_title_backup">備份</string>
     <string name="pref_summary_backup">備份所有個人資料及設定</string>

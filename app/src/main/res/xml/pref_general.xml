@@ -1,9 +1,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:key="@string/pref_general"
+        android:title="@string/pref_category_title_general"
+        android:order="10">
+
+        <Preference
+            android:key="@string/pref_update_routes"
+            android:title="@string/pref_title_update_routes"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="@string/pref_backup_restore"
         android:title="@string/pref_category_title_backup_restore"
-        android:order="10">
+        android:order="80">
 
         <Preference
             android:key="@string/pref_backup"

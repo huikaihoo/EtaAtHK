@@ -147,6 +147,8 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Settings -->
+    <string name="pref_general" translatable="false">general</string>
+    <string name="pref_update_routes" translatable="false">update_routes</string>
     <string name="pref_backup_restore" translatable="false">backup_restore</string>
     <string name="pref_backup" translatable="false">backup</string>
     <string name="pref_restore" translatable="false">restore</string>
@@ -158,6 +160,8 @@
     <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018</string>
     <string name="open_source_licenses_path" translatable="false">file:///android_asset/licenses.html</string>
 
+    <string name="pref_category_title_general">General</string>
+    <string name="pref_title_update_routes">Update routes data now</string>
     <string name="pref_category_title_backup_restore">Backup and Restore</string>
     <string name="pref_title_backup">Backup</string>
     <string name="pref_summary_backup">Backup all personal data and settings</string>

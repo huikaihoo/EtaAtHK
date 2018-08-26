@@ -23,9 +23,9 @@ object RoutesRepo {
         return AppHelper.db.parentRouteDao().select(typeCodes, orderBy)
     }
 
-    fun updateParentRoutes(company: String) {
+    fun updateParentRoutes(company: String, forceUpdate: Boolean = false) {
         launch(CommonPool) {
-            if (AppHelper.db.parentRouteDao().lastUpdate() < Utils.getValidUpdateTimestamp()) {
+            if (forceUpdate || AppHelper.db.parentRouteDao().lastUpdate() < Utils.getValidUpdateTimestamp()) {
                 logd("updateParentRoutes ${company}")
                 ConnectionHelper.getParentRoutes(company)
             }

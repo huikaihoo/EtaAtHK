@@ -6,9 +6,11 @@ import android.support.v7.app.AlertDialog
 import android.widget.Button
 import hoo.etahk.BuildConfig
 import hoo.etahk.R
+import hoo.etahk.common.Constants
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.transfer.data.Exporter
 import hoo.etahk.transfer.data.Importer
+import hoo.etahk.transfer.repo.RoutesRepo
 import hoo.etahk.view.base.BasePrefFragment
 import hoo.etahk.view.follow.FollowActivity
 import org.jetbrains.anko.startActivity
@@ -23,6 +25,14 @@ class GeneralPrefFragment : BasePrefFragment() {
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
+
+        // General
+        val updateRoutes = findPreference(R.string.pref_update_routes)
+
+        updateRoutes.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            RoutesRepo.updateParentRoutes(Constants.Company.BUS, true)
+            true
+        }
 
         // Backup and Restore
         val backup = findPreference(R.string.pref_backup)
