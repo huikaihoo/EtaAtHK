@@ -6,12 +6,11 @@ import android.support.v7.app.AlertDialog
 import android.widget.Button
 import hoo.etahk.BuildConfig
 import hoo.etahk.R
+import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.transfer.data.Exporter
 import hoo.etahk.transfer.data.Importer
 import hoo.etahk.view.base.BasePrefFragment
 import hoo.etahk.view.follow.FollowActivity
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.okButton
 import org.jetbrains.anko.startActivity
 
 class GeneralPrefFragment : BasePrefFragment() {
@@ -30,9 +29,10 @@ class GeneralPrefFragment : BasePrefFragment() {
 
         backup.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val exporter = Exporter()
-            alert(exporter.export()){
-                okButton {}
-            }.show()
+            AlertDialogBuilder(activity)
+                .setTitle(exporter.export())
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
             true
         }
 
@@ -45,19 +45,20 @@ class GeneralPrefFragment : BasePrefFragment() {
 
             if (displayList.isNotEmpty()) {
                 lateinit var positiveButton: Button
-                val dialog = AlertDialog.Builder(activity!!)
+                val dialog = AlertDialogBuilder(activity)
                     .setTitle(R.string.title_select_groups_to_move)
                     .setSingleChoiceItems(displayList, selectedIndex) { dialog, which ->
                         selectedIndex = which
                         positiveButton.isEnabled = (selectedIndex >= 0)
                     }
                     .setPositiveButton(android.R.string.ok) { dialog, which ->
-                        alert(importer.import(displayList[selectedIndex].toString())) {
-                            okButton {
+                        AlertDialogBuilder(activity)
+                            .setTitle(importer.import(displayList[selectedIndex].toString()))
+                            .setPositiveButton(android.R.string.ok) { dialog, which ->
                                 activity.finishAffinity()
                                 startActivity<FollowActivity>()
                             }
-                        }.show()
+                            .show()
                     }
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
@@ -65,11 +66,11 @@ class GeneralPrefFragment : BasePrefFragment() {
                 positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                 positiveButton.isEnabled = false
             } else {
-                alert("Cannot find any backup"){
-                    okButton {}
-                }.show()
+                AlertDialogBuilder(activity)
+                    .setTitle("Cannot find any backup")
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
             }
-
             true
         }
 

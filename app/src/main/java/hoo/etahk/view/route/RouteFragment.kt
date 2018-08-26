@@ -18,6 +18,7 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
@@ -118,7 +119,7 @@ class RouteFragment : BaseFragment() {
                     var checkedCnt = 0
 
                     lateinit var positiveButton: Button
-                    val dialog = AlertDialog.Builder(activity!!)
+                    val dialog = AlertDialogBuilder(activity!!)
                         .setTitle(R.string.title_select_groups_to_add)
                         .setMultiChoiceItems(displayList, checkedList) { dialog, position, checked ->
                             checkedList[position] = checked

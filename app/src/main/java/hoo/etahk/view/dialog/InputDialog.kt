@@ -1,23 +1,25 @@
 package hoo.etahk.view.dialog
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import com.mcxiaoke.koi.ext.onClick
 import com.mcxiaoke.koi.ext.onTextChange
 import hoo.etahk.R
+import hoo.etahk.common.view.AlertDialogBuilder
 import kotlinx.android.synthetic.main.dialog_input.view.*
 
-class InputDialog (val activity: AppCompatActivity) {
+class InputDialog (val context: Context) {
 
     // https://stackoverflow.com/questions/10695103/creating-custom-alertdialog-what-is-the-root-view
     @SuppressLint("InflateParams")
-    val view: View = activity.layoutInflater.inflate(R.layout.dialog_input, null)
+    val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_input, null)
 
-    private val builder = AlertDialog.Builder(activity)
+    private val builder = AlertDialogBuilder(context)
         .setView(view)
         .setNeutralButton(R.string.clear, null)
         .setNegativeButton(android.R.string.cancel, null)
@@ -34,7 +36,7 @@ class InputDialog (val activity: AppCompatActivity) {
 
     fun setText(str: String): InputDialog {
         view.input.setText(str)
-        view.input.setAdapter(ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, arrayOf(str)))
+        view.input.setAdapter(ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, arrayOf(str)))
         return this
     }
 

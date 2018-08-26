@@ -29,13 +29,13 @@
         <item name="android:windowActionBarOverlay">true</item>
     </style>
 
-    <!-- App Theme (Bus - All) -->
-    <style name="AppTheme.Bus" parent="AppTheme">
-        <item name="colorPrimary">@color/colorNight</item>
-        <item name="colorPrimaryDark">@color/colorNightDark</item>
-        <item name="colorAccent">@color/colorMenuWhite</item>
+    <!-- App Theme (Dialog) -->
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:colorAccent">@color/colorDialogAccent</item>
+        <item name="colorControlActivated">@color/colorDialogAccent</item>
     </style>
 
+    <!-- App Theme (Bus) -->
     <style name="AppTheme.Kmb" parent="AppTheme">
         <item name="colorPrimary">@color/colorKmb</item>
         <item name="colorPrimaryDark">@color/colorKmbDark</item>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#673AB7</color>
-    <color name="colorPrimaryDark">#512DA8</color>
-    <color name="colorAccent">#7C4DFF</color>
+    <color name="colorPrimary">#07234D</color>
+    <color name="colorPrimaryDark">#041835</color>
+    <color name="colorAccent">#384f70</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorMenuWhite">#F5F5F5</color>
@@ -10,50 +10,52 @@
     <color name="colorBgGrey">#212121</color>
     <color name="colorSemiTransparentBlack">#59000000</color>
     <color name="colorBlack">#FF000000</color>
-    <color name="colorLineRed">#A7F44336</color>
+
+    <color name="colorLineRed">#D0F44336</color>
+    <color name="colorDialogAccent">#637BFE</color>
 
     <color name="colorNavItemBlack">#8A000000</color>
     <color name="colorNavItemWhite">#1EFFFFFF</color>
 
-    <color name="colorAll">#795548</color>
-    <color name="colorAllDark">#5D4037</color>
-    <color name="colorAllAccent">#795548</color>
+    <color name="colorAll">@color/colorPrimary</color>
+    <color name="colorAllDark">@color/colorPrimaryDark</color>
+    <color name="colorAllAccent">@color/colorAccent</color>
 
-    <color name="colorHki">#9C27B0</color>
-    <color name="colorHkiDark">#7B1FA2</color>
-    <color name="colorHkiAccent">#E040FB</color>
+    <color name="colorHki">#724C9C</color>
+    <color name="colorHkiDark">#4F356D</color>
+    <color name="colorHkiAccent">#8E6FAF</color>
 
     <color name="colorCrossHarbour">#2196F3</color>
-    <color name="colorCrossHarbourDark">#1976D2</color>
-    <color name="colorCrossHarbourAccent">#448AFF</color>
+    <color name="colorCrossHarbourDark">#1769AA</color>
+    <color name="colorCrossHarbourAccent">#4DABF5</color>
 
     <color name="colorNight">#1B1B1B</color>
-    <color name="colorNightDark">#212121</color>
+    <color name="colorNightDark">#121212</color>
     <color name="colorNightAccent">#424242</color>
 
-    <color name="colorKmb">#F44336</color>
-    <color name="colorKmbDark">#D32F2F</color>
-    <color name="colorKmbAccent">#FF5252</color>
+    <color name="colorKmb">#E42127</color>
+    <color name="colorKmbDark">#9F171B</color>
+    <color name="colorKmbAccent">#E94D52</color>
 
     <color name="colorLwb">#FF5722</color>
-    <color name="colorLwbDark">#E64A19</color>
-    <color name="colorLwbAccent">#FF5722</color>
+    <color name="colorLwbDark">#B23C17</color>
+    <color name="colorLwbAccent">#FF784E</color>
 
     <color name="colorNwfb">#FF9800</color>
-    <color name="colorNwfbDark">#F57C00</color>
+    <color name="colorNwfbDark">#B26A00</color>
     <color name="colorNwfbAccent">#FFD740</color>
 
-    <color name="colorCtb">#3F51B5</color>
-    <color name="colorCtbDark">#303F9F</color>
-    <color name="colorCtbAccent">#536DFE</color>
+    <color name="colorCtb">#0068AC</color>
+    <color name="colorCtbDark">#004878</color>
+    <color name="colorCtbAccent">#3386BC</color>
 
-    <color name="colorNlb">#009688</color>
-    <color name="colorNlbDark">#00796B</color>
-    <color name="colorNlbAccent">#00796B</color>
+    <color name="colorNlb">#00887B</color>
+    <color name="colorNlbDark">#005F56</color>
+    <color name="colorNlbAccent">#339F95</color>
 
-    <color name="colorTram">#388E3C</color>
-    <color name="colorTramDark">#1B5E20</color>
-    <color name="colorTramAccent">#00C853</color>
+    <color name="colorTram">#007549</color>
+    <color name="colorTramDark">#005133</color>
+    <color name="colorTramAccent">#33906d</color>
 
     <color name="colorMtr">#9E9E9E</color>
     <color name="colorMtrDark">#616161</color>

@@ -19,6 +19,7 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.common.view.ItemTouchHelperCallback
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.FollowItem
@@ -166,7 +167,7 @@ class FollowFragment : BaseFragment() {
                         var selectedIndex = -1
 
                         lateinit var positiveButton: Button
-                        val dialog = AlertDialog.Builder(activity!!)
+                        val dialog = AlertDialogBuilder(activity!!)
                             .setTitle(R.string.title_select_groups_to_move)
                             .setSingleChoiceItems(displayList, selectedIndex) { dialog, which ->
                                 selectedIndex = which
@@ -184,7 +185,7 @@ class FollowFragment : BaseFragment() {
                         positiveButton.isEnabled = false
                     }
                     R.id.popup_remove -> {
-                        AlertDialog.Builder(activity!!)
+                        AlertDialogBuilder(activity!!)
                             .setTitle(R.string.title_conform_delete_item)
                             .setMessage(R.string.content_conform_delete)
                             .setPositiveButton(android.R.string.ok) { dialog, which ->
