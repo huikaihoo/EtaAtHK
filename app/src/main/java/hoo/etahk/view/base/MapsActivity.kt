@@ -43,9 +43,9 @@ abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
 
-        googleMap.setPadding(0, pendingTop, 0, pendingBottom)
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_dark))
-
+        googleMap.setPadding(0, pendingTop, 0, pendingBottom)
+        
         googleMap.isIndoorEnabled = false
         googleMap.isBuildingsEnabled = true
         googleMap.uiSettings.isZoomControlsEnabled = true

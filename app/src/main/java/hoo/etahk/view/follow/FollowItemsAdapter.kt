@@ -34,7 +34,8 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
         override fun onBind(context: FollowFragment?, position: Int, dataSource: List<ItemAndStop>) {
             val item = dataSource[position]
 
-            itemView.stop_title.text = "..."
+            itemView.stop_title.text = item.item.routeKey.getCompanyName() + " " + item.item.routeKey.routeNo
+            itemView.stop_desc.text = "NOT EXIST"
 
             dataSource[position].stop?.let { stop ->
                 val etaStatus = stop.etaStatus
@@ -81,8 +82,8 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
                 }
 
                 itemView.setOnClickListener { context?.updateEta(listOf(item)) }
-                itemView.setOnLongClickListener { context?.showItemPopupMenu(itemView, item); true }
             }
+            itemView.setOnLongClickListener { context?.showItemPopupMenu(itemView, item); true }
         }
 
     }

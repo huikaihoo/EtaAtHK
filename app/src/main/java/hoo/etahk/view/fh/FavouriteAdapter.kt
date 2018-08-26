@@ -28,7 +28,7 @@ class FavouriteAdapter : BasePagedAdapter<FHActivity, RouteFavouriteEx>(RouteFav
             val route = if (dataSource.isEmpty()) null else dataSource[0].route
 
             if (route == null) {
-                val favourite = dataSource[position].favourite
+                val favourite = dataSource[0].favourite
 
                 itemView.route_no.text = favourite.routeNo
                 itemView.from_to.text = "NOT EXIST"

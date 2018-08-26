@@ -132,6 +132,15 @@
   },
   {
     "featureType": "road.highway",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
     "elementType": "labels.text.fill",
     "stylers": [
       {

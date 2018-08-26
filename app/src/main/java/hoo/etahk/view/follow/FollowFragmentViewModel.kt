@@ -44,7 +44,11 @@ class FollowFragmentViewModel : ViewModel() {
 
     fun updateEta(items: List<ItemAndStop>) {
         val stops = mutableListOf<Stop>()
-        items.forEach{item -> stops.add(item.stop!!)}
+        items.forEach{ item ->
+            if(item.stop != null) {
+                stops.add(item.stop!!)
+            }
+        }
         StopsRepo.updateEta(stops, false)
         //FollowRepo.updateEta(items)
     }

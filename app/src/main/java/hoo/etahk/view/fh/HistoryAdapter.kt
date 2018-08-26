@@ -28,7 +28,7 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
             val route = if (dataSource.isEmpty()) null else dataSource[0].route
 
             if (route == null) {
-                val history = dataSource[position].history
+                val history = dataSource[0].history
 
                 itemView.route_no.text = history.routeNo
                 itemView.from_to.text = "NOT EXIST"
