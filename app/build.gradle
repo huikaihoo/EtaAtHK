@@ -66,19 +66,19 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     //implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.24.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.24.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.30.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.30.0'
 
     // Anko
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
-    // Android Core
+    // Android X Core + Material Design
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'com.google.android.material:material:1.0.0'
 
     // Google Service
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
@@ -93,8 +93,8 @@ dependencies {
     implementation "androidx.paging:paging-runtime:2.1.0-alpha01"
 
     // Kotlin library for android
-    implementation 'com.mcxiaoke.koi:core:0.5.5'
     implementation 'androidx.core:core-ktx:1.0.0'
+    implementation 'com.mcxiaoke.koi:core:0.5.5'
 
     // RecyclerView-FastScroll
     implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'
