@@ -48,7 +48,6 @@ abstract class MapsActivity : TransparentActivity(), OnMapReadyCallback {
         
         googleMap.isIndoorEnabled = false
         googleMap.isBuildingsEnabled = true
-        googleMap.uiSettings.isZoomControlsEnabled = true
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION )
                 != PackageManager.PERMISSION_GRANTED) {

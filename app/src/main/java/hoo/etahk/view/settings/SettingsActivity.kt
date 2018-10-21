@@ -49,7 +49,6 @@ class SettingsActivity : BaseActivity() {
                 true
             }
             R.id.menu_github -> {
-                onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)

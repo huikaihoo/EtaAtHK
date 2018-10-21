@@ -90,21 +90,9 @@
         <activity android:name=".view.ShortcutsActivity" />
 
         <activity-alias
-            android:name=".Shortcut.Follow"
-            android:icon="@drawable/ic_shortcut_follow"
-            android:label="@string/sc_follow_l"
-            android:targetActivity=".view.ShortcutsActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".Shortcut.Favourite"
-            android:icon="@drawable/ic_shortcut_favourite"
-            android:label="@string/sc_favourite_l"
+            android:name=".Shortcut.Bus"
+            android:icon="@drawable/ic_shortcut_bus"
+            android:label="@string/sc_bus_l"
             android:targetActivity=".view.ShortcutsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
@@ -126,9 +114,9 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".Shortcut.Bus"
-            android:icon="@drawable/ic_shortcut_bus"
-            android:label="@string/sc_bus_l"
+            android:name=".Shortcut.Favourite"
+            android:icon="@drawable/ic_shortcut_favourite"
+            android:label="@string/sc_favourite_l"
             android:targetActivity=".view.ShortcutsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
@@ -137,6 +125,20 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
+        <activity-alias
+            android:name=".Shortcut.Follow"
+            android:icon="@drawable/ic_shortcut_follow"
+            android:label="@string/sc_follow_l"
+            android:targetActivity=".view.ShortcutsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity android:name=".view.follow.LocationEditActivity"></activity>
     </application>
 
 </manifest>

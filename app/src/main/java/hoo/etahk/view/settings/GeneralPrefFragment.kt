@@ -55,7 +55,7 @@ class GeneralPrefFragment : BasePrefFragment() {
 
             if (displayList.isNotEmpty()) {
                 lateinit var positiveButton: Button
-                val dialog = AlertDialogBuilder(activity)
+                val dialog = AlertDialogBuilder(activity, R.style.AppTheme_Dialog)
                     .setTitle(R.string.title_select_groups_to_move)
                     .setSingleChoiceItems(displayList, selectedIndex) { dialog, which ->
                         selectedIndex = which

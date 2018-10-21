@@ -30,7 +30,7 @@ class InputDialog (val context: Context) {
     }
 
     fun setHint(textId: Int): InputDialog {
-        view.input.setHint(textId)
+        view.input_layout.hint = context.getString(textId)
         return this
     }
 

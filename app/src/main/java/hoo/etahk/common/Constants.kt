@@ -88,6 +88,8 @@ object Constants {
         const val ARG_LATITUDE = "latitude"
         const val ARG_LONGITUDE = "longitude"
         const val ARG_MISC_TYPE = "misc_type"
+        const val ARG_LOCATION_ID = "location_id"
+        const val ARG_NAME = "name"
     }
 
     object Company {

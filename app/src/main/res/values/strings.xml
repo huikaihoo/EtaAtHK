@@ -76,6 +76,9 @@
     <string name="add_to_follow_stop">Add to following stops</string>
     <string name="view_route">View route</string>
 
+    <!-- Activity -->
+    <string name="select_location">Select Location</string>
+
     <!-- Common -->
     <string name="clear">Clear</string>
     <string name="to_prefix">To\u0020</string>

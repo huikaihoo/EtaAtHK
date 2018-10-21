@@ -110,7 +110,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
 
     private fun showPathsAndStops(withAnimation: Boolean) {
         // Clear all markers on maps
-        this.googleMap?.clear()
+        googleMap?.clear()
 
         val latLngBoundsBuilder = LatLngBounds.Builder()
 
@@ -123,7 +123,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
                 polylineOptions.add(path.location)
                 latLngBoundsBuilder.include(path.location)
             }
-            this.googleMap?.addPolyline(polylineOptions)
+            googleMap?.addPolyline(polylineOptions)
         }
 
         // Set stops on map
@@ -141,7 +141,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
                 latLngBoundsBuilder.include(stop.location)
 
                 val markerOptions = MarkerOptions().position(stop.location).title(title).icon(BitmapDescriptorFactory.defaultMarker(markerColor))
-                val marker = this.googleMap?.addMarker(markerOptions)
+                val marker = googleMap?.addMarker(markerOptions)
 
                 if (i == 0) {
                     marker?.showInfoWindow()
@@ -149,9 +149,9 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
             }
 
             if (withAnimation)
-                this.googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 50))
+                googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 50))
             else
-                this.googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 50))
+                googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 50))
 
             // Check for location permission
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)

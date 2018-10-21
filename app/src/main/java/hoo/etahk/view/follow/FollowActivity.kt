@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
-import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,6 +17,7 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.tag
+import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.base.NavActivity
 import hoo.etahk.view.dialog.InputDialog
@@ -182,7 +182,7 @@ class FollowActivity : NavActivity() {
             R.id.menu_remove_loaction -> {
                 val location = viewModel.getSelectedLocation().value!!
 
-                AlertDialog.Builder(this)
+                AlertDialogBuilder(this)
                     .setTitle(R.string.title_conform_delete_location)
                     .setMessage(R.string.content_conform_delete)
                     .setPositiveButton(android.R.string.ok) { dialog, which ->
@@ -229,7 +229,7 @@ class FollowActivity : NavActivity() {
                 if (!location.groups.isEmpty()) {
                     val group = location.groups[container.currentItem]
 
-                    AlertDialog.Builder(this)
+                    AlertDialogBuilder(this)
                         .setTitle(R.string.title_conform_delete_group)
                         .setMessage(R.string.content_conform_delete)
                         .setPositiveButton(android.R.string.ok) { dialog, which ->
@@ -251,6 +251,25 @@ class FollowActivity : NavActivity() {
                 true
             }
             R.id.menu_add_shortcut -> {
+//                val REQUEST_PLACE_PICKER = 1
+//
+//
+//                val intentBuilder = PlacePicker.IntentBuilder()
+//
+//                val intent: Intent
+//                try {
+//                    intent = intentBuilder.build(this)
+//                    //startActivityForResult(intent, REQUEST_PLACE_PICKER)
+//                } catch (e: GooglePlayServicesRepairableException) {
+//                    e.printStackTrace()
+//                } catch (e: GooglePlayServicesNotAvailableException) {
+//                    e.printStackTrace()
+//                }
+//
+//                startActivity<LocationEditActivity>(
+//                    Argument.ARG_NAME to ""
+//                )
+
                 Utils.createShortcut(
                     this,
                     tag(),

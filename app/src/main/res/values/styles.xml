@@ -35,6 +35,18 @@
         <item name="colorControlActivated">@color/colorDialogAccent</item>
     </style>
 
+    <!-- https://stackoverflow.com/a/26108697 -->
+    <style name="AppTheme.Dialog.Large" parent="AppTheme.Dialog">
+        <item name="android:colorAccent">@color/colorDialogAccent</item>
+        <item name="colorControlActivated">@color/colorDialogAccent</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/colorDialogAccent</item>
+    </style>
+
     <!-- App Theme (Bus) -->
     <style name="AppTheme.Kmb" parent="AppTheme">
         <item name="colorPrimary">@color/colorKmb</item>

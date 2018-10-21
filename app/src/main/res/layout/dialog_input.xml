@@ -9,15 +9,27 @@
         android:id="@+id/input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dialog_margin"
+        android:layout_marginEnd="@dimen/dialog_margin"
+        android:layout_marginStart="@dimen/dialog_margin"
+        android:layout_marginTop="@dimen/dialog_margin"
+        android:layout_marginBottom="0dp"
+        app:hintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintTextAppearance="@style/AppTheme.TextAppearance"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:hint="Hint" >
 
         <hoo.etahk.common.view.AlwaysAutoCompleteTextView
             android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:hint="Name" />
+            android:imeOptions="flagNoExtractUi"
+            app:hintEnabled="true"
+            app:hintAnimationEnabled="true"
+            tools:text="Content" />
 
     </android.support.design.widget.TextInputLayout>
 
