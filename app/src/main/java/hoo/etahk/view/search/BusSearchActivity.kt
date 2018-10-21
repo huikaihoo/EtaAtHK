@@ -2,11 +2,11 @@ package hoo.etahk.view.search
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v7.widget.SearchView
+import com.google.android.material.tabs.TabLayout
+import androidx.appcompat.widget.SearchView
 import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem

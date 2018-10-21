@@ -1,8 +1,8 @@
 package hoo.etahk.view.route
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import hoo.etahk.R
 import hoo.etahk.model.data.Route
 import hoo.etahk.view.App

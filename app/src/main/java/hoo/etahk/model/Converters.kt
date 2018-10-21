@@ -1,6 +1,6 @@
 package hoo.etahk.model
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper

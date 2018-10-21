@@ -1,8 +1,8 @@
 package hoo.etahk.view.base
 
 import android.graphics.drawable.ColorDrawable
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.appcompat.widget.Toolbar
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.MenuItem
@@ -51,7 +51,7 @@ abstract class TransparentActivity : BaseActivity() {
     private val actionBarHeight: Int
         get() {
             val tv = TypedValue()
-            theme.resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true)
+            theme.resolveAttribute(androidx.appcompat.R.attr.actionBarSize, tv, true)
             return TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
         }
 

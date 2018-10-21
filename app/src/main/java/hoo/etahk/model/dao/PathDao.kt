@@ -1,7 +1,7 @@
 package hoo.etahk.model.dao
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.*
 import hoo.etahk.model.data.Path
 import hoo.etahk.model.data.Route
 

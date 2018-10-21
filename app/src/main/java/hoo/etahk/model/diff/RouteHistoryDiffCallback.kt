@@ -1,6 +1,6 @@
 package hoo.etahk.model.diff
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import hoo.etahk.model.relation.RouteHistoryEx
 
 class RouteHistoryDiffCallback : DiffUtil.ItemCallback<RouteHistoryEx>() {

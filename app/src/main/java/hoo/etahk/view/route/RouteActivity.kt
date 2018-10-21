@@ -1,9 +1,9 @@
 package hoo.etahk.view.route
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.design.widget.TabLayout
+import com.google.android.material.tabs.TabLayout
 import android.view.Menu
 import android.view.MenuItem
 import hoo.etahk.R

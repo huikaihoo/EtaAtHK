@@ -1,9 +1,9 @@
 package hoo.etahk.model.dao
 
-import android.arch.paging.DataSource
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Transaction
+import androidx.paging.DataSource
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Transaction
 import hoo.etahk.common.Constants
 import hoo.etahk.model.misc.RouteFavourite
 import hoo.etahk.model.relation.RouteFavouriteEx

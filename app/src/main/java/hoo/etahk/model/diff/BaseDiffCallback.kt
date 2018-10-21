@@ -1,6 +1,6 @@
 package hoo.etahk.model.diff
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 
 abstract class BaseDiffCallback<T>(val oldData: List<T>, val newData: List<T>): DiffUtil.Callback() {
 

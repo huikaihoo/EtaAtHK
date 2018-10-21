@@ -1,8 +1,8 @@
 package hoo.etahk.view.follow
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import hoo.etahk.model.data.FollowItem
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.ItemAndStop

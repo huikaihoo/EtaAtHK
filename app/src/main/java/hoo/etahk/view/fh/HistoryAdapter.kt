@@ -19,9 +19,9 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
 
     override fun getItemViewId(position: Int, dataSource: RouteHistoryEx?): Int = R.layout.item_route
 
-    override fun instantiateViewHolder(view: View?, viewType: Int): ViewHolder = ViewHolder(view)
+    override fun instantiateViewHolder(view: View, viewType: Int): ViewHolder = ViewHolder(view)
 
-    class ViewHolder(itemView: View?) : BaseViewHolder<FHActivity, RouteHistoryEx>(itemView) {
+    class ViewHolder(itemView: View) : BaseViewHolder<FHActivity, RouteHistoryEx>(itemView) {
 
         @SuppressLint("SetTextI18n")
         override fun onBind(context: FHActivity?, position: Int, dataSource: List<RouteHistoryEx>) {

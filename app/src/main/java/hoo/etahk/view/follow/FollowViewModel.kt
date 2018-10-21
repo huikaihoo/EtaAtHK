@@ -1,7 +1,7 @@
 package hoo.etahk.view.follow
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.FollowLocation
 import hoo.etahk.model.relation.LocationAndGroups

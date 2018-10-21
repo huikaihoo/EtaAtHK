@@ -24,14 +24,14 @@ kapt {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "hoo.etahk"
         minSdkVersion 23
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode versionBuild
         versionName "$versionMajor.$versionMinor.$versionPatch." + getCurrentDate() + " ($versionBuild)"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -75,10 +75,10 @@ dependencies {
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     // Android Core
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
 
     // Google Service
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
@@ -86,15 +86,15 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:16.0.0'
 
     // ViewModel + LiveData + Room + Paging
-    implementation "android.arch.lifecycle:extensions:1.1.1"
-    kapt "android.arch.lifecycle:compiler:1.1.1"
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    kapt "android.arch.persistence.room:compiler:1.1.1"
-    implementation "android.arch.paging:runtime:1.0.1"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
+    implementation "androidx.room:room-runtime:2.1.0-alpha01"
+    kapt "androidx.room:room-compiler:2.1.0-alpha01"
+    implementation "androidx.paging:paging-runtime:2.1.0-alpha01"
 
     // Kotlin library for android
     implementation 'com.mcxiaoke.koi:core:0.5.5'
-    implementation 'androidx.core:core-ktx:0.3'
+    implementation 'androidx.core:core-ktx:1.0.0'
 
     // RecyclerView-FastScroll
     implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'
@@ -114,14 +114,14 @@ dependencies {
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 
     // Unit Test
-    testImplementation 'android.arch.core:core-testing:1.1.1'
-    testImplementation 'android.arch.persistence.room:testing:1.1.1'
+    testImplementation 'androidx.arch.core:core-testing:2.0.0'
+    testImplementation 'androidx.room:room-testing:2.1.0-alpha01'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.8'
 
     // Android Unit Test
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
 }
 
 task copyFiles(type: Copy) {

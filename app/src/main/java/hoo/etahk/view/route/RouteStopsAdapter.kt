@@ -2,9 +2,9 @@ package hoo.etahk.view.route
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.text.SpannableStringBuilder
 import android.view.View
+import androidx.core.content.ContextCompat
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
@@ -26,9 +26,9 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
     override fun getItemViewId(position: Int, dataSource: List<Stop>): Int = R.layout.item_stop
 
-    override fun instantiateViewHolder(view: View?, viewType: Int): ViewHolder = ViewHolder(view)
+    override fun instantiateViewHolder(view: View, viewType: Int): ViewHolder = ViewHolder(view)
 
-    class ViewHolder(itemView: View?) : BaseViewHolder<RouteFragment, Stop>(itemView) {
+    class ViewHolder(itemView: View) : BaseViewHolder<RouteFragment, Stop>(itemView) {
 
         @SuppressLint("SetTextI18n")
         override fun onBind(context: RouteFragment?, position: Int, dataSource: List<Stop>) {

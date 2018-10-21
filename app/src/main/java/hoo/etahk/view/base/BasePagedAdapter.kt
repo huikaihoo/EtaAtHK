@@ -1,10 +1,10 @@
 package hoo.etahk.view.base
 
-import android.arch.paging.PagedListAdapter
-import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 
 abstract class BasePagedAdapter<C, D>(diffCallback: DiffUtil.ItemCallback<D>) : PagedListAdapter<D, BaseViewHolder<C, D>>(diffCallback) {
 
@@ -22,7 +22,7 @@ abstract class BasePagedAdapter<C, D>(diffCallback: DiffUtil.ItemCallback<D>) : 
     protected abstract fun getItemViewId(position: Int, item: D?): Int
 
     // Need to override
-    abstract fun instantiateViewHolder(view: View?, viewType: Int): BaseViewHolder<C, D>
+    abstract fun instantiateViewHolder(view: View, viewType: Int): BaseViewHolder<C, D>
 
     override fun onBindViewHolder(holder: BaseViewHolder<C, D>, position: Int) {
         val item = getItem(position)

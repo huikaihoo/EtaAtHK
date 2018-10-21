@@ -1,7 +1,7 @@
 package hoo.etahk.model.data
 
-import android.arch.persistence.room.*
-import android.arch.persistence.room.ForeignKey.CASCADE
+import androidx.room.*
+import androidx.room.ForeignKey.CASCADE
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.common.Constants
 import hoo.etahk.model.json.EtaResult

@@ -1,6 +1,6 @@
 package hoo.etahk.model.dao
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import hoo.etahk.common.Constants
 import hoo.etahk.model.data.Misc
 

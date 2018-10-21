@@ -1,6 +1,6 @@
 package hoo.etahk.view.follow
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import hoo.etahk.transfer.repo.FollowRepo
 
 class LocationEditViewModel : ViewModel() {

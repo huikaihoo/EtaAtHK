@@ -3,7 +3,7 @@ package hoo.etahk.view.follow
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
-import android.support.v7.widget.ThemedSpinnerAdapter
+import androidx.appcompat.widget.ThemedSpinnerAdapter
 import android.view.View
 import android.view.ViewGroup
 import hoo.etahk.R

@@ -26,9 +26,9 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
 
     override fun getItemViewId(position: Int, dataSource: List<Route>): Int = R.layout.item_route
 
-    override fun instantiateViewHolder(view: View?, viewType: Int): ViewHolder = ViewHolder(view)
+    override fun instantiateViewHolder(view: View, viewType: Int): ViewHolder = ViewHolder(view)
 
-    class ViewHolder(itemView: View?) : BaseViewHolder<BusSearchFragment, Route>(itemView) {
+    class ViewHolder(itemView: View) : BaseViewHolder<BusSearchFragment, Route>(itemView) {
 
         @SuppressLint("SetTextI18n")
         override fun onBind(context: BusSearchFragment?, position: Int, dataSource: List<Route>) {

@@ -1,14 +1,14 @@
 package hoo.etahk.view.route
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.PopupMenu
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.PopupMenu
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -74,7 +74,8 @@ class RouteFragment : BaseFragment() {
 
         rootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
 
-        rootView.recycler_view.layoutManager = LinearLayoutManager(activity)
+        rootView.recycler_view.layoutManager =
+                LinearLayoutManager(activity)
         rootView.recycler_view.adapter = routeStopsAdapter
         rootView.recycler_view.itemAnimator = DefaultItemAnimator()
         rootView.recycler_view.addItemDecoration(

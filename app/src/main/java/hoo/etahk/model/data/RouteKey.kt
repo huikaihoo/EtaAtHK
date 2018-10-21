@@ -1,6 +1,6 @@
 package hoo.etahk.model.data
 
-import android.arch.persistence.room.Ignore
+import androidx.room.Ignore
 import hoo.etahk.common.Constants.Company.CTB
 import hoo.etahk.common.Constants.Company.DB
 import hoo.etahk.common.Constants.Company.KMB

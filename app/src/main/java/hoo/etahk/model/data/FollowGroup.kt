@@ -1,7 +1,7 @@
 package hoo.etahk.model.data
 
-import android.arch.persistence.room.*
-import android.arch.persistence.room.ForeignKey.CASCADE
+import androidx.room.*
+import androidx.room.ForeignKey.CASCADE
 
 @Entity(indices = [Index(value = ["locationId"],
                           name = "idx_location_id")],

@@ -2,7 +2,7 @@ package hoo.etahk.view.base
 
 import android.app.ActivityManager
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import hoo.etahk.R
 import hoo.etahk.common.Utils

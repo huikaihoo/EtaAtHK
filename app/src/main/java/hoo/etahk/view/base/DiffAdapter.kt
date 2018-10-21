@@ -1,6 +1,6 @@
 package hoo.etahk.view.base
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import hoo.etahk.model.diff.BaseDiffCallback
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch

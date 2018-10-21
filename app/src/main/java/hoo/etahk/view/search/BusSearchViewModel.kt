@@ -1,7 +1,7 @@
 package hoo.etahk.view.search
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import hoo.etahk.common.Constants
 import hoo.etahk.transfer.repo.RoutesRepo
 

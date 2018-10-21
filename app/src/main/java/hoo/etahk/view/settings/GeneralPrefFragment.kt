@@ -2,7 +2,7 @@ package hoo.etahk.view.settings
 
 import android.os.Bundle
 import android.preference.Preference
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.widget.Button
 import hoo.etahk.BuildConfig
 import hoo.etahk.R

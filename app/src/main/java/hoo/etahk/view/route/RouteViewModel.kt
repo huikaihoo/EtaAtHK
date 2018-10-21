@@ -1,6 +1,6 @@
 package hoo.etahk.view.route
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.transfer.repo.MiscRepo

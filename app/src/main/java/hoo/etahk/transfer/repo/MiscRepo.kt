@@ -1,8 +1,8 @@
 package hoo.etahk.transfer.repo
 
-import android.arch.lifecycle.LiveData
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
+import androidx.lifecycle.LiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import hoo.etahk.common.Constants.SharePrefs.DEFAULT_PAGE_SIZE
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper

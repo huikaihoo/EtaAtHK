@@ -2,7 +2,7 @@ package hoo.etahk.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.mcxiaoke.koi.ext.Bundle
 import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R

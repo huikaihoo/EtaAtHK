@@ -19,9 +19,9 @@ class FavouriteAdapter : BasePagedAdapter<FHActivity, RouteFavouriteEx>(RouteFav
 
     override fun getItemViewId(position: Int, dataSource: RouteFavouriteEx?): Int = R.layout.item_route
 
-    override fun instantiateViewHolder(view: View?, viewType: Int): ViewHolder = ViewHolder(view)
+    override fun instantiateViewHolder(view: View, viewType: Int): ViewHolder = ViewHolder(view)
 
-    class ViewHolder(itemView: View?) : BaseViewHolder<FHActivity, RouteFavouriteEx>(itemView) {
+    class ViewHolder(itemView: View) : BaseViewHolder<FHActivity, RouteFavouriteEx>(itemView) {
 
         @SuppressLint("SetTextI18n")
         override fun onBind(context: FHActivity?, position: Int, dataSource: List<RouteFavouriteEx>) {

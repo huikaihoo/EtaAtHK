@@ -1,9 +1,9 @@
 package hoo.etahk.view.test
 
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
 import hoo.etahk.R
 import hoo.etahk.common.helper.AppHelper
 import kotlinx.android.synthetic.main.activity_t_bv.*

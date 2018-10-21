@@ -1,7 +1,7 @@
 package hoo.etahk.model.data
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.common.Constants
 import hoo.etahk.model.json.Extra

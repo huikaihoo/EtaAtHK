@@ -1,9 +1,9 @@
 package hoo.etahk.view.base
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
@@ -33,7 +33,7 @@ abstract class BaseAdapter<C, D> : RecyclerView.Adapter<BaseViewHolder<C, D>>() 
     protected abstract fun getItemViewId(position: Int, dataSource: List<D>): Int
 
     // Need to override
-    abstract fun instantiateViewHolder(view: View?, viewType: Int): BaseViewHolder<C, D>
+    abstract fun instantiateViewHolder(view: View, viewType: Int): BaseViewHolder<C, D>
 
     override fun onBindViewHolder(holder: BaseViewHolder<C, D>, position: Int) {
         holder.onBind(context, position, dataSource)

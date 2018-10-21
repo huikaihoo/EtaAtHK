@@ -1,7 +1,7 @@
 package hoo.etahk.view.base
 
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 
 abstract class BasePagerAdapter<D>(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 

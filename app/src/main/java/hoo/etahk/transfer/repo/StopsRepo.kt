@@ -1,6 +1,6 @@
 package hoo.etahk.transfer.repo
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd

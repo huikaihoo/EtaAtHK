@@ -1,6 +1,6 @@
 package hoo.etahk.common.view
 
-import android.support.design.widget.FloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.view.View
 
 /**

@@ -1,8 +1,8 @@
 package hoo.etahk.model.data
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Entity
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
 import hoo.etahk.common.Utils
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang

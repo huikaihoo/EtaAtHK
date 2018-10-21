@@ -26,9 +26,9 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
 
     override fun getItemViewId(position: Int, dataSource: List<ItemAndStop>): Int = R.layout.item_stop
 
-    override fun instantiateViewHolder(view: View?, viewType: Int): ViewHolder = ViewHolder(view)
+    override fun instantiateViewHolder(view: View, viewType: Int): ViewHolder = ViewHolder(view)
 
-    class ViewHolder(itemView: View?) : BaseViewHolder<FollowFragment, ItemAndStop>(itemView) {
+    class ViewHolder(itemView: View) : BaseViewHolder<FollowFragment, ItemAndStop>(itemView) {
 
         @SuppressLint("SetTextI18n")
         override fun onBind(context: FollowFragment?, position: Int, dataSource: List<ItemAndStop>) {

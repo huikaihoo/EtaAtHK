@@ -1,7 +1,7 @@
 package hoo.etahk.view.map
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.relation.RouteAndStops
 import hoo.etahk.transfer.repo.StopsRepo
