@@ -29,6 +29,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="@string/hint_location_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,15 +43,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appbar"
-        app:layout_constraintBottom_toTopOf="@id/map">
+        app:layout_constraintBottom_toTopOf="@id/button">
 
         <hoo.etahk.common.view.AlwaysAutoCompleteTextView
             android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="flagNoExtractUi" />
+            android:imeOptions="flagNoExtractUi"
+            android:padding="@dimen/normal_margin"
+            app:hintEnabled="true"
+            app:hintAnimationEnabled="true"
+            tools:text="Content" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:text="@string/select_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/half_margin"
+        android:layout_marginBottom="@dimen/half_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_layout"
+        app:layout_constraintBottom_toTopOf="@id/map" />
 
     <fragment
         android:id="@+id/map"
@@ -63,7 +83,7 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/input_layout"
+        app:layout_constraintTop_toBottomOf="@id/button"
         app:layout_constraintBottom_toTopOf="@id/guideline"
         map:liteMode="true"
         map:uiCompass="false"
@@ -78,19 +98,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.85" />
 
-    <Button
-        android:id="@+id/button"
-        android:text="@string/select_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/half_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

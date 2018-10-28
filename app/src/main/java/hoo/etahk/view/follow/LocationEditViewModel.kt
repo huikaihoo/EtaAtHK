@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import hoo.etahk.transfer.repo.FollowRepo
 
 class LocationEditViewModel : ViewModel() {
+    var isInit = false
+
     var locationId: Long? = null
         set(value) {
             field = if (value != null && value > 0L) value else null

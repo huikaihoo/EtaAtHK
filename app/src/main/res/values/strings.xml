@@ -46,6 +46,7 @@
     <string name="sc_bus_l">Bus Routes</string>
 
     <!-- Menu -->
+    <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="maps">Maps</string>
     <string name="settings">Settings</string>

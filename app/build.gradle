@@ -97,8 +97,8 @@ dependencies {
     implementation 'com.mcxiaoke.koi:core:0.5.5'
 
     // RecyclerView-FastScroll
-    implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'
-    //implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.18'
+    implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.18'
+    //implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -120,8 +120,8 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:3.8'
 
     // Android Unit Test
-    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
 
 task copyFiles(type: Copy) {

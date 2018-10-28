@@ -1,17 +1,17 @@
 package hoo.etahk.view.search
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.appcompat.widget.PopupMenu
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -60,8 +60,7 @@ class BusSearchFragment : BaseFragment() {
 
         rootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
 
-        rootView.recycler_view.layoutManager =
-                LinearLayoutManager(activity)
+        rootView.recycler_view.layoutManager = LinearLayoutManager(activity)
         rootView.recycler_view.itemAnimator = DefaultItemAnimator()
         rootView.recycler_view.addItemDecoration(
             DividerItemDecoration(
@@ -72,14 +71,13 @@ class BusSearchFragment : BaseFragment() {
 
         rootView.recycler_view.setPopupBgColor(BusSearchActivity.searchList[fragmentViewModel.index].color.colorPrimaryAccent)
         rootView.recycler_view.setThumbColor(BusSearchActivity.searchList[fragmentViewModel.index].color.colorPrimaryAccent)
-        rootView.recycler_view.setStateChangeListener(object: OnFastScrollStateChangeListener{
+        rootView.recycler_view.setOnFastScrollStateChangeListener(object: OnFastScrollStateChangeListener{
             override fun onFastScrollStop() {
                 (activity as BusSearchActivity).fab.show()
             }
             override fun onFastScrollStart() {
                 (activity as BusSearchActivity).fab.hide()
             }
-
         })
 
         rootView.recycler_view.adapter = busRoutesAdapter

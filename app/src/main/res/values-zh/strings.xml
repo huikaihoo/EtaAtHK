@@ -27,6 +27,7 @@
     <string name="sc_bus_l">巴士</string>
 
     <!-- Menu -->
+    <string name="save">儲存</string>
     <string name="search">搜尋</string>
     <string name="maps">地圖</string>
     <string name="settings">設定</string>
@@ -56,6 +57,9 @@
     <string name="view_another_company">以另一公司檢視</string>
     <string name="add_to_follow_stop">加入至追蹤車站</string>
     <string name="view_route">檢視路線</string>
+
+    <!-- Activity -->
+    <string name="select_location">選取地點</string>
 
     <!-- Common -->
     <string name="clear">清除</string>

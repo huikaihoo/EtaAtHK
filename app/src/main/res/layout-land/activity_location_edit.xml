@@ -29,6 +29,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="@string/hint_location_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -48,12 +49,17 @@
             android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="flagNoExtractUi" />
+            android:imeOptions="flagNoExtractUi"
+            android:padding="@dimen/normal_margin"
+            app:hintEnabled="true"
+            app:hintAnimationEnabled="true"
+            tools:text="Content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/button"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:text="@string/select_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

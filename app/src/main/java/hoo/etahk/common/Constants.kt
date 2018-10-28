@@ -77,6 +77,10 @@ object Constants {
         const val PERMISSIONS_REQUEST_LOCATION = 1
     }
 
+    object Request {
+        const val REQUEST_PLACE_PICKER = 1
+    }
+
     object Argument {
         const val ARG_COMPANY = "company"
         const val ARG_ROUTE_NO = "route_no"

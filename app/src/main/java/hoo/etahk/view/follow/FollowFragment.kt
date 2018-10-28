@@ -1,20 +1,20 @@
 package hoo.etahk.view.follow
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.appcompat.widget.PopupMenu
-import androidx.recyclerview.widget.ItemTouchHelper
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.PopupMenu
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
@@ -78,8 +78,7 @@ class FollowFragment : BaseFragment() {
         // Recycler View
         rootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
 
-        rootView.recycler_view.layoutManager =
-                LinearLayoutManager(activity)
+        rootView.recycler_view.layoutManager = LinearLayoutManager(activity)
         rootView.recycler_view.adapter = followItemsAdapter
         rootView.recycler_view.itemAnimator = DefaultItemAnimator()
         rootView.recycler_view.addItemDecoration(

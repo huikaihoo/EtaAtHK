@@ -17,12 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbarSize="1dip"
+            app:fastScrollAutoHide="true"
+            app:fastScrollEnableThumbInactiveColor="false"
             app:fastScrollPopupPosition="center"
             app:fastScrollPopupTextSize="40sp"
             app:fastScrollPopupTextColor="@color/colorMenuWhite"
             app:fastScrollPopupBackgroundSize="60dp"
             app:fastScrollPopupBgColor="?colorAccent"
-            app:fastScrollThumbColor="?colorAccent" />
+            app:fastScrollThumbColor="?colorAccent"
+            app:fastScrollThumbEnabled="true" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
