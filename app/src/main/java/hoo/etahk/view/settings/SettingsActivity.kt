@@ -5,6 +5,7 @@ import android.preference.PreferenceActivity
 import android.view.Menu
 import android.view.MenuItem
 import hoo.etahk.R
+import hoo.etahk.common.Utils
 import hoo.etahk.view.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_follow.*
 
@@ -49,6 +50,7 @@ class SettingsActivity : BaseActivity() {
                 true
             }
             R.id.menu_github -> {
+                Utils.startCustomTabs(this, getString(R.string.github_url))
                 true
             }
             else -> super.onOptionsItemSelected(item)

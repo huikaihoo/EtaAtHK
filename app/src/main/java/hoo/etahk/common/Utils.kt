@@ -9,6 +9,7 @@ import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -16,6 +17,7 @@ import android.text.style.ImageSpan
 import android.util.Log
 import android.util.TypedValue
 import android.widget.TextView
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -24,6 +26,7 @@ import androidx.core.graphics.drawable.IconCompat
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
+import hoo.etahk.common.browser.CustomTabsHelper
 import hoo.etahk.view.App
 import java.text.SimpleDateFormat
 import java.util.*
@@ -370,5 +373,28 @@ object Utils {
                 )
             }
         }
+    }
+
+    /**
+     * Method to launch a Custom Tabs Activity.
+     * @param context The source Context.
+     * @param url The URL to load in the Custom Tab.
+     * @param id Toolbar color's resource id
+     */
+    fun startCustomTabs(context: Context, url: String) {
+        val packageName = CustomTabsHelper.getPackageNameToUse(context)
+
+        val builder = CustomTabsIntent.Builder()
+        val customTabsIntent = builder.setShowTitle(true)
+            .addDefaultShareMenuItem()
+            .enableUrlBarHiding()
+            .setToolbarColor(getThemeColorPrimary(context))
+            .build()
+
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName)
+        }
+
+        customTabsIntent.launchUrl(context, Uri.parse(url))
     }
 }

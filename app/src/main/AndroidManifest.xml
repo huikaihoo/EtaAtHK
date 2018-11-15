@@ -76,9 +76,7 @@
             android:theme="@style/AppTheme.Transparent" />
 
         <!-- Settings Activity -->
-        <activity
-            android:name=".view.settings.SettingsActivity"
-            android:label="@string/title_activity_settings">
+        <activity android:name=".view.settings.SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
 

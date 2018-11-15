@@ -148,7 +148,6 @@
     <string name="msg_one_group_removed">One group is removed</string>
     <string name="msg_one_item_removed">One item is removed</string>
     <string name="msg_add_to_favourite_success">Added to favourite successfully</string>
-    <string name="title_activity_settings">Settings</string>
 
     <!-- Settings -->
     <string name="pref_general" translatable="false">general</string>
@@ -162,7 +161,7 @@
     <string name="pref_licenses" translatable="false">licenses</string>
 
     <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018</string>
-    <string name="open_source_licenses_path" translatable="false">file:///android_asset/licenses.html</string>
+    <string name="github_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/</string>
 
     <string name="pref_category_title_general">General</string>
     <string name="pref_title_update_routes">Update routes data now</string>
