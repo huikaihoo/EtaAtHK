@@ -54,5 +54,7 @@ interface NwfbApi {
                @Query("syscode") syscode: String = "",
                @Query("p") p: String = Constants.SharePrefs.NWFB_API_PARAMETER_PLATFORM,
                @Query("version") appversion: String = Constants.SharePrefs.NWFB_API_PARAMETER_APP_VERSION,
-               @Query("syscode2", encoded = true) syscode2: String = ""): Call<ResponseBody>
+               @Query("version2") appversion2: String = Constants.SharePrefs.NWFB_API_PARAMETER_APP_VERSION_2,
+               @Query("syscode2", encoded = true) syscode2: String = "",
+               @Query("tk") tk: String = "0"): Call<ResponseBody>
 }

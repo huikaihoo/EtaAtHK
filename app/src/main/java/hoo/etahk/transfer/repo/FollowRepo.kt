@@ -12,13 +12,12 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.App
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 
 object FollowRepo {
 
     fun initLocationsAndGroups() {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             if (AppHelper.db.locationDao().count() <= 0) {
                 AppHelper.db.locationDao().insert(FollowLocation(name = App.instance.getString(R.string.home), displaySeq = 1))
                 AppHelper.db.locationDao().insert(FollowLocation(name = App.instance.getString(R.string.work), displaySeq = 2))
@@ -50,7 +49,7 @@ object FollowRepo {
     }
 
     fun insertLocation(name: String) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             val location = FollowLocation(
                 name = name,
                 displaySeq = AppHelper.db.locationDao().nextDisplaySeq(),
@@ -60,20 +59,20 @@ object FollowRepo {
     }
 
     fun updateLocation(location: FollowLocation) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             location.updateTime = Utils.getCurrentTimestamp()
             AppHelper.db.locationDao().update(location)
         }
     }
 
     fun deleteLocation(location: FollowLocation) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             AppHelper.db.locationDao().delete(location)
         }
     }
 
     fun insertGroup(locationId: Long, name: String) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             val group = FollowGroup(
                 locationId = locationId,
                 name = name,
@@ -85,14 +84,14 @@ object FollowRepo {
     }
 
     fun updateGroup(group: FollowGroup) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             group.updateTime = Utils.getCurrentTimestamp()
             AppHelper.db.groupDao().update(group)
         }
     }
 
     fun deleteGroup(group: FollowGroup) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             AppHelper.db.groupDao().delete(group)
         }
     }
@@ -102,7 +101,7 @@ object FollowRepo {
     }
 
     fun insertItem(groupId: Long, stop: Stop) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             val item = FollowItem(
                 groupId = groupId,
                 routeKey = stop.routeKey,
@@ -115,7 +114,7 @@ object FollowRepo {
     }
 
     fun updateItems(items: List<FollowItem>, newDisplaySeq: Boolean = false) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             val t  = Utils.getCurrentTimestamp()
             if (newDisplaySeq && items.isNotEmpty()) {
                 var displaySeq = AppHelper.db.itemDao().nextDisplaySeq(items[0].groupId)
@@ -129,13 +128,13 @@ object FollowRepo {
     }
 
     fun deleteItem(item: FollowItem) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             AppHelper.db.itemDao().delete(item)
         }
     }
 
     fun updateEta(items: List<ItemAndStop>?) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             if (items != null && items.isNotEmpty())
                 ConnectionHelper.updateItemsEta(items)
         }

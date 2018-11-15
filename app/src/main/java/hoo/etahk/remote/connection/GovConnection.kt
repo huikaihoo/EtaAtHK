@@ -11,8 +11,7 @@ import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.StringLang
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -139,7 +138,7 @@ object GovConnection: BaseConnection {
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                        launch(CommonPool) {
+                        GlobalScope.launch(Dispatchers.Default) {
                             val t = Utils.getCurrentTimestamp()
                             val routes = mutableListOf<Route>()
                             val separator = Separator("\\|\\*\\|".toRegex(), "\\|\\|".toRegex(), Constants.Route.GOV_ROUTE_RECORD_SIZE)

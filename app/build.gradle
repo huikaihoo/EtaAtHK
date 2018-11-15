@@ -13,12 +13,6 @@ def static getCurrentDate() {
     return date.format('yyyyMMdd')
 }
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
-
 kapt {
     useBuildCache = true
 }
@@ -66,16 +60,14 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     //implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.30.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.30.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
 
     // Anko
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
-    implementation "org.jetbrains.anko:anko-design:$anko_version"
-    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     // Android X Core + Material Design
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     implementation 'com.google.android.material:material:1.0.0'
@@ -88,16 +80,16 @@ dependencies {
     // ViewModel + LiveData + Room + Paging
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
     kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
-    implementation "androidx.room:room-runtime:2.1.0-alpha01"
-    kapt "androidx.room:room-compiler:2.1.0-alpha01"
-    implementation "androidx.paging:paging-runtime:2.1.0-alpha01"
+    implementation "androidx.room:room-runtime:2.1.0-alpha02"
+    kapt "androidx.room:room-compiler:2.1.0-alpha02"
+    implementation "androidx.paging:paging-runtime:2.1.0-beta01"
 
     // Kotlin library for android
-    implementation 'androidx.core:core-ktx:1.0.0'
+    implementation 'androidx.core:core-ktx:1.0.1'
     implementation 'com.mcxiaoke.koi:core:0.5.5'
 
     // RecyclerView-FastScroll
-    implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.18'
+    implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.20'
     //implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'
 
     // Gson
@@ -115,9 +107,9 @@ dependencies {
 
     // Unit Test
     testImplementation 'androidx.arch.core:core-testing:2.0.0'
-    testImplementation 'androidx.room:room-testing:2.1.0-alpha01'
+    testImplementation 'androidx.room:room-testing:2.1.0-alpha02'
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:3.8'
+    testImplementation 'org.robolectric:robolectric:4.0.2'
 
     // Android Unit Test
     androidTestImplementation 'androidx.test:runner:1.1.0'

@@ -2,8 +2,7 @@ package hoo.etahk.view.base
 
 import androidx.recyclerview.widget.DiffUtil
 import hoo.etahk.model.diff.BaseDiffCallback
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 
 abstract class DiffAdapter<C, D> : BaseAdapter<C, D>() {
 
@@ -11,7 +10,7 @@ abstract class DiffAdapter<C, D> : BaseAdapter<C, D>() {
 
     override var dataSource: List<D> = emptyList()
         set(value) {
-            launch(UI) {
+            GlobalScope.launch(Dispatchers.Main) {
                 if (useDiff)
                     dispatchUpdates(DiffUtil.calculateDiff(getDiffCallback(field, value)))
                 field = value

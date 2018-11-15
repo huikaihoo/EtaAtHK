@@ -9,10 +9,7 @@ import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.*
 
 object BusConnection : BaseConnection {
 
@@ -38,13 +35,13 @@ object BusConnection : BaseConnection {
                 val jobs = arrayListOf<Job>()
 
                 parentRoutesResult.keys.forEach { company ->
-                    jobs += launch(CommonPool) {
+                    jobs += GlobalScope.launch(Dispatchers.Default) {
                         parentRoutesResult[company] = ConnectionHelper.getParentRoutes(company)
                     }
                 }
 
                 etaRoutesResult.keys.forEach { company ->
-                    jobs += launch(CommonPool) {
+                    jobs += GlobalScope.launch(Dispatchers.Default) {
                         etaRoutesResult[company] = ConnectionHelper.getEtaRoutes(company)
                     }
                 }

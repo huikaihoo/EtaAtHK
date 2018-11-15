@@ -1,11 +1,11 @@
 package hoo.etahk.view.route
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.tabs.TabLayout
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Argument
@@ -18,8 +18,7 @@ import hoo.etahk.model.data.RouteKey
 import hoo.etahk.view.base.BaseActivity
 import hoo.etahk.view.map.RoutesMapsActivity
 import kotlinx.android.synthetic.main.activity_route.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 
@@ -130,7 +129,7 @@ class RouteActivity : BaseActivity() {
 
         viewModel.getMillisLeft().observe(this, Observer<Long> {
             it?.let {
-                launch(UI){
+                GlobalScope.launch(Dispatchers.Main){
                     progress_bar.progress = it.toInt()
                 }
             }

@@ -10,17 +10,17 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Icon
 import android.os.Build
-import androidx.core.content.ContextCompat
-import androidx.core.content.pm.ShortcutInfoCompat
-import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.graphics.drawable.IconCompat
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ImageSpan
 import android.util.Log
 import android.util.TypedValue
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
@@ -195,7 +195,8 @@ object Utils {
      */
     fun timeStrToMsg(timeStr: String): String {
         // TODO("Need to Support English")
-        return timeStr.replace("　".toRegex(), " ")
+        return replaceSpecialCharacters(timeStr)
+                .replace("　".toRegex(), " ")
                 .replace("班次".toRegex(), "")
                 .replace("時段".toRegex(), "")
                 .replace("預定".toRegex(), "")
@@ -250,7 +251,7 @@ object Utils {
             drawable.setBounds(0, 0, size, size)
             DrawableCompat.setTint(drawable.mutate(), color)
 
-            val imageSpan = ImageSpan(drawable, ImageSpan.ALIGN_BASELINE)
+            val imageSpan = ImageSpan(drawable!!, ImageSpan.ALIGN_BASELINE)
             val originalLength = spannableStringBuilder.length
             spannableStringBuilder.append("  ")
             spannableStringBuilder.setSpan(imageSpan, originalLength, originalLength + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)

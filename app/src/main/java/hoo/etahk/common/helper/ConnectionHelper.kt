@@ -60,10 +60,10 @@ object ConnectionHelper: BaseConnection {
         nwfbEta = ConnectionFactory.createRetrofit(okHttpEtaNwfb, Url.NWFB_URL)
                 .create(NwfbApi::class.java)
 
-        gov = ConnectionFactory.createRetrofit(okHttp, Url.GOV2_URL)
+        gov = ConnectionFactory.createRetrofit(okHttp, Url.GOV_URL)
                 .create(GovApi::class.java)
 
-        govStop = ConnectionFactory.createRetrofit(okHttpStop, Url.GOV2_URL)
+        govStop = ConnectionFactory.createRetrofit(okHttpStop, Url.GOV_URL)
                 .create(GovApi::class.java)
     }
 

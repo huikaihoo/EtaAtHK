@@ -1,16 +1,16 @@
 package hoo.etahk.view.base
 
+import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.os.CountDownTimer
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 
 open class TimerViewModel : ViewModel() {
 
     private val millisLeft = MutableLiveData<Long>()
-    private val lastUpdateTime = MutableLiveData<Long>()
+    private val lastUpdateTime = MutableLiveData<Long>().apply { postValue(Utils.getCurrentTimestamp() - 1) }
     private var timer : CountDownTimer? = null
 
     var durationInMillis = 0L

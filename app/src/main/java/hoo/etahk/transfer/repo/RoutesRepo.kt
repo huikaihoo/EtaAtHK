@@ -9,8 +9,7 @@ import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 
 object RoutesRepo {
 
@@ -24,7 +23,7 @@ object RoutesRepo {
     }
 
     fun updateParentRoutes(company: String, forceUpdate: Boolean = false) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             if (forceUpdate || AppHelper.db.parentRouteDao().lastUpdate() < Utils.getValidUpdateTimestamp()) {
                 logd("updateParentRoutes ${company}")
                 ConnectionHelper.getParentRoutes(company)
@@ -42,7 +41,7 @@ object RoutesRepo {
     }
 
     fun updateChildRoutes(parentRoute: Route) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             if (AppHelper.db.childRouteDao().lastUpdate(parentRoute.routeKey.company, parentRoute.routeKey.routeNo) < Utils.getValidUpdateTimestamp()) {
                 logd("updateChildRoutes ${parentRoute.routeKey.company} ${parentRoute.routeKey.routeNo}")
                 ConnectionHelper.getChildRoutes(parentRoute)

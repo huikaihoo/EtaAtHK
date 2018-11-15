@@ -15,5 +15,5 @@ interface GovApi {
                         @Query("region") region: String = "",
                         @Query("syscode") syscode: String = "",
                         @Query("p") p: String = Constants.SharePrefs.GOV_API_PARAMETER_PLATFORM,
-                        @Query("version") appversion: String = Constants.SharePrefs.GOV2_API_PARAMETER_APP_VERSION): Call<ResponseBody>
+                        @Query("version") appversion: String = Constants.SharePrefs.GOV_API_PARAMETER_APP_VERSION): Call<ResponseBody>
 }

@@ -18,10 +18,7 @@ import hoo.etahk.remote.response.KmbBoundVariantRes
 import hoo.etahk.remote.response.KmbEtaRes
 import hoo.etahk.remote.response.KmbStopsRes
 import hoo.etahk.view.App
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,7 +51,7 @@ object KmbConnection: BaseConnection {
                     .enqueue(object : Callback<KmbBoundVariantRes> {
                         override fun onFailure(call: Call<KmbBoundVariantRes>, t: Throwable) {}
                         override fun onResponse(call: Call<KmbBoundVariantRes>, response: Response<KmbBoundVariantRes>) {
-                            launch(CommonPool) {
+                            GlobalScope.launch(Dispatchers.Default) {
                                 val t = Utils.getCurrentTimestamp()
                                 val kmbBoundVariantRes = response.body()
                                 //logd(kmbBoundVariantRes.toString())
@@ -103,7 +100,7 @@ object KmbConnection: BaseConnection {
                 .enqueue(object : Callback<KmbStopsRes> {
                     override fun onFailure(call: Call<KmbStopsRes>, t: Throwable) {}
                     override fun onResponse(call: Call<KmbStopsRes>, response: Response<KmbStopsRes>) {
-                        launch(CommonPool) {
+                        GlobalScope.launch(Dispatchers.Default) {
                             val t = Utils.getCurrentTimestamp()
                             val kmbStopsRes = response.body()
                             //logd(kmbStopsRes.toString())
@@ -184,7 +181,7 @@ object KmbConnection: BaseConnection {
                 val jobs = arrayListOf<Job>()
 
                 stops.forEach { stop ->
-                    jobs += launch(CommonPool) {
+                    jobs += GlobalScope.launch(Dispatchers.Default) {
                         stop.etaStatus = Constants.EtaStatus.FAILED
                         stop.etaUpdateTime = t
                         try {

@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 
 abstract class BaseAdapter<C, D> : RecyclerView.Adapter<BaseViewHolder<C, D>>() {
 
@@ -14,7 +13,7 @@ abstract class BaseAdapter<C, D> : RecyclerView.Adapter<BaseViewHolder<C, D>>() 
     open var dataSource: List<D> = emptyList()
         set(value) {
             field = value
-            launch(UI) {
+            GlobalScope.launch(Dispatchers.Main) {
                 notifyDataSetChanged()
             }
         }

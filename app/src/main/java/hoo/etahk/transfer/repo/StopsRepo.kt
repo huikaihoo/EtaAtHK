@@ -9,8 +9,7 @@ import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.RouteAndStops
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 
 object StopsRepo {
 
@@ -33,7 +32,7 @@ object StopsRepo {
     }
 
     fun updateStops(route: Route, needEtaUpdate: Boolean){
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             if (AppHelper.db.stopDao().lastUpdate(
                     route.routeKey.company,
                     route.routeKey.routeNo,
@@ -58,7 +57,7 @@ object StopsRepo {
 
     // ETA
     fun updateEta(stops: List<Stop>?, sameCompany: Boolean = true) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             if (stops != null && stops.isNotEmpty()) {
                 if (sameCompany) {
                     ConnectionHelper.updateEta(stops)

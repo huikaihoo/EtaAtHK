@@ -1,19 +1,19 @@
 package hoo.etahk.view.route
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.appcompat.widget.PopupMenu
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.PopupMenu
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
@@ -25,8 +25,7 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 
 class RouteFragment : BaseFragment() {
 
@@ -97,7 +96,7 @@ class RouteFragment : BaseFragment() {
     }
 
     fun updateEta(stops: List<Stop>) {
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main) {
             rootView.refresh_layout.isRefreshing = true
             stops.forEach { it.isLoading = true }
             routeStopsAdapter.notifyDataSetChanged()
@@ -167,51 +166,50 @@ class RouteFragment : BaseFragment() {
 
             var errorCount = 0
             var updatedCount = 0
+            var oldCount = 0
 
             it?.forEach { item ->
-                if (item.etaStatus != Constants.EtaStatus.SUCCESS) {
-                    errorCount++
-                }
-                if (item.etaUpdateTime >= 0L && item.etaUpdateTime >= last) {
-                    updatedCount++
-                }
-                if (!fragmentViewModel.isEtaInit) {
+                if (item.etaUpdateTime < last){
+                    oldCount++
                     item.displayEta = false
+                } else {
+                    if (item.etaStatus != Constants.EtaStatus.SUCCESS) {
+                        errorCount++
+                    }
+                    if (item.etaUpdateTime >= 0L) {
+                        updatedCount++
+                    }
                 }
             }
 
-            logd("F=$errorCount U=$updatedCount T=$size")
+            logd("E=$errorCount U=$updatedCount O=$oldCount T=$size last=$last")
 
             it?.let { routeStopsAdapter.dataSource = it }
 
-            if (!fragmentViewModel.isEtaInit && size > 0) {
-                fragmentViewModel.isEtaInit = true
-                fragmentViewModel.isRefreshingAll = true
-            } else {
-                if (size > 0 && !viewModel.isGotoSeqUsed) {
-                    val gotoBound = activity!!.intent.extras.getLong(Constants.Argument.ARG_GOTO_BOUND)
-                    val gotoSeq = activity!!.intent.extras.getLong(Constants.Argument.ARG_GOTO_SEQ)
-                    if (gotoBound == fragmentViewModel.routeKey!!.bound && gotoSeq > 0) {
-                        launch (UI){
-                            for (i in it?.indices!! ) {
-                                if (it[i].seq == gotoSeq) {
-                                    logd("GotoSeqUsed ${gotoSeq} ${i}")
-                                    val layoutManager = rootView.recycler_view.layoutManager as LinearLayoutManager
-                                    layoutManager.scrollToPositionWithOffset(i, 0)
-                                }
+            if (size > 0 && !viewModel.isGotoSeqUsed) {
+                val gotoBound = activity!!.intent.extras!!.getLong(Constants.Argument.ARG_GOTO_BOUND)
+                val gotoSeq = activity!!.intent.extras!!.getLong(Constants.Argument.ARG_GOTO_SEQ)
+                if (gotoBound == fragmentViewModel.routeKey!!.bound && gotoSeq > 0) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        for (i in it?.indices!! ) {
+                            if (it[i].seq == gotoSeq) {
+                                logd("GotoSeqUsed $gotoSeq $i")
+                                val layoutManager = rootView.recycler_view.layoutManager as LinearLayoutManager
+                                layoutManager.scrollToPositionWithOffset(i, 0)
                             }
                         }
                     }
                 }
-                if (size == updatedCount && errorCount <= 0) {
-                    rootView.refresh_layout.isRefreshing = false
+            }
+            if (size == updatedCount && errorCount <= 0) {
+                rootView.refresh_layout.isRefreshing = false
 
-                    if (fragmentViewModel.isRefreshingAll) {
-                        fragmentViewModel.isRefreshingAll = false
-                        viewModel.startTimer()
-                    }
+                if (fragmentViewModel.isRefreshingAll) {
+                    fragmentViewModel.isRefreshingAll = false
+                    viewModel.startTimer()
                 }
             }
+
             // TODO ("Show Network Error Message based on Network Error")
         })
 

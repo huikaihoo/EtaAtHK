@@ -12,8 +12,7 @@ import hoo.etahk.model.misc.RouteFavourite
 import hoo.etahk.model.misc.RouteHistory
 import hoo.etahk.model.relation.RouteFavouriteEx
 import hoo.etahk.model.relation.RouteHistoryEx
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 
 object MiscRepo {
 
@@ -32,7 +31,7 @@ object MiscRepo {
     }
 
     fun insertRouteFavourite(routeKey: RouteKey) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             val favourite = AppHelper.db.miscFavouriteDao().selectOnce(routeKey.company, routeKey.routeNo)
             if (favourite == null) {
                 insert(
@@ -46,7 +45,7 @@ object MiscRepo {
     }
 
     fun insertOrUpdateRouteHistory(routeKey: RouteKey) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             val history = AppHelper.db.miscHistoryDao().selectOnce(routeKey.company, routeKey.routeNo)
             if (history == null) {
                 insert(RouteHistory(
@@ -62,7 +61,7 @@ object MiscRepo {
     }
 
     fun insert(misc: BaseMisc) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             misc.displaySeq = AppHelper.db.miscDao().nextDisplaySeq(misc.miscType)
             misc.updateTime = Utils.getCurrentTimestamp()
             AppHelper.db.miscDao().insert(misc.toMisc())
@@ -70,14 +69,14 @@ object MiscRepo {
     }
 
     fun update(misc: BaseMisc) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             misc.updateTime = Utils.getCurrentTimestamp()
             AppHelper.db.miscDao().update(misc.toMisc())
         }
     }
 
     fun delete(misc: BaseMisc) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             AppHelper.db.miscDao().delete(misc.toMisc())
         }
     }

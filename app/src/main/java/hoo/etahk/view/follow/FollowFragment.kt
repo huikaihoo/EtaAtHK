@@ -29,9 +29,7 @@ import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.fragment_recycler.view.*
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 import org.jetbrains.anko.startActivity
 
 class FollowFragment : BaseFragment() {
@@ -106,7 +104,7 @@ class FollowFragment : BaseFragment() {
     }
 
     fun updateEta(items: List<ItemAndStop>) {
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main) {
             rootView.refresh_layout.isRefreshing = true
             items.forEach { it.stop?.isLoading = true }
             followItemsAdapter.notifyDataSetChanged()
@@ -116,7 +114,7 @@ class FollowFragment : BaseFragment() {
     }
 
     fun updateItemsDisplaySeq(items: List<ItemAndStop>) {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             val updatedItems = mutableListOf<FollowItem>()
 
             for (i in items.indices) {

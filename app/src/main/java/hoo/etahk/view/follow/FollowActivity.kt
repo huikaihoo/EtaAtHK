@@ -1,16 +1,16 @@
 package hoo.etahk.view.follow
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -24,8 +24,7 @@ import hoo.etahk.view.dialog.InputDialog
 import kotlinx.android.synthetic.main.activity_follow.*
 import kotlinx.android.synthetic.main.activity_follow_nav.*
 import kotlinx.android.synthetic.main.dialog_input.view.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 
 
 class FollowActivity : NavActivity() {
@@ -117,7 +116,7 @@ class FollowActivity : NavActivity() {
 
         viewModel.getMillisLeft().observe(this, Observer<Long> {
             it?.let {
-                launch(UI){
+                GlobalScope.launch(Dispatchers.Main){
                     progress_bar.progress = it.toInt()
                 }
             }
@@ -251,25 +250,6 @@ class FollowActivity : NavActivity() {
                 true
             }
             R.id.menu_add_shortcut -> {
-//                val REQUEST_PLACE_PICKER = 1
-//
-//
-//                val intentBuilder = PlacePicker.IntentBuilder()
-//
-//                val intent: Intent
-//                try {
-//                    intent = intentBuilder.build(this)
-//                    //startActivityForResult(intent, REQUEST_PLACE_PICKER)
-//                } catch (e: GooglePlayServicesRepairableException) {
-//                    e.printStackTrace()
-//                } catch (e: GooglePlayServicesNotAvailableException) {
-//                    e.printStackTrace()
-//                }
-//
-//                startActivity<LocationEditActivity>(
-//                    Argument.ARG_NAME to ""
-//                )
-
                 Utils.createShortcut(
                     this,
                     tag(),

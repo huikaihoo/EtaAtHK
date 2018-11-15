@@ -21,10 +21,7 @@ import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 import hoo.etahk.view.App
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -102,7 +99,7 @@ object NwfbConnection: BaseConnection {
         if (response.isSuccessful) {
             val separator = Separator("\\|\\*\\|<br>".toRegex(), "\\|\\|".toRegex(), Constants.Route.NWFB_ROUTE_RECORD_SIZE)
 
-            logd("onResponse ${separator.columnSize}")
+            logd("onResponse columnSize ${separator.columnSize}")
             separator.original = response.body()?.string() ?: ""
             separator.result.forEach {
                 val route = toRoute(it, t)
@@ -178,7 +175,7 @@ object NwfbConnection: BaseConnection {
                     .enqueue(object : Callback<ResponseBody> {
                         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                            launch(CommonPool) {
+                            GlobalScope.launch(Dispatchers.Default) {
                                 val t = Utils.getCurrentTimestamp()
                                 val responseStr = response.body()?.string()
                                 //logd(responseStr)
@@ -241,7 +238,7 @@ object NwfbConnection: BaseConnection {
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                        launch(CommonPool) {
+                        GlobalScope.launch(Dispatchers.Default) {
                             val t = Utils.getCurrentTimestamp()
                             val responseStr = response.body()?.string()
                             //logd(responseStr)
@@ -275,7 +272,7 @@ object NwfbConnection: BaseConnection {
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                        launch(CommonPool) {
+                        GlobalScope.launch(Dispatchers.Default) {
                             val t = Utils.getCurrentTimestamp()
                             val responseStr = response.body()?.string()
                             //logd(responseStr)
@@ -342,7 +339,7 @@ object NwfbConnection: BaseConnection {
                 val jobs = arrayListOf<Job>()
 
                 stops.forEach { stop ->
-                    jobs += launch(CommonPool) {
+                    jobs += GlobalScope.launch(Dispatchers.Default) {
                         stop.etaStatus = Constants.EtaStatus.FAILED
                         stop.etaUpdateTime = t
                         try {

@@ -3,8 +3,7 @@ package hoo.etahk.view.base
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 
 abstract class FilterDiffAdapter<C, D> : DiffAdapter<C, D>() {
 
@@ -23,7 +22,7 @@ abstract class FilterDiffAdapter<C, D> : DiffAdapter<C, D>() {
     private var dataSourceFiltered: List<D> = emptyList()
 
     private fun publishResults(constraint: String, scrollToTop: Boolean) {
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main) {
             val result = performFiltering(constraint)
 
             if (useDiff) {
