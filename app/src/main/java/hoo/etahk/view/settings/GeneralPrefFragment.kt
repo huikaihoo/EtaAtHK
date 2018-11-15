@@ -2,8 +2,9 @@ package hoo.etahk.view.settings
 
 import android.os.Bundle
 import android.preference.Preference
-import androidx.appcompat.app.AlertDialog
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import hoo.etahk.BuildConfig
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -99,6 +100,15 @@ class GeneralPrefFragment : BasePrefFragment() {
                 }
                 return true
             }
+        }
+
+        val licenses= findPreference(R.string.pref_licenses)
+
+        licenses.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            activity.startActivity<OssLicensesMenuActivity>(
+                Constants.Argument.ARG_TITLE to getString(R.string.pref_title_licenses)
+            )
+            true
         }
     }
 }

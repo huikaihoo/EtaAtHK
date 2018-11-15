@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="hoo.etahk">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,7 +18,8 @@
         android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <!-- Application meta-data -->
         <meta-data
@@ -36,8 +38,7 @@
         <!-- Main Activity -->
         <activity
             android:name=".view.follow.FollowActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,36 +52,47 @@
         </activity>
         <activity
             android:name=".view.search.BusSearchActivity"
-            android:label="@string/title_bus_search"
-            android:theme="@style/AppTheme">
+            android:label="@string/title_bus_search">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.route.RouteActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".view.route.RouteActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.fh.FHActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".view.fh.FHActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.follow.LocationEditActivity" />
         <activity
             android:name=".view.map.RoutesMapsActivity"
             android:theme="@style/AppTheme.Transparent" />
         <activity
             android:name=".view.map.StreetViewActivity"
             android:theme="@style/AppTheme.Transparent" />
+
+        <!-- Settings Activity -->
         <activity
             android:name=".view.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Licenses Activity -->
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/AppTheme.WithActionBar" />
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/AppTheme.WithActionBar" />
 
         <!-- Test -->
         <activity android:name=".view.test.MainActivity" />
@@ -137,8 +149,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
-
-        <activity android:name=".view.follow.LocationEditActivity"></activity>
     </application>
 
 </manifest>

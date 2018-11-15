@@ -1,6 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- App Theme -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -8,16 +8,15 @@
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
 
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-
         <item name="alertDialogTheme">@style/AppTheme.Dialog.Large</item>
         <item name="buttonStyle">@style/AppTheme.Button</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat" />
+    <!-- App Theme (with Action Bar) -->
+    <style name="AppTheme.WithActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+    </style>
 
     <!-- App Theme (Transparent) -->
     <style name="AppTheme.Transparent" parent="Theme.AppCompat">
@@ -47,6 +46,9 @@
     </style>
 
     <!-- App Theme (Component) -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat" />
+
     <style name="AppTheme.TextAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/colorDialogAccent</item>
     </style>
@@ -92,10 +94,4 @@
         <item name="colorPrimaryDark">@color/colorNightDark</item>
         <item name="colorAccent">@color/colorNightAccent</item>
     </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
 </resources>

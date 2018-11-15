@@ -95,6 +95,7 @@ object Constants {
         const val ARG_MISC_TYPE = "misc_type"
         const val ARG_LOCATION_ID = "location_id"
         const val ARG_NAME = "name"
+        const val ARG_TITLE = "title"
     }
 
     object Company {
