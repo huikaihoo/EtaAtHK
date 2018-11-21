@@ -11,7 +11,9 @@ import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.StringLang
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,9 +43,12 @@ object GovConnection: BaseConnection {
         return null
     }
 
-    /*********************
-     * Get Parent Routes *
-     *********************/
+    /**
+     * Get List of Parent Routes
+     *
+     * @param company company code
+     * @return map of route no to its parent route
+     */
     override fun getParentRoutes(company: String): HashMap<String, Route>? {
         val t = Utils.getCurrentTimestamp()
         val temp = HashMap<String, MutableList<Route>>()
@@ -61,9 +66,9 @@ object GovConnection: BaseConnection {
                     if (temp.contains(key)) {
                         val routes = temp[key]!!
                         routes.add(route)
-                        temp.put(key, routes)
+                        temp[key] = routes
                     } else {
-                        temp.put(key, mutableListOf(route))
+                        temp[key] = mutableListOf(route)
                     }
                 }
                 //result.putAll(routes.associate{ Pair(it.routeKey.company + it.routeKey.routeNo, it) })
@@ -72,9 +77,9 @@ object GovConnection: BaseConnection {
 
             for((key, routes) in temp) {
                 if (routes.size == 1) {
-                    result.put(key, routes[0])
+                    result[key] = routes[0]
                 } else if (routes.size > 1){
-                    result.put(key, mergeVariantRoutes(routes))
+                    result[key] = mergeVariantRoutes(routes)
                 }
             }
         }

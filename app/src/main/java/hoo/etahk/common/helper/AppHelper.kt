@@ -1,10 +1,11 @@
 package hoo.etahk.common.helper
 
-import androidx.room.Room
 import android.content.Context
+import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import hoo.etahk.common.Constants.DATABASE_NAME
+import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.model.AppDatabase
 
 
@@ -25,10 +26,18 @@ object AppHelper {
                 .serializeNulls()
                 .create()
 
-        db = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build()
+        db = when (Utils.isUnitTest) {
+            true ->
+                Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build()
+            false ->
+                Room.databaseBuilder(context, AppDatabase::class.java, Constants.DATABASE_NAME)
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build()
+        }
 
 //        val dispatcher = Dispatcher()
 //        dispatcher.maxRequests = Constants.SharePrefs.DEFAULT_MAX_REQUESTS_VAL

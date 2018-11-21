@@ -72,7 +72,7 @@
     <string name="lwb">龍運</string>
     <string name="nwfb">新巴</string>
     <string name="ctb">城巴</string>
-    <string name="ntb">嶼巴</string>
+    <string name="nlb">嶼巴</string>
     <string name="tram">電車</string>
     <string name="mtr">港鐵</string>
 
@@ -93,6 +93,8 @@
     <string name="work">公司</string>
 
     <!-- Stop Item -->
+    <string name="stop_only_for_particular_time">部分班次途經</string>
+    <string name="stop_fare_holiday">假日車費：</string>
     <string name="eta_msg_no_eta_service">沒有到站時間服務</string>
     <string name="eta_msg_not_in_service_hours">服務時間已過</string>
     <string name="eta_msg_no_eta_info">沒有到站時間資訊</string>

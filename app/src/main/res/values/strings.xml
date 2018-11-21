@@ -95,7 +95,7 @@
     <string name="lwb">LWB</string>
     <string name="nwfb">NWFB</string>
     <string name="ctb">CTB</string>
-    <string name="ntb">NTB</string>
+    <string name="nlb">NLB</string>
     <string name="tram">Tram</string>
     <string name="mtr">MTR</string>
 
@@ -116,6 +116,8 @@
     <string name="work">Work</string>
 
     <!-- Stop Item -->
+    <string name="stop_only_for_particular_time">Only stop at particular time</string>
+    <string name="stop_fare_holiday">Fare in holiday:\u0020</string>
     <string name="eta_msg_no_eta_service">No ETA Service</string>
     <string name="eta_msg_not_in_service_hours">Not in service hours</string>
     <string name="eta_msg_no_eta_info">No ETA Information</string>

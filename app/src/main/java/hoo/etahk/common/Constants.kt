@@ -144,6 +144,7 @@ object Constants {
         const val KMB_ETA_URL = "http://etav3.kmb.hk/"
         const val KMB_ETA_FEED_URL = "http://etadatafeed.kmb.hk:1933/"
         const val NWFB_URL = "http://mobile.nwstbus.com.hk/"
+        const val NLB_URL = "https://nlb.kcbh.com.hk:8443/"
         const val GOV_URL = "http://app1.hketransport.td.gov.hk/"
         const val GOV2_URL = "http://cms.hkemobility.gov.hk/"
     }

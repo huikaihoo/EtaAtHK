@@ -33,16 +33,15 @@ object KmbConnection: BaseConnection {
         return null
     }
 
-    /*****************************
-     * Get Parent Route (Single) *
-     *****************************/
     override fun getParentRoute(routeKey: RouteKey): Route? {
         return null
     }
 
-    /********************
-     * Get Child Routes *
-     ********************/
+    /**
+     * Get Child Route by Parent Route and update into DB
+     *
+     *  @param parentRoute parent route
+     */
     override fun getChildRoutes(parentRoute: Route) {
         for (bound in 1..parentRoute.boundCount) {
             ConnectionHelper.kmb.getBoundVariant(
@@ -89,9 +88,12 @@ object KmbConnection: BaseConnection {
         )
     }
 
-    /***********************
-     * Get Paths and Stops *
-     ***********************/
+    /**
+     * Get list of stops and path by Child Route and update into DB
+     *
+     * @param route Child Route
+     * @param needEtaUpdate update eta of stops as well if true
+     */
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
         ConnectionHelper.kmbStop.getStops(
                 route = route.routeKey.routeNo,
@@ -169,10 +171,11 @@ object KmbConnection: BaseConnection {
         return stop
     }
 
-    /***************
-     * Update ETA
-     ***************/
-
+    /**
+     * Get Eta of list of stops and update into DB
+     *
+     * @param stops list of stops
+     */
     override fun updateEta(stops: List<Stop>) {
         val t = Utils.getCurrentTimestamp()
 
@@ -286,15 +289,5 @@ object KmbConnection: BaseConnection {
                 wifi = (response.wifi != null && response.wifi == "Y"),
                 capacity = Utils.phaseCapacity(response.ol ?: "")
         )
-    }
-
-    // ETA with message only (no time)
-    private fun toEtaResult(stop: Stop, msg: String): EtaResult {
-        return EtaResult(
-            company = stop.routeKey.company,
-            etaTime = -1L,
-            msg = msg,
-            scheduleOnly = false,
-            distance = -1L)
     }
 }

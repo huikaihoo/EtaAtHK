@@ -1,17 +1,17 @@
 package hoo.etahk.view.map
 
 import android.Manifest
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import android.view.Menu
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -127,7 +127,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         }
 
         // Set stops on map
-        val stops = spinnerAdapter.dataSource[viewModel.selectedRoutePosition].stops
+        val stops = spinnerAdapter.dataSource[viewModel.selectedRoutePosition].stops.sortedBy { it.seq }
 
         if (stops.isNotEmpty()) {
             stops.forEachIndexed { i, stop ->

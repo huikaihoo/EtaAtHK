@@ -48,6 +48,7 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -72,6 +73,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     implementation 'androidx.browser:browser:1.0.0'
+    implementation 'androidx.preference:preference:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
 
     // Google Service
@@ -95,8 +97,9 @@ dependencies {
     implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.20'
     //implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'
 
-    // Gson
+    // JSON / HTML Parser
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'org.jsoup:jsoup:1.11.3'
 
     // Retrofit2 (OkHttp3)
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
@@ -115,7 +118,7 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.0.2'
 
     // Android Unit Test
-    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
 

@@ -10,6 +10,7 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.remote.api.GovApi
 import hoo.etahk.remote.api.KmbApi
+import hoo.etahk.remote.api.NlbApi
 import hoo.etahk.remote.api.NwfbApi
 import hoo.etahk.remote.connection.*
 import okhttp3.OkHttpClient
@@ -19,6 +20,7 @@ object ConnectionHelper: BaseConnection {
     private lateinit var okHttpStop: OkHttpClient
     private lateinit var okHttpEtaKmb: OkHttpClient
     private lateinit var okHttpEtaNwfb: OkHttpClient
+    private lateinit var okHttpEtaNlb: OkHttpClient
 
     // KMB
     lateinit var kmb: KmbApi private set
@@ -29,6 +31,9 @@ object ConnectionHelper: BaseConnection {
     lateinit var nwfb: NwfbApi private set
     lateinit var nwfbStop: NwfbApi private set
     lateinit var nwfbEta: NwfbApi private set
+    // NLB
+    lateinit var nlb: NlbApi private set
+    lateinit var nlbEta: NlbApi private set
     // GOV
     lateinit var gov: GovApi private set
     lateinit var govStop: GovApi private set
@@ -38,6 +43,7 @@ object ConnectionHelper: BaseConnection {
         okHttpStop = ConnectionFactory.createClient(NetworkType.STOP, "")
         okHttpEtaKmb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
         okHttpEtaNwfb = ConnectionFactory.createClient(NetworkType.ETA, Company.NWFB)
+        okHttpEtaNlb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
 
         kmb = ConnectionFactory.createRetrofit(okHttp, Url.KMB_URL)
                 .create(KmbApi::class.java)
@@ -60,6 +66,12 @@ object ConnectionHelper: BaseConnection {
         nwfbEta = ConnectionFactory.createRetrofit(okHttpEtaNwfb, Url.NWFB_URL)
                 .create(NwfbApi::class.java)
 
+        nlb = ConnectionFactory.createRetrofit(okHttp, Url.NLB_URL)
+                .create(NlbApi::class.java)
+
+        nlbEta = ConnectionFactory.createRetrofit(okHttpEtaNlb, Url.NLB_URL)
+                .create(NlbApi::class.java)
+
         gov = ConnectionFactory.createRetrofit(okHttp, Url.GOV_URL)
                 .create(GovApi::class.java)
 
@@ -75,6 +87,7 @@ object ConnectionHelper: BaseConnection {
             Company.LWB -> KmbConnection
             Company.NWFB -> NwfbConnection
             Company.CTB -> NwfbConnection
+            Company.NLB -> NlbConnection
             else -> null
         }
     }

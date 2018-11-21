@@ -17,15 +17,18 @@ object BusConnection : BaseConnection {
         return null
     }
 
-    /*********************
-     * Get Parent Routes *
-     *********************/
+    /**
+     * Get List of Parent Routes
+     *
+     * @param company company code
+     * @return map of route no to its parent route
+     */
     override fun getParentRoutes(company: String): HashMap<String, Route>? {
         val t = Utils.getCurrentTimestamp()
 
         // 1. Get Result from Multiple Sources
         val parentRoutesResult = HashMap<String, HashMap<String, Route>?>()
-        parentRoutesResult.putAll(mapOf(Company.GOV to null, Company.NWFB to null))
+        parentRoutesResult.putAll(mapOf(Company.GOV to null, Company.NWFB to null, Company.NLB to null))
 
         val etaRoutesResult = HashMap<String, List<String>?>()
         etaRoutesResult.putAll(mapOf(Company.KMB to null, Company.NWFB to null))
@@ -52,23 +55,37 @@ object BusConnection : BaseConnection {
             loge("getParentRoutes failed!", e)
         }
 
-        logd("onResponse ${parentRoutesResult[Company.GOV]?.size}")
-        logd("onResponse ${parentRoutesResult[Company.NWFB]?.size}")
+        parentRoutesResult.keys.forEach { company ->
+            logd("onResponse $company = ${parentRoutesResult[company]?.size}")
+        }
 
         parentRoutesResult.values.forEach { if (it == null || it.isEmpty()) return null }
         //etaRoutesResult.values.forEach { if (it == null) return null }
 
-        // 2. Merge NWFB Parents Routes to Gov Parents Routes
+        // 2. Merge Others Parents Routes into Gov Parents Routes
         val govResult = parentRoutesResult[Company.GOV]!!
 
-        for((key, nwfbRoute) in parentRoutesResult[Company.NWFB]!!) {
-            if (govResult.contains(key)) {
-                val govRoute = govResult[key]!!
-                govRoute.direction = nwfbRoute.direction
-                govRoute.info.boundIds = nwfbRoute.info.boundIds
-                govResult.put(key, govRoute)
-            } else {
-                govResult.put(key, nwfbRoute)
+        parentRoutesResult.forEach { (company, parentRoutes) ->
+            if (company != Company.GOV && parentRoutes != null) {
+                for((key, companyRoute) in parentRoutes) {
+                    if (govResult.contains(key)) {
+                        val govRoute = govResult[key]!!
+                        govRoute.direction = companyRoute.direction
+                        when (company) {
+                            Company.NWFB -> {
+                                govRoute.info.boundIds = companyRoute.info.boundIds
+                            }
+                            Company.NLB -> {
+                                govRoute.from = companyRoute.from
+                                govRoute.to = companyRoute.to
+                                govRoute.details = companyRoute.details
+                            }
+                        }
+                        govResult[key] = govRoute
+                    } else {
+                        govResult[key] = companyRoute
+                    }
+                }
             }
         }
 
@@ -79,11 +96,11 @@ object BusConnection : BaseConnection {
                 if (govResult.contains(key)) {
                     val govRoute = govResult[key]!!
                     govRoute.eta = true
-                    govResult.put(key, govRoute)
+                    govResult[key] = govRoute
                 } else {
                     val newRoute = ConnectionHelper.getParentRoute(RouteKey(etaCompany, routeNo, -1L, -1L))
                     if (newRoute != null)
-                        govResult.put(key, newRoute)
+                        govResult[key] = newRoute
                 }
             }
         }

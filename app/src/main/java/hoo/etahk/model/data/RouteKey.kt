@@ -103,8 +103,14 @@ data class RouteKey (
                 }
             } else if (prefix == "A" || prefix == "E" || prefix == "R" || prefix == "S") {
                 BUS_AIRPORT_LANTAU
-            } else if (prefix == "B" || prefix == "K") {
+            } else if (prefix == "K") {
                 BUS_KL_NT
+            } else if (prefix == "B") {
+                if (num in 4L..6L) {
+                    BUS_AIRPORT_LANTAU
+                } else {
+                    BUS_KL_NT
+                }
             } else if (prefix == "H") {
                 BUS_CROSS_HARBOUR
             } else if (company == DB || company == PI) {

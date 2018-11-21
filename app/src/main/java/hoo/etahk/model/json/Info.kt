@@ -5,4 +5,6 @@ data class Info(var boundIds: List<String> = emptyList(),
                 val bound: String = "",
                 val startSeq: Long = -1L,
                 val endSeq: Long = -1L,
-                val stopId: String = "")
+                val stopId: String = "",
+                val fareHoliday: Double = -1.0,
+                val partial: Long = 0L)

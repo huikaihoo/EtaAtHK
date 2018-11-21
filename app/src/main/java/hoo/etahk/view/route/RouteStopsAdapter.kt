@@ -37,12 +37,25 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
             val etaResults = stop.etaResults
 
             itemView.stop_title.text = "${position + 1}. ${stop.name.value}"
-            itemView.stop_desc.text = stop.details.value
+
+            var additionInfo = ""
+            if (stop.info.partial == 1L) {
+                additionInfo = " (" + App.instance.getString(R.string.stop_only_for_particular_time) + ")"
+            }
+
             if (stop.fare > 0 && dataSource.size > (position + 1)) {
-                itemView.fare.text = App.instance.getString(R.string.price_2dp).format(stop.fare)
+                var fareHoliday = ""
+                if (stop.info.fareHoliday > 0.0 && stop.info.fareHoliday != stop.fare) {
+                    additionInfo += " [" + App.instance.getString(R.string.stop_fare_holiday) +
+                            App.instance.getString(R.string.price_2dp).format(stop.info.fareHoliday) + "]"
+                }
+                itemView.fare.text = App.instance.getString(R.string.price_2dp).format(stop.fare) + fareHoliday
+
             } else {
                 itemView.fare.text = ""
             }
+
+            itemView.stop_desc.text = stop.details.value + additionInfo
 
             // ETA Text Color
             var highlight = false
@@ -52,7 +65,9 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                 val prevEtaTime = if (prevEtaResults.isNotEmpty()) prevEtaResults[0].etaTime else -1
                 val currEtaTime = if (etaResults.isNotEmpty()) etaResults[0].etaTime else -1
 
-                if (!prevIsLoading && (currEtaTime in 1..(prevEtaTime - 1) || (prevEtaTime < 0L && currEtaTime > 0L)))
+                // TODO("Handle info.partial")
+
+                if (!prevIsLoading && ( (currEtaTime/60L) in 1..(prevEtaTime/60L- 1L) || (prevEtaTime < 0L && currEtaTime > 0L)))
                     highlight = true
             } else {
                 if (etaResults.isNotEmpty() && etaResults[0].valid && etaResults[0].getDiffInMinutes() <= Constants.SharePrefs.DEFAULT_HIGHLIGHT_B4_DEPARTURE)

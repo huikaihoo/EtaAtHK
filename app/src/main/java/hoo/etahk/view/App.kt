@@ -2,6 +2,7 @@ package hoo.etahk.view
 
 import android.app.Application
 import com.facebook.stetho.Stetho
+import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
@@ -23,7 +24,8 @@ class App : Application() {
     }
 
     private fun initStetho() {
-        Stetho.initializeWithDefaults(this)
+        if (!Utils.isUnitTest)
+            Stetho.initializeWithDefaults(this)
     }
 
     private fun initSharePrefs() {

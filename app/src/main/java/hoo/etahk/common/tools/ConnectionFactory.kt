@@ -6,6 +6,7 @@ import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.NetworkType
 import hoo.etahk.common.Constants.SharePrefs
 import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
 import okhttp3.Dispatcher
@@ -15,7 +16,9 @@ import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.security.SecureRandom
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.*
 
 object ConnectionFactory {
 
@@ -31,6 +34,13 @@ object ConnectionFactory {
         }
 
         var builder = OkHttpClient().newBuilder().dispatcher(dispatcher)
+
+        val sslTrustManager = SSLTrustManager()
+        val sslSocketFactory = createSSLSocketFactory(sslTrustManager)
+
+        if (sslSocketFactory != null) {
+            builder = builder.sslSocketFactory(sslSocketFactory, sslTrustManager).hostnameVerifier(TrustAllHostnameVerifier())
+        }
 
         builder = when (networkType) {
             NetworkType.DEFAULT -> builder
@@ -56,7 +66,7 @@ object ConnectionFactory {
         /**
          * Source: https://www.jianshu.com/p/4132b381f07e
          */
-        builder.addInterceptor( { chain ->
+        builder.addInterceptor { chain ->
             val request = chain.request()
                 .newBuilder()
                 .removeHeader("User-Agent")
@@ -64,11 +74,11 @@ object ConnectionFactory {
                 //.addHeader("User-Agent", WebSettings.getDefaultUserAgent(App.instance))
                 .build()
             chain.proceed(request)
-        } )
+        }
 
         builder = when (SharedPrefsHelper.getAppMode()) {
             AppMode.DEV -> builder.addNetworkInterceptor(StethoInterceptor())
-            else -> builder.addNetworkInterceptor(StethoInterceptor())
+            else -> builder
         }
 
         return builder.build()
@@ -101,6 +111,44 @@ object ConnectionFactory {
             }
 
             return response
+        }
+    }
+
+    /**
+     * Source: https://www.jianshu.com/p/cc7ae2f96b64
+     */
+    private fun createSSLSocketFactory(trustManager: TrustManager): SSLSocketFactory? {
+        return try {
+            val sc = SSLContext.getInstance("TLS")
+            sc.init(null, arrayOf(trustManager), SecureRandom())
+            sc.socketFactory
+        } catch (e: Exception) {
+            loge("createSSLSocketFactory Failed!", e)
+            null
+        }
+    }
+
+    class SSLTrustManager : X509TrustManager {
+        override fun checkClientTrusted(
+            x509Certificates: Array<java.security.cert.X509Certificate>,
+            s: String
+        ) {
+        }
+
+        override fun checkServerTrusted(
+            x509Certificates: Array<java.security.cert.X509Certificate>,
+            s: String
+        ) {
+        }
+
+        override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate?> {
+            return arrayOfNulls(0)
+        }
+    }
+
+    private class TrustAllHostnameVerifier : HostnameVerifier {
+        override fun verify(hostname: String, session: SSLSession): Boolean {
+            return true
         }
     }
 }

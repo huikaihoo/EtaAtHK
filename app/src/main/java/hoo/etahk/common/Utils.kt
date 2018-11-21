@@ -34,6 +34,8 @@ import kotlin.math.abs
 
 
 object Utils {
+    val isUnitTest = (Build.DEVICE ?: "") == "robolectric" && (Build.PRODUCT ?: "") == "robolectric"
+
     /**
      * Function to return current timestamp in second.
      * @return timestamp in second
@@ -185,6 +187,18 @@ object Utils {
         return result
     }
 
+    /**
+     * Function to return EAT Time String from timestamp
+     *
+     * @param timestamp timestamp in second
+     * @return time string (HH:mm)
+     */
+    @SuppressLint("SimpleDateFormat")
+    fun timestampToTimeStr(timestamp: Long): String {
+        val etaTimeFormat = SimpleDateFormat("HH:mm")
+        return etaTimeFormat.format(Date(timestamp * 1000))
+    }
+
     fun replaceSpecialCharacters(str: String): String {
         return str.replace("\uE473".toRegex(), "邨")
                 .replace("\uE2B4".toRegex(), "璧")
@@ -205,6 +219,7 @@ object Utils {
                 .replace("預定".toRegex(), "")
                 .replace("距離.*公里".toRegex(), "")
                 .replace("未開出".toRegex(), "")
+                .replace("預計時間".toRegex(), "")
                 .trim()
     }
 
@@ -214,7 +229,7 @@ object Utils {
      */
     fun isScheduledOnly(timeStr: String): Boolean {
         // TODO("Need to Support English")
-        return timeStr.contains("預定".toRegex())
+        return timeStr.contains("預定".toRegex()) || timeStr.contains("預計時間".toRegex())
     }
 
     fun phaseCapacity(capacityStr: String): Long {

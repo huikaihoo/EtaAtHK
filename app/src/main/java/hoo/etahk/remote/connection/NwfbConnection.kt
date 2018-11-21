@@ -84,9 +84,12 @@ object NwfbConnection: BaseConnection {
         return null
     }
 
-    /*********************
-     * Get Parent Routes *
-     *********************/
+    /**
+     * Get List of Parent Routes
+     *
+     * @param company company code
+     * @return map of route no to its parent route
+     */
     override fun getParentRoutes(company: String): HashMap<String, Route>? {
         val t = Utils.getCurrentTimestamp()
         val result = HashMap<String, Route>()
@@ -106,9 +109,9 @@ object NwfbConnection: BaseConnection {
                 val key = route.routeKey.company + route.routeKey.routeNo
 
                 if (result.contains(key)) {
-                    result.put(key, mergeRoute(it, result[key]!!))
+                    result[key] = mergeRoute(it, result[key]!!)
                 } else {
-                    result.put(key, route)
+                    result[key] = route
                 }
             }
 
@@ -162,9 +165,11 @@ object NwfbConnection: BaseConnection {
         return null
     }
 
-    /*******************
-     * Get Child Routes
-     *******************/
+    /**
+     * Get Child Route by Parent Route and update into DB
+     *
+     *  @param parentRoute parent route
+     */
     override fun getChildRoutes(parentRoute: Route) {
 
         parentRoute.info.boundIds.forEachIndexed { index, boundId ->
@@ -225,9 +230,12 @@ object NwfbConnection: BaseConnection {
         )
     }
 
-    /***************
-     * Get Stops
-     ***************/
+    /**
+     * Get list of stops and path by Child Route and update into DB
+     *
+     * @param route Child Route
+     * @param needEtaUpdate update eta of stops as well if true
+     */
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
 
         ConnectionHelper.nwfbStop.getPaths(
@@ -328,9 +336,11 @@ object NwfbConnection: BaseConnection {
         )
     }
 
-    /***************
-     * Update ETA
-     ***************/
+    /**
+     * Get Eta of list of stops and update into DB
+     *
+     * @param stops list of stops
+     */
     override fun updateEta(stops: List<Stop>) {
         val t = Utils.getCurrentTimestamp()
 
@@ -477,16 +487,6 @@ object NwfbConnection: BaseConnection {
                 }
             }
         }
-    }
-
-    // ETA with message only (no time)
-    private fun toEtaResult(stop: Stop, msg: String): EtaResult {
-        return EtaResult(
-                company = stop.routeKey.company,
-                etaTime = -1L,
-                msg = msg,
-                scheduleOnly = false,
-                distance = -1L)
     }
 
     // Normal ETA
