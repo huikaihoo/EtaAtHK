@@ -1,9 +1,9 @@
 package hoo.etahk.view.settings
 
 import android.os.Bundle
-import android.preference.Preference
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import androidx.preference.Preference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import hoo.etahk.BuildConfig
 import hoo.etahk.R
@@ -17,8 +17,17 @@ import hoo.etahk.view.follow.FollowActivity
 import org.jetbrains.anko.startActivity
 
 class GeneralPrefFragment : BasePrefFragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    /**
+     * Called during [.onCreate] to supply the preferences for this fragment.
+     * Subclasses are expected to call [.setPreferenceScreen] either
+     * directly or via helper methods such as [.addPreferencesFromResource].
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     * @param rootKey If non-null, this preference fragment should be rooted at the
+     * [androidx.preference.PreferenceScreen] with this key.
+     */
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_general)
         setHasOptionsMenu(true)
 
@@ -40,7 +49,7 @@ class GeneralPrefFragment : BasePrefFragment() {
 
         backup.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val exporter = Exporter()
-            AlertDialogBuilder(activity)
+            AlertDialogBuilder(context!!)
                 .setTitle(exporter.export())
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
@@ -56,18 +65,18 @@ class GeneralPrefFragment : BasePrefFragment() {
 
             if (displayList.isNotEmpty()) {
                 lateinit var positiveButton: Button
-                val dialog = AlertDialogBuilder(activity, R.style.AppTheme_Dialog)
+                val dialog = AlertDialogBuilder(context!!, R.style.AppTheme_Dialog)
                     .setTitle(R.string.title_select_groups_to_move)
                     .setSingleChoiceItems(displayList, selectedIndex) { dialog, which ->
                         selectedIndex = which
                         positiveButton.isEnabled = (selectedIndex >= 0)
                     }
                     .setPositiveButton(android.R.string.ok) { dialog, which ->
-                        AlertDialogBuilder(activity)
+                        AlertDialogBuilder(context!!)
                             .setTitle(importer.import(displayList[selectedIndex].toString()))
                             .setPositiveButton(android.R.string.ok) { dialog, which ->
-                                activity.finishAffinity()
-                                startActivity<FollowActivity>()
+                                activity?.finishAffinity()
+                                activity?.startActivity<FollowActivity>()
                             }
                             .show()
                     }
@@ -77,7 +86,7 @@ class GeneralPrefFragment : BasePrefFragment() {
                 positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                 positiveButton.isEnabled = false
             } else {
-                AlertDialogBuilder(activity)
+                AlertDialogBuilder(context!!)
                     .setTitle("Cannot find any backup")
                     .setPositiveButton(android.R.string.ok, null)
                     .show()
@@ -105,7 +114,7 @@ class GeneralPrefFragment : BasePrefFragment() {
         val licenses= findPreference(R.string.pref_licenses)
 
         licenses.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity.startActivity<OssLicensesMenuActivity>(
+            activity?.startActivity<OssLicensesMenuActivity>(
                 Constants.Argument.ARG_TITLE to getString(R.string.pref_title_licenses)
             )
             true

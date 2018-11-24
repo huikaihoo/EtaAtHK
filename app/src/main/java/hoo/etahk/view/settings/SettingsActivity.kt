@@ -31,7 +31,7 @@ class SettingsActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // load General Preference fragment
-        fragmentManager.beginTransaction().replace(R.id.container, GeneralPrefFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.container, GeneralPrefFragment()).commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
