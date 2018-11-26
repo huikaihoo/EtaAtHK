@@ -24,6 +24,9 @@ abstract class LocationDao {
     @Query("SELECT * FROM followLocation WHERE displaySeq > 0 ORDER BY displaySeq")
     abstract fun selectOnce(): List<FollowLocation>
 
+    @Query("SELECT * FROM followLocation WHERE id = :locationId AND displaySeq > 0 ORDER BY displaySeq")
+    abstract fun selectOnce(locationId: Long): FollowLocation
+
     // Insert / Update
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract fun insert(location: FollowLocation)

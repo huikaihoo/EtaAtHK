@@ -126,7 +126,7 @@
     <!-- Dialog -->
     <string name="title_add_location">Add new location</string>
     <string name="title_add_group">Add new group</string>
-    <string name="title_rename_location">Rename location</string>
+    <string name="title_edit_location">Edit location</string>
     <string name="title_rename_group">Rename group</string>
     <string name="title_select_groups_to_add">Select group(s) you want to add:</string>
     <string name="title_select_groups_to_move">Select group you want to move to:</string>

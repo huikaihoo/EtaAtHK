@@ -103,7 +103,7 @@
     <!-- Dialog -->
     <string name="title_add_location">加入新的地點</string>
     <string name="title_add_group">加入新的組別</string>
-    <string name="title_rename_location">重新命名地點</string>
+    <string name="title_edit_location">編輯地點</string>
     <string name="title_rename_group">重新命名組別</string>
     <string name="title_select_groups_to_add">選擇要加入的組別：</string>
     <string name="title_select_groups_to_move">選擇要移動到的組別：</string>

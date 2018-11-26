@@ -80,6 +80,8 @@ object Constants {
 
     object Request {
         const val REQUEST_PLACE_PICKER = 1
+        const val REQUEST_LOCATION_ADD = 2
+        const val REQUEST_LOCATION_UPDATE = 3
     }
 
     object Argument {

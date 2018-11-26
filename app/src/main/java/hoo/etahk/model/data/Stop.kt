@@ -25,8 +25,8 @@ data class Stop(
         @ColumnInfo(name = "locTo")
         var to: StringLang = StringLang(),              // store as json string
         var details: StringLang = StringLang(),         // store as json string
-        var latitude: Double = 0.0,
-        var longitude: Double = 0.0,
+        var latitude: Double = -1.0,
+        var longitude: Double = -1.0,
         var fare: Double = -1.0,
         var info: Info = Info(),
         var etaStatus: Constants.EtaStatus = Constants.EtaStatus.NONE,

@@ -1,33 +1,61 @@
 package hoo.etahk.view.follow
 
 import androidx.lifecycle.ViewModel
+import hoo.etahk.model.data.FollowLocation
 import hoo.etahk.transfer.repo.FollowRepo
 
 class LocationEditViewModel : ViewModel() {
     var isInit = false
 
-    var locationId: Long? = null
+    private var followLocation: FollowLocation = FollowLocation()
+
+    var locationId: Long?
+        get() = followLocation.Id
         set(value) {
-            field = if (value != null && value > 0L) value else null
+            if (value != null && value > 0L) {
+                followLocation = FollowRepo.getLocationOnce(value)
+            }
         }
 
-    var name: String = ""
+    var name: String
+        get() = followLocation.name
+        set(value) { followLocation.name = value }
 
-    var latitude: Double? = null
+    var latitude: Double?
+        get() {
+            val value = followLocation.latitude
+            return if (value >= 0f) value else null
+        }
         set(value) {
-            field =  if (value != null && value > 0f) value else null
+            if (value != null && value >= 0.0) {
+                followLocation.latitude = value
+            }
         }
 
-    var longitude: Double? = null
+    var longitude: Double?
+        get() {
+            val value = followLocation.longitude
+            return if (value >= 0f) value else null
+        }
         set(value) {
-            field =  if (value != null && value > 0f) value else null
+            if (value != null && value >= 0.0) {
+                followLocation.longitude = value
+            }
         }
 
-    fun insertLocation() {
-        FollowRepo.insertLocation(name)
-    }
+    val nameHistory: HashSet<String> = hashSetOf()
 
-    fun updateLocation() {
-        //FollowRepo.updateLocation(location!!)
+    fun saveLocation(): Boolean {
+        return when (name.isNotBlank() && latitude != null && longitude != null) {
+            true -> {
+                if (locationId == null) {
+                    FollowRepo.insertLocation(followLocation)
+                } else {
+                    FollowRepo.updateLocation(followLocation)
+                }
+                true
+            }
+            false -> false
+        }
     }
 }

@@ -1,6 +1,7 @@
 package hoo.etahk.view.follow
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import com.google.android.material.tabs.TabLayout
 import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Constants.Argument
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.tag
@@ -24,7 +26,10 @@ import hoo.etahk.view.dialog.InputDialog
 import kotlinx.android.synthetic.main.activity_follow.*
 import kotlinx.android.synthetic.main.activity_follow_nav.*
 import kotlinx.android.synthetic.main.dialog_input.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.jetbrains.anko.startActivityForResult
 
 
 class FollowActivity : NavActivity() {
@@ -139,6 +144,21 @@ class FollowActivity : NavActivity() {
         tabs.addOnTabSelectedListener(onTabSelectedListener!!)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            Constants.Request.REQUEST_LOCATION_ADD -> {
+                if (resultCode == RESULT_OK) {
+                    Snackbar.make(container, R.string.msg_add_location_success, Snackbar.LENGTH_SHORT).show()
+                }
+            }
+            Constants.Request.REQUEST_LOCATION_UPDATE -> {
+                if (resultCode == RESULT_OK) {
+                    Snackbar.make(container, R.string.msg_one_location_renamed, Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_follow, menu)
@@ -151,34 +171,26 @@ class FollowActivity : NavActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
 
         return when (item.itemId) {
-            R.id.menu_add_loaction -> {
-                val inputDialog = InputDialog(this)
-                inputDialog.setTitle(R.string.title_add_location)
-                    .setHint(R.string.hint_location_name)
-                    .setPositiveButton(listener = DialogInterface.OnClickListener {dialog, which ->
-                        viewModel.insertLocation(inputDialog.view.input.text.toString())
-                        Snackbar.make(container, R.string.msg_add_location_success, Snackbar.LENGTH_SHORT).show()
-                    })
-                    .show()
+            R.id.menu_add_location -> {
+                startActivityForResult<LocationEditActivity>(
+                    Constants.Request.REQUEST_LOCATION_ADD,
+                    Argument.ARG_NAME to ""
+                )
                 true
             }
             R.id.menu_edit_location -> {
-                val location = viewModel.getSelectedLocation().value!!
+                val location = viewModel.getSelectedLocation().value!!.location
 
-                val inputDialog = InputDialog(this)
-                inputDialog.setTitle(R.string.title_rename_location)
-                    .setHint(R.string.hint_new_location_name)
-                    .setText(location.location.name)
-                    .setPositiveButton(listener = DialogInterface.OnClickListener {dialog, which ->
-                        location.location.name = inputDialog.view.input.text.toString()
-                        viewModel.updateLocation(location.location)
-                        Snackbar.make(container, R.string.msg_one_location_renamed, Snackbar.LENGTH_SHORT).show()
-
-                    })
-                    .show()
+                startActivityForResult<LocationEditActivity>(
+                    Constants.Request.REQUEST_LOCATION_UPDATE,
+                    Argument.ARG_LOCATION_ID to location.Id,
+                    Argument.ARG_NAME to location.name,
+                    Argument.ARG_LATITUDE to location.latitude,
+                    Argument.ARG_LONGITUDE to location.longitude
+                )
                 true
             }
-            R.id.menu_remove_loaction -> {
+            R.id.menu_remove_location -> {
                 val location = viewModel.getSelectedLocation().value!!
 
                 AlertDialogBuilder(this)

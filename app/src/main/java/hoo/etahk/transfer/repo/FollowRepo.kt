@@ -12,7 +12,9 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.App
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 object FollowRepo {
 
@@ -40,6 +42,10 @@ object FollowRepo {
         }
     }
 
+    fun getLocationOnce(locationId: Long): FollowLocation {
+        return AppHelper.db.locationDao().selectOnce(locationId)
+    }
+
     fun getLocations(): LiveData<List<LocationAndGroups>> {
         return AppHelper.db.locationGroupsDao().select()
     }
@@ -48,12 +54,21 @@ object FollowRepo {
         return AppHelper.db.locationGroupsDao().selectOnce()
     }
 
+    @Deprecated("Use 'insertLocation(FollowLocation): Unit' instead.")
     fun insertLocation(name: String) {
         GlobalScope.launch(Dispatchers.Default) {
             val location = FollowLocation(
                 name = name,
                 displaySeq = AppHelper.db.locationDao().nextDisplaySeq(),
                 updateTime = Utils.getCurrentTimestamp())
+            AppHelper.db.locationDao().insert(location)
+        }
+    }
+
+    fun insertLocation(location: FollowLocation) {
+        GlobalScope.launch(Dispatchers.Default) {
+            location.displaySeq = AppHelper.db.locationDao().nextDisplaySeq()
+            location.updateTime = Utils.getCurrentTimestamp()
             AppHelper.db.locationDao().insert(location)
         }
     }

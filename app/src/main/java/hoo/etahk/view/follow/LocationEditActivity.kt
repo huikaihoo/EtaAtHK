@@ -2,12 +2,12 @@ package hoo.etahk.view.follow
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mcxiaoke.koi.ext.onClick
+import com.mcxiaoke.koi.ext.onTextChange
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Argument
@@ -39,6 +40,7 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
     private lateinit var viewModel: LocationEditViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var googleMap: GoogleMap? = null
+    private var menuSave: MenuItem? = null
 
     @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,25 +54,34 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
             viewModel.isInit = true
             viewModel.locationId = intent.extras?.getLong(Argument.ARG_LOCATION_ID)
             viewModel.name = intent.extras?.getString(Argument.ARG_NAME) ?: ""
-            viewModel.latitude = intent.extras?.getDouble(Argument.ARG_LATITUDE)
-            viewModel.longitude = intent.extras?.getDouble(Argument.ARG_LOCATION_ID)
+            viewModel.latitude = intent.extras?.getDouble(Argument.ARG_LATITUDE, -1.0)
+            viewModel.longitude = intent.extras?.getDouble(Argument.ARG_LOCATION_ID, -1.0)
             logd("${viewModel.locationId} ${viewModel.name} ${viewModel.latitude} ${viewModel.longitude}")
+
+            if (viewModel.name.isNotBlank()) {
+                viewModel.nameHistory.add(viewModel.name)
+            }
         }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Setup Actionbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = getString(if (viewModel.locationId == null) R.string.title_add_location else R.string.title_rename_location)
+        supportActionBar?.title = getString(if (viewModel.locationId == null) R.string.title_add_location else R.string.title_edit_location)
 
         supportActionBar?.setHomeAsUpIndicator(R.drawable.abc_ic_clear_material)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        @Suppress("CAST_NEVER_SUCCEEDS")
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         @Suppress("CAST_NEVER_SUCCEEDS")
         (mapFragment as Fragment).view?.isClickable = false
         mapFragment.getMapAsync(this)
 
+        input.onTextChange { text, start, before, count ->
+            viewModel.name = text.toString()
+            menuSave?.isEnabled = text.isNotBlank()
+        }
         button.onClick {
             startActivityForResult(PlacePicker.IntentBuilder().build(this), Constants.Request.REQUEST_PLACE_PICKER)
         }
@@ -129,7 +140,7 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             Constants.Request.REQUEST_PLACE_PICKER -> {
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     val place = PlacePicker.getPlace(this, data)
                     viewModel.name = place.name.toString()
                     viewModel.latitude = place.latLng.latitude
@@ -143,8 +154,29 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_location_edit, menu)
+
+        menuSave = menu.findItem(R.id.menu_save)
+        menuSave?.isEnabled = viewModel.name.isNotBlank()
         return true
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        return when (item.itemId) {
+            R.id.menu_save -> {
+                if (viewModel.saveLocation()) {
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun getCurrentLocation() {
         if (viewModel.latitude == null && viewModel.longitude == null) {
             try {
@@ -168,10 +200,16 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
         val latlng = LatLng(viewModel.latitude!!, viewModel.longitude!!)
         val markerOptions = MarkerOptions().position(latlng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
         googleMap?.addMarker(markerOptions)
-
         googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))
 
         input.setText(viewModel.name)
-        input.setAdapter(ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayOf(viewModel.name)))
+
+        if (viewModel.name.isNotBlank()) {
+            viewModel.nameHistory.add(viewModel.name)
+        }
+
+        if (!viewModel.nameHistory.isEmpty()) {
+            input.setAdapter(ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, viewModel.nameHistory.toList()))
+        }
     }
 }

@@ -29,6 +29,8 @@
             android:layout_height="wrap_content"
             android:imeOptions="flagNoExtractUi"
             android:padding="@dimen/normal_margin"
+            android:inputType="text"
+            android:maxLines="1"
             app:hintEnabled="true"
             app:hintAnimationEnabled="true"
             tools:text="Content" />

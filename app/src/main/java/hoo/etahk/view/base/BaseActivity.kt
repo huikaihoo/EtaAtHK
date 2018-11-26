@@ -2,8 +2,11 @@ package hoo.etahk.view.base
 
 import android.app.ActivityManager
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.view.settings.SettingsActivity
@@ -45,5 +48,14 @@ abstract class BaseActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    fun replaceFragment(@IdRes originalFragmentId: Int, newFragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(originalFragmentId, newFragment)
+            .addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .commit()
     }
 }

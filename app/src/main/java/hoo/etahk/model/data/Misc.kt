@@ -25,8 +25,8 @@ data class Misc(
         var dataBooleanB: Boolean? = null,
         var dataBooleanC: Boolean? = null,
         var extra: Extra = Extra(),
-        var latitude: Double = 0.0,
-        var longitude: Double = 0.0,
+        var latitude: Double = -1.0,
+        var longitude: Double = -1.0,
         var freq: Long = -1L,
         var displaySeq: Long = -1L,
         var updateTime: Long = 0L) {

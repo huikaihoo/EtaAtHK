@@ -20,8 +20,8 @@ data class Path(
         var routeKey: RouteKey,
         var seq: Long = -1L,
         var section: Long = -1L,
-        var latitude: Double = 0.0,
-        var longitude: Double = 0.0,
+        var latitude: Double = -1.0,
+        var longitude: Double = -1.0,
         var updateTime: Long = 0L) {
 
     var location

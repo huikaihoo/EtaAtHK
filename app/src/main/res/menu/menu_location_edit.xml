@@ -5,7 +5,7 @@
     tools:context=".view.map.RoutesMapsActivity">
 
     <item
-        android:id="@+id/menu_button"
+        android:id="@+id/menu_save"
         android:orderInCategory="110"
         android:title="@string/save"
         app:showAsAction="always" />

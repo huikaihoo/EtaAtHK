@@ -8,14 +8,14 @@ import com.google.android.gms.maps.model.LatLng
 data class FollowLocation(
         @PrimaryKey(autoGenerate = true)
         var Id: Long? = null,
-        var name: String,
+        var name: String = "",
         var icon: String = "",
-        var latitude: Double = 0.0,
-        var longitude: Double = 0.0,
+        var latitude: Double = -1.0,
+        var longitude: Double = -1.0,
         var distance: Double = 0.0,
         var pin: Boolean = false,
         var defaultGroupId: Long = -1L,     // reserve
-        var displaySeq: Long,
+        var displaySeq: Long = -1L,
         var updateTime: Long = 0L) {
 
     var location

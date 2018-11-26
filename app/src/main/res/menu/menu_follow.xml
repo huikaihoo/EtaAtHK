@@ -8,7 +8,7 @@
         android:orderInCategory="100">
         <menu>
             <item
-                android:id="@+id/menu_add_loaction"
+                android:id="@+id/menu_add_location"
                 android:orderInCategory="110"
                 android:title="@string/add_location"
                 app:showAsAction="never" />
@@ -18,7 +18,7 @@
                 android:title="@string/edit_c_location"
                 app:showAsAction="never" />
             <item
-                android:id="@+id/menu_remove_loaction"
+                android:id="@+id/menu_remove_location"
                 android:orderInCategory="130"
                 android:title="@string/remove_c_location"
                 app:showAsAction="never" />
