@@ -55,7 +55,7 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
             viewModel.locationId = intent.extras?.getLong(Argument.ARG_LOCATION_ID)
             viewModel.name = intent.extras?.getString(Argument.ARG_NAME) ?: ""
             viewModel.latitude = intent.extras?.getDouble(Argument.ARG_LATITUDE, -1.0)
-            viewModel.longitude = intent.extras?.getDouble(Argument.ARG_LOCATION_ID, -1.0)
+            viewModel.longitude = intent.extras?.getDouble(Argument.ARG_LONGITUDE, -1.0)
             logd("${viewModel.locationId} ${viewModel.name} ${viewModel.latitude} ${viewModel.longitude}")
 
             if (viewModel.name.isNotBlank()) {
@@ -108,7 +108,7 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
         if (viewModel.latitude == null && viewModel.longitude == null) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-                // Request the permission.
+                // Request the permission
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),

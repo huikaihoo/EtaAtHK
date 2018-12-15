@@ -65,6 +65,7 @@
     <string name="remove_c_group">Delete Current Location</string>
     <string name="sort_groups">Sort Groups</string>
 
+    <string name="get_my_location">Get My Location</string>
     <string name="enable_sort">Enable Sorting</string>
     <string name="create_shortcut">Create Shortcut</string>
 
@@ -143,7 +144,7 @@
     <string name="msg_add_location_success">New location is added successfully</string>
     <string name="msg_add_group_success">New group is added successfully</string>
     <string name="msg_add_to_follow_stop_success">Added to following stops successfully</string>
-    <string name="msg_one_location_renamed">One location is renamed</string>
+    <string name="msg_one_location_updated">One location is updated</string>
     <string name="msg_one_group_renamed">One group is renamed</string>
     <string name="msg_move_follow_stop_success">Move the following stop successfully</string>
     <string name="msg_one_location_removed">One location is removed</string>

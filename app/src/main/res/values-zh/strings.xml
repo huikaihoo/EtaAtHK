@@ -46,6 +46,7 @@
     <string name="remove_c_group">移除組別</string>
     <string name="sort_groups">編輯組別排序</string>
 
+    <string name="get_my_location">取得目前位置</string>
     <string name="enable_sort">編輯排序</string>
     <string name="create_shortcut">建立捷徑</string>
 
@@ -120,7 +121,7 @@
     <string name="msg_add_location_success">成功新增一個地點</string>
     <string name="msg_add_group_success">成功新增一個組別</string>
     <string name="msg_add_to_follow_stop_success">成功加入至追蹤車站</string>
-    <string name="msg_one_location_renamed">成功重新命名一個地點</string>
+    <string name="msg_one_location_updated">成功編輯一個地點</string>
     <string name="msg_one_group_renamed">成功重新命名一個組別</string>
     <string name="msg_move_follow_stop_success">成功移動追蹤車站</string>
     <string name="msg_one_location_removed">已移除一個地點</string>

@@ -4,6 +4,13 @@
     tools:context="hoo.etahk.view.route.RouteActivity">
 
     <item
+        android:id="@+id/menu_get_my_location"
+        android:title="@string/get_my_location"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_menu_gps_on"
+        app:showAsAction="always" />
+
+    <item
         android:title="@string/location_options"
         android:orderInCategory="100">
         <menu>

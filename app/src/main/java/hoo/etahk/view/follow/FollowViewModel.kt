@@ -1,5 +1,6 @@
 package hoo.etahk.view.follow
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hoo.etahk.model.data.FollowGroup
@@ -10,18 +11,9 @@ import hoo.etahk.view.base.TimerViewModel
 
 class FollowViewModel : TimerViewModel() {
     private var followLocations: LiveData<List<LocationAndGroups>>? = null
-    private val selectedLocation = MutableLiveData<LocationAndGroups>()
+    val selectedLocation = MutableLiveData<LocationAndGroups>()
     val enableSorting = MutableLiveData<Boolean>()
-
-    var selectedLocationPosition: Int = 0
-        set(value) {
-            field = value
-            followLocations?.value?.let {
-                if (field < it.size)
-                    selectedLocation.value = it[selectedLocationPosition]
-            }
-        }
-    var keepSpinnerSelection: Boolean = false
+    var lastLocation: Location? = null
 
     init {
         subscribeToRepo()
@@ -65,10 +57,6 @@ class FollowViewModel : TimerViewModel() {
 
     fun getFollowLocations(): LiveData<List<LocationAndGroups>> {
         return followLocations!!
-    }
-
-    fun getSelectedLocation(): LiveData<LocationAndGroups> {
-        return selectedLocation
     }
 
     private fun subscribeToRepo() {

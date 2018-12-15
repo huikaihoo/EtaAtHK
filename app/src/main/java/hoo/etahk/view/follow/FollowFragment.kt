@@ -29,7 +29,9 @@ import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.fragment_recycler.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.startActivity
 
 class FollowFragment : BaseFragment() {
@@ -205,7 +207,7 @@ class FollowFragment : BaseFragment() {
             it?.let { itemTouchHelperCallback.enableDrag = it }
         })
 
-        viewModel.getSelectedLocation().observe(this, Observer<LocationAndGroups> {
+        viewModel.selectedLocation.observe(this, Observer<LocationAndGroups> {
             it?.let {
                 val position = arguments!!.getInt(ARG_POSITION)
                 logd("subscribeUiChanges $position")
