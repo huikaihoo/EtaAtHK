@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -18,7 +19,9 @@ import hoo.etahk.model.data.RouteKey
 import hoo.etahk.view.base.BaseActivity
 import hoo.etahk.view.map.RoutesMapsActivity
 import kotlinx.android.synthetic.main.activity_route.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 
@@ -66,6 +69,7 @@ class RouteActivity : BaseActivity() {
 
         viewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
         viewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
+        viewModel.anotherCompany = intent.extras.getString(Argument.ARG_ANOTHER_COMPANY, "")
         viewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
 
         intent.extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
@@ -139,6 +143,11 @@ class RouteActivity : BaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_route, menu)
+
+        if (intent.extras.getString(Argument.ARG_ANOTHER_COMPANY, "").isNotEmpty()) {
+            menu.findItem(R.id.menu_another_company).isVisible = true
+        }
+
         return true
     }
 
@@ -156,11 +165,28 @@ class RouteActivity : BaseActivity() {
                 )
                 true
             }
+            R.id.menu_another_company -> {
+                startActivity<RouteActivity>(
+                    Constants.Argument.ARG_COMPANY to viewModel.anotherCompany,
+                    Constants.Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
+                    Constants.Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
+                    Constants.Argument.ARG_ANOTHER_COMPANY to viewModel.routeKey?.company,
+                    Constants.Argument.ARG_GOTO_BOUND to -1L,
+                    Constants.Argument.ARG_GOTO_SEQ to -1L
+                )
+                true
+            }
+            R.id.menu_add_favourite -> {
+                viewModel.insertRouteFavourite()
+                Snackbar.make(container, R.string.msg_add_to_favourite_success, Snackbar.LENGTH_SHORT).show()
+                true
+            }
             R.id.menu_add_shortcut -> {
                 val intent = intentFor<RouteActivity>(
                     Constants.Argument.ARG_COMPANY to viewModel.routeKey?.company,
                     Constants.Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
                     Constants.Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
+                    Constants.Argument.ARG_ANOTHER_COMPANY to viewModel.anotherCompany,
                     Constants.Argument.ARG_GOTO_BOUND to -1L,
                     Constants.Argument.ARG_GOTO_SEQ to -1L
                 )

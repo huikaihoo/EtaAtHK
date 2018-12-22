@@ -139,10 +139,13 @@ class FollowFragment : BaseFragment() {
                 when (menuItem.itemId) {
                     R.id.popup_view -> {
                         item.stop?.let {
+                            val route = fragmentViewModel.getParentRouteOnce(it.routeKey.company, it.routeKey.routeNo)
+
                             activity?.startActivity<RouteActivity>(
                                 Constants.Argument.ARG_COMPANY to it.routeKey.company,
                                 Constants.Argument.ARG_ROUTE_NO to it.routeKey.routeNo,
                                 Constants.Argument.ARG_TYPE_CODE to it.routeKey.typeCode,
+                                Constants.Argument.ARG_ANOTHER_COMPANY to route.anotherCompany,
                                 Constants.Argument.ARG_GOTO_BOUND to it.routeKey.bound,
                                 Constants.Argument.ARG_GOTO_SEQ to it.seq
                             )

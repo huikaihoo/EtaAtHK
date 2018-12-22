@@ -61,6 +61,9 @@ abstract class ParentRouteDao {
     @Query("SELECT * FROM route WHERE company = :company AND routeNo = :routeNo AND bound = 0 LIMIT 1")
     abstract fun select(company: String, routeNo: String): LiveData<Route>
 
+    @Query("SELECT * FROM route WHERE company = :company AND routeNo = :routeNo AND bound = 0 LIMIT 1")
+    abstract fun selectOnce(company: String, routeNo: String): Route
+
     // Insert / Update (single)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(route: Route)

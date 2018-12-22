@@ -2,11 +2,13 @@ package hoo.etahk.transfer.data
 
 import android.os.Environment
 import android.os.Environment.MEDIA_MOUNTED
+import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
+import hoo.etahk.view.App
 import java.io.File
 import java.io.FileOutputStream
 
@@ -31,7 +33,7 @@ class Exporter: FilesWorker() {
             return "Error 3"
         }
 
-        return "The backup has been successfully saved to $backupFullPath"
+        return App.instance.getString(R.string.content_backup_save_success_to) + backupFullPath
     }
 
 

@@ -19,6 +19,7 @@ class RouteViewModel: TimerViewModel() {
             if (value != null)
                 subscribeToRepo()
         }
+    var anotherCompany = ""
 
     var isGotoBoundUsed: Boolean = false
     var isGotoSeqUsed: Boolean = false
@@ -31,6 +32,18 @@ class RouteViewModel: TimerViewModel() {
         if (!hasUpdateChildRoutes) {
             hasUpdateChildRoutes = true
             RoutesRepo.updateChildRoutes(parentRoute)
+        }
+    }
+
+    fun insertRouteFavourite() {
+        getParentRoute().value?.let {
+            val routeKey = RouteKey(
+                company = it.companyDetails[0],
+                routeNo = it.routeKey.routeNo,
+                bound = 0L,
+                variant = 0L
+            )
+            MiscRepo.insertRouteFavourite(routeKey)
         }
     }
 

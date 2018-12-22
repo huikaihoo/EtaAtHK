@@ -45,16 +45,17 @@ class FavouriteAdapter : BasePagedAdapter<FHActivity, RouteFavouriteEx>(RouteFav
                 itemView.from_to.text = route.from.value + directionArrow + route.to.value
                 itemView.route_desc.text = route.getParentDesc()
 
-                itemView.setOnClickListener { startRouteActivity(context, route.routeKey) }
+                itemView.setOnClickListener { startRouteActivity(context, route.routeKey, route.anotherCompany) }
                 //itemView.setOnLongClickListener { context?.showRoutePopupMenu(itemView, route); true }
             }
         }
 
-        private fun startRouteActivity(context: FHActivity?, routeKey: RouteKey){
+        private fun startRouteActivity(context: FHActivity?, routeKey: RouteKey, anotherCompany: String = ""){
             context?.startActivity<RouteActivity>(
                 Constants.Argument.ARG_COMPANY to routeKey.company,
                 Constants.Argument.ARG_ROUTE_NO to routeKey.routeNo,
                 Constants.Argument.ARG_TYPE_CODE to routeKey.typeCode,
+                Constants.Argument.ARG_ANOTHER_COMPANY to anotherCompany,
                 Constants.Argument.ARG_GOTO_BOUND to -1L,
                 Constants.Argument.ARG_GOTO_SEQ to -1L
             )

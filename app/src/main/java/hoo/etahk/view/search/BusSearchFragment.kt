@@ -102,9 +102,10 @@ class BusSearchFragment : BaseFragment() {
             when (menuItem.itemId) {
                 R.id.popup_view -> {
                     activity?.startActivity<RouteActivity>(
-                        Constants.Argument.ARG_COMPANY to route.companyDetails[1],
+                        Constants.Argument.ARG_COMPANY to route.anotherCompany,
                         Constants.Argument.ARG_ROUTE_NO to route.routeKey.routeNo,
                         Constants.Argument.ARG_TYPE_CODE to route.routeKey.typeCode,
+                        Constants.Argument.ARG_ANOTHER_COMPANY to route.routeKey.company,
                         Constants.Argument.ARG_GOTO_BOUND to -1L,
                         Constants.Argument.ARG_GOTO_SEQ to -1L
                     )

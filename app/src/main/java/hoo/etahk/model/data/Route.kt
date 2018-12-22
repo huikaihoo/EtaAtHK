@@ -36,6 +36,9 @@ data class Route(
     val childDirection: Long
         get() = if (direction > 1L) 1L else direction
 
+    val anotherCompany: String
+        get() = if (companyDetails.size > 1) companyDetails[1] else ""
+
     fun getParentDesc(): String {
         var result = ""
         companyDetails.forEachIndexed { i, company ->

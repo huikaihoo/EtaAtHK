@@ -11,6 +11,19 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_another_company"
+        android:orderInCategory="210"
+        android:title="@string/view_another_company"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_add_favourite"
+        android:orderInCategory="310"
+        android:title="@string/add_to_favourite"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_add_shortcut"
         android:orderInCategory="910"
         android:title="@string/create_shortcut"

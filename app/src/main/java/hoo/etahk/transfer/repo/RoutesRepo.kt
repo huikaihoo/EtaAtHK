@@ -9,7 +9,9 @@ import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 object RoutesRepo {
 
@@ -34,6 +36,10 @@ object RoutesRepo {
     // Parents route by Company and routeNo
     fun getParentRoute(company: String, routeNo: String): LiveData<Route> {
         return AppHelper.db.parentRouteDao().select(company, routeNo)
+    }
+
+    fun getParentRouteOnce(company: String, routeNo: String): Route {
+        return AppHelper.db.parentRouteDao().selectOnce(company, routeNo)
     }
 
     fun getChildRoutes(company: String, routeNo: String, bound: Long): LiveData<List<Route>> {

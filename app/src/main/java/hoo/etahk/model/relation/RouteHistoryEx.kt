@@ -9,10 +9,17 @@ class RouteHistoryEx {
     @Embedded
     lateinit var history: RouteHistory
 
-    @Relation(parentColumn = "relationStr",
-              entityColumn = "routeStr")
+    @Relation(parentColumn = "dataStrB",
+              entityColumn = "routeNo")
     var routes: List<Route> = listOf()
 
     val route: Route?
-        get() = if (routes.isEmpty()) null else routes[0]
+        get() = when {
+            routes.isEmpty() -> null
+            routes.size == 1 -> routes[0]
+            else -> {
+                val filtered = routes.filter { it.routeKey.routeStr.endsWith("_0_0") && it.companyDetails.contains(history.company) }
+                if (filtered.isEmpty()) null else filtered[0]
+            }
+        }
 }

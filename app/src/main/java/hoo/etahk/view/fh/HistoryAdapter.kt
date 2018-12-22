@@ -26,13 +26,13 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
         @SuppressLint("SetTextI18n")
         override fun onBind(context: FHActivity?, position: Int, dataSource: List<RouteHistoryEx>) {
             val route = if (dataSource.isEmpty()) null else dataSource[0].route
+            val history = dataSource[0].history
+
+            itemView.route_no.text = history.routeNo
+            itemView.route_desc.text = Utils.getStringResourceByName(history.company.toLowerCase())
 
             if (route == null) {
-                val history = dataSource[0].history
-
-                itemView.route_no.text = history.routeNo
                 itemView.from_to.text = "NOT EXIST"
-                itemView.route_desc.text = Utils.getStringResourceByName(history.company)
             } else {
                 val directionArrow = App.instance.getString(
                     when (route.direction) {
@@ -41,20 +41,25 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
                         else -> R.string.arrow_two_ways
                     })
 
-                itemView.route_no.text = route.routeKey.routeNo
                 itemView.from_to.text = route.from.value + directionArrow + route.to.value
-                itemView.route_desc.text = route.getParentDesc()
 
-                itemView.setOnClickListener { startRouteActivity(context, route.routeKey) }
+                val routeKey = RouteKey(
+                    company = history.company,
+                    routeNo = route.routeKey.routeNo,
+                    bound = route.routeKey.bound,
+                    variant = route.routeKey.variant)
+
+                itemView.setOnClickListener { startRouteActivity(context, routeKey, route.anotherCompany) }
                 //itemView.setOnLongClickListener { context?.showRoutePopupMenu(itemView, route); true }
             }
         }
 
-        private fun startRouteActivity(context: FHActivity?, routeKey: RouteKey){
+        private fun startRouteActivity(context: FHActivity?, routeKey: RouteKey, anotherCompany: String = ""){
             context?.startActivity<RouteActivity>(
                 Constants.Argument.ARG_COMPANY to routeKey.company,
                 Constants.Argument.ARG_ROUTE_NO to routeKey.routeNo,
                 Constants.Argument.ARG_TYPE_CODE to routeKey.typeCode,
+                Constants.Argument.ARG_ANOTHER_COMPANY to anotherCompany,
                 Constants.Argument.ARG_GOTO_BOUND to -1L,
                 Constants.Argument.ARG_GOTO_SEQ to -1L
             )

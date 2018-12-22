@@ -66,7 +66,7 @@ class GeneralPrefFragment : BasePrefFragment() {
             if (displayList.isNotEmpty()) {
                 lateinit var positiveButton: Button
                 val dialog = AlertDialogBuilder(context!!, R.style.AppTheme_Dialog)
-                    .setTitle(R.string.title_select_groups_to_move)
+                    .setTitle(R.string.title_select_backup_to_restore)
                     .setSingleChoiceItems(displayList, selectedIndex) { dialog, which ->
                         selectedIndex = which
                         positiveButton.isEnabled = (selectedIndex >= 0)

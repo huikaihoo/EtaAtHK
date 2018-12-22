@@ -90,6 +90,7 @@ object Constants {
         const val ARG_TYPE_CODE = "type_code"
         const val ARG_GOTO_BOUND = "goto_bound"
         const val ARG_GOTO_SEQ = "goto_seq"
+        const val ARG_ANOTHER_COMPANY = "another_company"
         const val ARG_ACTIONBAR_TITLE = "actionbar_title"
         const val ARG_ACTIONBAR_SUBTITLE = "actionbar_subtitle"
         const val ARG_LATITUDE = "latitude"

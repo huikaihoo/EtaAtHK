@@ -4,10 +4,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import hoo.etahk.model.data.FollowItem
+import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.transfer.repo.FollowRepo
+import hoo.etahk.transfer.repo.RoutesRepo
 import hoo.etahk.transfer.repo.StopsRepo
 
 class FollowFragmentViewModel : ViewModel() {
@@ -25,6 +27,10 @@ class FollowFragmentViewModel : ViewModel() {
         }
 
     var isRefreshingAll: Boolean = false
+
+    fun getParentRouteOnce(company: String, routeNo: String): Route {
+        return RoutesRepo.getParentRouteOnce(company, routeNo)
+    }
 
     fun getAllFollowLocations(): List<LocationAndGroups> {
         return FollowRepo.getLocationsOnce()
