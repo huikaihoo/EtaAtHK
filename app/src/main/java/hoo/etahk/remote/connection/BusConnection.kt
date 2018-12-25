@@ -70,10 +70,16 @@ object BusConnection : BaseConnection {
                 for((key, companyRoute) in parentRoutes) {
                     if (govResult.contains(key)) {
                         val govRoute = govResult[key]!!
-                        govRoute.direction = companyRoute.direction
+                        govRoute.direction = companyRoute.direction // need to remove when offline data is ready
                         when (company) {
                             Company.NWFB -> {
-                                govRoute.info.boundIds = companyRoute.info.boundIds
+                                if ( companyRoute.info.boundIds.size > 1 &&
+                                     ( Utils.isLocationMatch(govRoute.from.value, companyRoute.to.value) ||
+                                       Utils.isLocationMatch(companyRoute.from.value, govRoute.to.value) ) ) {
+                                    govRoute.info.boundIds = listOf(companyRoute.info.boundIds[1], companyRoute.info.boundIds[0])
+                                } else {
+                                    govRoute.info.boundIds = companyRoute.info.boundIds
+                                }
                             }
                             Company.NLB -> {
                                 govRoute.from = companyRoute.from

@@ -232,6 +232,13 @@ object Utils {
         return timeStr.contains("預定".toRegex()) || timeStr.contains("預計時間".toRegex())
     }
 
+    fun isLocationMatch(locationStr1: String, locationStr2: String): Boolean {
+        return locationStr1.trim() == locationStr2.trim() ||
+                locationStr1.trim().startsWith(locationStr2.trim().substring(0, 2)) ||
+                locationStr1.trim().contains(locationStr2.trim()) ||
+                locationStr2.trim().contains(locationStr1.trim())
+    }
+
     fun phaseCapacity(capacityStr: String): Long {
         return when (capacityStr.toUpperCase()) {
             "N" -> -1

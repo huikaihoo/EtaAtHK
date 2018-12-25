@@ -142,17 +142,9 @@ object NwfbConnection: BaseConnection {
     }
 
     private fun mergeRoute(records: List<String>, route: Route): Route {
-        if (route.info.bound == "O") {
-            val boundIds = route.info.boundIds.toMutableList()
-            boundIds.add(records[Constants.Route.NWFB_ROUTE_RECORD_INFO_BOUND_ID])
-            route.info.boundIds = boundIds.toList()
-        } else {
-            route.from = StringLang.newInstance(records[Constants.Route.NWFB_ROUTE_RECORD_FROM])
-            route.to = StringLang.newInstance(records[Constants.Route.NWFB_ROUTE_RECORD_TO])
-            val boundIds = mutableListOf(records[Constants.Route.NWFB_ROUTE_RECORD_INFO_BOUND_ID])
-            boundIds.addAll(route.info.boundIds)
-            route.info.boundIds = boundIds.toList()
-        }
+        val boundIds = route.info.boundIds.toMutableList()
+        boundIds.add(records[Constants.Route.NWFB_ROUTE_RECORD_INFO_BOUND_ID])
+        route.info.boundIds = boundIds.toList()
 
         if (route.direction == 1L && route.info.boundIds.size > 1) {
             route.direction = route.info.boundIds.size.toLong()
