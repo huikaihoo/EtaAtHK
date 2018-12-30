@@ -9,17 +9,20 @@ import hoo.etahk.model.relation.RouteAndStops
 @Dao
 abstract class RouteStopsDao {
 
+    companion object {
+        const val ROUTE_STOP_SELECT =
+            "SELECT * FROM route " +
+            "WHERE company = :company " +
+            "AND routeNo = :routeNo " +
+            "AND variant > 0 "
+    }
+
     // Select
     @Transaction
-    @Query("SELECT * FROM route WHERE company = :company AND routeNo = :routeNo AND bound > 0 AND variant > 0 ORDER BY bound, variant")
+    @Query("$ROUTE_STOP_SELECT AND bound > 0 ORDER BY bound, variant")
     abstract fun select(company: String, routeNo: String): LiveData<List<RouteAndStops>>
 
     @Transaction
-    @Query("SELECT * FROM route " +
-            "WHERE company = :company " +
-            "AND routeNo = :routeNo " +
-            "AND bound = :bound " +
-            "AND variant > 0 " +
-            "ORDER BY variant")
+    @Query("$ROUTE_STOP_SELECT AND bound = :bound ORDER BY variant")
     abstract fun select(company: String, routeNo: String, bound: Long): LiveData<List<RouteAndStops>>
 }

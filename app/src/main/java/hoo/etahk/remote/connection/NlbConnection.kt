@@ -63,14 +63,16 @@ object NlbConnection: BaseConnection {
             }
 
             // 2. Insert Child Routes into DB
-            logd("main-start")
-            GlobalScope.launch(Dispatchers.DB) {
-                logd("runBlocking-launch-start")
-                AppHelper.db.childRouteDao().insertOrUpdate(childRoutes, t)
-                delay(50)
-                logd("runBlocking-launch-end")
+            val childRoutesMap = childRoutes.groupBy{
+                RouteKey(company = it.routeKey.company,
+                    routeNo = it.routeKey.routeNo,
+                    bound = it.routeKey.bound,
+                    variant = 0L)
             }
-            logd("main-end")
+            childRoutesMap.forEach { (routeKey, childRoutes) ->
+                AppHelper.db.childRouteDao().insertOrUpdate(childRoutes, t)
+            }
+            logd("After insert child routes")
 
             // 3. Get Stops
             val routeStopsMap = (nlbDatabaseRes.routeStops ?: listOf()).groupBy{ it!!.routeId!! }
@@ -88,7 +90,7 @@ object NlbConnection: BaseConnection {
 
                 GlobalScope.launch(Dispatchers.DB) {
                     if (stops.isNotEmpty()) {
-                        AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
+                        AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
                     }
                 }
             }

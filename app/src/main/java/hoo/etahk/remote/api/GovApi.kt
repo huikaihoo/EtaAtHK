@@ -6,8 +6,8 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+// baseUrl = "http://cms.hkemobility.gov.hk/"
 interface GovApi {
-    // Base Url = "http://cms.hkemobility.gov.hk/"
     @GET("et/getrouteinfo4.php")
     fun getParentRoutes(@Query("route_name") route_name: String = "",
                         @Query("company_index") company_index: String = Constants.SharePrefs.GOV_API_PARAMETER_COMPANY_ALL_BUS,

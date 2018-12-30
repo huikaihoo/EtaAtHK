@@ -44,10 +44,10 @@ object ConnectionFactory {
 
         builder = when (networkType) {
             NetworkType.DEFAULT -> builder
-            NetworkType.STOP ->
-                builder.connectTimeout(SharePrefs.STOP_CONNECTION_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
-                        .readTimeout(SharePrefs.STOP_READ_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
-                        .writeTimeout(SharePrefs.STOP_WRITE_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+            NetworkType.LONG ->
+                builder.connectTimeout(SharePrefs.LONG_CONNECTION_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                        .readTimeout(SharePrefs.LONG_READ_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                        .writeTimeout(SharePrefs.LONG_WRITE_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
             NetworkType.ETA ->
                 when (company) {
                     Company.KMB ->

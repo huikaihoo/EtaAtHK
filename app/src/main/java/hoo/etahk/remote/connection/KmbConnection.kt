@@ -4,6 +4,8 @@ import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.DB
+import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
@@ -14,6 +16,7 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
+import hoo.etahk.remote.response.GistDatabaseRes
 import hoo.etahk.remote.response.KmbBoundVariantRes
 import hoo.etahk.remote.response.KmbEtaRes
 import hoo.etahk.remote.response.KmbStopsRes
@@ -29,8 +32,52 @@ object KmbConnection: BaseConnection {
         return null
     }
 
+    /**
+     * Get List of Parent Routes
+     *
+     * @param company company code
+     * @return map of route no to its parent route
+     */
     override fun getParentRoutes(company: String): HashMap<String, Route>? {
-        return null
+        val t = Utils.getCurrentTimestamp()
+        var result = HashMap<String, Route>()
+
+        val response = ConnectionHelper.gist.getGist("").execute()
+
+        logd("${response.isSuccessful}")
+
+        if (response.isSuccessful) {
+            val gistFile = response.body()?.files?.kmb
+            val gistDatabaseRes = if (gistFile != null) toGistDatabaseRes(gistFile, t) else GistDatabaseRes()
+
+            logd("gistDatabaseRes.isValid = ${gistDatabaseRes.isValid}")
+
+            if (gistDatabaseRes.isValid) {
+                result = gistDatabaseRes.parentRoutes.associateTo(HashMap()) { it.routeKey.routeNo to it }
+
+                val childRoutesMap = gistDatabaseRes.childRoutes.groupBy{
+                    RouteKey(company = it.routeKey.company,
+                        routeNo = it.routeKey.routeNo,
+                        bound = it.routeKey.bound,
+                        variant = 0L)
+                }
+                childRoutesMap.forEach { (routeKey, childRoutes) ->
+                    AppHelper.db.childRouteDao().insertOrUpdate(childRoutes, t)
+                }
+                logd("After insert child routes")
+
+                val stopsMap = gistDatabaseRes.stops.groupBy{ it.routeKey }
+                stopsMap.forEach { (routeKey, stops) ->
+                    GlobalScope.launch(Dispatchers.DB) {
+                        AppHelper.db.stopDao().insertOrUpdate(routeKey, stops, t)
+                    }
+                }
+            }
+
+            logd("onResponse ${result.size}")
+        }
+
+        return result
     }
 
     override fun getParentRoute(routeKey: RouteKey): Route? {
@@ -95,7 +142,7 @@ object KmbConnection: BaseConnection {
      * @param needEtaUpdate update eta of stops as well if true
      */
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
-        ConnectionHelper.kmbStop.getStops(
+        ConnectionHelper.kmb.getStops(
                 route = route.routeKey.routeNo,
                 bound = route.routeKey.bound.toString(),
                 serviceType = route.routeKey.variant.toString())
@@ -135,7 +182,7 @@ object KmbConnection: BaseConnection {
                                 }
 
                                 //logd(AppHelper.gson.toJson(stops))
-                                AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
+                                AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
                                 if (needEtaUpdate)
                                     updateEta(stops)
                             }

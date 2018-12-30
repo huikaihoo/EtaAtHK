@@ -9,7 +9,9 @@ import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.RouteAndStops
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 object StopsRepo {
 
@@ -69,7 +71,7 @@ object StopsRepo {
                                 else -> it.routeKey.company
                              }
                          }
-                    map.forEach { company, stopsByCompany ->
+                    map.forEach { (company, stopsByCompany) ->
                         ConnectionHelper.updateEta(stopsByCompany)
                     }
                 }

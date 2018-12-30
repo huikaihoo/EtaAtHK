@@ -8,8 +8,8 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
+// baseUrl = "https://nlb.kcbh.com.hk:8443/"
 interface NlbApi {
-    // Base Url = "https://nlb.kcbh.com.hk:8443/"
     @GET("api/passenger/app.php?action=getDatabase")
     fun getDatabase(): Call<NlbDatabaseRes>
 

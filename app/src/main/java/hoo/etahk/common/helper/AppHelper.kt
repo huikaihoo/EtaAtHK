@@ -21,10 +21,7 @@ object AppHelper {
     }
 
     fun init(context: Context) {
-        //gson = Gson()
-        gson = GsonBuilder()
-                .serializeNulls()
-                .create()
+        init()
 
         db = when (Utils.isUnitTest) {
             true ->

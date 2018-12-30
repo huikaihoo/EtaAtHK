@@ -1,9 +1,19 @@
 package hoo.etahk.remote.connection
 
+import android.util.Base64
+import hoo.etahk.common.extensions.loge
+import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.common.helper.ZipHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
+import hoo.etahk.remote.response.GistDatabaseRes
+import hoo.etahk.remote.response.GistRes
+import hoo.etahk.view.App
+import java.io.File
+import java.io.FileOutputStream
+import java.util.zip.ZipFile
 
 interface BaseConnection {
     /**
@@ -69,5 +79,60 @@ interface BaseConnection {
             msg = msg,
             scheduleOnly = false,
             distance = -1L)
+    }
+
+    /**
+     * Convert Gist File to GistDatabaseRes
+     *
+     * @param gistFile Gist File
+     * @param updateTime update time of GistDatabaseRes
+     * @return Gist Database
+     */
+    fun toGistDatabaseRes(gistFile: GistRes.File, updateTime: Long): GistDatabaseRes {
+        try {
+            val rawUrl = gistFile.rawUrl ?: ""
+            val version = rawUrl.substring(rawUrl.lastIndexOf("raw/") + 4, rawUrl.lastIndexOf("/"))
+            val company = rawUrl.substring(rawUrl.lastIndexOf("/") + 1, rawUrl.length)
+            val file = File("${App.instance.cacheDir.path}/$company", "$version.zip")
+
+            if (version.isNotBlank() && company.isNotBlank()) {
+                file.parentFile.mkdirs()
+
+                if (!file.isFile) {
+                    // Remove the old cache files
+                    val oldFiles = file.parentFile.listFiles()
+                    for (f in oldFiles)
+                        f.delete()
+
+                    // Get the result string
+                    var result = ""
+                    if (gistFile.truncated == false) {
+                        // Get from gistFile
+                        result = gistFile.content ?: ""
+                    } else {
+                        // Get from rawUrl
+                        val response = ConnectionHelper.gist.getContent(rawUrl).execute()
+                        if (response.isSuccessful) {
+                            result = response.body()?.string() ?: ""
+                        }
+                    }
+
+                    // Decode to zip file
+                    if (result.isNotBlank()) {
+                        val fos = FileOutputStream(file)
+                        fos.write(Base64.decode(result, Base64.NO_WRAP))
+                        fos.close()
+                    }
+                }
+            }
+
+            if (file.isFile) {
+                return ZipHelper.zipToGistDatabaseRes(ZipFile("${App.instance.cacheDir.path}/$company/$version.zip"), updateTime)
+            }
+        } catch (e: Exception) {
+            loge("toGistDatabaseRes failed!", e)
+        }
+
+        return GistDatabaseRes()
     }
 }

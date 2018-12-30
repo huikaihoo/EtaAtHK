@@ -3,7 +3,7 @@ package hoo.etahk.connection
 import hoo.etahk.BaseUnitTest
 import hoo.etahk.common.Constants
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.remote.connection.NlbConnection
+import hoo.etahk.remote.connection.KmbConnection
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -11,17 +11,17 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class NlbConnectionUnitTest: BaseUnitTest() {
+class KmbConnectionUnitTest: BaseUnitTest() {
 
     override val printLog = false
 
-    private val routeNo = "B4"
+    private val routeNo = "224R"
     private val bound = 1L
     private val variant = 1L
 
     @Test
     fun getParentRoutes() {
-        val result = NlbConnection.getParentRoutes(Constants.Company.NLB)
+        val result = KmbConnection.getParentRoutes(Constants.Company.KMB)
         result?.forEach { routeId, route ->
             System.out.println("routeId = $routeId; route = $route")
         }
@@ -34,7 +34,7 @@ class NlbConnectionUnitTest: BaseUnitTest() {
 
         // Check Child Routes
         val childRouteCount = AppHelper.db.childRouteDao().count()
-        val childRoute = AppHelper.db.childRouteDao().selectOnce(Constants.Company.NLB, routeNo)
+        val childRoute = AppHelper.db.childRouteDao().selectOnce(Constants.Company.KMB, routeNo)
         System.out.println("childRouteCount = $childRouteCount")
         System.out.println(gson.toJson(childRoute))
 
@@ -42,7 +42,7 @@ class NlbConnectionUnitTest: BaseUnitTest() {
 
         // Check Stops
         val stopCount = AppHelper.db.stopDao().count()
-        val stopList = AppHelper.db.stopDao().selectOnce(Constants.Company.NLB, routeNo, bound, variant)
+        val stopList = AppHelper.db.stopDao().selectOnce(Constants.Company.KMB, routeNo, bound, variant)
 
         System.out.println("stopCount = $stopCount")
         System.out.println(gson.toJson(stopList))

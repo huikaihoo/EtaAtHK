@@ -7,6 +7,13 @@ import hoo.etahk.model.data.Route
 @Dao
 abstract class ChildRouteDao {
 
+    companion object {
+        const val CHILD_ROUTE_SELECT =
+            "SELECT * FROM route " +
+            "WHERE company = :company " +
+            "AND routeNo = :routeNo "
+    }
+
     // Count
     @Query("SELECT COUNT(*) FROM route WHERE bound > 0 AND variant > 0")
     abstract fun count(): Int
@@ -15,22 +22,16 @@ abstract class ChildRouteDao {
     abstract fun lastUpdate(company: String, routeNo: String): Long
 
     // Select
-    @Query("SELECT * FROM route WHERE company = :company AND routeNo = :routeNo AND bound > 0 AND variant > 0 ORDER BY bound, variant")
+    @Query("$CHILD_ROUTE_SELECT AND bound > 0 AND variant > 0 ORDER BY bound, variant")
     abstract fun select(company: String, routeNo: String): LiveData<List<Route>>
 
-    @Query("SELECT * FROM route " +
-            "WHERE company = :company " +
-            "AND routeNo = :routeNo " +
-            "AND bound = :bound " +
-            "AND variant > 0 " +
-            "ORDER BY variant")
+    @Query("$CHILD_ROUTE_SELECT AND bound > 0 AND variant > 0 ORDER BY bound, variant")
+    abstract fun selectOnce(company: String, routeNo: String): List<Route>
+
+    @Query("$CHILD_ROUTE_SELECT AND bound = :bound AND variant > 0 ORDER BY variant")
     abstract fun select(company: String, routeNo: String, bound: Long): LiveData<List<Route>>
 
-    @Query("SELECT * FROM route " +
-            "WHERE company = :company " +
-            "AND routeNo = :routeNo " +
-            "AND bound = :bound " +
-            "AND variant = :variant")
+    @Query("$CHILD_ROUTE_SELECT AND bound = :bound AND variant = :variant")
     abstract fun select(company: String, routeNo: String, bound: Long, variant: Long): LiveData<Route>
 
     // Insert / Update (single)

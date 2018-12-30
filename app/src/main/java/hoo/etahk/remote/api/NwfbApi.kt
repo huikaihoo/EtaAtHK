@@ -6,10 +6,8 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-
+// baseUrl = "http://mobile.nwstbus.com.hk/"
 interface NwfbApi {
-
-    // Base Url = "http://mobile.nwstbus.com.hk/"
     @GET("api6/getmmroutelist.php")
     fun getParentRoutes(@Query("rno") rno: String = "",
                         @Query("m") m: String,

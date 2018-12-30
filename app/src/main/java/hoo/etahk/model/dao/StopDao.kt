@@ -2,7 +2,7 @@ package hoo.etahk.model.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import hoo.etahk.model.data.Route
+import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 
 @Dao
@@ -75,14 +75,14 @@ abstract class StopDao {
     abstract fun updateOnReplace(stops: List<Stop>)
 
     @Transaction
-    open fun insertOrUpdate(route: Route? = null, stops: List<Stop>, updateTime: Long? = null) {
+    open fun insertOrUpdate(routeKey: RouteKey? = null, stops: List<Stop>, updateTime: Long? = null) {
         insert(stops)
         update(stops)
-        if (route != null && updateTime != null) {
-            delete(route.routeKey.company,
-                    route.routeKey.routeNo,
-                    route.routeKey.bound,
-                    route.routeKey.variant,
+        if (routeKey != null && updateTime != null) {
+            delete(routeKey.company,
+                    routeKey.routeNo,
+                    routeKey.bound,
+                    routeKey.variant,
                     updateTime)
         }
     }

@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.FollowItem
 import hoo.etahk.model.data.FollowLocation
@@ -145,13 +144,6 @@ object FollowRepo {
     fun deleteItem(item: FollowItem) {
         GlobalScope.launch(Dispatchers.Default) {
             AppHelper.db.itemDao().delete(item)
-        }
-    }
-
-    fun updateEta(items: List<ItemAndStop>?) {
-        GlobalScope.launch(Dispatchers.Default) {
-            if (items != null && items.isNotEmpty())
-                ConnectionHelper.updateItemsEta(items)
         }
     }
 }

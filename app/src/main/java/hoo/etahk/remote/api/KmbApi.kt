@@ -4,11 +4,9 @@ import hoo.etahk.remote.response.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import retrofit2.http.Url
 
+// baseUrl = "http://search.kmb.hk/KMBWebSite/"
 interface KmbApi {
-
-    // Base Url = "http://search.kmb.hk/KMBWebSite/"
     @GET("Function/FunctionRequest.ashx?action=getRouteBound")
     fun getRouteBound(@Query("route") route: String): Call<KmbRouteBoundRes>
 
@@ -26,11 +24,7 @@ interface KmbApi {
 //    @GET("AnnouncementPicture.ashx")
 //    fun getAnnouncementPicture(@Query("url") url: String): Call<ResponseBody>
 
-    // Base Url = "http://etav3.kmb.hk/"
-    @GET
-    fun getEta(@Url url: String): Call<KmbEtaRes>
-
-    @GET("?action=geteta")
+    @GET("http://etav3.kmb.hk/?action=geteta")
     fun getEta(@Query("route") route: String = "",
                @Query("bound") bound: String = "",
                @Query("stop") stop: String = "",
@@ -39,7 +33,6 @@ interface KmbApi {
                @Query("lang") lang: String = "tc",
                @Query("updated") updated: String = ""): Call<KmbEtaRes>
 
-    // Base Url = "http://etadatafeed.kmb.hk:1933/"
-    @GET("GetData.ashx?type=ETA_R")
+    @GET("http://etadatafeed.kmb.hk:1933/GetData.ashx?type=ETA_R")
     fun getEtaRoutes(): Call<List<KmbEtaRoutesRes>>
 }

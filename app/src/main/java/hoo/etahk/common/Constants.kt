@@ -47,10 +47,10 @@ object Constants {
 
         const val DEFAULT_MAX_REQUESTS_VAL = 64
         const val DEFAULT_MAX_REQUESTS_PER_HOST_VAL = 4
-        // Stop
-        const val STOP_CONNECTION_TIMEOUT_VAL = 10000L
-        const val STOP_READ_TIMEOUT_VAL = 10000L
-        const val STOP_WRITE_TIMEOUT_VAL = 10000L
+        // Long
+        const val LONG_CONNECTION_TIMEOUT_VAL = 10000L
+        const val LONG_READ_TIMEOUT_VAL = 10000L
+        const val LONG_WRITE_TIMEOUT_VAL = 10000L
         // KMB Eta
         const val ETA_KMB_MAX_REQUESTS_PER_HOST_VAL = 4
         const val ETA_KMB_CONNECTION_TIMEOUT_VAL = 3500L
@@ -144,17 +144,16 @@ object Constants {
 
     object Url {
         const val KMB_URL = "http://search.kmb.hk/KMBWebSite/"
-        const val KMB_ETA_URL = "http://etav3.kmb.hk/"
-        const val KMB_ETA_FEED_URL = "http://etadatafeed.kmb.hk:1933/"
         const val NWFB_URL = "http://mobile.nwstbus.com.hk/"
         const val NLB_URL = "https://nlb.kcbh.com.hk:8443/"
         const val GOV_URL = "http://app1.hketransport.td.gov.hk/"
         const val GOV2_URL = "http://cms.hkemobility.gov.hk/"
+        const val GIST_URL = "https://api.github.com/gists/"
     }
 
     object NetworkType {
         const val DEFAULT = 0L
-        const val STOP = 1L
+        const val LONG = 1L
         const val ETA = 2L
     }
 

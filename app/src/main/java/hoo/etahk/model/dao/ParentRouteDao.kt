@@ -10,10 +10,10 @@ abstract class ParentRouteDao {
 
     companion object {
         const val PARENT_ROUTE_SELECT =
-                "SELECT * FROM route " +
-                "WHERE typeCode IN (:typeCodes) " +
-                "AND bound = 0 " +
-                "AND variant = 0 "
+            "SELECT * FROM route " +
+            "WHERE typeCode IN (:typeCodes) " +
+            "AND bound = 0 " +
+            "AND variant = 0 "
     }
 
     // Count
@@ -35,18 +35,15 @@ abstract class ParentRouteDao {
     protected abstract fun selectOrderByBus(typeCodes: List<Long>): LiveData<List<Route>>
 
     // Select
-    @Query(PARENT_ROUTE_SELECT +
-            "ORDER BY typeCode, displaySeq, routeNo")
+    @Query("$PARENT_ROUTE_SELECT ORDER BY typeCode, displaySeq, routeNo")
     protected abstract fun selectOrderByTypCodeTypeSeq(typeCodes: List<Long>): LiveData<List<Route>>
 
     // Select
-    @Query(PARENT_ROUTE_SELECT +
-            "ORDER BY displaySeq, routeNo")
+    @Query("$PARENT_ROUTE_SELECT ORDER BY displaySeq, routeNo")
     protected abstract fun selectOrderByTypeSeq(typeCodes: List<Long>): LiveData<List<Route>>
 
     // Select
-    @Query(PARENT_ROUTE_SELECT +
-            "ORDER BY displaySeq, routeNo")
+    @Query("$PARENT_ROUTE_SELECT ORDER BY displaySeq, routeNo")
     protected abstract fun selectOrderBySeq(typeCodes: List<Long>): LiveData<List<Route>>
 
     fun select(typeCodes: List<Long>, orderBy: Long): LiveData<List<Route>> {

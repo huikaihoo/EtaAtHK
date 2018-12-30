@@ -230,7 +230,7 @@ object NwfbConnection: BaseConnection {
      */
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
 
-        ConnectionHelper.nwfbStop.getPaths(
+        ConnectionHelper.nwfb.getPaths(
                 rdv = route.info.rdv,
                 bound = route.info.bound,
                 l = "0",
@@ -265,7 +265,7 @@ object NwfbConnection: BaseConnection {
         val info = "1|*|${route.routeKey.company}||${route.info.rdv}||${route.info.startSeq}||${route.info.endSeq}"
         //logd("info=[$info]")
 
-        ConnectionHelper.nwfbStop.getStops(
+        ConnectionHelper.nwfb.getStops(
                 info = info,
                 l = "0",
                 syscode = getSystemCode())
@@ -290,7 +290,7 @@ object NwfbConnection: BaseConnection {
                                 }
 
                                 //logd(AppHelper.gson.toJson(stops))
-                                AppHelper.db.stopDao().insertOrUpdate(route, stops, t)
+                                AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
                                 if (needEtaUpdate)
                                     updateEta(stops)
                             }
