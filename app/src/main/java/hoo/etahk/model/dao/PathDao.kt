@@ -8,17 +8,20 @@ import hoo.etahk.model.data.Route
 @Dao
 abstract class PathDao {
 
-    // Count
-    @Query("SELECT COUNT(*) FROM stop")
-    abstract fun count(): Int
-
-    // Select
-    @Query("SELECT * FROM path " +
+    companion object {
+        const val PATH_COND =
             "WHERE company = :company " +
             "AND routeNo = :routeNo " +
             "AND bound = :bound " +
-            "AND variant = :variant " +
-            "ORDER BY seq")
+            "AND variant = :variant "
+    }
+
+    // Count
+    @Query("SELECT COUNT(*) FROM path")
+    abstract fun count(): Int
+
+    // Select
+    @Query("SELECT * FROM path $PATH_COND ORDER BY seq")
     abstract fun select(company: String,
                         routeNo: String,
                         bound: Long,
@@ -45,12 +48,7 @@ abstract class PathDao {
     }
 
     // Delete
-    @Query("DELETE FROM stop " +
-            "WHERE company = :company " +
-            "AND routeNo = :routeNo " +
-            "AND bound = :bound " +
-            "AND variant = :variant " +
-            "AND updateTime < :updateTime")
+    @Query("DELETE FROM path $PATH_COND AND updateTime < :updateTime")
     abstract fun delete(company: String,
                         routeNo: String,
                         bound: Long,

@@ -8,39 +8,32 @@ import hoo.etahk.model.data.Stop
 @Dao
 abstract class StopDao {
 
+    companion object {
+        const val STOP_COND =
+            "WHERE company = :company " +
+            "AND routeNo = :routeNo " +
+            "AND bound = :bound " +
+            "AND variant = :variant "
+    }
+
     // Count
     @Query("SELECT COUNT(*) FROM stop")
     abstract fun count(): Int
 
-    @Query("SELECT IFNULL(MIN(updateTime), 0) FROM stop " +
-            "WHERE company = :company " +
-            "AND routeNo = :routeNo " +
-            "AND bound = :bound " +
-            "AND variant = :variant " +
-            "ORDER BY seq")
+    @Query("SELECT IFNULL(MIN(updateTime), 0) FROM stop $STOP_COND ORDER BY seq")
     abstract fun lastUpdate(company: String,
                             routeNo: String,
                             bound: Long,
                             variant: Long): Long
 
     // Select
-    @Query("SELECT * FROM stop " +
-            "WHERE company = :company " +
-            "AND routeNo = :routeNo " +
-            "AND bound = :bound " +
-            "AND variant = :variant " +
-            "ORDER BY seq")
+    @Query("SELECT * FROM stop $STOP_COND ORDER BY seq")
     abstract fun select(company: String,
                         routeNo: String,
                         bound: Long,
                         variant: Long): LiveData<List<Stop>>
 
-    @Query("SELECT * FROM stop " +
-            "WHERE company = :company " +
-            "AND routeNo = :routeNo " +
-            "AND bound = :bound " +
-            "AND variant = :variant " +
-            "ORDER BY seq")
+    @Query("SELECT * FROM stop $STOP_COND ORDER BY seq")
     abstract fun selectOnce(company: String,
                             routeNo: String,
                             bound: Long,
@@ -91,12 +84,7 @@ abstract class StopDao {
 //    @Delete
 //    abstract fun delete(stop: Stop)
 
-    @Query("DELETE FROM stop " +
-            "WHERE company = :company " +
-            "AND routeNo = :routeNo " +
-            "AND bound = :bound " +
-            "AND variant = :variant " +
-            "AND updateTime < :updateTime")
+    @Query("DELETE FROM stop $STOP_COND AND updateTime < :updateTime")
     abstract fun delete(company: String,
                         routeNo: String,
                         bound: Long,

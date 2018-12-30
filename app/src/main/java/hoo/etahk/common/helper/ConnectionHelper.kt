@@ -10,6 +10,7 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.remote.api.*
 import hoo.etahk.remote.connection.*
 import okhttp3.OkHttpClient
+import retrofit2.create
 
 object ConnectionHelper: BaseConnection {
     private lateinit var okHttp: OkHttpClient
@@ -39,18 +40,18 @@ object ConnectionHelper: BaseConnection {
         okHttpEtaNwfb = ConnectionFactory.createClient(NetworkType.ETA, Company.NWFB)
         okHttpEtaNlb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
 
-        kmb = ConnectionFactory.createRetrofit(okHttp, Url.KMB_URL).create(KmbApi::class.java)
-        kmbEta = ConnectionFactory.createRetrofit(okHttpEtaKmb, Url.KMB_URL).create(KmbApi::class.java)
+        kmb = ConnectionFactory.createRetrofit(okHttp, Url.KMB_URL).create()
+        kmbEta = ConnectionFactory.createRetrofit(okHttpEtaKmb, Url.KMB_URL).create()
 
-        nwfb = ConnectionFactory.createRetrofit(okHttpLong, Url.NWFB_URL).create(NwfbApi::class.java)
-        nwfbEta = ConnectionFactory.createRetrofit(okHttpEtaNwfb, Url.NWFB_URL).create(NwfbApi::class.java)
+        nwfb = ConnectionFactory.createRetrofit(okHttpLong, Url.NWFB_URL).create()
+        nwfbEta = ConnectionFactory.createRetrofit(okHttpEtaNwfb, Url.NWFB_URL).create()
 
-        nlb = ConnectionFactory.createRetrofit(okHttp, Url.NLB_URL).create(NlbApi::class.java)
-        nlbEta = ConnectionFactory.createRetrofit(okHttpEtaNlb, Url.NLB_URL).create(NlbApi::class.java)
+        nlb = ConnectionFactory.createRetrofit(okHttp, Url.NLB_URL).create()
+        nlbEta = ConnectionFactory.createRetrofit(okHttpEtaNlb, Url.NLB_URL).create()
 
-        gov = ConnectionFactory.createRetrofit(okHttpLong, Url.GOV_URL).create(GovApi::class.java)
+        gov = ConnectionFactory.createRetrofit(okHttpLong, Url.GOV_URL).create()
 
-        gist = ConnectionFactory.createRetrofit(okHttpLong, Url.GIST_URL).create(GistApi::class.java)
+        gist = ConnectionFactory.createRetrofit(okHttpLong, Url.GIST_URL).create()
     }
 
     private fun getConnection(company: String): BaseConnection? {
