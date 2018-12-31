@@ -38,13 +38,18 @@ object Constants {
     }
 
     object SharePrefs {
-        const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.40 Safari/537.36"
-
+        // General
+        const val DEFAULT_DATA_VALIDITY_PERIOD = 1
         const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
         const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
-        const val DEFAULT_OUTDATED_TIME = 1
-        const val DEFAULT_PAGE_SIZE = 20
 
+        // Parameters
+        // App
+        const val DEFAULT_PAGED_LIST_PAGE_SIZE = 20
+
+        // OKHttp3
+        // Default
+        const val DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
         const val DEFAULT_MAX_REQUESTS_VAL = 64
         const val DEFAULT_MAX_REQUESTS_PER_HOST_VAL = 4
         // Long
@@ -62,11 +67,14 @@ object Constants {
         const val ETA_NWFB_READ_TIMEOUT_VAL = 7000L
         const val ETA_NWFB_WRITE_TIMEOUT_VAL = 7000L
 
+        // API
+        // NWFB
         const val NWFB_API_PARAMETER_TYPE_ALL_BUS = "0"
         const val NWFB_API_PARAMETER_TYPE_ETA_BUS = "5"
         const val NWFB_API_PARAMETER_PLATFORM = "android"
         const val NWFB_API_PARAMETER_APP_VERSION = "3.5.5"
         const val NWFB_API_PARAMETER_APP_VERSION_2 = "49"
+        // GOV
         const val GOV_API_PARAMETER_PLATFORM = "android"
         const val GOV_API_PARAMETER_APP_VERSION = "3.6"
         const val GOV2_API_PARAMETER_APP_VERSION = "1.0"
@@ -206,12 +214,6 @@ object Constants {
         const val NWFB_ETA_RECORD_DISTANCE = 13
         const val NWFB_ETA_RECORD_ETA_TIME = 16
         const val NWFB_ETA_RECORD_MSG = 26
-    }
-
-    // Share Preferences Key
-    object Prefs {
-        const val APP_MODE = "app_mode"
-        const val LANG = "lang"
     }
 }
 

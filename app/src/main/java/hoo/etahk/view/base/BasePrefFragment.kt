@@ -1,5 +1,6 @@
 package hoo.etahk.view.base
 
+import androidx.annotation.StringRes
 import androidx.preference.*
 
 abstract class BasePrefFragment: PreferenceFragmentCompat() {
@@ -69,7 +70,11 @@ abstract class BasePrefFragment: PreferenceFragmentCompat() {
         }
     }
 
-    fun findPreference(resId: Int): Preference {
+    fun findPreference(@StringRes resId: Int): Preference {
         return super.findPreference(getString(resId))
+    }
+
+    fun bindPreferenceSummaryToValue(@StringRes resId: Int) {
+        bindPreferenceSummaryToValue(findPreference(resId))
     }
 }

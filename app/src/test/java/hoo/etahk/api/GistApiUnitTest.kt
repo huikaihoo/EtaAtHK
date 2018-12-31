@@ -3,6 +3,7 @@ package hoo.etahk.api
 import android.util.Base64
 import com.google.android.gms.common.util.IOUtils
 import hoo.etahk.BaseUnitTest
+import hoo.etahk.R
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
@@ -24,10 +25,9 @@ import java.util.zip.ZipFile
 @Config(manifest = Config.NONE)
 class GistApiUnitTest: BaseUnitTest() {
 
-    private val getGistId = getStringFromResource("gistIdKmb.txt")
+    private val gistId = getStringFromResource(R.string.param_gist_id_kmb)
 
     private fun getRawUrl(): List<String> {
-        val gistId = getGistId
         val rawUrlList = mutableListOf<String>()
 
         val call = ConnectionHelper.gist.getGist(gistId)

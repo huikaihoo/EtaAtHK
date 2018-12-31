@@ -45,7 +45,7 @@ object Utils {
     }
 
     fun getValidUpdateTimestamp(): Long {
-        return getCurrentTimestamp() - Constants.SharePrefs.DEFAULT_OUTDATED_TIME * Time.ONE_DAY_IN_SECONDS
+        return getCurrentTimestamp() - Constants.SharePrefs.DEFAULT_DATA_VALIDITY_PERIOD * Time.ONE_DAY_IN_SECONDS
     }
 
     @SuppressLint("SimpleDateFormat")

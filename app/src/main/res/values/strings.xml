@@ -154,7 +154,7 @@
     <string name="msg_one_item_removed">One item is removed</string>
     <string name="msg_add_to_favourite_success">Added to favourite successfully</string>
 
-    <!-- Settings -->
+    <!-- General Preference -->
     <string name="pref_general" translatable="false">general</string>
     <string name="pref_update_routes" translatable="false">update_routes</string>
     <string name="pref_backup_restore" translatable="false">backup_restore</string>
@@ -164,6 +164,8 @@
     <string name="pref_app_name" translatable="false">app_name</string>
     <string name="pref_app_version" translatable="false">app_version</string>
     <string name="pref_licenses" translatable="false">licenses</string>
+    <string name="pref_testing" translatable="false">testing</string>
+    <string name="pref_parameters" translatable="false">parameters</string>
 
     <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018</string>
     <string name="github_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/</string>
@@ -180,4 +182,18 @@
     <string name="pref_title_app_version">App version</string>
     <string name="pref_title_licenses">Open source licenses</string>
     <string name="pref_summary_licenses">License details for open source software</string>
+
+    <string name="pref_category_title_testing">Testing</string>
+    <string name="pref_title_parameters">Parameters</string>
+    <string name="pref_summary_parameters">View and edit parameters</string>
+
+    <!-- Parameters Preference -->
+    <string name="param_category_app" translatable="false">App</string>
+    <string name="param_app_mode" translatable="false">app_mode</string>
+    <string name="param_paged_list_page_size" translatable="false">paged_list_page_size</string>
+    <string name="param_category_gist" translatable="false">Gist</string>
+    <string name="param_gist_id_kmb" translatable="false">gist_id_kmb</string>
+    <string name="param_gist_id_nwfb" translatable="false">gist_id_nwfb</string>
+    <string name="param_category_ok_http" translatable="false">OkHttp</string>
+    <string name="param_user_agent" translatable="false">user_agent</string>
 </resources>

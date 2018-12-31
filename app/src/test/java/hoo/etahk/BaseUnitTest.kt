@@ -1,6 +1,8 @@
 package hoo.etahk
 
+import androidx.annotation.StringRes
 import com.google.gson.GsonBuilder
+import hoo.etahk.view.App
 import org.junit.Before
 import org.robolectric.shadows.ShadowLog
 
@@ -20,7 +22,7 @@ abstract class BaseUnitTest {
         ShadowLog.stream = if (printLog) System.out else null
     }
 
-    fun getStringFromResource(path: String): String {
-        return javaClass.getResource("/$path")?.readText() ?: ""
+    fun getStringFromResource(@StringRes resId: Int): String {
+        return javaClass.getResource("/${App.instance.getString(resId)}")?.readText() ?: ""
     }
 }

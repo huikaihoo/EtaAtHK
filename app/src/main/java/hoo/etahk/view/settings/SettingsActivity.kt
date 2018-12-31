@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.preference.PreferenceActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProviders
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.view.base.BaseActivity
@@ -21,17 +22,23 @@ import kotlinx.android.synthetic.main.activity_follow.*
  */
 class SettingsActivity : BaseActivity() {
 
+    private lateinit var viewModel: SettingsViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        setSupportActionBar(toolbar)
 
         setSupportActionBar(toolbar)
+
+        viewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
+        if (!viewModel.isInit) {
+            viewModel.isInit = true
+
+            // load General Preference fragment
+            supportFragmentManager.beginTransaction().replace(R.id.container, GeneralPrefFragment()).commit()
+        }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        // load General Preference fragment
-        supportFragmentManager.beginTransaction().replace(R.id.container, GeneralPrefFragment()).commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

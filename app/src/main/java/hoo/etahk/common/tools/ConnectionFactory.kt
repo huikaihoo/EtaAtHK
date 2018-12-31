@@ -1,6 +1,7 @@
 package hoo.etahk.common.tools
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import hoo.etahk.R
 import hoo.etahk.common.Constants.AppMode
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.NetworkType
@@ -70,7 +71,7 @@ object ConnectionFactory {
             val request = chain.request()
                 .newBuilder()
                 .removeHeader("User-Agent")
-                .addHeader("User-Agent", SharePrefs.USER_AGENT)
+                .addHeader("User-Agent", SharedPrefsHelper.get(R.string.param_user_agent, SharePrefs.DEFAULT_USER_AGENT))
                 //.addHeader("User-Agent", WebSettings.getDefaultUserAgent(App.instance))
                 .build()
             chain.proceed(request)

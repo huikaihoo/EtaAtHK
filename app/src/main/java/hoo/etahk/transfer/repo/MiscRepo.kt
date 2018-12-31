@@ -3,30 +3,38 @@ package hoo.etahk.transfer.repo
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import hoo.etahk.common.Constants.SharePrefs.DEFAULT_PAGE_SIZE
+import hoo.etahk.R
+import hoo.etahk.common.Constants.SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.misc.BaseMisc
 import hoo.etahk.model.misc.RouteFavourite
 import hoo.etahk.model.misc.RouteHistory
 import hoo.etahk.model.relation.RouteFavouriteEx
 import hoo.etahk.model.relation.RouteHistoryEx
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 object MiscRepo {
+
+    private val pagedListConfig = PagedList.Config.Builder()
+        .setPageSize(SharedPrefsHelper.get(R.string.param_paged_list_page_size, DEFAULT_PAGED_LIST_PAGE_SIZE))
+        .build()
 
     fun getRouteFavourite(): LiveData<PagedList<RouteFavouriteEx>> {
         return LivePagedListBuilder(
             AppHelper.db.miscFavouriteDao().selectDS(),
-            PagedList.Config.Builder().setPageSize(DEFAULT_PAGE_SIZE).build()
+            pagedListConfig
         ).build()
     }
 
     fun getRouteHistory(): LiveData<PagedList<RouteHistoryEx>> {
         return LivePagedListBuilder(
             AppHelper.db.miscHistoryDao().selectDS(),
-            PagedList.Config.Builder().setPageSize(DEFAULT_PAGE_SIZE).build()
+            pagedListConfig
         ).build()
     }
 

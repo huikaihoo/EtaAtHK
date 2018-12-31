@@ -9,6 +9,7 @@ import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.data.Path
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -42,9 +43,10 @@ object KmbConnection: BaseConnection {
         val t = Utils.getCurrentTimestamp()
         var result = HashMap<String, Route>()
 
-        val response = ConnectionHelper.gist.getGist("").execute()
+        val gistId = SharedPrefsHelper.get<String>(R.string.param_gist_id_kmb)
+        val response = ConnectionHelper.gist.getGist(gistId).execute()
 
-        logd("${response.isSuccessful}")
+        logd("gistId = $gistId; isSuccessful = ${response.isSuccessful}")
 
         if (response.isSuccessful) {
             val gistFile = response.body()?.files?.kmb

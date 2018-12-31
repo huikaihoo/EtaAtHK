@@ -3,6 +3,8 @@ package hoo.etahk.view.settings
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import androidx.preference.Preference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import hoo.etahk.BuildConfig
@@ -17,6 +19,10 @@ import hoo.etahk.view.follow.FollowActivity
 import org.jetbrains.anko.startActivity
 
 class GeneralPrefFragment : BasePrefFragment() {
+
+    private lateinit var testing: Preference
+    private lateinit var viewModel: SettingsViewModel
+
     /**
      * Called during [.onCreate] to supply the preferences for this fragment.
      * Subclasses are expected to call [.setPreferenceScreen] either
@@ -28,6 +34,8 @@ class GeneralPrefFragment : BasePrefFragment() {
      * [androidx.preference.PreferenceScreen] with this key.
      */
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        viewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
+
         addPreferencesFromResource(R.xml.pref_general)
         setHasOptionsMenu(true)
 
@@ -102,8 +110,9 @@ class GeneralPrefFragment : BasePrefFragment() {
             var counter = 0
 
             override fun onPreferenceClick(preference: Preference): Boolean {
-                if (counter == 6) {
-                    //preferenceScreen.addPreference()
+                if (counter == 5) {
+                    viewModel.showTesting = true
+                    preferenceScreen.addPreference(testing)
                 } else {
                     counter++
                 }
@@ -119,5 +128,23 @@ class GeneralPrefFragment : BasePrefFragment() {
             )
             true
         }
+
+        // Testing
+        val parameters = findPreference(R.string.pref_parameters)
+
+        parameters.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container, ParametersPrefFragment()).addToBackStack(null).commit()
+            true
+        }
+
+        testing = findPreference(R.string.pref_testing)
+        if (!viewModel.showTesting) {
+            preferenceScreen.removePreference(testing)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_settings)
     }
 }

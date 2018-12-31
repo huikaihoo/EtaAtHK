@@ -144,4 +144,8 @@
     <string name="pref_title_app_version">程式版本</string>
     <string name="pref_title_licenses">開放原始碼授權</string>
     <string name="pref_summary_licenses">開放原始碼軟件的授權詳細資料</string>
+
+    <string name="pref_category_title_testing">測試</string>
+    <string name="pref_title_parameters">參數</string>
+    <string name="pref_summary_parameters">檢視／編輯參數</string>
 </resources>

@@ -70,4 +70,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="@string/pref_testing"
+        android:title="@string/pref_category_title_testing"
+        android:order="130">
+
+        <Preference
+            android:key="@string/pref_parameters"
+            android:title="@string/pref_title_parameters"
+            android:summary="@string/pref_summary_parameters"
+            android:singleLine="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

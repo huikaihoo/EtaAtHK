@@ -1,8 +1,10 @@
 package hoo.etahk.connection
 
 import hoo.etahk.BaseUnitTest
+import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.helper.AppHelper
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.remote.connection.KmbConnection
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,12 +17,16 @@ class KmbConnectionUnitTest: BaseUnitTest() {
 
     override val printLog = false
 
+    private val gistId = getStringFromResource(R.string.param_gist_id_kmb)
+
     private val routeNo = "224R"
     private val bound = 1L
     private val variant = 1L
 
     @Test
     fun getParentRoutes() {
+        SharedPrefsHelper.put(R.string.param_gist_id_kmb, gistId)
+
         val result = KmbConnection.getParentRoutes(Constants.Company.KMB)
         result?.forEach { routeId, route ->
             System.out.println("routeId = $routeId; route = $route")

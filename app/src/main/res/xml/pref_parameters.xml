@@ -1,0 +1,59 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="@string/param_category_app"
+        android:title="@string/param_category_app"
+        android:order="10">
+
+        <EditTextPreference
+            android:key="@string/param_app_mode"
+            android:title="@string/param_app_mode"
+            android:maxLines="1"
+            android:persistent="true" />
+
+        <EditTextPreference
+            android:key="@string/param_paged_list_page_size"
+            android:title="@string/param_paged_list_page_size"
+            android:inputType="number"
+            android:defaultValue="20"
+            android:maxLines="1"
+            android:persistent="true" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:key="@string/param_category_gist"
+        android:title="@string/param_category_gist"
+        android:order="20">
+
+        <EditTextPreference
+            android:key="@string/param_gist_id_kmb"
+            android:title="@string/param_gist_id_kmb"
+            android:inputType="textNoSuggestions|textVisiblePassword"
+            android:maxLines="1"
+            android:persistent="true" />
+
+        <EditTextPreference
+            android:key="@string/param_gist_id_nwfb"
+            android:title="@string/param_gist_id_nwfb"
+            android:inputType="textNoSuggestions|textVisiblePassword"
+            android:maxLines="1"
+            android:persistent="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/param_category_ok_http"
+        android:title="@string/param_category_ok_http"
+        android:order="30">
+
+        <EditTextPreference
+            android:key="@string/param_user_agent"
+            android:title="@string/param_user_agent"
+            android:maxLines="1"
+            android:persistent="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
