@@ -20,6 +20,12 @@ abstract class PathDao {
     @Query("SELECT COUNT(*) FROM path")
     abstract fun count(): Int
 
+    @Query("SELECT IFNULL(MIN(updateTime), 0) FROM path $PATH_COND ORDER BY seq")
+    abstract fun lastUpdate(company: String,
+                            routeNo: String,
+                            bound: Long,
+                            variant: Long): Long
+
     // Select
     @Query("SELECT * FROM path $PATH_COND ORDER BY seq")
     abstract fun select(company: String,

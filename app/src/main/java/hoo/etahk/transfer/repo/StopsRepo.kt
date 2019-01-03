@@ -35,11 +35,13 @@ object StopsRepo {
 
     fun updateStops(route: Route, needEtaUpdate: Boolean){
         GlobalScope.launch(Dispatchers.Default) {
-            if (AppHelper.db.stopDao().lastUpdate(
-                    route.routeKey.company,
-                    route.routeKey.routeNo,
-                    route.routeKey.bound,
-                    route.routeKey.variant) < Utils.getValidUpdateTimestamp()) {
+            val stopLastUpdate = AppHelper.db.stopDao().lastUpdate(
+                route.routeKey.company, route.routeKey.routeNo, route.routeKey.bound, route.routeKey.variant)
+            val pathLastUpdate = AppHelper.db.pathDao().lastUpdate(
+                route.routeKey.company, route.routeKey.routeNo, route.routeKey.bound, route.routeKey.variant)
+            val validUpdate = Utils.getValidUpdateTimestamp()
+
+            if (stopLastUpdate < validUpdate || pathLastUpdate < validUpdate) {
                 logd("updateStops ${route.routeKey.company} ${route.routeKey.routeNo} ${route.routeKey.bound} ${route.routeKey.variant}")
                 ConnectionHelper.getStops(route, needEtaUpdate)
             } else if (needEtaUpdate) {
