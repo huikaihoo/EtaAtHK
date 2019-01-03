@@ -45,7 +45,7 @@ object Constants {
 
         // Parameters
         // App
-        const val DEFAULT_PAGED_LIST_PAGE_SIZE = 20
+        const val DEFAULT_PAGED_LIST_PAGE_SIZE = "20"
 
         // OKHttp3
         // Default

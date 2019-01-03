@@ -27,9 +27,9 @@ class KmbConnectionUnitTest: BaseUnitTest() {
     fun getParentRoutes() {
         SharedPrefsHelper.put(R.string.param_gist_id_kmb, gistId)
 
-        val result = KmbConnection.getParentRoutes(Constants.Company.KMB)
-        result?.forEach { routeId, route ->
-            System.out.println("routeId = $routeId; route = $route")
+        val result = KmbConnection.getParentRoutes(Constants.Company.KMB)?.getAll()?.sortedBy { it.routeKey.routeNo }
+        result?.forEach {
+            System.out.println("route = $it")
         }
 
         // Check Parent Routes

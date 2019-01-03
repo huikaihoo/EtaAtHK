@@ -10,6 +10,7 @@ import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.model.custom.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -22,7 +23,6 @@ import hoo.etahk.view.App
 import kotlinx.coroutines.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import java.util.*
 
 object NlbConnection: BaseConnection {
 
@@ -41,11 +41,11 @@ object NlbConnection: BaseConnection {
      * Get List of Parent Routes
      *
      * @param company company code
-     * @return map of route no to its parent route
+     * @return map of route no to list of parent routes
      */
-    override fun getParentRoutes(company: String): HashMap<String, Route>? {
+    override fun getParentRoutes(company: String): ParentRoutesMap? {
         val t = Utils.getCurrentTimestamp()
-        val result = HashMap<String, Route>()
+        val result = ParentRoutesMap()
         val childRoutes = mutableListOf<Route>()
 
         val response = ConnectionHelper.nlb.getDatabase().execute()
@@ -54,11 +54,11 @@ object NlbConnection: BaseConnection {
             val nlbDatabaseRes = response.body()!!
 
             // 1. Get Parent and Child Routes
-            val routesMap = (nlbDatabaseRes.routes ?: listOf()).groupBy{ it -> Company.NLB + it!!.routeNo }
+            val routesMap = (nlbDatabaseRes.routes ?: listOf()).groupBy{ it!!.routeNo }
 
-            for((key, routes) in routesMap) {
+            routesMap.values.forEach { routes ->
                 val routePair = toRoutePair(routes.sortedBy { it?.routeId?.toInt() ?: 0 }, t)
-                result[key] = routePair.first
+                result.add(routePair.first)
                 childRoutes.addAll(routePair.second)
             }
 

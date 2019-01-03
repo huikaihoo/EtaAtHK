@@ -34,15 +34,12 @@ abstract class ParentRouteDao {
             "routeNo")
     protected abstract fun selectOrderByBus(typeCodes: List<Long>): LiveData<List<Route>>
 
-    // Select
     @Query("$PARENT_ROUTE_SELECT ORDER BY typeCode, displaySeq, routeNo")
     protected abstract fun selectOrderByTypCodeTypeSeq(typeCodes: List<Long>): LiveData<List<Route>>
 
-    // Select
     @Query("$PARENT_ROUTE_SELECT ORDER BY displaySeq, routeNo")
     protected abstract fun selectOrderByTypeSeq(typeCodes: List<Long>): LiveData<List<Route>>
 
-    // Select
     @Query("$PARENT_ROUTE_SELECT ORDER BY displaySeq, routeNo")
     protected abstract fun selectOrderBySeq(typeCodes: List<Long>): LiveData<List<Route>>
 

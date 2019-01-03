@@ -4,6 +4,7 @@ import android.util.Base64
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.ZipHelper
+import hoo.etahk.model.custom.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -28,9 +29,9 @@ interface BaseConnection {
      * Get List of Parent Routes
      *
      * @param company company code
-     * @return map of route no to its parent route
+     * @return map of route no to list of parent routes
      */
-    fun getParentRoutes(company: String = ""): HashMap<String, Route>?
+    fun getParentRoutes(company: String = ""): ParentRoutesMap?
 
     /**
      * Get Parent Route by Route No

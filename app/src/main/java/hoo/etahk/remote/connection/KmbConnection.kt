@@ -10,6 +10,7 @@ import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
+import hoo.etahk.model.custom.ParentRoutesMap
 import hoo.etahk.model.data.Path
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -37,11 +38,11 @@ object KmbConnection: BaseConnection {
      * Get List of Parent Routes
      *
      * @param company company code
-     * @return map of route no to its parent route
+     * @return map of route no to list of parent routes
      */
-    override fun getParentRoutes(company: String): HashMap<String, Route>? {
+    override fun getParentRoutes(company: String): ParentRoutesMap? {
         val t = Utils.getCurrentTimestamp()
-        var result = HashMap<String, Route>()
+        val result = ParentRoutesMap()
 
         val gistId = SharedPrefsHelper.get<String>(R.string.param_gist_id_kmb)
         val response = ConnectionHelper.gist.getGist(gistId).execute()
@@ -55,7 +56,7 @@ object KmbConnection: BaseConnection {
             logd("gistDatabaseRes.isValid = ${gistDatabaseRes.isValid}")
 
             if (gistDatabaseRes.isValid) {
-                result = gistDatabaseRes.parentRoutes.associateTo(HashMap()) { it.routeKey.routeNo to it }
+                result.addAll(gistDatabaseRes.parentRoutes)
 
                 val childRoutesMap = gistDatabaseRes.childRoutes.groupBy{
                     RouteKey(company = it.routeKey.company,

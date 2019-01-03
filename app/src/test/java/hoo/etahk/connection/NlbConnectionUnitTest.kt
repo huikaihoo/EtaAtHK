@@ -21,9 +21,9 @@ class NlbConnectionUnitTest: BaseUnitTest() {
 
     @Test
     fun getParentRoutes() {
-        val result = NlbConnection.getParentRoutes(Constants.Company.NLB)
-        result?.forEach { routeId, route ->
-            System.out.println("routeId = $routeId; route = $route")
+        val result = NlbConnection.getParentRoutes(Constants.Company.NLB)?.getAll()?.sortedBy { it.routeKey.routeNo }
+        result?.forEach {
+            System.out.println("route = $it")
         }
 
         // Check Parent Routes

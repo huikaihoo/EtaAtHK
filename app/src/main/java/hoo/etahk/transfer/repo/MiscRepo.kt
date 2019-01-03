@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 object MiscRepo {
 
     private val pagedListConfig = PagedList.Config.Builder()
-        .setPageSize(SharedPrefsHelper.get(R.string.param_paged_list_page_size, DEFAULT_PAGED_LIST_PAGE_SIZE))
+        .setPageSize(SharedPrefsHelper.get(R.string.param_paged_list_page_size, DEFAULT_PAGED_LIST_PAGE_SIZE).toInt())
         .build()
 
     fun getRouteFavourite(): LiveData<PagedList<RouteFavouriteEx>> {

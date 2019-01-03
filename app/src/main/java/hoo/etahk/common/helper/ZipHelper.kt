@@ -2,6 +2,7 @@ package hoo.etahk.common.helper
 
 import hoo.etahk.common.Constants
 import hoo.etahk.model.data.Route
+import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.remote.response.GistDatabaseRes
 import java.io.BufferedReader
@@ -32,14 +33,29 @@ object ZipHelper {
         }
 
         gistDatabaseRes.parentRoutes.forEach {
+            it.routeKey = RouteKey(
+                company = it.routeKey.company,
+                routeNo = it.routeKey.routeNo,
+                bound = it.routeKey.bound,
+                variant = it.routeKey.variant)
             it.updateTime = updateTime
         }
 
         gistDatabaseRes.childRoutes.forEach {
+            it.routeKey = RouteKey(
+                company = it.routeKey.company,
+                routeNo = it.routeKey.routeNo,
+                bound = it.routeKey.bound,
+                variant = it.routeKey.variant)
             it.updateTime = updateTime
         }
 
         gistDatabaseRes.stops.forEach {
+            it.routeKey = RouteKey(
+                company = it.routeKey.company,
+                routeNo = it.routeKey.routeNo,
+                bound = it.routeKey.bound,
+                variant = it.routeKey.variant)
             it.etaStatus = Constants.EtaStatus.NONE
             it.etaResults = emptyList()
             it.etaUpdateTime = 0L

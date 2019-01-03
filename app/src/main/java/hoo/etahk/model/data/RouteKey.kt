@@ -111,7 +111,7 @@ data class RouteKey (
                 } else {
                     BUS_KL_NT
                 }
-            } else if (prefix == "H") {
+            } else if (prefix == "H" || routeNo == "88R") {
                 BUS_CROSS_HARBOUR
             } else if (company == DB || company == PI) {
                 BUS_AIRPORT_LANTAU

@@ -13,6 +13,7 @@ import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.Separator
+import hoo.etahk.model.custom.ParentRoutesMap
 import hoo.etahk.model.data.Path
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -88,11 +89,12 @@ object NwfbConnection: BaseConnection {
      * Get List of Parent Routes
      *
      * @param company company code
-     * @return map of route no to its parent route
+     * @return map of route no to list of parent routes
      */
-    override fun getParentRoutes(company: String): HashMap<String, Route>? {
+    override fun getParentRoutes(company: String): ParentRoutesMap? {
         val t = Utils.getCurrentTimestamp()
-        val result = HashMap<String, Route>()
+        val temp = HashMap<String, Route>()
+        val result = ParentRoutesMap()
 
         val response = ConnectionHelper.nwfb.getParentRoutes(
                 m = Constants.SharePrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
@@ -102,20 +104,22 @@ object NwfbConnection: BaseConnection {
         if (response.isSuccessful) {
             val separator = Separator("\\|\\*\\|<br>".toRegex(), "\\|\\|".toRegex(), Constants.Route.NWFB_ROUTE_RECORD_SIZE)
 
-            logd("onResponse columnSize ${separator.columnSize}")
+            //logd("onResponse columnSize ${separator.columnSize}")
             separator.original = response.body()?.string() ?: ""
             separator.result.forEach {
                 val route = toRoute(it, t)
-                val key = route.routeKey.company + route.routeKey.routeNo
+                val key = route.routeKey.routeNo
 
-                if (result.contains(key)) {
-                    result[key] = mergeRoute(it, result[key]!!)
+                if (temp.contains(key)) {
+                    temp[key] = mergeRoute(it, temp[key]!!)
                 } else {
-                    result[key] = route
+                    temp[key] = route
                 }
             }
 
-            logd("onResponse ${separator.result.size}")
+            result.addAll(temp.values)
+            logd("onResponse separator.result ${separator.result.size}")
+            logd("onResponse ${result.size}")
         }
 
         return result

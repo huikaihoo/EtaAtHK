@@ -7,6 +7,7 @@ import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.Separator
+import hoo.etahk.model.custom.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -49,10 +50,11 @@ object GovConnection: BaseConnection {
      * @param company company code
      * @return map of route no to its parent route
      */
-    override fun getParentRoutes(company: String): HashMap<String, Route>? {
+    override fun getParentRoutes(company: String): ParentRoutesMap? {
         val t = Utils.getCurrentTimestamp()
-        val temp = HashMap<String, MutableList<Route>>()
-        val result = HashMap<String, Route>()
+        val temp = HashMap<String, MutableList<Route>>()    // (Company + routeNo) to Route
+        val temp2 = HashMap<String, Route>()
+        val result = ParentRoutesMap()
 
         val response = ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode()).execute()
         if (response.isSuccessful) {
@@ -61,27 +63,29 @@ object GovConnection: BaseConnection {
             //logd("onResponse ${separator.columnSize}")
             separator.original = response.body()?.string() ?: ""
             separator.result.forEach {
-                toRoutes(it, t).forEach { route ->
-                    val key = route.routeKey.company + route.routeKey.routeNo
-                    if (temp.contains(key)) {
-                        val routes = temp[key]!!
-                        routes.add(route)
-                        temp[key] = routes
-                    } else {
-                        temp[key] = mutableListOf(route)
-                    }
+                val route = toRoute(it, t)
+                val key = route.routeKey.company + route.routeKey.routeNo
+                if (temp.contains(key)) {
+                    val routes = temp[key]!!
+                    routes.add(route)
+                    temp[key] = routes
+                } else {
+                    temp[key] = mutableListOf(route)
                 }
                 //result.putAll(routes.associate{ Pair(it.routeKey.company + it.routeKey.routeNo, it) })
             }
-            logd("onResponse ${separator.result.size}")
 
             for((key, routes) in temp) {
                 if (routes.size == 1) {
-                    result[key] = routes[0]
+                    temp2[key] = routes[0]
                 } else if (routes.size > 1){
-                    result[key] = mergeVariantRoutes(routes)
+                    temp2[key] = mergeVariantRoutes(routes)
                 }
             }
+
+            result.addAll(temp2.values)
+            logd("onResponse separator.result ${separator.result.size}")
+            logd("onResponse ${result.size}")
         }
 
         return result
@@ -137,6 +141,31 @@ object GovConnection: BaseConnection {
         return routes[0].copy(direction = newDirection, from = newFrom, to = newTo)
     }
 
+    private fun toRoute(records: List<String>, t: Long): Route {
+        val companies = records[Constants.Route.GOV_ROUTE_RECORD_COMPANIES].split("\\+".toRegex())
+
+        val direction = when {
+            records[Constants.Route.GOV_ROUTE_RECORD_BOUND_COUNT].toInt() > 1 -> records[Constants.Route.GOV_ROUTE_RECORD_BOUND_COUNT].toLong()
+            records[Constants.Route.GOV_ROUTE_RECORD_CIRCULAR].toInt() > 0 -> 0L
+            else -> 1L
+        }
+
+        return Route(
+            routeKey = RouteKey(company = companies[0],
+                routeNo = records[Constants.Route.GOV_ROUTE_RECORD_ROUTE_NO],
+                bound = 0L,
+                variant = 0L),
+            direction = direction,
+            specialCode = records[Constants.Route.GOV_ROUTE_RECORD_SPECIAL].toLong(),
+            companyDetails = companies,
+            from = StringLang.newInstance(records[Constants.Route.GOV_ROUTE_RECORD_FROM]),
+            to = StringLang.newInstance(records[Constants.Route.GOV_ROUTE_RECORD_TO]),
+            details = StringLang.newInstance(records[Constants.Route.GOV_ROUTE_RECORD_DETAILS]),
+            updateTime = t
+        )
+
+    }
+
     @Deprecated("Use 'getParentRoutes(company: String): HashMap<String, Route>?' instead.")
     fun getParentRoutesOld(company: String): HashMap<String, Route>? {
         ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode())
@@ -169,6 +198,7 @@ object GovConnection: BaseConnection {
         return null
     }
 
+    @Deprecated("Use 'toRoute(records: List<String>, t: Long): Route' instead.")
     private fun toRoutes(records: List<String>, t: Long): List<Route> {
         val routes: MutableList<Route> = mutableListOf()
         val companies = records[Constants.Route.GOV_ROUTE_RECORD_COMPANIES].split("\\+".toRegex())
