@@ -1,5 +1,6 @@
 package hoo.etahk.model.custom
 
+import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 
@@ -10,6 +11,9 @@ class ParentRoutesMap(val ignoreConstraint: Boolean = false) {
         private set
 
     fun add(route: Route) {
+        route.from.tc = Utils.phaseFromTo(route.from.tc)
+        route.to.tc = Utils.phaseFromTo(route.to.tc)
+
         if (ignoreConstraint || get(route.routeKey) == null) {
             if (map.contains(route.routeKey.routeNo)) {
                 map[route.routeKey.routeNo]!!.add(route)

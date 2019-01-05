@@ -206,6 +206,20 @@ object Utils {
                 .replace("\uE1D0".toRegex(), "栢")
     }
 
+    fun phaseFromTo(str: String): String {
+        // TODO("Need to Support English")
+        return str.replace("公共運輸".toRegex(), "")
+            .replace("公共交通".toRegex(), "")
+            .replace("運輸交匯處".toRegex(), "")
+            .replace("交匯處".toRegex(), "")
+            .replace("臨時巴士總站".toRegex(), "")
+            .replace("巴士總站".toRegex(), "")
+            .replace("總站".toRegex(), "")
+            .replace("鐵路站".toRegex(), "站")
+            .replace("渡輪碼頭".toRegex(), "碼頭")
+            .trim()
+    }
+
     /**
      * Function to return valid ETA Result's message from EAT Time String
      * @return message in ETAResult
