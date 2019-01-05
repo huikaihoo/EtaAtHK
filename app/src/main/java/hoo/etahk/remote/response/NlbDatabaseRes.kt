@@ -1,4 +1,5 @@
 package hoo.etahk.remote.response
+
 import com.google.gson.annotations.SerializedName
 
 data class NlbDatabaseRes(
@@ -67,4 +68,3 @@ data class NlbDatabaseRes(
         @SerializedName("stop_name_s") val stopNameS: String? = ""
     )
 }
-

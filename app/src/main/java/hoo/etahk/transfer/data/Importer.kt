@@ -4,12 +4,14 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Environment
 import hoo.etahk.BuildConfig
+import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.DATABASE_NAME
 import hoo.etahk.common.Constants.DATABASE_VERSION
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.view.App
 import java.io.File
 import java.io.FileInputStream
@@ -37,7 +39,7 @@ class Importer: FilesWorker() {
 
             fileMap.keys.sortedDescending().toList().toTypedArray()
         } catch (e: Exception) {
-            loge("backup failed!", e)
+            loge("Get backup list failed!", e)
             arrayOf()
         }
     }
@@ -52,7 +54,7 @@ class Importer: FilesWorker() {
             return "Cannot restore data"
         }
 
-        if (false && !restoreSharedPref()) {
+        if (appData.sharedPrefData != null && !restoreSharedPref()) {
             return "Cannot restore shared preferences"
         }
 
@@ -79,7 +81,7 @@ class Importer: FilesWorker() {
 
             return appData.packageName == BuildConfig.APPLICATION_ID
         } catch (e: Exception) {
-            loge("prepare failed!", e)
+            loge("Prepare failed!", e)
             false
         }
     }
@@ -113,7 +115,7 @@ class Importer: FilesWorker() {
 
             true
         } catch (e: Exception) {
-            loge("restore database failed!", e)
+            loge("Restore database failed!", e)
             false
         }
     }
@@ -121,6 +123,20 @@ class Importer: FilesWorker() {
     private fun restoreSharedPref(): Boolean {
         logd("Start Restore Shared Preferences")
 
-        return true
+        return try {
+            if (appData.sharedPrefData!!.pagedListPageSize.isNotBlank())
+                SharedPrefsHelper.put(R.string.param_paged_list_page_size, appData.sharedPrefData!!.pagedListPageSize)
+            if (appData.sharedPrefData!!.gistIdKmb.isNotBlank())
+                SharedPrefsHelper.put(R.string.param_gist_id_kmb, appData.sharedPrefData!!.gistIdKmb)
+            if (appData.sharedPrefData!!.gistIdNwfb.isNotBlank())
+                SharedPrefsHelper.put(R.string.param_gist_id_nwfb, appData.sharedPrefData!!.gistIdNwfb)
+            if (appData.sharedPrefData!!.userAgent.isNotBlank())
+                SharedPrefsHelper.put(R.string.param_user_agent, appData.sharedPrefData!!.userAgent)
+
+            true
+        } catch (e: Exception) {
+            loge("Restore database failed!", e)
+            false
+        }
     }
 }

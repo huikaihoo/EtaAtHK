@@ -4,11 +4,12 @@ import android.os.Environment
 import android.os.Environment.MEDIA_MOUNTED
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Constants.SharePrefs
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.view.App
+import hoo.etahk.common.helper.SharedPrefsHelper
 import java.io.File
 import java.io.FileOutputStream
 
@@ -33,7 +34,7 @@ class Exporter: FilesWorker() {
             return "Error 3"
         }
 
-        return App.instance.getString(R.string.content_backup_save_success_to) + backupFullPath
+        return backupFullPath
     }
 
 
@@ -52,7 +53,7 @@ class Exporter: FilesWorker() {
 
             true
         } catch (e: Exception) {
-            loge("prepareDatabase failed!", e)
+            loge("Prepare Database failed!", e)
             false
         }
     }
@@ -60,7 +61,24 @@ class Exporter: FilesWorker() {
     private fun prepareSharedPref(): Boolean {
         logd("Start Prepare Shared Preferences")
 
-        return true
+        return try {
+            val sharedPrefData = SharedPrefData()
+
+            sharedPrefData.pagedListPageSize = SharedPrefsHelper.get(R.string.param_paged_list_page_size, SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE)
+            if (SharedPrefsHelper.getAppMode() == Constants.AppMode.DEV) {
+                sharedPrefData.gistIdKmb = SharedPrefsHelper.get(R.string.param_gist_id_kmb)
+                sharedPrefData.gistIdNwfb = SharedPrefsHelper.get(R.string.param_gist_id_nwfb)
+            }
+            sharedPrefData.userAgent = SharedPrefsHelper.get(R.string.param_user_agent, SharePrefs.DEFAULT_USER_AGENT)
+
+            appData.sharedPrefData = sharedPrefData
+
+            true
+        } catch (e: Exception) {
+            loge("Prepare Shared Preferences failed!", e)
+            false
+        }
+
     }
 
     private fun backup(): Boolean {
@@ -85,7 +103,7 @@ class Exporter: FilesWorker() {
 
             true
         } catch (e: Exception) {
-            loge("backup failed!", e)
+            loge("Backup failed!", e)
             false
         }
     }

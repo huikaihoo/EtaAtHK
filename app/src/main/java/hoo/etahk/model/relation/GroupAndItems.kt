@@ -8,7 +8,9 @@ class GroupAndItems {
     @Embedded
     lateinit var group: FollowGroup
 
-    @Relation(parentColumn = "Id",
-              entityColumn = "groupId")
+    @Relation(
+        parentColumn = "Id",
+        entityColumn = "groupId"
+    )
     var itemAndStop: List<ItemAndStop> = listOf()
 }

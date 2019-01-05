@@ -58,7 +58,8 @@ class GeneralPrefFragment : BasePrefFragment() {
         backup.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val exporter = Exporter()
             AlertDialogBuilder(context!!)
-                .setTitle(exporter.export())
+                .setTitle(R.string.title_backup_save_success_to)
+                .setMessage(exporter.export())
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
             true

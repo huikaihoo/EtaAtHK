@@ -9,8 +9,10 @@ class RouteFavouriteEx {
     @Embedded
     lateinit var favourite: RouteFavourite
 
-    @Relation(parentColumn = "relationStr",
-              entityColumn = "routeStr")
+    @Relation(
+        parentColumn = "relationStr",
+        entityColumn = "routeStr"
+    )
     var routes: List<Route> = listOf()
 
     val route: Route?

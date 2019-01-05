@@ -112,12 +112,12 @@
     <string name="title_conform_delete_group">要移除目前的組別嗎？</string>
     <string name="title_conform_delete_item">要移除選取的車站嗎？</string>
     <string name="title_select_backup_to_restore">選擇要還原的備份：</string>
+    <string name="title_backup_save_success_to">成功備份至：</string>
     <string name="hint_location_name">地點名稱</string>
     <string name="hint_group_name">組別名稱</string>
     <string name="hint_new_location_name">新的地點名稱</string>
     <string name="hint_new_group_name">新的組別名稱</string>
     <string name="content_conform_delete">注意！這個動作無法復原</string>
-    <string name="content_backup_save_success_to">成功備份至\u0020</string>
 
     <!-- Message -->
     <string name="msg_add_location_success">成功新增一個地點</string>

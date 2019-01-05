@@ -1,4 +1,5 @@
 package hoo.etahk.remote.request
+
 import com.google.gson.annotations.SerializedName
 
 data class NlbEtaReq(

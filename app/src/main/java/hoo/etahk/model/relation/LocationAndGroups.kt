@@ -10,8 +10,10 @@ class LocationAndGroups {
     @Embedded
     lateinit var location: FollowLocation
 
-    @Relation(parentColumn = "Id",
-              entityColumn = "locationId")
+    @Relation(
+        parentColumn = "Id",
+        entityColumn = "locationId"
+    )
     var groups: List<FollowGroup> = listOf()
         get() {
             field.forEach {

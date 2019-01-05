@@ -9,8 +9,10 @@ class ItemAndStop {
     @Embedded
     lateinit var item: FollowItem
 
-    @Relation(parentColumn = "stopStr",
-              entityColumn = "stopStr")
+    @Relation(
+        parentColumn = "stopStr",
+        entityColumn = "stopStr"
+    )
     var stops: List<Stop> = listOf()
 
     val stop: Stop?

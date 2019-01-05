@@ -9,4 +9,5 @@ data class AppData(var createTime: String = "") {
     val buildType: String = BuildConfig.BUILD_TYPE
 
     var databaseData: DatabaseData? = null
+    var sharedPrefData: SharedPrefData? = null
 }

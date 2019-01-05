@@ -9,7 +9,7 @@ abstract class FilesWorker {
         val gson = GsonBuilder()
             .serializeNulls()
             .setPrettyPrinting()
-            .create()
+            .create()!!
     }
 
     var appData: AppData = AppData()
