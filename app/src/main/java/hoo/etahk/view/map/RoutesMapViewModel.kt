@@ -18,6 +18,8 @@ class RoutesMapViewModel : ViewModel() {
                 subscribeToRepo()
         }
 
+    var isGotoBoundUsed: Boolean = false
+
     fun getRouteAndStopsList(): LiveData<List<RouteAndStops>> {
         return routeAndStopsList!!
     }

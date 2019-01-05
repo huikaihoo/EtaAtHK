@@ -109,33 +109,29 @@ class RouteActivity : BaseActivity() {
 
     private fun subscribeUiChanges() {
         viewModel.getParentRoute().observe(this, Observer<Route> {
-            it?.let {
-                viewModel.updateChildRoutes(it)
-                pagerAdapter?.dataSource = it
-                setActionBarSubtitle(it)
-                tabs.addOnTabSelectedListener(object : TabLayout.ViewPagerOnTabSelectedListener(container) {
-                    override fun onTabSelected(tab: TabLayout.Tab) {
-                        super.onTabSelected(tab)
-                        if (tabs.tabCount > 0)
-                            viewModel.selectedTabPosition = tab.position
-                    }
-                })
-                if (!viewModel.isGotoBoundUsed) {
-                    val gotoBound = intent.extras.getLong(Argument.ARG_GOTO_BOUND)
-                    if (gotoBound > 0) {
-                        viewModel.isGotoBoundUsed = true
-                        viewModel.selectedTabPosition = if (gotoBound >= 2L) 1 else 0
-                    }
+            viewModel.updateChildRoutes(it)
+            pagerAdapter?.dataSource = it
+            setActionBarSubtitle(it)
+            tabs.addOnTabSelectedListener(object : TabLayout.ViewPagerOnTabSelectedListener(container) {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    super.onTabSelected(tab)
+                    if (tabs.tabCount > 0)
+                        viewModel.selectedTabPosition = tab.position
                 }
-                tabs.getTabAt(viewModel.selectedTabPosition)?.select()
+            })
+            if (!viewModel.isGotoBoundUsed) {
+                val gotoBound = intent.extras.getLong(Argument.ARG_GOTO_BOUND)
+                if (gotoBound > 0) {
+                    viewModel.isGotoBoundUsed = true
+                    viewModel.selectedTabPosition = if (gotoBound >= 2L) 1 else 0
+                }
             }
+            tabs.getTabAt(viewModel.selectedTabPosition)?.select()
         })
 
         viewModel.getMillisLeft().observe(this, Observer<Long> {
-            it?.let {
-                GlobalScope.launch(Dispatchers.Main){
-                    progress_bar.progress = it.toInt()
-                }
+            GlobalScope.launch(Dispatchers.Main){
+                progress_bar.progress = it.toInt()
             }
         })
     }
@@ -161,7 +157,7 @@ class RouteActivity : BaseActivity() {
                 startActivity<RoutesMapsActivity>(
                     Constants.Argument.ARG_COMPANY to viewModel.routeKey?.company,
                     Constants.Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
-                    Constants.Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE)
+                    Constants.Argument.ARG_GOTO_BOUND to (container.currentItem + 1).toLong()
                 )
                 true
             }

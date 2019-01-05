@@ -22,9 +22,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Argument
+import hoo.etahk.common.extensions.logd
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.relation.RouteAndStops
 import hoo.etahk.view.base.MapsActivity
+import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.startActivity
 
 
@@ -39,6 +41,8 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
 
         viewModel = ViewModelProviders.of(this).get(RoutesMapViewModel::class.java)
         viewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
+
+        intent.extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
 
         spinnerAdapter = RoutesSpinnerAdapter(this)
 
@@ -71,15 +75,27 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
 
     private fun subscribeUiChanges() {
         viewModel.getRouteAndStopsList().observe(this, Observer<List<RouteAndStops>> {
-            it?.let {
-                val isEmptyBefore = spinnerAdapter.dataSource.isEmpty()
-                spinnerAdapter.dataSource = it
-                spinner?.isEnabled = (it.size > 1)
-                if (isEmptyBefore) {
-                    spinner?.setSelection(viewModel.selectedRoutePosition)
-                    if (viewModel.selectedRoutePosition < it.size)
-                        showPathsAndStops(false)
+            val isEmptyBefore = spinnerAdapter.dataSource.isEmpty()
+            spinnerAdapter.dataSource = it
+            spinner?.isEnabled = (it.size > 1)
+            if (isEmptyBefore) {
+                if (!viewModel.isGotoBoundUsed) {
+                    val gotoBound = intent.extras.getLong(Argument.ARG_GOTO_BOUND)
+                    logd("gotoBound = $gotoBound")
+                    if (gotoBound > 0) {
+                        viewModel.isGotoBoundUsed = true
+                        it.forEachWithIndex { i, routeAndStops ->
+                            val routeKey = routeAndStops.route.routeKey
+                            logd("routeKey = $routeKey")
+                            if (routeKey.bound == gotoBound && routeKey.variant == 1L)
+                                viewModel.selectedRoutePosition = i
+                        }
+                    }
+                    logd("viewModel.selectedRoutePosition = ${viewModel.selectedRoutePosition}")
                 }
+                spinner?.setSelection(viewModel.selectedRoutePosition)
+                if (viewModel.selectedRoutePosition < it.size)
+                    showPathsAndStops(false)
             }
         })
     }

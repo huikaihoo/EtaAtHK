@@ -128,18 +128,16 @@ abstract class TransparentActivity : BaseActivity() {
 
     protected fun setupActionBar() {
         // Setup ActionBar
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setBackgroundDrawable(
+        supportActionBar?.let {
+            it.setBackgroundDrawable(
                 ColorDrawable(
                     ContextCompat.getColor(this, R.color.colorSemiTransparentBlack)
                 )
             )
-            actionBar.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayHomeAsUpEnabled(true)
         }
 
         // Setup Toolbar
-        val toolbar = find<Toolbar>(R.id.action_bar)
-        toolbar.contentInsetStartWithNavigation = 0
+        find<Toolbar>(R.id.action_bar).contentInsetStartWithNavigation = 0
     }
 }

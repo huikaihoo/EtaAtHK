@@ -47,8 +47,8 @@ open class TimerViewModel : ViewModel() {
     }
 
     fun stopTimer() {
-        if (timer != null) {
-            timer?.cancel()
+        timer?.let {
+            it.cancel()
             millisLeft.value = 0L
             lastUpdateTime.value = Utils.getCurrentTimestamp() - 1
         }

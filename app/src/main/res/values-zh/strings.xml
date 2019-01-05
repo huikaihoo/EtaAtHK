@@ -54,6 +54,7 @@
     <string name="move_to">移動至\u2026</string>
     <string name="remove">移除</string>
 
+    <string name="refresh_route_info">更新路線資料</string>
     <string name="add_to_favourite">加入至最愛路線</string>
     <string name="view_another_company">以另一公司檢視</string>
     <string name="add_to_follow_stop">加入至追蹤車站</string>

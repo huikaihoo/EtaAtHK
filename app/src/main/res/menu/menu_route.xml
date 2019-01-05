@@ -18,8 +18,15 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_add_favourite"
+        android:id="@+id/menu_refresh_route_info"
         android:orderInCategory="310"
+        android:title="@string/refresh_route_info"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_add_favourite"
+        android:orderInCategory="320"
         android:title="@string/add_to_favourite"
         app:showAsAction="never" />
 

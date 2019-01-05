@@ -25,7 +25,9 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RouteFragment : BaseFragment() {
 
@@ -40,10 +42,10 @@ class RouteFragment : BaseFragment() {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        fun newInstance(direction: Long): RouteFragment {
+        fun newInstance(bound: Long): RouteFragment {
             val fragment = RouteFragment()
             val args = Bundle()
-            args.putLong(ARG_BOUND, direction)
+            args.putLong(ARG_BOUND, bound)
             fragment.arguments = args
             return fragment
         }
@@ -168,7 +170,7 @@ class RouteFragment : BaseFragment() {
             var updatedCount = 0
             var oldCount = 0
 
-            it?.forEach { item ->
+            it.forEach { item ->
                 if (item.etaUpdateTime < last){
                     oldCount++
                     item.displayEta = false
@@ -184,7 +186,7 @@ class RouteFragment : BaseFragment() {
 
             logd("E=$errorCount U=$updatedCount O=$oldCount T=$size last=$last")
 
-            it?.let { routeStopsAdapter.dataSource = it }
+            routeStopsAdapter.dataSource = it
 
             if (size > 0 && !viewModel.isGotoSeqUsed) {
                 val gotoBound = activity!!.intent.extras!!.getLong(Constants.Argument.ARG_GOTO_BOUND)
@@ -214,12 +216,10 @@ class RouteFragment : BaseFragment() {
         })
 
         viewModel.getLastUpdateTime().observe(this, Observer<Long> {
-            if (it != null) {
-                val stops = fragmentViewModel.getStops().value
-                if (stops != null && stops.isNotEmpty() && !fragmentViewModel.isRefreshingAll){
-                    fragmentViewModel.isRefreshingAll = true
-                    updateEta(stops)
-                }
+            val stops = fragmentViewModel.getStops().value
+            if (!stops.isNullOrEmpty() && !fragmentViewModel.isRefreshingAll){
+                fragmentViewModel.isRefreshingAll = true
+                updateEta(stops)
             }
         })
     }

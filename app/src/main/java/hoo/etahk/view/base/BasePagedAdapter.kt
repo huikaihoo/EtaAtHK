@@ -25,9 +25,8 @@ abstract class BasePagedAdapter<C, D>(diffCallback: DiffUtil.ItemCallback<D>) : 
     abstract fun instantiateViewHolder(view: View, viewType: Int): BaseViewHolder<C, D>
 
     override fun onBindViewHolder(holder: BaseViewHolder<C, D>, position: Int) {
-        val item = getItem(position)
-        if (item != null) {
-            holder.onBind(context, position, listOf(item))
+        getItem(position)?.let {
+            holder.onBind(context, position, listOf(it))
         }
     }
 }

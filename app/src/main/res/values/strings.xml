@@ -73,6 +73,7 @@
     <string name="move_to">Move to \u2026</string>
     <string name="remove">Remove</string>
 
+    <string name="refresh_route_info">Refresh Route Info</string>
     <string name="add_to_favourite">Add to favourite</string>
     <string name="view_another_company">View in another company</string>
     <string name="add_to_follow_stop">Add to following stops</string>

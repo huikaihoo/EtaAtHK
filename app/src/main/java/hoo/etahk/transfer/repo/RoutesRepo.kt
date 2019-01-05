@@ -46,9 +46,9 @@ object RoutesRepo {
         return AppHelper.db.childRouteDao().select(company, routeNo, bound)
     }
 
-    fun updateChildRoutes(parentRoute: Route) {
+    fun updateChildRoutes(parentRoute: Route, forceUpdate: Boolean = false) {
         GlobalScope.launch(Dispatchers.Default) {
-            if (AppHelper.db.childRouteDao().lastUpdate(parentRoute.routeKey.company, parentRoute.routeKey.routeNo) < Utils.getValidUpdateTimestamp()) {
+            if (forceUpdate || AppHelper.db.childRouteDao().lastUpdate(parentRoute.routeKey.company, parentRoute.routeKey.routeNo) < Utils.getValidUpdateTimestamp()) {
                 logd("updateChildRoutes ${parentRoute.routeKey.company} ${parentRoute.routeKey.routeNo}")
                 ConnectionHelper.getChildRoutes(parentRoute)
             }
