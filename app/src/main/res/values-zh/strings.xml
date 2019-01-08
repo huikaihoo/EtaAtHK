@@ -143,6 +143,10 @@
 
     <string name="pref_category_title_about">關於</string>
     <string name="pref_title_app_version">程式版本</string>
+    <string name="pref_title_privacy_policy">私隱權政策</string>
+    <string name="pref_summary_privacy_policy">閱讀應用程式的《私隱權政策》</string>
+    <string name="pref_title_disclaimer">免責條款</string>
+    <string name="pref_summary_disclaimer">閱讀應用程式的《免責條款》</string>
     <string name="pref_title_licenses">開放原始碼授權</string>
     <string name="pref_summary_licenses">開放原始碼軟件的授權詳細資料</string>
 

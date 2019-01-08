@@ -1,6 +1,7 @@
 package hoo.etahk.common.extensions
 
 import android.util.Log
+import com.crashlytics.android.Crashlytics
 
 /**
  * Sources: https://github.com/Kotlin/anko/blob/27fba1aa00811470f58ec6b61851e1cd8c2d9999/anko/library/static/commons/src/main/java/Logging.kt
@@ -100,8 +101,10 @@ fun kotlin.Any.logw(message: Any?, thr: Throwable? = null) {
 fun kotlin.Any.loge(message: Any?, thr: Throwable? = null) {
     if (thr != null) {
         Log.e(tag(), message?.toString() ?: "null", thr)
+        Crashlytics.logException(thr)
     } else {
         Log.e(tag(), message?.toString() ?: "null")
+        Crashlytics.log("[${tag()}] ${message?.toString()}")
     }
 }
 

@@ -164,11 +164,13 @@
     <string name="pref_about" translatable="false">about</string>
     <string name="pref_app_name" translatable="false">app_name</string>
     <string name="pref_app_version" translatable="false">app_version</string>
+    <string name="pref_privacy_policy" translatable="false">privacy_policy</string>
+    <string name="pref_disclaimer" translatable="false">disclaimer</string>
     <string name="pref_licenses" translatable="false">licenses</string>
     <string name="pref_testing" translatable="false">testing</string>
     <string name="pref_parameters" translatable="false">parameters</string>
 
-    <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018</string>
+    <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018-2019</string>
     <string name="github_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/</string>
 
     <string name="pref_category_title_general">General</string>
@@ -181,6 +183,10 @@
 
     <string name="pref_category_title_about">About</string>
     <string name="pref_title_app_version">App version</string>
+    <string name="pref_title_privacy_policy">Privacy Policy</string>
+    <string name="pref_summary_privacy_policy">Read Privacy Policy of this app</string>
+    <string name="pref_title_disclaimer">Disclaimer</string>
+    <string name="pref_summary_disclaimer">Read Disclaimer of this app</string>
     <string name="pref_title_licenses">Open source licenses</string>
     <string name="pref_summary_licenses">License details for open source software</string>
 

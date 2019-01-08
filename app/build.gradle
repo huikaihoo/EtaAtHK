@@ -1,16 +1,20 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'de.undercouch.download'
+apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 def versionMajor = 0
-def versionMinor = 7
-def versionPatch = 6
+def versionMinor = 1
+def versionPatch = 0
+def versionSuffix = "-alpha"
+
 def versionBuild = 8
 
-def static getCurrentDate() {
+def static getBuildTime() {
     def date = new Date()
     return date.format('yyyyMMdd')
 }
@@ -26,7 +30,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode versionBuild
-        versionName "$versionMajor.$versionMinor.$versionPatch." + getCurrentDate() + " ($versionBuild)"
+        versionName "$versionMajor.$versionMinor.$versionPatch$versionSuffix+" + getBuildTime() + " ($versionBuild)"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -82,6 +86,11 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-config:16.1.2'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
 
     // ViewModel + LiveData + Room + Paging
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'

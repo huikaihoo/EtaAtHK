@@ -47,6 +47,18 @@
             android:title="@string/pref_title_app_version"
             android:persistent="false" />
 
+        <Preference
+            android:key="@string/pref_privacy_policy"
+            android:title="@string/pref_title_privacy_policy"
+            android:summary="@string/pref_summary_privacy_policy"
+            android:persistent="false" />
+
+        <Preference
+            android:key="@string/pref_disclaimer"
+            android:title="@string/pref_title_disclaimer"
+            android:summary="@string/pref_summary_disclaimer"
+            android:persistent="false" />
+
         <PreferenceScreen
             android:key="@string/pref_licenses"
             android:title="@string/pref_title_licenses"
