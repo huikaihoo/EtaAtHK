@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -28,6 +29,7 @@ import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.base.NavActivity
 import hoo.etahk.view.dialog.InputDialog
+import hoo.etahk.view.service.UpdateRoutesService
 import kotlinx.android.synthetic.main.activity_follow.*
 import kotlinx.android.synthetic.main.activity_follow_nav.*
 import kotlinx.android.synthetic.main.dialog_input.view.*
@@ -64,6 +66,10 @@ class FollowActivity : NavActivity() {
         viewModel = ViewModelProviders.of(this).get(FollowViewModel::class.java)
         viewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
         viewModel.enableSorting.value = false
+
+        if (viewModel.needUpdateParentRoute()) {
+            ContextCompat.startForegroundService(this, newIntent<UpdateRoutesService>())
+        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

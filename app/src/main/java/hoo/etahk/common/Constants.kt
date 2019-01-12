@@ -109,6 +109,10 @@ object Constants {
         const val ARG_TITLE = "title"
     }
 
+    object Notification {
+        const val NOTIFICATION_UPDATE_ROUTES = 101
+    }
+
     object Company {
         const val BUS = "BUS"
         const val GOV = "GOV"

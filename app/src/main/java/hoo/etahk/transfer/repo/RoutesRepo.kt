@@ -1,6 +1,7 @@
 package hoo.etahk.transfer.repo
 
 import androidx.lifecycle.LiveData
+import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.helper.AppHelper
@@ -24,13 +25,12 @@ object RoutesRepo {
         return AppHelper.db.parentRouteDao().select(typeCodes, orderBy)
     }
 
-    fun updateParentRoutes(company: String, forceUpdate: Boolean = false) {
-        GlobalScope.launch(Dispatchers.Default) {
-            if (forceUpdate || AppHelper.db.parentRouteDao().lastUpdate() < Utils.getValidUpdateTimestamp()) {
-                logd("updateParentRoutes $company")
-                ConnectionHelper.getParentRoutes(company)
-            }
-        }
+    fun needUpdateParentRoutes(): Boolean {
+        return (AppHelper.db.parentRouteDao().lastUpdate() < Utils.getValidUpdateTimestamp())
+    }
+
+    fun updateParentRoutes() {
+        ConnectionHelper.getParentRoutes(Constants.Company.BUS)
     }
 
     // Parents route by Company and routeNo

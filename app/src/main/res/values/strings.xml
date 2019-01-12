@@ -23,6 +23,14 @@
     <string name="aan_sc_history" translatable="false">.Shortcut.History</string>
     <string name="aan_sc_bus" translatable="false">.Shortcut.Bus</string>
 
+    <!-- Notification Channel -->
+    <string name="nc_id_update_routes" translatable="false">update_routes</string>
+
+    <string name="nc_name_update_routes" translatable="false">Update routes data</string>
+
+    <!-- Notification -->
+    <string name="notification_title_update_routes">Updating routes data</string>
+
     <!-- Navigation Drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -2,14 +2,14 @@ package hoo.etahk.view.search
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
-import androidx.lifecycle.ViewModelProviders
 import android.content.res.ColorStateList
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import androidx.appcompat.widget.SearchView
 import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.tabs.TabLayout
 import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -89,7 +89,6 @@ class BusSearchActivity : NavActivity() {
         setSupportActionBar(toolbar)
 
         viewModel = ViewModelProviders.of(this).get(BusSearchViewModel::class.java)
-        viewModel.updateParentRoutes()
 
         if (viewModel.selectedTabPosition == -1)
             viewModel.selectedTabPosition = 0 // TODO(" Pass argument to Activity to set the default open tab")

@@ -7,6 +7,12 @@
     <string name="title_history">歷史</string>
     <string name="title_settings">設定</string>
 
+    <!-- Notification Channel -->
+    <string name="nc_name_update_routes">更新路線資料</string>
+
+    <!-- Notification -->
+    <string name="notification_title_update_routes">正在更新路線資料</string>
+
     <!-- Navigation Drawer -->
     <string name="last_update">路線更新：</string>
 

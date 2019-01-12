@@ -4,18 +4,21 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.Preference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.BuildConfig
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.transfer.data.Exporter
 import hoo.etahk.transfer.data.Importer
-import hoo.etahk.transfer.repo.RoutesRepo
+import hoo.etahk.view.App
 import hoo.etahk.view.base.BasePrefFragment
 import hoo.etahk.view.follow.FollowActivity
+import hoo.etahk.view.service.UpdateRoutesService
 import org.jetbrains.anko.startActivity
 
 class GeneralPrefFragment : BasePrefFragment() {
@@ -48,7 +51,7 @@ class GeneralPrefFragment : BasePrefFragment() {
         val updateRoutes = findPreference(R.string.pref_update_routes)
 
         updateRoutes.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            RoutesRepo.updateParentRoutes(Constants.Company.BUS, true)
+            ContextCompat.startForegroundService(App.instance, activity!!.newIntent<UpdateRoutesService>())
             true
         }
 

@@ -152,6 +152,7 @@ object BusConnection : BaseConnection {
 
             // 7. Insert into Database
             AppHelper.db.parentRouteDao().insertOrUpdate(routes, t)
+            logd("Finish Update")
         }
 
         // return result for unit test only

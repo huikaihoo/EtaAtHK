@@ -7,9 +7,11 @@ import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.FollowLocation
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.transfer.repo.FollowRepo
+import hoo.etahk.transfer.repo.RoutesRepo
 import hoo.etahk.view.base.TimerViewModel
 
 class FollowViewModel : TimerViewModel() {
+    private var updateChecked = false
     private var followLocations: LiveData<List<LocationAndGroups>>? = null
     val selectedLocation = MutableLiveData<LocationAndGroups>()
     val enableSorting = MutableLiveData<Boolean>()
@@ -21,6 +23,12 @@ class FollowViewModel : TimerViewModel() {
 
     fun initLocationsAndGroups() {
         FollowRepo.initLocationsAndGroups()
+    }
+
+    fun needUpdateParentRoute(): Boolean {
+        val result = !updateChecked && RoutesRepo.needUpdateParentRoutes()
+        updateChecked = true
+        return result
     }
 
     ///////////////////////////
