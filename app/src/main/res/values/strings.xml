@@ -179,7 +179,11 @@
     <string name="pref_parameters" translatable="false">parameters</string>
 
     <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018-2019</string>
+    <string name="play_store_app_url" translatable="false">market://details?id=</string>
+    <string name="play_store_developer_url" translatable="false">market://search?q=pub:Simon+Hui</string>
     <string name="github_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/</string>
+    <string name="privacy_policy_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/blob/master/app/src/main/res/raw/privacy_policy.md</string>
+    <string name="disclaimer_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/blob/master/app/src/main/res/raw/disclaimer.md</string>
 
     <string name="pref_category_title_general">General</string>
     <string name="pref_title_update_routes">Update routes data now</string>

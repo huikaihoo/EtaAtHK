@@ -21,7 +21,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     companion object {
         private val permissionMap = hashMapOf(
-            Manifest.permission.ACCESS_FINE_LOCATION to Constants.Permission.PERMISSIONS_REQUEST_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION to Constants.Permission.PERMISSIONS_REQUEST_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE to Constants.Permission.PERMISSIONS_REQUEST_STORAGE
         )
     }
 

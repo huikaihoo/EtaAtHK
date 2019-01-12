@@ -1,14 +1,19 @@
 package hoo.etahk.view.settings
 
+import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProviders
+import hoo.etahk.BuildConfig
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.view.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_follow.*
+
 
 /**
  * A [PreferenceActivity] that presents a set of application settings. On
@@ -31,14 +36,23 @@ class SettingsActivity : BaseActivity() {
         setSupportActionBar(toolbar)
 
         viewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
-        if (!viewModel.isInit) {
-            viewModel.isInit = true
 
-            // load General Preference fragment
-            supportFragmentManager.beginTransaction().replace(R.id.container, GeneralPrefFragment()).commit()
+        if (!checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            checkAndRequestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        } else {
+            if (!viewModel.isInit) {
+                onRequestPermissionResult(true, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onRequestPermissionResult(isSuccess: Boolean, permission: String) {
+        viewModel.isInit = true
+
+        // load General Preference fragment
+        supportFragmentManager.beginTransaction().replace(R.id.container, GeneralPrefFragment()).commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,6 +67,7 @@ class SettingsActivity : BaseActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.menu_play_store -> {
+                startActivity(Intent(Intent.ACTION_VIEW, (getString(R.string.play_store_app_url) + BuildConfig.APPLICATION_ID).toUri()))
                 true
             }
             R.id.menu_github -> {

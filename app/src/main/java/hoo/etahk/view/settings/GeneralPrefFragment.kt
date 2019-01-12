@@ -1,10 +1,13 @@
 package hoo.etahk.view.settings
 
+import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.Preference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -12,10 +15,12 @@ import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.BuildConfig
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.transfer.data.Exporter
 import hoo.etahk.transfer.data.Importer
 import hoo.etahk.view.App
+import hoo.etahk.view.base.BaseActivity
 import hoo.etahk.view.base.BasePrefFragment
 import hoo.etahk.view.follow.FollowActivity
 import hoo.etahk.view.service.UpdateRoutesService
@@ -107,6 +112,12 @@ class GeneralPrefFragment : BasePrefFragment() {
         }
 
         // About
+        val appName = findPreference(R.string.pref_app_name)
+        appName.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, getString(R.string.play_store_developer_url).toUri()))
+            true
+        }
+
         val appVersion = findPreference(R.string.pref_app_version)
 
         appVersion.summary = BuildConfig.VERSION_NAME
@@ -122,6 +133,18 @@ class GeneralPrefFragment : BasePrefFragment() {
                 }
                 return true
             }
+        }
+
+        val privacyPolicy = findPreference(R.string.pref_privacy_policy)
+        privacyPolicy.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            Utils.startCustomTabs((activity as AppCompatActivity), getString(R.string.privacy_policy_url))
+            true
+        }
+
+        val disclaimer = findPreference(R.string.pref_disclaimer)
+        disclaimer.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            Utils.startCustomTabs((activity as AppCompatActivity), getString(R.string.disclaimer_url))
+            true
         }
 
         val licenses= findPreference(R.string.pref_licenses)
@@ -144,6 +167,13 @@ class GeneralPrefFragment : BasePrefFragment() {
         testing = findPreference(R.string.pref_testing)
         if (!viewModel.showTesting) {
             preferenceScreen.removePreference(testing)
+        }
+
+        // Disable preference if permission is not granted
+        if (!(activity as BaseActivity).checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            backup.isEnabled = false
+            restore.isEnabled = false
+            parameters.isEnabled = false
         }
     }
 

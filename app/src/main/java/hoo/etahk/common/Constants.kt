@@ -84,6 +84,7 @@ object Constants {
 
     object Permission {
         const val PERMISSIONS_REQUEST_LOCATION = 1
+        const val PERMISSIONS_REQUEST_STORAGE = 2
     }
 
     object Request {
