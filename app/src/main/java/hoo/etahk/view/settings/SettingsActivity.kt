@@ -52,7 +52,7 @@ class SettingsActivity : BaseActivity() {
         viewModel.isInit = true
 
         // load General Preference fragment
-        supportFragmentManager.beginTransaction().replace(R.id.container, GeneralPrefFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.container, GeneralPrefFragment()).commitAllowingStateLoss()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

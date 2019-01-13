@@ -32,6 +32,7 @@ android {
         versionCode versionBuild
         versionName "$versionMajor.$versionMinor.$versionPatch$versionSuffix"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resConfigs "zh", "zh-rHK", "en"
         vectorDrawables.useSupportLibrary = true
         archivesBaseName = "$applicationId-$versionName"
         javaCompileOptions {
@@ -42,7 +43,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

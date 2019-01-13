@@ -62,7 +62,7 @@ object SharedPrefsHelper {
     }
 
     inline fun <reified T> putFromRemote(@StringRes resId: Int, ignoreValue: T) {
-        if (get(R.string.param_enable_remote_config)) {
+        if (get(R.string.param_enable_remote_config, true)) {
             val remoteValue = remote.get<T>(App.instance.getString(resId))
             if (remoteValue != ignoreValue) {
                 put(resId, remote.get<T>(App.instance.getString(resId)))

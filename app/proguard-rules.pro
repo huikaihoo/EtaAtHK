@@ -43,6 +43,28 @@
 
 
 ### Kotlin coroutines ###
+# ServiceLoader support
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+
+# Most of volatile fields are updated with AFU and should not be mangled
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
+
+
+### Firebase ###
+-keep class com.firebase.** { *; }
+-keep class org.xmlpull.** { *; }
+
+-dontwarn com.fasterxml.**
+-dontwarn org.xmlpull.v1.**
+-dontnote org.xmlpull.v1.**
+
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+-keepclassmembers class org.xmlpull.** { *; }
+
+
+### ETA@HK ###
+-keep class hoo.etahk.** { *; }
