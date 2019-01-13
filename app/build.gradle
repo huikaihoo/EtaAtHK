@@ -10,7 +10,7 @@ apply plugin: 'kotlin-kapt'
 def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
-def versionSuffix = "-alpha"
+def versionSuffix = "-alpha.1"
 
 def versionBuild = 8
 
@@ -30,9 +30,10 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode versionBuild
-        versionName "$versionMajor.$versionMinor.$versionPatch$versionSuffix+" + getBuildTime() + " ($versionBuild)"
+        versionName "$versionMajor.$versionMinor.$versionPatch$versionSuffix"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        archivesBaseName = "$applicationId-$versionName"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -58,6 +59,17 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    applicationVariants.all { variant ->
+        def flavor = variant.mergedFlavor
+        def versionName = flavor.getVersionName()
+        if (variant.buildType.isDebuggable()) {
+            versionName = "$versionMajor.$versionMinor.$versionPatch-debug." + getBuildTime()
+        }
+        versionName += " ($versionBuild)"
+        variant.outputs.each { output ->
+            output.versionNameOverride = versionName
+        }
     }
 }
 
@@ -89,7 +101,7 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.google.firebase:firebase-config:16.1.2'
+    implementation 'com.google.firebase:firebase-config:16.1.3'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
 
     // ViewModel + LiveData + Room + Paging

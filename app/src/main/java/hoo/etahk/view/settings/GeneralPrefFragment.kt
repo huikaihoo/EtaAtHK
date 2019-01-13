@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.Preference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mcxiaoke.koi.ext.newIntent
-import hoo.etahk.BuildConfig
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
@@ -120,7 +119,7 @@ class GeneralPrefFragment : BasePrefFragment() {
 
         val appVersion = findPreference(R.string.pref_app_version)
 
-        appVersion.summary = BuildConfig.VERSION_NAME
+        appVersion.summary = App.instance.getVersionName()
         appVersion.onPreferenceClickListener = object : Preference.OnPreferenceClickListener {
             var counter = 0
 

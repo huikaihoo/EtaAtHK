@@ -8,6 +8,8 @@ import androidx.core.content.ContextCompat
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Notification.NOTIFICATION_UPDATE_ROUTES
 import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.extensions.loge
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.transfer.repo.RoutesRepo
 import kotlin.concurrent.thread
 
@@ -32,11 +34,28 @@ class UpdateRoutesService: Service() {
 
             startForeground(NOTIFICATION_UPDATE_ROUTES, notification)
 
-            thread(start = true) {
-                logd("Start working thread")
-                RoutesRepo.updateParentRoutes()
-                stopSelf()
-                logd("Finish working thread")
+            logd("Start working thread")
+            SharedPrefsHelper.remote.fetch(SharedPrefsHelper.remoteCacheExpiration).addOnCompleteListener { task ->
+                thread(start = true) {
+                    if (task.isSuccessful) {
+                        SharedPrefsHelper.remote.activateFetched()
+                        SharedPrefsHelper.putFromRemote(R.string.param_gist_id_kmb, "")
+                        SharedPrefsHelper.putFromRemote(R.string.param_gist_id_nwfb, "")
+                    }
+                    RoutesRepo.updateParentRoutes()
+                    logd("Finish working thread (Complete)")
+                    stopSelf()
+                }
+            }.addOnFailureListener { e ->
+                thread(start = true) {
+                    loge("FirebaseRemoteConfig::fetch failed!", e)
+                    stopSelf()
+                }
+            }.addOnCanceledListener {
+                thread(start = true) {
+                    logd("Finish Working thread (Canceled)")
+                    stopSelf()
+                }
             }
         }
 

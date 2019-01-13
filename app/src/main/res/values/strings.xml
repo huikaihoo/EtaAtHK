@@ -207,6 +207,8 @@
     <string name="pref_summary_parameters">View and edit parameters</string>
 
     <!-- Parameters Preference -->
+    <string name="param_category_firebase" translatable="false">Firebase</string>
+    <string name="param_enable_remote_config" translatable="false">enable_remote_config</string>
     <string name="param_category_app" translatable="false">App</string>
     <string name="param_app_mode" translatable="false">app_mode</string>
     <string name="param_paged_list_page_size" translatable="false">paged_list_page_size</string>

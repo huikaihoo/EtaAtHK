@@ -1,9 +1,23 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:key="@string/param_category_firebase"
+        android:title="@string/param_category_firebase"
+        android:order="10">
+
+        <SwitchPreference
+            android:key="@string/param_enable_remote_config"
+            android:title="@string/param_enable_remote_config"
+            android:order="1"
+            android:defaultValue="true"
+            android:persistent="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="@string/param_category_app"
         android:title="@string/param_category_app"
-        android:order="10">
+        android:order="20">
 
         <EditTextPreference
             android:key="@string/param_app_mode"
@@ -21,11 +35,10 @@
 
     </PreferenceCategory>
 
-
     <PreferenceCategory
         android:key="@string/param_category_gist"
         android:title="@string/param_category_gist"
-        android:order="20">
+        android:order="30">
 
         <EditTextPreference
             android:key="@string/param_gist_id_kmb"
@@ -46,7 +59,7 @@
     <PreferenceCategory
         android:key="@string/param_category_ok_http"
         android:title="@string/param_category_ok_http"
-        android:order="30">
+        android:order="40">
 
         <EditTextPreference
             android:key="@string/param_user_agent"

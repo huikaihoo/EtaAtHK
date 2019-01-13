@@ -79,7 +79,7 @@ We may use third-party Service Providers to monitor and analyze the use of our S
 
     Google Play Service is a service offered by Google to provide Google-powered features.
 
-    You may opt-out of certain Google Analytics features through your mobile device settings, such as your device advertising settings or by following the instructions provided by Google in their Privacy Policy: [https://policies.google.com/privacy?hl=en](https://policies.google.com/privacy?hl=en)
+    You may opt-out of certain Google Play Service features through your mobile device settings, such as your device advertising settings or by following the instructions provided by Google in their Privacy Policy: [https://policies.google.com/privacy?hl=en](https://policies.google.com/privacy?hl=en)
 
     For more information on the privacy practices of Google, please visit the Google Privacy & Terms web page: [https://policies.google.com/privacy?hl=en](https://policies.google.com/privacy?hl=en)
 
@@ -89,7 +89,9 @@ We may use third-party Service Providers to monitor and analyze the use of our S
 
     You may opt-out of certain Firebase features through your mobile device settings, such as your device advertising settings or by following the instructions provided by Google in their Privacy Policy: [https://policies.google.com/privacy?hl=en](https://policies.google.com/privacy?hl=en)
 
-    We also encourage you to review the Google's policy for safeguarding your data: [https://support.google.com/analytics/answer/6004245](https://support.google.com/analytics/answer/6004245). For more information on what type of information Firebase collects, please visit please visit the Google Privacy & Terms web page: [https://policies.google.com/privacy?hl=en](https://policies.google.com/privacy?hl=en)
+    We also encourage you to review the Google's policy for safeguarding your data: [https://support.google.com/analytics/answer/6004245](https://support.google.com/analytics/answer/6004245).
+    
+    For more information on what type of information Firebase collects, please visit please visit the Google Privacy & Terms web page: [https://policies.google.com/privacy?hl=en](https://policies.google.com/privacy?hl=en)
 
 ## Links To Other Sites
 

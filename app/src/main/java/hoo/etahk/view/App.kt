@@ -40,4 +40,8 @@ class App : Application() {
     private fun initConnectionHelper() {
         ConnectionHelper.init()
     }
+
+    fun getVersionName(): String {
+        return packageManager.getPackageInfo(packageName, 0).versionName
+    }
 }
