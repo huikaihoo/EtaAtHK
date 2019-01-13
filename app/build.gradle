@@ -66,7 +66,7 @@ android {
         def flavor = variant.mergedFlavor
         def versionName = flavor.getVersionName()
         if (variant.buildType.isDebuggable()) {
-            versionName = "$versionMajor.$versionMinor.$versionPatch-debug." + getBuildTime()
+            versionName = "$versionMajor.$versionMinor.$versionPatch-dev." + getBuildTime()
         }
         versionName += " ($versionBuild)"
         variant.outputs.each { output ->
