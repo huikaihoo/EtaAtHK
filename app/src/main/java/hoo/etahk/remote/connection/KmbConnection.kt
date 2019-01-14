@@ -1,6 +1,7 @@
 package hoo.etahk.remote.connection
 
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.perf.metrics.AddTrace
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
@@ -226,6 +227,7 @@ object KmbConnection: BaseConnection {
      *
      * @param stops list of stops
      */
+    @AddTrace(name = "KmbConnection_updateEta")
     override fun updateEta(stops: List<Stop>) {
         val t = Utils.getCurrentTimestamp()
 

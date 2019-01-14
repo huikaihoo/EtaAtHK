@@ -1,5 +1,6 @@
 package hoo.etahk.remote.connection
 
+import com.google.firebase.perf.metrics.AddTrace
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.DB
@@ -26,6 +27,7 @@ object BusConnection : BaseConnection {
      * @param company company code
      * @return map of route no to list of parent routes
      */
+    @AddTrace(name = "BusConnection_getParentRoutes")
     override fun getParentRoutes(company: String): ParentRoutesMap? {
         val t = Utils.getCurrentTimestamp()
 

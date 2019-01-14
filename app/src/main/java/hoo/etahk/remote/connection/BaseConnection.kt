@@ -1,6 +1,7 @@
 package hoo.etahk.remote.connection
 
 import android.util.Base64
+import com.mcxiaoke.koi.ext.closeQuietly
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.ZipHelper
@@ -122,7 +123,7 @@ interface BaseConnection {
                     if (result.isNotBlank()) {
                         val fos = FileOutputStream(file)
                         fos.write(Base64.decode(result, Base64.NO_WRAP))
-                        fos.close()
+                        fos.closeQuietly()
                     }
                 }
             }

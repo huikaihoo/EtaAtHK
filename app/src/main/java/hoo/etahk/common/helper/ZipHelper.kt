@@ -1,5 +1,6 @@
 package hoo.etahk.common.helper
 
+import com.mcxiaoke.koi.ext.closeQuietly
 import hoo.etahk.common.Constants
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -31,6 +32,7 @@ object ZipHelper {
 
             }
         }
+        zipFile.closeQuietly()
 
         gistDatabaseRes.parentRoutes.forEach {
             it.routeKey = RouteKey(

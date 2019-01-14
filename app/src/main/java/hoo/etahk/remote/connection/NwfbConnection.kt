@@ -2,6 +2,7 @@ package hoo.etahk.remote.connection
 
 import android.util.Base64
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.perf.metrics.AddTrace
 import com.mcxiaoke.koi.HASH
 import hoo.etahk.R
 import hoo.etahk.common.Constants
@@ -337,6 +338,7 @@ object NwfbConnection: BaseConnection {
      *
      * @param stops list of stops
      */
+    @AddTrace(name = "NwfbConnection_updateEta")
     override fun updateEta(stops: List<Stop>) {
         val t = Utils.getCurrentTimestamp()
 

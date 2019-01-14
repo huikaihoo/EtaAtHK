@@ -1,5 +1,6 @@
 package hoo.etahk.remote.connection
 
+import com.google.firebase.perf.metrics.AddTrace
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Company
@@ -228,6 +229,7 @@ object NlbConnection: BaseConnection {
         return
     }
 
+    @AddTrace(name = "NlbConnection_updateEta")
     override fun updateEta(stops: List<Stop>) {
         val t = Utils.getCurrentTimestamp()
 
