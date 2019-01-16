@@ -1,12 +1,14 @@
 package hoo.etahk.view
 
 import android.app.Application
+import com.crashlytics.android.Crashlytics
 import com.facebook.stetho.Stetho
 import hoo.etahk.common.Constants.AppMode.DEV
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
+import io.fabric.sdk.android.Fabric
 
 class App : Application() {
 
@@ -18,10 +20,15 @@ class App : Application() {
         super.onCreate()
         instance = this
 
+        initCrashlytics()
         initSharePrefs()
         initStetho()
         initAppHelper()
         initConnectionHelper()
+    }
+
+    private fun initCrashlytics() {
+        Fabric.with(this, Crashlytics())
     }
 
     private fun initSharePrefs() {

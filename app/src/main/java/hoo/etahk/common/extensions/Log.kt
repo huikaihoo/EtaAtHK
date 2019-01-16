@@ -104,7 +104,7 @@ fun kotlin.Any.loge(message: Any?, thr: Throwable? = null) {
         Crashlytics.logException(thr)
     } else {
         Log.e(tag(), message?.toString() ?: "null")
-        Crashlytics.log("[${tag()}] ${message?.toString()}")
+        Crashlytics.log(Log.ERROR, tag(), message?.toString() ?: "null")
     }
 }
 
@@ -194,4 +194,5 @@ inline fun kotlin.Any.logw(message: () -> Any?) {
  */
 inline fun kotlin.Any.loge(message: () -> Any?) {
     Log.e(tag(), message()?.toString() ?: "null")
+    Crashlytics.log(Log.ERROR, tag(), message()?.toString() ?: "null")
 }
