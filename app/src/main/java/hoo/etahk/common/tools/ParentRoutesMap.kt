@@ -1,4 +1,4 @@
-package hoo.etahk.model.custom
+package hoo.etahk.common.tools
 
 import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Route

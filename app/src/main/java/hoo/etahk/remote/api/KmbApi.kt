@@ -1,6 +1,7 @@
 package hoo.etahk.remote.api
 
 import hoo.etahk.remote.response.*
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -35,4 +36,9 @@ interface KmbApi {
 
     @GET("http://etadatafeed.kmb.hk:1933/GetData.ashx?type=ETA_R")
     fun getEtaRoutes(): Call<List<KmbEtaRoutesRes>>
+
+    @GET("Function/FunctionRequest.ashx?action=getschedule")
+    fun getTimetable(@Query("route") route: String,
+                     @Query("bound") bound: String): Call<ResponseBody>
+
 }

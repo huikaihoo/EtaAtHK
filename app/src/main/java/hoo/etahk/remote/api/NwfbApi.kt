@@ -56,4 +56,13 @@ interface NwfbApi {
                @Query("syscode2", encoded = true) syscode2: String = ""
                //,@Query("tk") tk: String = "0"
     ): Call<ResponseBody>
+
+    @GET("api6/gettimetable.php")
+    fun getTimetable(@Query("rdv") rdv: String,
+                     @Query("bound") bound: String,
+                     @Query("l") l: String,
+                     @Query("syscode") syscode: String,
+                     @Query("p") p: String = Constants.SharePrefs.NWFB_API_PARAMETER_PLATFORM,
+                     @Query("version") appversion: String = Constants.SharePrefs.NWFB_API_PARAMETER_APP_VERSION,
+                     @Query("syscode2", encoded = true) syscode2: String = ""): Call<ResponseBody>
 }

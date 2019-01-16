@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ETA@HK</string>
-    <string name="app_name_full">ETA@HK．香港交通到站預報</string>
+    <string name="app_name_full">ETA@HK・香港交通到站預報</string>
     <string name="title_bus_search">巴士路線</string>
     <string name="title_favourite">我的最愛</string>
     <string name="title_history">歷史</string>

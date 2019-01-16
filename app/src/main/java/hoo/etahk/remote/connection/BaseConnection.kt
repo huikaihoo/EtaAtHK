@@ -5,7 +5,7 @@ import com.mcxiaoke.koi.ext.closeQuietly
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.ZipHelper
-import hoo.etahk.model.custom.ParentRoutesMap
+import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop

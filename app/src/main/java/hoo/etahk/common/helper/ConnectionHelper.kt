@@ -4,7 +4,7 @@ import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.NetworkType
 import hoo.etahk.common.Constants.Url
 import hoo.etahk.common.tools.ConnectionFactory
-import hoo.etahk.model.custom.ParentRoutesMap
+import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
