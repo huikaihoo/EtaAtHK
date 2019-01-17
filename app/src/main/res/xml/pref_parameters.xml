@@ -8,7 +8,6 @@
         <SwitchPreference
             android:key="@string/param_enable_remote_config"
             android:title="@string/param_enable_remote_config"
-            android:order="1"
             android:defaultValue="true"
             android:persistent="true" />
 
@@ -23,6 +22,12 @@
             android:key="@string/param_app_mode"
             android:title="@string/param_app_mode"
             android:maxLines="1"
+            android:persistent="true" />
+
+        <SwitchPreference
+            android:key="@string/param_accept_terms"
+            android:title="@string/param_accept_terms"
+            android:defaultValue="false"
             android:persistent="true" />
 
         <EditTextPreference

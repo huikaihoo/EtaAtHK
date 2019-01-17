@@ -87,26 +87,41 @@ object FollowRepo {
 
     fun insertGroup(locationId: Long, name: String) {
         GlobalScope.launch(Dispatchers.Default) {
+            val t  = Utils.getCurrentTimestamp()
+
             val group = FollowGroup(
                 locationId = locationId,
                 name = name,
                 displaySeq = AppHelper.db.groupDao().nextDisplaySeq(locationId),
-                updateTime = Utils.getCurrentTimestamp())
-
+                updateTime = t)
             AppHelper.db.groupDao().insert(group)
+
+            val location = AppHelper.db.locationDao().selectOnce(locationId)
+            location.updateTime = t
+            AppHelper.db.locationDao().update(location)
         }
     }
 
     fun updateGroup(group: FollowGroup) {
         GlobalScope.launch(Dispatchers.Default) {
-            group.updateTime = Utils.getCurrentTimestamp()
+            val t  = Utils.getCurrentTimestamp()
+
+            group.updateTime = t
             AppHelper.db.groupDao().update(group)
+
+            val location = AppHelper.db.locationDao().selectOnce(group.locationId)
+            location.updateTime = t
+            AppHelper.db.locationDao().update(location)
         }
     }
 
     fun deleteGroup(group: FollowGroup) {
         GlobalScope.launch(Dispatchers.Default) {
             AppHelper.db.groupDao().delete(group)
+
+            val location = AppHelper.db.locationDao().selectOnce(group.locationId)
+            location.updateTime = Utils.getCurrentTimestamp()
+            AppHelper.db.locationDao().update(location)
         }
     }
 

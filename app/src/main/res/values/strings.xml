@@ -92,6 +92,7 @@
 
     <!-- Common -->
     <string name="clear">Clear</string>
+    <string name="exit_app">Exit App</string>
     <string name="to_prefix">To\u0020</string>
     <string name="to_middle">\u0020to\u0020</string>
     <string name="min">min</string>
@@ -99,6 +100,7 @@
     <string name="arrow_circular" translatable="false">\u0020⟲\u0020</string>
     <string name="arrow_one_way" translatable="false">\u0020→\u0020</string>
     <string name="arrow_two_ways" translatable="false">\u0020⇄\u0020</string>
+    <string name="html_link" translatable="false">&lt;a href=\'%1$s\'>%2$s&lt;/a></string>
 
     <!-- Company -->
     <string name="kmb">KMB</string>
@@ -150,6 +152,7 @@
     <string name="hint_new_location_name">New Location Name</string>
     <string name="hint_new_group_name">New Group Name</string>
     <string name="content_conform_delete">Be Careful! This action cannot be undone.</string>
+    <string name="content_accept_terms">In order to use our Service, you must agree to the %1$s and %2$s of this app.</string>
 
     <!-- Message -->
     <string name="msg_add_location_success">New location is added successfully</string>
@@ -211,6 +214,7 @@
     <string name="param_enable_remote_config" translatable="false">enable_remote_config</string>
     <string name="param_category_app" translatable="false">App</string>
     <string name="param_app_mode" translatable="false">app_mode</string>
+    <string name="param_accept_terms" translatable="false">accept_terms</string>
     <string name="param_paged_list_page_size" translatable="false">paged_list_page_size</string>
     <string name="param_category_gist" translatable="false">Gist</string>
     <string name="param_gist_id_kmb" translatable="false">gist_id_kmb</string>

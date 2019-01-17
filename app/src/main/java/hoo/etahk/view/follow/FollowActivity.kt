@@ -4,12 +4,15 @@ import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -25,6 +28,7 @@ import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.extensions.tag
 import hoo.etahk.common.extensions.toLocation
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.base.NavActivity
@@ -36,6 +40,7 @@ import kotlinx.android.synthetic.main.dialog_input.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivityForResult
 
 
@@ -106,7 +111,12 @@ class FollowActivity : NavActivity() {
         progress_bar.progress = 0
 
         viewModel.initLocationsAndGroups()
-        checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+
+        if (SharedPrefsHelper.get(R.string.param_accept_terms, false)) {
+            checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            showPolicyDialog()
+        }
     }
 
     override fun onResume() {
@@ -127,6 +137,29 @@ class FollowActivity : NavActivity() {
             }
         }
     }
+
+    private fun showPolicyDialog() {
+        val privacyPolicy = getString(R.string.html_link, getString(R.string.privacy_policy_url), getString(R.string.pref_title_privacy_policy))
+        val disclaimer = getString(R.string.html_link, getString(R.string.disclaimer_url), getString(R.string.pref_title_disclaimer))
+
+        val dialog = AlertDialogBuilder(this)
+            .setMessage(
+                HtmlCompat.fromHtml(getString(R.string.content_accept_terms, privacyPolicy, disclaimer),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                ))
+            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                SharedPrefsHelper.put(R.string.param_accept_terms, true)
+                checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+            .setNegativeButton(R.string.exit_app) { dialog, which ->
+                finishAffinity()
+            }
+            .setCancelable(false)
+            .show()
+
+        dialog.find<TextView>(android.R.id.message).movementMethod = LinkMovementMethod.getInstance()
+    }
+
 
     private fun subscribeUiChanges() {
         if (!viewModel.getFollowLocations().hasActiveObservers()) {
@@ -221,12 +254,12 @@ class FollowActivity : NavActivity() {
         when (requestCode) {
             Constants.Request.REQUEST_LOCATION_ADD -> {
                 if (resultCode == RESULT_OK) {
-                    Snackbar.make(container, R.string.msg_add_location_success, Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(find(android.R.id.content), R.string.msg_add_location_success, Snackbar.LENGTH_SHORT).show()
                 }
             }
             Constants.Request.REQUEST_LOCATION_UPDATE -> {
                 if (resultCode == RESULT_OK) {
-                    Snackbar.make(container, R.string.msg_one_location_updated, Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(find(android.R.id.content), R.string.msg_one_location_updated, Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
@@ -275,7 +308,7 @@ class FollowActivity : NavActivity() {
                         .setMessage(R.string.content_conform_delete)
                         .setPositiveButton(android.R.string.ok) { dialog, which ->
                             viewModel.deleteLocation(location.location)
-                            Snackbar.make(container, R.string.msg_one_location_removed, Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(find(android.R.id.content), R.string.msg_one_location_removed, Snackbar.LENGTH_SHORT).show()
                         }
                         .setNegativeButton(android.R.string.cancel, null)
                         .show()
@@ -288,7 +321,8 @@ class FollowActivity : NavActivity() {
                     .setHint(R.string.hint_group_name)
                     .setPositiveButton(listener = DialogInterface.OnClickListener {dialog, which ->
                         viewModel.insertGroup(inputDialog.view.input.text.toString())
-                        Snackbar.make(container, R.string.msg_add_group_success, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(find(android.R.id.content), R.string.msg_add_group_success, Snackbar.LENGTH_SHORT).show()
+                        restartActivity()
                     })
                     .show()
                 true
@@ -304,7 +338,8 @@ class FollowActivity : NavActivity() {
                         .setPositiveButton(listener = DialogInterface.OnClickListener { dialog, which ->
                             group.name = inputDialog.view.input.text.toString()
                             viewModel.updateGroup(group)
-                            Snackbar.make(container, R.string.msg_one_group_renamed, Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(find(android.R.id.content), R.string.msg_one_group_renamed, Snackbar.LENGTH_SHORT).show()
+                            restartActivity()
                         })
                         .show()
                 }
@@ -319,11 +354,8 @@ class FollowActivity : NavActivity() {
                         .setMessage(R.string.content_conform_delete)
                         .setPositiveButton(android.R.string.ok) { dialog, which ->
                             viewModel.deleteGroup(group)
-                            Snackbar.make(
-                                container,
-                                R.string.msg_one_group_removed,
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            Snackbar.make(find(android.R.id.content), R.string.msg_one_group_removed, Snackbar.LENGTH_SHORT).show()
+                            restartActivity()
                         }
                         .setNegativeButton(android.R.string.cancel, null)
                         .show()

@@ -222,6 +222,14 @@ object NlbConnection: BaseConnection {
     }
 
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
+        if (needEtaUpdate) {
+            val stops = AppHelper.db.stopDao().selectOnce(
+                route.routeKey.company,
+                route.routeKey.routeNo,
+                route.routeKey.bound,
+                route.routeKey.variant)
+            updateEta(stops)
+        }
         return
     }
 

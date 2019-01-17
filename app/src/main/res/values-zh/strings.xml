@@ -71,6 +71,7 @@
 
     <!-- Common -->
     <string name="clear">清除</string>
+    <string name="exit_app">退出應用程式</string>
     <string name="to_prefix">往\u0020</string>
     <string name="to_middle">\u0020往\u0020</string>
     <string name="min">分鐘</string>
@@ -125,6 +126,7 @@
     <string name="hint_new_location_name">新的地點名稱</string>
     <string name="hint_new_group_name">新的組別名稱</string>
     <string name="content_conform_delete">注意！這個動作無法復原</string>
+    <string name="content_accept_terms">在使用我們的服務前，您必須同意本應用程式的《%1$s》和《%2$s》。</string>
 
     <!-- Message -->
     <string name="msg_add_location_success">成功新增一個地點</string>

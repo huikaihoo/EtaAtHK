@@ -23,6 +23,10 @@ While using our Service, we may ask you to provide us with certain personally id
 
 When you access the Service with a mobile device, we may collect certain information automatically, including, but not limited to, the type of mobile device you use, your mobile device unique ID, the IP address of your mobile device, your mobile operating system, the type of mobile Internet browser you use, unique device identifiers and other diagnostic data ("Usage Data").
 
+#### Geolocation Data
+
+When you access the Service with a mobile device, we may use your current location data to provide nearby public transport information. Your current location may also be displayed within our Service. We will not collect, store and share your current location data for any other purpose.
+
 #### Tracking & Cookies Data
 
 We use cookies and similar tracking technologies to track the activity on our Service and hold certain information.

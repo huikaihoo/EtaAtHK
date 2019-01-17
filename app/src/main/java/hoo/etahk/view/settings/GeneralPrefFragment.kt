@@ -118,21 +118,7 @@ class GeneralPrefFragment : BasePrefFragment() {
         }
 
         val appVersion = findPreference(R.string.pref_app_version)
-
         appVersion.summary = App.instance.getVersionName()
-        appVersion.onPreferenceClickListener = object : Preference.OnPreferenceClickListener {
-            var counter = 0
-
-            override fun onPreferenceClick(preference: Preference): Boolean {
-                if (counter == 5) {
-                    viewModel.showTesting = true
-                    preferenceScreen.addPreference(testing)
-                } else {
-                    counter++
-                }
-                return true
-            }
-        }
 
         val privacyPolicy = findPreference(R.string.pref_privacy_policy)
         privacyPolicy.onPreferenceClickListener = Preference.OnPreferenceClickListener {

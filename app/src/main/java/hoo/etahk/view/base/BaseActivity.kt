@@ -123,4 +123,10 @@ abstract class BaseActivity : AppCompatActivity() {
     open fun onRequestPermissionResult(isSuccess: Boolean, permission: String) {
 
     }
+
+    fun restartActivity() {
+        val currentIntent = intent
+        finish()
+        startActivity(currentIntent)
+    }
 }

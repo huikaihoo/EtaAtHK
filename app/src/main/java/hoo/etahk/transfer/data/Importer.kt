@@ -124,6 +124,8 @@ class Importer: FilesWorker() {
         logd("Start Restore Shared Preferences")
 
         return try {
+            if (appData.sharedPrefData!!.appMode.isNotBlank())
+                SharedPrefsHelper.put(R.string.param_app_mode, appData.sharedPrefData!!.appMode)
             if (appData.sharedPrefData!!.pagedListPageSize.isNotBlank())
                 SharedPrefsHelper.put(R.string.param_paged_list_page_size, appData.sharedPrefData!!.pagedListPageSize)
             if (appData.sharedPrefData!!.gistIdKmb.isNotBlank())
