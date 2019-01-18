@@ -49,56 +49,62 @@ object NlbConnection: BaseConnection {
         val result = ParentRoutesMap()
         val childRoutes = mutableListOf<Route>()
 
-        val response = ConnectionHelper.nlb.getDatabase().execute()
+        try {
+            val response = ConnectionHelper.nlb.getDatabase().execute()
 
-        if (response.isSuccessful) {
-            val nlbDatabaseRes = response.body()!!
+            if (response.isSuccessful) {
+                val nlbDatabaseRes = response.body()!!
 
-            // 1. Get Parent and Child Routes
-            val routesMap = (nlbDatabaseRes.routes ?: listOf()).groupBy{ it!!.routeNo }
+                // 1. Get Parent and Child Routes
+                val routesMap = (nlbDatabaseRes.routes ?: listOf()).groupBy { it!!.routeNo }
 
-            routesMap.values.forEach { routes ->
-                val routePair = toRoutePair(routes.sortedBy { it?.routeId?.toInt() ?: 0 }, t)
-                result.add(routePair.first)
-                childRoutes.addAll(routePair.second)
-            }
+                routesMap.values.forEach { routes ->
+                    val routePair = toRoutePair(routes.sortedBy { it?.routeId?.toInt() ?: 0 }, t)
+                    result.add(routePair.first)
+                    childRoutes.addAll(routePair.second)
+                }
 
-            // 2. Insert Child Routes into DB
-            val childRoutesMap = childRoutes.groupBy{
-                RouteKey(company = it.routeKey.company,
-                    routeNo = it.routeKey.routeNo,
-                    bound = it.routeKey.bound,
-                    variant = 0L)
-            }
-            childRoutesMap.forEach { (routeKey, childRoutes) ->
-                AppHelper.db.childRouteDao().insertOrUpdate(childRoutes, t)
-            }
-            logd("After insert child routes")
+                // 2. Insert Child Routes into DB
+                val childRoutesMap = childRoutes.groupBy {
+                    RouteKey(
+                        company = it.routeKey.company,
+                        routeNo = it.routeKey.routeNo,
+                        bound = it.routeKey.bound,
+                        variant = 0L
+                    )
+                }
+                childRoutesMap.forEach { (routeKey, childRoutes) ->
+                    AppHelper.db.childRouteDao().insertOrUpdate(childRoutes, t)
+                }
+                logd("After insert child routes")
 
-            // 3. Get Stops
-            val routeStopsMap = (nlbDatabaseRes.routeStops ?: listOf()).groupBy{ it!!.routeId!! }
-            val stopsMap = (nlbDatabaseRes.stops ?: listOf()).groupBy{ it!!.stopId!! }
-            childRoutes.forEach { route ->
-                val stops = mutableListOf<Stop>()
+                // 3. Get Stops
+                val routeStopsMap = (nlbDatabaseRes.routeStops ?: listOf()).groupBy { it!!.routeId!! }
+                val stopsMap = (nlbDatabaseRes.stops ?: listOf()).groupBy { it!!.stopId!! }
+                childRoutes.forEach { route ->
+                    val stops = mutableListOf<Stop>()
 
-                routeStopsMap[route.info.rdv]?.forEach { rawRouteStop ->
-                    val rawStops = stopsMap[rawRouteStop?.stopId ?: ""]
-                    if (!rawStops.isNullOrEmpty()) {
-                        val rawStop = rawStops[0]!!
-                        stops.add(toStop(route, rawRouteStop!!, rawStop, t))
+                    routeStopsMap[route.info.rdv]?.forEach { rawRouteStop ->
+                        val rawStops = stopsMap[rawRouteStop?.stopId ?: ""]
+                        if (!rawStops.isNullOrEmpty()) {
+                            val rawStop = rawStops[0]!!
+                            stops.add(toStop(route, rawRouteStop!!, rawStop, t))
+                        }
+                    }
+
+                    GlobalScope.launch(Dispatchers.DB) {
+                        if (stops.isNotEmpty()) {
+                            AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
+                        }
                     }
                 }
 
-                GlobalScope.launch(Dispatchers.DB) {
-                    if (stops.isNotEmpty()) {
-                        AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
-                    }
-                }
+                logd("onResponse ${result.size}")
             }
-
-            logd("onResponse ${result.size}")
+        } catch (e: Exception) {
+            loge("getParentRoutes failed!", e)
         }
-
+        
         return result
     }
 

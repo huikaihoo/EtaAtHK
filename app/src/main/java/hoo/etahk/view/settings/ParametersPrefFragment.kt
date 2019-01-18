@@ -25,6 +25,7 @@ class ParametersPrefFragment : BasePrefFragment() {
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
+        bindPreferenceSummaryToValue(R.string.param_user_uuid)
         bindPreferenceSummaryToValue(R.string.param_enable_remote_config)
         bindPreferenceSummaryToValue(R.string.param_app_mode)
         bindPreferenceSummaryToValue(R.string.param_paged_list_page_size)

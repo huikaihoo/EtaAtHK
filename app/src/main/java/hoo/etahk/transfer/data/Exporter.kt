@@ -64,6 +64,7 @@ class Exporter: FilesWorker() {
         return try {
             val sharedPrefData = SharedPrefData()
 
+            sharedPrefData.userUUID = SharedPrefsHelper.get(R.string.param_user_uuid)
             sharedPrefData.pagedListPageSize = SharedPrefsHelper.get(R.string.param_paged_list_page_size, SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE)
             if (SharedPrefsHelper.getAppMode() == Constants.AppMode.DEV) {
                 sharedPrefData.gistIdKmb = SharedPrefsHelper.get(R.string.param_gist_id_kmb)

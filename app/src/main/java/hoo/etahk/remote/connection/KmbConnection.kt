@@ -44,41 +44,48 @@ object KmbConnection: BaseConnection {
     override fun getParentRoutes(company: String): ParentRoutesMap? {
         val t = Utils.getCurrentTimestamp()
         val result = ParentRoutesMap()
-
         val gistId = SharedPrefsHelper.get<String>(R.string.param_gist_id_kmb)
-        val response = ConnectionHelper.gist.getGist(gistId).execute()
 
-        logd("gistId = $gistId; isSuccessful = ${response.isSuccessful}")
+        try {
+            val response = ConnectionHelper.gist.getGist(gistId).execute()
 
-        if (response.isSuccessful) {
-            val gistFile = response.body()?.files?.kmb
-            val gistDatabaseRes = if (gistFile != null) toGistDatabaseRes(gistFile, t) else GistDatabaseRes()
+            logd("gistId = $gistId; isSuccessful = ${response.isSuccessful}")
 
-            logd("gistDatabaseRes.isValid = ${gistDatabaseRes.isValid}")
+            if (response.isSuccessful) {
+                val gistFile = response.body()?.files?.kmb
+                val gistDatabaseRes =
+                    if (gistFile != null) toGistDatabaseRes(gistFile, t) else GistDatabaseRes()
 
-            if (gistDatabaseRes.isValid) {
-                result.addAll(gistDatabaseRes.parentRoutes)
+                logd("gistDatabaseRes.isValid = ${gistDatabaseRes.isValid}")
 
-                val childRoutesMap = gistDatabaseRes.childRoutes.groupBy{
-                    RouteKey(company = it.routeKey.company,
-                        routeNo = it.routeKey.routeNo,
-                        bound = it.routeKey.bound,
-                        variant = 0L)
-                }
-                childRoutesMap.forEach { (routeKey, childRoutes) ->
-                    AppHelper.db.childRouteDao().insertOrUpdate(childRoutes, t)
-                }
-                logd("After insert child routes")
+                if (gistDatabaseRes.isValid) {
+                    result.addAll(gistDatabaseRes.parentRoutes)
 
-                val stopsMap = gistDatabaseRes.stops.groupBy{ it.routeKey }
-                stopsMap.forEach { (routeKey, stops) ->
-                    GlobalScope.launch(Dispatchers.DB) {
-                        AppHelper.db.stopDao().insertOrUpdate(routeKey, stops, t)
+                    val childRoutesMap = gistDatabaseRes.childRoutes.groupBy {
+                        RouteKey(
+                            company = it.routeKey.company,
+                            routeNo = it.routeKey.routeNo,
+                            bound = it.routeKey.bound,
+                            variant = 0L
+                        )
+                    }
+                    childRoutesMap.forEach { (routeKey, childRoutes) ->
+                        AppHelper.db.childRouteDao().insertOrUpdate(childRoutes, t)
+                    }
+                    logd("After insert child routes")
+
+                    val stopsMap = gistDatabaseRes.stops.groupBy { it.routeKey }
+                    stopsMap.forEach { (routeKey, stops) ->
+                        GlobalScope.launch(Dispatchers.DB) {
+                            AppHelper.db.stopDao().insertOrUpdate(routeKey, stops, t)
+                        }
                     }
                 }
-            }
 
-            logd("onResponse ${result.size}")
+                logd("onResponse ${result.size}")
+            }
+        } catch (e: Exception) {
+            loge("getParentRoutes failed!", e)
         }
 
         return result

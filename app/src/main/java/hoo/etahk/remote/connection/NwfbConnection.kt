@@ -13,8 +13,8 @@ import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
-import hoo.etahk.common.tools.Separator
 import hoo.etahk.common.tools.ParentRoutesMap
+import hoo.etahk.common.tools.Separator
 import hoo.etahk.model.data.Path
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -28,7 +28,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -39,7 +38,7 @@ object NwfbConnection: BaseConnection {
      * Shared
      ***************/
     fun getSystemCode(): String {
-        var random = Random().nextInt(1000).toString()
+        var random = (0 until 1000).random().toString()
         random += "0".repeat(4 - random.length)
 
         var timestamp = Utils.getCurrentTimestamp().toString()
@@ -50,11 +49,11 @@ object NwfbConnection: BaseConnection {
 
     fun getSystemCode2(): String {
         // Get Random String
-        var random = Random().nextInt(10000).toString()
+        var random = (0 until 10000).random().toString()
         random += "0".repeat(5 - random.length)
 
         val timestamp = Utils.getCurrentTimestamp().toString()
-        var timestampStr = (timestamp.substring(2, 3) + timestamp.substring(9, 10)
+        val timestampStr = (timestamp.substring(2, 3) + timestamp.substring(9, 10)
                 + timestamp.substring(4, 5) + timestamp.substring(6, 7)
                 + timestamp.substring(3, 4) + timestamp.substring(0, 1)
                 + timestamp.substring(8, 9) + timestamp.substring(7, 8)
@@ -97,30 +96,33 @@ object NwfbConnection: BaseConnection {
         val temp = HashMap<String, Route>()
         val result = ParentRoutesMap()
 
-        val response = ConnectionHelper.nwfb.getParentRoutes(
-                m = Constants.SharePrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
-                syscode = getSystemCode())
-                .execute()
+        try {
+            val response = ConnectionHelper.nwfb.getParentRoutes(
+                    m = Constants.SharePrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
+                    syscode = getSystemCode()).execute()
 
-        if (response.isSuccessful) {
-            val separator = Separator("\\|\\*\\|<br>".toRegex(), "\\|\\|".toRegex(), Constants.Route.NWFB_ROUTE_RECORD_SIZE)
+            if (response.isSuccessful) {
+                val separator = Separator("\\|\\*\\|<br>".toRegex(), "\\|\\|".toRegex(), Constants.Route.NWFB_ROUTE_RECORD_SIZE)
 
-            //logd("onResponse columnSize ${separator.columnSize}")
-            separator.original = response.body()?.string() ?: ""
-            separator.result.forEach {
-                val route = toRoute(it, t)
-                val key = route.routeKey.routeNo
+                //logd("onResponse columnSize ${separator.columnSize}")
+                separator.original = response.body()?.string() ?: ""
+                separator.result.forEach {
+                    val route = toRoute(it, t)
+                    val key = route.routeKey.routeNo
 
-                if (temp.contains(key)) {
-                    temp[key] = mergeRoute(it, temp[key]!!)
-                } else {
-                    temp[key] = route
+                    if (temp.contains(key)) {
+                        temp[key] = mergeRoute(it, temp[key]!!)
+                    } else {
+                        temp[key] = route
+                    }
                 }
-            }
 
-            result.addAll(temp.values)
-            logd("onResponse separator.result ${separator.result.size}")
-            logd("onResponse ${result.size}")
+                result.addAll(temp.values)
+                logd("onResponse separator.result ${separator.result.size}")
+                logd("onResponse ${result.size}")
+            }
+        } catch (e: Exception) {
+            loge("getParentRoutes failed!", e)
         }
 
         return result
@@ -170,36 +172,38 @@ object NwfbConnection: BaseConnection {
     override fun getChildRoutes(parentRoute: Route) {
 
         parentRoute.info.boundIds.forEachIndexed { index, boundId ->
-            ConnectionHelper.nwfb.getBoundVariant(
-                    id = boundId,
-                    l = "0",
-                    syscode = getSystemCode())
-                    .enqueue(object : Callback<ResponseBody> {
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
-                        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                            GlobalScope.launch(Dispatchers.Default) {
-                                val t = Utils.getCurrentTimestamp()
-                                val responseStr = response.body()?.string()
-                                //logd(responseStr)
+            try {
+                val response = ConnectionHelper.nwfb.getBoundVariant(
+                        id = boundId,
+                        l = "0",
+                        syscode = getSystemCode()).execute()
 
-                                if (!responseStr.isNullOrBlank()) {
-                                    val routes = mutableListOf<Route>()
-                                    val nwfbResponse = responseStr!!.split("<br>")
+                if (response.isSuccessful) {
+                    GlobalScope.launch(Dispatchers.Default) {
+                        val t = Utils.getCurrentTimestamp()
+                        val responseStr = response.body()?.string()
+                        //logd(responseStr)
 
-                                    nwfbResponse.forEach {
-                                        val records = it.split("(\\|\\|)|(\\*\\*\\*)".toRegex())
-                                        if (records.size >= Constants.Route.NWFB_VARIANT_RECORD_SIZE) {
-                                            routes.add(toChildRoute(parentRoute, (index + 1).toLong(), records, t))
-                                        }
-                                        //logd(it)
-                                    }
+                        if (!responseStr.isNullOrBlank()) {
+                            val routes = mutableListOf<Route>()
+                            val nwfbResponse = responseStr!!.split("<br>")
 
-                                    //logd(AppHelper.gson.toJson(routes))
-                                    AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
+                            nwfbResponse.forEach {
+                                val records = it.split("(\\|\\|)|(\\*\\*\\*)".toRegex())
+                                if (records.size >= Constants.Route.NWFB_VARIANT_RECORD_SIZE) {
+                                    routes.add(toChildRoute(parentRoute, (index + 1).toLong(), records, t))
                                 }
+                                //logd(it)
                             }
+
+                            //logd(AppHelper.gson.toJson(routes))
+                            AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
                         }
-                    })
+                    }
+                }
+            } catch (e: Exception) {
+                loge("getChildRoutes failed!", e)
+            }
         }
     }
 

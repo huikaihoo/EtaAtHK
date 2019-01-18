@@ -5,6 +5,12 @@
         android:title="@string/param_category_firebase"
         android:order="10">
 
+        <EditTextPreference
+            android:key="@string/param_user_uuid"
+            android:title="@string/param_user_uuid"
+            android:maxLines="1"
+            android:persistent="true" />
+
         <SwitchPreference
             android:key="@string/param_enable_remote_config"
             android:title="@string/param_enable_remote_config"

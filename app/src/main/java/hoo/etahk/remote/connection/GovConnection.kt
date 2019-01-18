@@ -4,10 +4,11 @@ import com.mcxiaoke.koi.HASH
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
-import hoo.etahk.common.tools.Separator
 import hoo.etahk.common.tools.ParentRoutesMap
+import hoo.etahk.common.tools.Separator
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -19,7 +20,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 object GovConnection: BaseConnection {
 
@@ -27,7 +27,7 @@ object GovConnection: BaseConnection {
      * Shared
      ***************/
     fun getSystemCode(): String {
-        var random = Random().nextInt(10000).toString()
+        var random = (0 until 10000).random().toString()
         random += "0".repeat(5 - random.length)
 
         val timestamp = Utils.getCurrentTimestamp().toString()
@@ -56,36 +56,44 @@ object GovConnection: BaseConnection {
         val temp2 = HashMap<String, Route>()
         val result = ParentRoutesMap()
 
-        val response = ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode()).execute()
-        if (response.isSuccessful) {
-            val separator = Separator("\\|\\*\\|".toRegex(), "\\|\\|".toRegex(), Constants.Route.GOV_ROUTE_RECORD_SIZE)
+        try {
+            val response = ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode()).execute()
+            if (response.isSuccessful) {
+                val separator = Separator(
+                    "\\|\\*\\|".toRegex(),
+                    "\\|\\|".toRegex(),
+                    Constants.Route.GOV_ROUTE_RECORD_SIZE
+                )
 
-            //logd("onResponse ${separator.columnSize}")
-            separator.original = response.body()?.string() ?: ""
-            separator.result.forEach {
-                val route = toRoute(it, t)
-                val key = route.routeKey.company + route.routeKey.routeNo
-                if (temp.contains(key)) {
-                    val routes = temp[key]!!
-                    routes.add(route)
-                    temp[key] = routes
-                } else {
-                    temp[key] = mutableListOf(route)
+                //logd("onResponse ${separator.columnSize}")
+                separator.original = response.body()?.string() ?: ""
+                separator.result.forEach {
+                    val route = toRoute(it, t)
+                    val key = route.routeKey.company + route.routeKey.routeNo
+                    if (temp.contains(key)) {
+                        val routes = temp[key]!!
+                        routes.add(route)
+                        temp[key] = routes
+                    } else {
+                        temp[key] = mutableListOf(route)
+                    }
+                    //result.putAll(routes.associate{ Pair(it.routeKey.company + it.routeKey.routeNo, it) })
                 }
-                //result.putAll(routes.associate{ Pair(it.routeKey.company + it.routeKey.routeNo, it) })
-            }
 
-            for((key, routes) in temp) {
-                if (routes.size == 1) {
-                    temp2[key] = routes[0]
-                } else if (routes.size > 1){
-                    temp2[key] = mergeVariantRoutes(routes)
+                for ((key, routes) in temp) {
+                    if (routes.size == 1) {
+                        temp2[key] = routes[0]
+                    } else if (routes.size > 1) {
+                        temp2[key] = mergeVariantRoutes(routes)
+                    }
                 }
-            }
 
-            result.addAll(temp2.values)
-            logd("onResponse separator.result ${separator.result.size}")
-            logd("onResponse ${result.size}")
+                result.addAll(temp2.values)
+                logd("onResponse separator.result ${separator.result.size}")
+                logd("onResponse ${result.size}")
+            }
+        } catch (e: Exception) {
+            loge("getParentRoutes failed!", e)
         }
 
         return result

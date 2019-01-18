@@ -4,6 +4,8 @@ import hoo.etahk.common.Constants
 
 data class SharedPrefData(
     // Parameters
+    // Firebase
+    var userUUID: String = "",
     // App
     var appMode: String = "",
     var pagedListPageSize: String = Constants.SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE,

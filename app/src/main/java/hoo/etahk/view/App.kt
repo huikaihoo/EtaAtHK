@@ -20,8 +20,8 @@ class App : Application() {
         super.onCreate()
         instance = this
 
-        initCrashlytics()
         initSharePrefs()
+        initCrashlytics()
         initStetho()
         initAppHelper()
         initConnectionHelper()
@@ -29,6 +29,7 @@ class App : Application() {
 
     private fun initCrashlytics() {
         Fabric.with(this, Crashlytics())
+        Crashlytics.setUserIdentifier(SharedPrefsHelper.getUserUUID())
     }
 
     private fun initSharePrefs() {

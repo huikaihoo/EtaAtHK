@@ -15,7 +15,7 @@ import hoo.etahk.common.Constants.AppMode.DEV
 import hoo.etahk.common.Constants.AppMode.RELEASE
 import hoo.etahk.view.App
 import put
-
+import java.util.*
 
 
 object SharedPrefsHelper {
@@ -47,6 +47,15 @@ object SharedPrefsHelper {
                 }
             }
         }
+    }
+
+    fun getUserUUID(): String {
+        var uuid = get<String>(R.string.param_user_uuid)
+        if (uuid.isBlank()) {
+            uuid = UUID.randomUUID().toString()
+            put(R.string.param_user_uuid, uuid)
+        }
+        return uuid
     }
 
     inline fun <reified T> get(@StringRes resId: Int): T {

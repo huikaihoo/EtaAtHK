@@ -41,13 +41,13 @@ object ConnectionHelper: BaseConnection {
         okHttpEtaNwfb = ConnectionFactory.createClient(NetworkType.ETA, Company.NWFB)
         okHttpEtaNlb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
 
-        kmb = ConnectionFactory.createRetrofit(okHttp, Url.KMB_URL).create()
+        kmb = ConnectionFactory.createRetrofit(okHttpLong, Url.KMB_URL).create()
         kmbEta = ConnectionFactory.createRetrofit(okHttpEtaKmb, Url.KMB_URL).create()
 
         nwfb = ConnectionFactory.createRetrofit(okHttpLong, Url.NWFB_URL).create()
         nwfbEta = ConnectionFactory.createRetrofit(okHttpEtaNwfb, Url.NWFB_URL).create()
 
-        nlb = ConnectionFactory.createRetrofit(okHttp, Url.NLB_URL).create()
+        nlb = ConnectionFactory.createRetrofit(okHttpLong, Url.NLB_URL).create()
         nlbEta = ConnectionFactory.createRetrofit(okHttpEtaNlb, Url.NLB_URL).create()
 
         gov = ConnectionFactory.createRetrofit(okHttpLong, Url.GOV_URL).create()
