@@ -149,7 +149,7 @@ class RouteFragment : BaseFragment() {
     }
 
     private fun subscribeUiChanges() {
-        fragmentViewModel.getChildRoutes().observe(this, Observer<List<Route>> {
+        fragmentViewModel.getChildRoutes().observe(viewLifecycleOwner, Observer<List<Route>> {
             it?.let {
                 fragmentViewModel.updateStops(it)
                 if (!subscribeStops && it.isNotEmpty()) {
@@ -162,7 +162,7 @@ class RouteFragment : BaseFragment() {
     }
 
     private fun subscribeStopsChanges() {
-        fragmentViewModel.getStops().observe(this, Observer<List<Stop>> {
+        fragmentViewModel.getStops().observe(viewLifecycleOwner, Observer<List<Stop>> {
             val size = it?.size ?: 0
             val last = viewModel.getLastUpdateTime().value ?: 0L
 
@@ -215,7 +215,7 @@ class RouteFragment : BaseFragment() {
             // TODO ("Show Network Error Message based on Network Error")
         })
 
-        viewModel.getLastUpdateTime().observe(this, Observer<Long> {
+        viewModel.getLastUpdateTime().observe(viewLifecycleOwner, Observer<Long> {
             val stops = fragmentViewModel.getStops().value
             if (!stops.isNullOrEmpty() && !fragmentViewModel.isRefreshingAll){
                 fragmentViewModel.isRefreshingAll = true

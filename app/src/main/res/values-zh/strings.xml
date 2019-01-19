@@ -19,8 +19,9 @@
     <string name="nav_follow">追蹤車站</string>
     <string name="nav_fh">常用路線</string>
     <string name="nav_bus">巴士</string>
+    <string name="nav_mb">小巴</string>
     <string name="nav_tram">電車</string>
-    <string name="nav_mtr">港鐵</string>
+    <string name="nav_mtr">鐵路</string>
 
     <!-- Shortcut -->
     <string name="sc_follow_s">追蹤車站</string>
@@ -40,17 +41,17 @@
     <string name="play_store">Play 商店</string>
     <string name="github">GitHub</string>
 
-    <string name="location_options">地點選項</string>
-    <string name="add_location">新增地點</string>
-    <string name="edit_c_location">編輯地點</string>
-    <string name="remove_c_location">移除地點</string>
-    <string name="sort_locations">編輯地點排序</string>
+    <string name="location_options">起點選項</string>
+    <string name="add_location">新增起點</string>
+    <string name="edit_c_location">編輯起點</string>
+    <string name="remove_c_location">移除起點</string>
+    <string name="sort_locations">編輯起點排序</string>
 
-    <string name="group_options">組別選項</string>
-    <string name="add_group">新增組別</string>
-    <string name="rename_c_group">重新命名組別</string>
-    <string name="remove_c_group">移除組別</string>
-    <string name="sort_groups">編輯組別排序</string>
+    <string name="group_options">目的地選項</string>
+    <string name="add_group">新增目的地</string>
+    <string name="rename_c_group">重新命名目的地</string>
+    <string name="remove_c_group">移除目的地</string>
+    <string name="sort_groups">編輯目的地排序</string>
 
     <string name="get_my_location">取得目前位置</string>
     <string name="enable_sort">編輯排序</string>
@@ -67,7 +68,7 @@
     <string name="view_route">檢視路線</string>
 
     <!-- Activity -->
-    <string name="select_location">選取地點</string>
+    <string name="select_location">選取起點位置</string>
 
     <!-- Common -->
     <string name="clear">清除</string>
@@ -110,33 +111,33 @@
     <string name="eta_msg_loading">載入中\u2026</string>
     
     <!-- Dialog -->
-    <string name="title_add_location">加入新的地點</string>
-    <string name="title_add_group">加入新的組別</string>
-    <string name="title_edit_location">編輯地點</string>
-    <string name="title_rename_group">重新命名組別</string>
-    <string name="title_select_groups_to_add">選擇要加入的組別：</string>
-    <string name="title_select_groups_to_move">選擇要移動到的組別：</string>
-    <string name="title_conform_delete_location">要移除目前的地點嗎？</string>
-    <string name="title_conform_delete_group">要移除目前的組別嗎？</string>
+    <string name="title_add_location">加入新的起點</string>
+    <string name="title_add_group">加入新的目的地</string>
+    <string name="title_edit_location">編輯起點</string>
+    <string name="title_rename_group">重新命名目的地</string>
+    <string name="title_select_groups_to_add">選擇要加入的目的地：</string>
+    <string name="title_select_groups_to_move">選擇要移動到的目的地：</string>
+    <string name="title_conform_delete_location">要移除目前的起點嗎？</string>
+    <string name="title_conform_delete_group">要移除目前的目的地嗎？</string>
     <string name="title_conform_delete_item">要移除選取的車站嗎？</string>
     <string name="title_select_backup_to_restore">選擇要還原的備份：</string>
     <string name="title_backup_save_success_to">成功備份至：</string>
-    <string name="hint_location_name">地點名稱</string>
-    <string name="hint_group_name">組別名稱</string>
-    <string name="hint_new_location_name">新的地點名稱</string>
-    <string name="hint_new_group_name">新的組別名稱</string>
+    <string name="hint_location_name">起點名稱</string>
+    <string name="hint_group_name">目的地名稱</string>
+    <string name="hint_new_location_name">新的起點名稱</string>
+    <string name="hint_new_group_name">新的目的地名稱</string>
     <string name="content_conform_delete">注意！這個動作無法復原</string>
     <string name="content_accept_terms">在使用我們的服務前，您必須同意本應用程式的《%1$s》和《%2$s》。</string>
 
     <!-- Message -->
-    <string name="msg_add_location_success">成功新增一個地點</string>
-    <string name="msg_add_group_success">成功新增一個組別</string>
+    <string name="msg_add_location_success">成功新增一個起點</string>
+    <string name="msg_add_group_success">成功新增一個目的地</string>
     <string name="msg_add_to_follow_stop_success">成功加入至追蹤車站</string>
-    <string name="msg_one_location_updated">成功編輯一個地點</string>
-    <string name="msg_one_group_renamed">成功重新命名一個組別</string>
+    <string name="msg_one_location_updated">成功編輯一個起點</string>
+    <string name="msg_one_group_renamed">成功重新命名一個目的地</string>
     <string name="msg_move_follow_stop_success">成功移動追蹤車站</string>
-    <string name="msg_one_location_removed">已移除一個地點</string>
-    <string name="msg_one_group_removed">已移除一個組別</string>
+    <string name="msg_one_location_removed">已移除一個起點</string>
+    <string name="msg_one_group_removed">已移除一個目的地</string>
     <string name="msg_one_item_removed">已移除一個項目</string>
     <string name="msg_add_to_favourite_success">成功加入至最愛路線</string>
 
@@ -160,5 +161,5 @@
 
     <string name="pref_category_title_testing">測試</string>
     <string name="pref_title_parameters">參數</string>
-    <string name="pref_summary_parameters">檢視／編輯參數</string>
+    <string name="pref_summary_parameters">檢視/編輯參數</string>
 </resources>

@@ -25,7 +25,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/app_name">
+            app:title="@string/home">
 
             <Spinner
                 android:id="@+id/spinner"
@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             app:tabMode="scrollable"
             app:tabMinWidth="@dimen/tab_min_width"
+            app:tabTextAppearance="@style/AppTheme.TextAppearance.Tab"
             app:tabIndicatorColor="@android:color/white"
             app:tabIndicatorHeight="@dimen/tab_indicator_height" />
 

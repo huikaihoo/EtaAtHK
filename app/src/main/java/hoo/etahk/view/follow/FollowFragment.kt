@@ -206,11 +206,11 @@ class FollowFragment : BaseFragment() {
     }
 
     private fun subscribeUiChanges() {
-        viewModel.enableSorting.observe(this, Observer<Boolean> {
+        viewModel.enableSorting.observe(viewLifecycleOwner, Observer<Boolean> {
             it?.let { itemTouchHelperCallback.enableDrag = it }
         })
 
-        viewModel.selectedLocation.observe(this, Observer<LocationAndGroups> {
+        viewModel.selectedLocation.observe(viewLifecycleOwner, Observer<LocationAndGroups> {
             it?.let {
                 val position = arguments!!.getInt(ARG_POSITION)
                 logd("subscribeUiChanges $position")
@@ -227,7 +227,7 @@ class FollowFragment : BaseFragment() {
     }
 
     private fun subscribeItemsChanges() {
-        fragmentViewModel.getFollowItems().observe(this, Observer<List<ItemAndStop>> {
+        fragmentViewModel.getFollowItems().observe(viewLifecycleOwner, Observer<List<ItemAndStop>> {
             if (!isItemsDisplaySeqChanged) {
                 val size = it?.size ?: 0
                 val last = viewModel.getLastUpdateTime().value ?: 0L
@@ -268,7 +268,7 @@ class FollowFragment : BaseFragment() {
             }
         })
 
-        viewModel.getLastUpdateTime().observe(this, Observer<Long> {
+        viewModel.getLastUpdateTime().observe(viewLifecycleOwner, Observer<Long> {
             isItemsDisplaySeqChanged = false
             if (it != null) {
                 val items = fragmentViewModel.getFollowItems().value

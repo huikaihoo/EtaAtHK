@@ -33,15 +33,16 @@
 
         <TextView
             android:id="@+id/nav_app_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:fontFamily="@font/noto_sans"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="@string/app_name_full"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:text="@string/app_name_full" />
 
         <TextView
             android:id="@+id/nav_last_update"
-            android:fontFamily="sans-serif-condensed"
+            android:fontFamily="@font/noto_sans_condensed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="路線更新：20180513 13:00" />

@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             app:tabGravity="center"
             app:tabMode="fixed"
+            app:tabTextAppearance="@style/AppTheme.TextAppearance.Tab"
             app:tabIndicatorColor="@android:color/white"
             app:tabIndicatorHeight="@dimen/tab_indicator_height" />
 

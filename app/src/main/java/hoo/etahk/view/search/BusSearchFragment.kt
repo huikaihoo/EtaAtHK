@@ -121,11 +121,11 @@ class BusSearchFragment : BaseFragment() {
     }
 
     private fun subscribeUiChanges() {
-        viewModel.searchText.observe(this, Observer<String> {
+        viewModel.searchText.observe(viewLifecycleOwner, Observer<String> {
             busRoutesAdapter.filter = it?: ""
         })
 
-        fragmentViewModel.getParentRoutes().observe(this, Observer<List<Route>> {
+        fragmentViewModel.getParentRoutes().observe(viewLifecycleOwner, Observer<List<Route>> {
             it?.let {
                 if (it.isNotEmpty()) {
                     rootView.refresh_layout.isRefreshing = false

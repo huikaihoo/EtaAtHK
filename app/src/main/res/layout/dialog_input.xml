@@ -17,7 +17,7 @@
         android:layout_marginBottom="0dp"
         app:hintEnabled="true"
         app:hintAnimationEnabled="true"
-        app:hintTextAppearance="@style/AppTheme.TextAppearance"
+        app:hintTextAppearance="@style/AppTheme.TextAppearance.Hint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

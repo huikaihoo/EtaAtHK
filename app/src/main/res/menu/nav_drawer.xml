@@ -24,6 +24,11 @@
             android:icon="@drawable/ic_nav_bus"
             android:title="@string/nav_bus" />
         <item
+            android:id="@+id/nav_mb"
+            android:icon="@drawable/ic_nav_minibus"
+            android:title="@string/nav_mb"
+            android:enabled="false" />
+        <item
             android:id="@+id/nav_tram"
             android:icon="@drawable/ic_nav_tram"
             android:title="@string/nav_tram"

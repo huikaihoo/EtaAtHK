@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             app:tabMode="scrollable"
             app:tabMinWidth="@dimen/tab_min_width"
+            app:tabTextAppearance="@style/AppTheme.TextAppearance.Tab"
             app:tabIndicatorColor="@android:color/white"
             app:tabIndicatorHeight="@dimen/tab_indicator_height" />
 
