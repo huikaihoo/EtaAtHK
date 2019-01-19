@@ -27,13 +27,15 @@ class App : Application() {
         initConnectionHelper()
     }
 
-    private fun initCrashlytics() {
-        Fabric.with(this, Crashlytics())
-        Crashlytics.setUserIdentifier(SharedPrefsHelper.getUserUUID())
-    }
-
     private fun initSharePrefs() {
         SharedPrefsHelper.init(this)
+    }
+
+    private fun initCrashlytics() {
+        if (!Utils.isUnitTest) {
+            Fabric.with(this, Crashlytics())
+            Crashlytics.setUserIdentifier(SharedPrefsHelper.getUserUUID())
+        }
     }
 
     private fun initStetho() {

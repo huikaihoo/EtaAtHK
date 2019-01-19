@@ -13,6 +13,7 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants.AppMode.BETA
 import hoo.etahk.common.Constants.AppMode.DEV
 import hoo.etahk.common.Constants.AppMode.RELEASE
+import hoo.etahk.common.Utils
 import hoo.etahk.view.App
 import put
 import java.util.*
@@ -28,12 +29,15 @@ object SharedPrefsHelper {
 
     fun init(context: Context) {
         default = PreferenceManager.getDefaultSharedPreferences(context)
-        remote = FirebaseRemoteConfig.getInstance()
 
-        remote.setConfigSettings(FirebaseRemoteConfigSettings.Builder()
-            .setDeveloperModeEnabled(getAppMode() == DEV)
-            .build())
-        remote.setDefaults(R.xml.remote_config_defaults)
+        if (!Utils.isUnitTest) {
+            remote = FirebaseRemoteConfig.getInstance()
+
+            remote.setConfigSettings(FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(getAppMode() == DEV)
+                .build())
+            remote.setDefaults(R.xml.remote_config_defaults)
+        }
     }
 
     fun getAppMode(): Long {
