@@ -239,6 +239,15 @@ object NlbConnection: BaseConnection {
         return
     }
 
+    /**
+     * Get url of timetable of route
+     *
+     * @param route Child Route
+     */
+    override fun getTimetableUrl(route: Route): String? {
+        return ConnectionHelper.nlb.getTimetable(route.info.rdv).request().url().toString()
+    }
+
     override fun updateEta(stop: Stop) {
         return
     }

@@ -1,12 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="hoo.etahk.view.route.RouteActivity">
+    tools:context="hoo.etahk.view.follow.FollowActivity">
+
+    <item
+        android:id="@+id/menu_show_nearby_stops"
+        android:title="@string/show_nearby_stops"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_menu_nearby"
+        android:enabled="false"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_get_my_location"
         android:title="@string/get_my_location"
-        android:orderInCategory="10"
+        android:orderInCategory="20"
         android:icon="@drawable/ic_menu_gps_on"
         app:showAsAction="always" />
 

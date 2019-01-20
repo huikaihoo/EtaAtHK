@@ -25,23 +25,22 @@
             android:title="@string/nav_bus" />
         <item
             android:id="@+id/nav_mb"
+            android:enabled="false"
             android:icon="@drawable/ic_nav_minibus"
-            android:title="@string/nav_mb"
-            android:enabled="false" />
+            android:title="@string/nav_mb" />
         <item
             android:id="@+id/nav_tram"
+            android:enabled="false"
             android:icon="@drawable/ic_nav_tram"
-            android:title="@string/nav_tram"
-            android:enabled="false" />
+            android:title="@string/nav_tram" />
         <item
             android:id="@+id/nav_mtr"
+            android:enabled="false"
             android:icon="@drawable/ic_nav_mtr"
-            android:title="@string/nav_mtr"
-            android:enabled="false" />
+            android:title="@string/nav_mtr" />
     </group>
 
-    <group
-        android:id="@+id/nav_group_others">
+    <group android:id="@+id/nav_group_others">
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_nav_settings"

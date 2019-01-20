@@ -197,10 +197,14 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
     private fun applyLocation() {
         googleMap?.clear()
 
-        val latlng = LatLng(viewModel.latitude!!, viewModel.longitude!!)
-        val markerOptions = MarkerOptions().position(latlng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-        googleMap?.addMarker(markerOptions)
-        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))
+        val latitude = viewModel.latitude
+        val longitude = viewModel.longitude
+        if (latitude != null && longitude != null) {
+            val latlng = LatLng(latitude, longitude)
+            val markerOptions = MarkerOptions().position(latlng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            googleMap?.addMarker(markerOptions)
+            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))
+        }
 
         input.setText(viewModel.name)
 

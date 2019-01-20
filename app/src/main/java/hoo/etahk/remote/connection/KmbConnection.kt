@@ -82,7 +82,7 @@ object KmbConnection: BaseConnection {
                     }
                 }
 
-                logd("onResponse ${result.size}")
+                logd("response ${result.size}")
             }
         } catch (e: Exception) {
             loge("getParentRoutes failed!", e)
@@ -102,33 +102,38 @@ object KmbConnection: BaseConnection {
      */
     override fun getChildRoutes(parentRoute: Route) {
         for (bound in 1..parentRoute.boundCount) {
-            ConnectionHelper.kmb.getBoundVariant(
-                    route = parentRoute.routeKey.routeNo,
-                    bound = bound.toString())
-                    .enqueue(object : Callback<KmbBoundVariantRes> {
-                        override fun onFailure(call: Call<KmbBoundVariantRes>, t: Throwable) {}
-                        override fun onResponse(call: Call<KmbBoundVariantRes>, response: Response<KmbBoundVariantRes>) {
-                            GlobalScope.launch(Dispatchers.Default) {
-                                val t = Utils.getCurrentTimestamp()
-                                val kmbBoundVariantRes = response.body()
-                                //logd(kmbBoundVariantRes.toString())
+            try {
+                val prefix = "${parentRoute.routeKey.routeNo}][$bound]"
 
-                                if (kmbBoundVariantRes?.data?.routes != null && (kmbBoundVariantRes.data.routes).isNotEmpty()) {
-                                    val routes = mutableListOf<Route>()
-                                    (kmbBoundVariantRes.data.routes).forEach {
-                                        //logd("${it?.bound} == $bound")
-                                        assert(it!!.bound!! == bound)
-                                        routes.add(toChildRoute(parentRoute, it, t))
-                                    }
+                val response = ConnectionHelper.kmb.getBoundVariant(
+                            route = parentRoute.routeKey.routeNo,
+                            bound = bound.toString()).execute()
 
-                                    //logd(AppHelper.gson.toJson(routes))
-                                    AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
-                                }
+                logd("$prefix isSuccessful = ${response.isSuccessful}")
+
+                if (response.isSuccessful) {
+                    GlobalScope.launch(Dispatchers.Default) {
+                        val t = Utils.getCurrentTimestamp()
+                        val kmbBoundVariantRes = response.body()
+                        //logd(kmbBoundVariantRes.toString())
+
+                        if (kmbBoundVariantRes?.data?.routes != null && kmbBoundVariantRes.data.routes.isNotEmpty()) {
+                            val routes = mutableListOf<Route>()
+                            (kmbBoundVariantRes.data.routes).forEach {
+                                //logd("${it?.bound} == $bound")
+                                assert(it!!.bound!! == bound)
+                                routes.add(toChildRoute(parentRoute, it, t))
                             }
-                        }
-                    })
-        }
 
+                            logd("$prefix response childroutes ${routes.size}")
+                            AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                loge("getChildRoutes failed!", e)
+            }
+        }
     }
 
     private fun toChildRoute(parentRoute: Route, route: KmbBoundVariantRes.Route, t: Long): Route {
@@ -153,53 +158,63 @@ object KmbConnection: BaseConnection {
      * @param needEtaUpdate update eta of stops as well if true
      */
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
-        ConnectionHelper.kmb.getStops(
-                route = route.routeKey.routeNo,
-                bound = route.routeKey.bound.toString(),
-                serviceType = route.routeKey.variant.toString())
-                .enqueue(object : Callback<KmbStopsRes> {
-                    override fun onFailure(call: Call<KmbStopsRes>, t: Throwable) {}
-                    override fun onResponse(call: Call<KmbStopsRes>, response: Response<KmbStopsRes>) {
-                        GlobalScope.launch(Dispatchers.Default) {
-                            val t = Utils.getCurrentTimestamp()
-                            val kmbStopsRes = response.body()
-                            //logd(kmbStopsRes.toString())
+        val prefix = "[${route.routeKey}]"
 
-                            // Add Paths to database
-                            if (kmbStopsRes?.data?.route?.lineGeometry != null && (kmbStopsRes.data.route.lineGeometry).isNotEmpty()) {
-                                val paths = mutableListOf<Path>()
+        try {
+            val response = ConnectionHelper.kmb.getStops(
+                    route = route.routeKey.routeNo,
+                    bound = route.routeKey.bound.toString(),
+                    serviceType = route.routeKey.variant.toString()).execute()
 
-                                val strPaths = kmbStopsRes.data.route.lineGeometry.replace("{paths:", "").replace("}", "")
-                                val arrPaths = AppHelper.gson.fromJson(strPaths, Array<Array<DoubleArray>>::class.java)
+            logd("$prefix isSuccessful = ${response.isSuccessful}")
 
-                                var seq = 0L
-                                arrPaths.forEachIndexed { section, arrPaths2 ->
-                                    arrPaths2.forEach { point ->
-                                        if (point.size == 2) {
-                                            val latLng = Utils.hk1980GridToLatLng(point[1], point[0])
-                                            paths.add(toPath(route, latLng, seq++, section.toLong(), t))
-                                        }
-                                    }
+            if (response.isSuccessful) {
+                GlobalScope.launch(Dispatchers.Default) {
+                    val t = Utils.getCurrentTimestamp()
+                    val kmbStopsRes = response.body()
+                    //logd(kmbStopsRes.toString())
+
+                    // Add Paths to database
+                    if (kmbStopsRes?.data?.route?.lineGeometry != null && kmbStopsRes.data.route.lineGeometry.isNotEmpty()) {
+                        val paths = mutableListOf<Path>()
+
+                        val strPaths = kmbStopsRes.data.route.lineGeometry.replace("{paths:", "")
+                            .replace("}", "")
+                        val arrPaths =
+                            AppHelper.gson.fromJson(strPaths, Array<Array<DoubleArray>>::class.java)
+
+                        var seq = 0L
+                        arrPaths.forEachIndexed { section, arrPaths2 ->
+                            arrPaths2.forEach { point ->
+                                if (point.size == 2) {
+                                    val latLng = Utils.hk1980GridToLatLng(point[1], point[0])
+                                    paths.add(toPath(route, latLng, seq++, section.toLong(), t))
                                 }
-
-                                AppHelper.db.pathDao().insertOrUpdate(route, paths, t)
-                            }
-
-                            // Add Stops to database
-                            if (kmbStopsRes?.data?.routeStops != null && (kmbStopsRes.data.routeStops).isNotEmpty()) {
-                                val stops = mutableListOf<Stop>()
-                                (kmbStopsRes.data.routeStops).forEach {
-                                    stops.add(toStop(route, it!!, t))
-                                }
-
-                                //logd(AppHelper.gson.toJson(stops))
-                                AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
-                                if (needEtaUpdate)
-                                    updateEta(stops)
                             }
                         }
+
+                        logd("$prefix paths response ${paths.size}")
+                        AppHelper.db.pathDao().insertOrUpdate(route, paths, t)
                     }
-                })
+
+                    // Add Stops to database
+                    if (kmbStopsRes?.data?.routeStops != null && kmbStopsRes.data.routeStops.isNotEmpty()) {
+                        val stops = mutableListOf<Stop>()
+                        (kmbStopsRes.data.routeStops).forEach {
+                            stops.add(toStop(route, it!!, t))
+                        }
+
+                        logd("$prefix stops response ${stops.size}")
+                        AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
+
+                        if (needEtaUpdate)
+                            updateEta(stops)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            loge("getStops failed!", e)
+        }
     }
 
     private fun toPath(route: Route, latLng: LatLng, seq: Long, section: Long, t: Long): Path {
@@ -227,6 +242,15 @@ object KmbConnection: BaseConnection {
         if (routeStop.x != null && routeStop.y != null)
             stop.location = Utils.hk1980GridToLatLng(routeStop.y, routeStop.x)
         return stop
+    }
+
+    /**
+     * Get url of timetable of route
+     *
+     * @param route Child Route
+     */
+    override fun getTimetableUrl(route: Route): String? {
+        return ConnectionHelper.kmb.getTimetable(route = route.routeKey.routeNo, bound = route.routeKey.bound.toString()).request().url().toString()
     }
 
     /**
@@ -262,7 +286,7 @@ object KmbConnection: BaseConnection {
 
                                 val etaResults = mutableListOf<EtaResult>()
 
-                                if (kmbEtaRes?.response != null && (kmbEtaRes.response).isNotEmpty()) {
+                                if (kmbEtaRes?.response != null && kmbEtaRes.response.isNotEmpty()) {
                                     (kmbEtaRes.response).forEach {
                                         etaResults.add(toEtaResult(stop, it))
                                     }
@@ -318,7 +342,7 @@ object KmbConnection: BaseConnection {
                         val kmbEtaRes = response.body()
                         //logd(kmbEtaRes.toString())
 
-                        if (kmbEtaRes?.response != null && (kmbEtaRes.response).isNotEmpty()) {
+                        if (kmbEtaRes?.response != null && kmbEtaRes.response.isNotEmpty()) {
                             val etaResults = mutableListOf<EtaResult>()
                             (kmbEtaRes.response).forEach {
                                 etaResults.add(toEtaResult(stop, it))

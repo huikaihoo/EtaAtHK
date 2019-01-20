@@ -213,6 +213,10 @@ object BusConnection : BaseConnection {
         return
     }
 
+    override fun getTimetableUrl(route: Route): String? {
+        return null
+    }
+
     override fun updateEta(stop: Stop) {
         return
     }

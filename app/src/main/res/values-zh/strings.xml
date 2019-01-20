@@ -37,6 +37,7 @@
     <string name="save">儲存</string>
     <string name="search">搜尋</string>
     <string name="maps">地圖</string>
+    <string name="timetable">時間表</string>
     <string name="settings">設定</string>
     <string name="play_store">Play 商店</string>
     <string name="github">GitHub</string>
@@ -54,6 +55,7 @@
     <string name="sort_groups">編輯目的地排序</string>
 
     <string name="get_my_location">取得目前位置</string>
+    <string name="show_nearby_stops">顯示附近車站</string>
     <string name="enable_sort">編輯排序</string>
     <string name="create_shortcut">建立捷徑</string>
 

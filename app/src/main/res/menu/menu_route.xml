@@ -11,6 +11,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_timetable"
+        android:title="@string/maps"
+        android:orderInCategory="20"
+        android:icon="@drawable/ic_menu_timetable"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menu_another_company"
         android:orderInCategory="210"
         android:title="@string/view_another_company"

@@ -161,6 +161,18 @@ class RouteActivity : BaseActivity() {
                 )
                 true
             }
+            R.id.menu_timetable -> {
+                val url = viewModel.getTimetableUrl(
+                    viewModel.routeKey?.company ?: "",
+                    viewModel.routeKey?.routeNo ?: "",
+                    (container.currentItem + 1).toLong(),
+                    1L
+                )
+
+                if (!url.isNullOrBlank())
+                    Utils.startCustomTabs(this, url)
+                true
+            }
             R.id.menu_another_company -> {
                 startActivity<RouteActivity>(
                     Constants.Argument.ARG_COMPANY to viewModel.anotherCompany,

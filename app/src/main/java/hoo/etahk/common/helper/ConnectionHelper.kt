@@ -88,6 +88,10 @@ object ConnectionHelper: BaseConnection {
         getConnection(route.routeKey.company)?.getStops(route, needEtaUpdate)
     }
 
+    override fun getTimetableUrl(route: Route): String? {
+        return getConnection(route.routeKey.company)?.getTimetableUrl(route)
+    }
+
     override fun updateEta(stop: Stop) {
         getConnection(stop.routeKey.company)?.updateEta(stop)
     }

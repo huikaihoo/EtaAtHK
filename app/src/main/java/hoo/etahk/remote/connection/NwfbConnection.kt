@@ -170,13 +170,16 @@ object NwfbConnection: BaseConnection {
      *  @param parentRoute parent route
      */
     override fun getChildRoutes(parentRoute: Route) {
-
         parentRoute.info.boundIds.forEachIndexed { index, boundId ->
             try {
+                val prefix = "[${parentRoute.routeKey.routeNo}][$boundId]"
+
                 val response = ConnectionHelper.nwfb.getBoundVariant(
                         id = boundId,
                         l = "0",
                         syscode = getSystemCode()).execute()
+
+                logd("$prefix isSuccessful = ${response.isSuccessful}")
 
                 if (response.isSuccessful) {
                     GlobalScope.launch(Dispatchers.Default) {
@@ -186,7 +189,7 @@ object NwfbConnection: BaseConnection {
 
                         if (!responseStr.isNullOrBlank()) {
                             val routes = mutableListOf<Route>()
-                            val nwfbResponse = responseStr!!.split("<br>")
+                            val nwfbResponse = responseStr.split("<br>")
 
                             nwfbResponse.forEach {
                                 val records = it.split("(\\|\\|)|(\\*\\*\\*)".toRegex())
@@ -196,7 +199,7 @@ object NwfbConnection: BaseConnection {
                                 //logd(it)
                             }
 
-                            //logd(AppHelper.gson.toJson(routes))
+                            logd("$prefix childroutes response ${routes.size}")
                             AppHelper.db.childRouteDao().insertOrUpdate(routes, t)
                         }
                     }
@@ -238,74 +241,84 @@ object NwfbConnection: BaseConnection {
      * @param needEtaUpdate update eta of stops as well if true
      */
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
+        val prefix = "[${route.routeKey}]"
 
-        ConnectionHelper.nwfb.getPaths(
-                rdv = route.info.rdv,
-                bound = route.info.bound,
-                l = "0",
-                syscode = getSystemCode())
-                .enqueue(object : Callback<ResponseBody> {
-                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
-                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                        GlobalScope.launch(Dispatchers.Default) {
-                            val t = Utils.getCurrentTimestamp()
-                            val responseStr = response.body()?.string()
-                            //logd(responseStr)
+        try {
+            val response = ConnectionHelper.nwfb.getPaths(
+                    rdv = route.info.rdv,
+                    bound = route.info.bound,
+                    l = "0",
+                    syscode = getSystemCode()).execute()
 
-                            if (!responseStr.isNullOrBlank()) {
-                                val paths = mutableListOf<Path>()
-                                val nwfbResponse = responseStr!!.split("\\|\\|".toRegex())
+            logd("$prefix isSuccessful = ${response.isSuccessful}")
 
-                                var seq = 0L
-                                nwfbResponse.forEach {
-                                    val records = it.split(",")
-                                    if (records.size == 2) {
-                                        val latLng = LatLng(records[0].toDouble()+0.000194, records[1].toDouble()-0.000070)
-                                        paths.add(toPath(route, latLng, seq++, t))
-                                    }
-                                }
+            if (response.isSuccessful) {
+                GlobalScope.launch(Dispatchers.Default) {
+                    val t = Utils.getCurrentTimestamp()
+                    val responseStr = response.body()?.string()
+                    //logd(responseStr)
 
-                                AppHelper.db.pathDao().insertOrUpdate(route, paths, t)
+                    if (!responseStr.isNullOrBlank()) {
+                        val paths = mutableListOf<Path>()
+                        val nwfbResponse = responseStr.split("\\|\\|".toRegex())
+
+                        var seq = 0L
+                        nwfbResponse.forEach {
+                            val records = it.split(",")
+                            if (records.size == 2) {
+                                val latLng = LatLng(records[0].toDouble()+0.000194, records[1].toDouble()-0.000070)
+                                paths.add(toPath(route, latLng, seq++, t))
                             }
                         }
+
+                        logd("$prefix paths response ${paths.size}")
+                        AppHelper.db.pathDao().insertOrUpdate(route, paths, t)
                     }
-                })
+                }
+            }
+        } catch (e: Exception) {
+            loge("getPaths failed!", e)
+        }
 
         val info = "1|*|${route.routeKey.company}||${route.info.rdv}||${route.info.startSeq}||${route.info.endSeq}"
         //logd("info=[$info]")
 
-        ConnectionHelper.nwfb.getStops(
-                info = info,
-                l = "0",
-                syscode = getSystemCode())
-                .enqueue(object : Callback<ResponseBody> {
-                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
-                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                        GlobalScope.launch(Dispatchers.Default) {
-                            val t = Utils.getCurrentTimestamp()
-                            val responseStr = response.body()?.string()
-                            //logd(responseStr)
+        try {
+            val response = ConnectionHelper.nwfb.getStops(
+                    info = info,
+                    l = "0",
+                    syscode = getSystemCode()).execute()
 
-                            if (!responseStr.isNullOrBlank()) {
-                                val stops = mutableListOf<Stop>()
-                                val nwfbResponse = responseStr!!.split("<br>")
+            logd("$prefix isSuccessful = ${response.isSuccessful}")
 
-                                nwfbResponse.forEach {
-                                    val records = it.split("\\|\\|".toRegex())
-                                    if (records.size >= Constants.Stop.NWFB_STOP_RECORD_SIZE) {
-                                        stops.add(toStop(route, records, t))
-                                    }
-                                    //logd(it)
-                                }
+            if (response.isSuccessful) {
+                GlobalScope.launch(Dispatchers.Default) {
+                    val t = Utils.getCurrentTimestamp()
+                    val responseStr = response.body()?.string()
+                    //logd(responseStr)
 
-                                //logd(AppHelper.gson.toJson(stops))
-                                AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
-                                if (needEtaUpdate)
-                                    updateEta(stops)
+                    if (!responseStr.isNullOrBlank()) {
+                        val stops = mutableListOf<Stop>()
+                        val nwfbResponse = responseStr!!.split("<br>")
+
+                        nwfbResponse.forEach {
+                            val records = it.split("\\|\\|".toRegex())
+                            if (records.size >= Constants.Stop.NWFB_STOP_RECORD_SIZE) {
+                                stops.add(toStop(route, records, t))
                             }
+                            //logd(it)
                         }
+
+                        logd("$prefix stops response ${stops.size}")
+                        AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
+                        if (needEtaUpdate)
+                            updateEta(stops)
                     }
-                })
+                }
+            }
+        } catch (e: Exception) {
+            loge("getStops failed!", e)
+        }
     }
 
     private fun toPath(route: Route, latLng: LatLng, seq: Long, t: Long): Path {
@@ -335,6 +348,22 @@ object NwfbConnection: BaseConnection {
                         stopId = records[Constants.Stop.NWFB_STOP_RECORD_STOP_ID].toInt().toString()),
                 updateTime = t
         )
+    }
+
+    /**
+     * Get url of timetable of route
+     *
+     * @param route Child Route
+     */
+    override fun getTimetableUrl(route: Route): String? {
+        val info = "1|*|${route.routeKey.company}||${route.info.rdv}||${route.info.startSeq}||${route.info.endSeq}"
+
+        return ConnectionHelper.nwfb.getTimetable(
+                rdv = info,
+                bound = route.info.bound,
+                l = "0",
+                syscode = getSystemCode(),
+                syscode2 = getSystemCode2()).request().url().toString()
     }
 
     /**

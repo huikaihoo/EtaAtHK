@@ -55,6 +55,16 @@ object RoutesRepo {
         }
     }
 
+    fun getTimetableUrl(company: String, routeNo: String, bound: Long, variant: Long): String {
+        val route = AppHelper.db.childRouteDao().selectOnce(company, routeNo, bound, variant)
+
+        return if (route != null) {
+            ConnectionHelper.getTimetableUrl(route) ?: ""
+        } else {
+            ""
+        }
+    }
+
     // Testing only
     fun insertRoute() {
         val route1 = Route(//id = 1,

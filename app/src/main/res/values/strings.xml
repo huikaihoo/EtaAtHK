@@ -58,6 +58,7 @@
     <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="maps">Maps</string>
+    <string name="timetable">Timetable</string>
     <string name="settings">Settings</string>
     <string name="play_store">Play Store</string>
     <string name="github">GitHub</string>
@@ -75,6 +76,7 @@
     <string name="sort_groups">Sort Destination</string>
 
     <string name="get_my_location">Get Current Location</string>
+    <string name="show_nearby_stops">Show Nearby Stops</string>
     <string name="enable_sort">Enable Sorting</string>
     <string name="create_shortcut">Create Shortcut</string>
 

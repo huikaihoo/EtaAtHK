@@ -28,6 +28,10 @@ class RouteViewModel: TimerViewModel() {
         return parentRoute!!
     }
 
+    fun getTimetableUrl(company: String, routeNo: String, bound: Long, variant: Long): String {
+        return RoutesRepo.getTimetableUrl(company, routeNo, bound, variant)
+    }
+
     fun updateChildRoutes(parentRoute: Route) {
         if (!hasUpdateChildRoutes) {
             hasUpdateChildRoutes = true

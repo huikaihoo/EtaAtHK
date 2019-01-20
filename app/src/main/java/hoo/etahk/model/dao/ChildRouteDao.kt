@@ -34,6 +34,9 @@ abstract class ChildRouteDao {
     @Query("$CHILD_ROUTE_SELECT AND bound = :bound AND variant = :variant")
     abstract fun select(company: String, routeNo: String, bound: Long, variant: Long): LiveData<Route>
 
+    @Query("$CHILD_ROUTE_SELECT AND bound = :bound AND variant = :variant")
+    abstract fun selectOnce(company: String, routeNo: String, bound: Long, variant: Long): Route?
+
     // Insert / Update (single)
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)
 //    abstract fun insert(route: Route)
