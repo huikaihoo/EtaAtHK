@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
 import hoo.etahk.common.browser.CustomTabsHelper
+import hoo.etahk.common.extensions.loge
 import hoo.etahk.view.App
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,6 +57,7 @@ object Utils {
                 val strDate = Date(t * Time.ONE_SECOND_IN_MILLIS)
                 return sdf.format(strDate)
             } catch (e: Exception) {
+                loge("getDateTimeString failed!", e)
             }
         }
         return ""

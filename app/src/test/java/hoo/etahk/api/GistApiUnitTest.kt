@@ -25,10 +25,12 @@ import java.util.zip.ZipFile
 @Config(manifest = Config.NONE)
 class GistApiUnitTest: BaseUnitTest() {
 
-    private val gistId = getStringFromResource(R.string.param_gist_id_kmb)
+    private val gistIdMap = hashMapOf(
+        "kmb" to getStringFromResource(R.string.param_gist_id_kmb),
+        "nwfb" to getStringFromResource(R.string.param_gist_id_nwfb))
 
-    private fun getRawUrl(): List<String> {
-        val rawUrlList = mutableListOf<String>()
+    private fun getRawUrl(company: String, gistId: String): String {
+        var rawUrl: String? = null
 
         val call = ConnectionHelper.gist.getGist(gistId)
         System.out.println("url = ${call.request().url()}")
@@ -39,9 +41,11 @@ class GistApiUnitTest: BaseUnitTest() {
 
             if (response.isSuccessful) {
                 val result = response.body()
-                System.out.println("[KMB] rawUrl = ${result?.files?.kmb?.rawUrl}")
-                assert(result?.files?.kmb?.rawUrl?.isNotEmpty() ?: false)
-                rawUrlList.add(result?.files?.kmb?.rawUrl ?: "")
+                assert(!result?.files.isNullOrEmpty())
+
+                rawUrl = result?.files?.get(company)?.rawUrl
+                System.out.println("[${company.toUpperCase()}] rawUrl = $rawUrl")
+                assert(!rawUrl.isNullOrBlank())
             } else {
                 System.out.println("error = ${response.errorBody()?.string()}")
                 assert(false)
@@ -51,7 +55,7 @@ class GistApiUnitTest: BaseUnitTest() {
             assert(false)
         }
 
-        return rawUrlList
+        return rawUrl ?: ""
     }
 
     private fun unzipFile(zipFile: ZipFile, zipEntry: ZipEntry, outputPath: String) {
@@ -66,12 +70,16 @@ class GistApiUnitTest: BaseUnitTest() {
 
     @Test
     fun getGist() {
-        getRawUrl()
+        gistIdMap.forEach { company, gistId ->
+            if (gistId.isNotEmpty())
+                getRawUrl(company, gistId)
+        }
     }
 
     @Test
     fun getContent() {
-        val rawUrlList = getRawUrl()
+        val rawUrlList = gistIdMap.map { getRawUrl(it.key, it.value) }
+
         for (rawUrl in rawUrlList) {
             val company = rawUrl.substring(rawUrl.lastIndexOf("/") + 1, rawUrl.length)
             val call = ConnectionHelper.gist.getContent(rawUrl)

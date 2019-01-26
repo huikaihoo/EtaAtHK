@@ -111,7 +111,16 @@
     <string name="eta_msg_not_in_service_hours">服務時間已過</string>
     <string name="eta_msg_no_eta_info">沒有到站時間資訊</string>
     <string name="eta_msg_loading">載入中\u2026</string>
-    
+
+    <!-- Timetable -->
+    <string name="mon_to_fri">星期一至星期五</string>
+    <string name="mon_to_sat">星期一至星期六</string>
+    <string name="sat">星期六</string>
+    <string name="sun_holidays">星期日及公眾假期</string>
+    <string name="daily">每日</string>
+    <string name="normal_route">正常路線</string>
+    <string name="headway_mins">班次 (分鐘)</string>
+
     <!-- Dialog -->
     <string name="title_add_location">加入新的起點</string>
     <string name="title_add_group">加入新的目的地</string>

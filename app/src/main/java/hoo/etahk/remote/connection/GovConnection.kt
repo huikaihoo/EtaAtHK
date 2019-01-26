@@ -255,6 +255,10 @@ object GovConnection: BaseConnection {
         return null
     }
 
+    override fun getTimetable(route: Route): String? {
+        return null
+    }
+
     override fun updateEta(stop: Stop) {
         return
     }

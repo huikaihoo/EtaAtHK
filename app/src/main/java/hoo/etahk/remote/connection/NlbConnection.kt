@@ -248,6 +248,10 @@ object NlbConnection: BaseConnection {
         return ConnectionHelper.nlb.getTimetable(route.info.rdv).request().url().toString()
     }
 
+    override fun getTimetable(route: Route): String? {
+        return null
+    }
+
     override fun updateEta(stop: Stop) {
         return
     }

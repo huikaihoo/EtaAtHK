@@ -122,13 +122,18 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.1'
     implementation 'com.mcxiaoke.koi:core:0.5.5'
 
-    // RecyclerView-FastScroll
+    // RecyclerView FastScroll
     implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.20'
     //implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'
 
     // JSON / HTML Parser
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'org.jsoup:jsoup:1.11.3'
+
+    // Markwon
+    implementation "ru.noties:markwon:$markwon_version"
+    implementation "ru.noties:markwon-image-loader:$markwon_version"
+    implementation "ru.noties:markwon-view:$markwon_version"
 
     // Retrofit2 (OkHttp3)
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'

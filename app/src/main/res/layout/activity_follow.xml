@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="hoo.etahk.view.test.MainActivity">
+    tools:context="hoo.etahk.view.follow.FollowActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

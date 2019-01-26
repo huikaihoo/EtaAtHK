@@ -73,6 +73,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.follow.LocationEditActivity" />
+        <activity android:name=".view.route.TimetableActivity" />
         <activity
             android:name=".view.map.RoutesMapsActivity"
             android:theme="@style/AppTheme.Transparent" />

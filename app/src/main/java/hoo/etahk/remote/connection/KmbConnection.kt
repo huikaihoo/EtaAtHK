@@ -5,9 +5,7 @@ import com.google.firebase.perf.metrics.AddTrace
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
-import hoo.etahk.common.extensions.DB
-import hoo.etahk.common.extensions.logd
-import hoo.etahk.common.extensions.loge
+import hoo.etahk.common.extensions.*
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
@@ -19,10 +17,7 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
-import hoo.etahk.remote.response.GistDatabaseRes
-import hoo.etahk.remote.response.KmbBoundVariantRes
-import hoo.etahk.remote.response.KmbEtaRes
-import hoo.etahk.remote.response.KmbStopsRes
+import hoo.etahk.remote.response.*
 import hoo.etahk.view.App
 import kotlinx.coroutines.*
 import retrofit2.Call
@@ -52,7 +47,7 @@ object KmbConnection: BaseConnection {
             logd("gistId = $gistId; isSuccessful = ${response.isSuccessful}")
 
             if (response.isSuccessful) {
-                val gistFile = response.body()?.files?.kmb
+                val gistFile = response.body()?.files?.get(company.toLowerCase())
                 val gistDatabaseRes =
                     if (gistFile != null) toGistDatabaseRes(gistFile, t) else GistDatabaseRes()
 
@@ -251,6 +246,106 @@ object KmbConnection: BaseConnection {
      */
     override fun getTimetableUrl(route: Route): String? {
         return ConnectionHelper.kmb.getTimetable(route = route.routeKey.routeNo, bound = route.routeKey.bound.toString()).request().url().toString()
+    }
+
+    /**
+     * Get timetable of route
+     *
+     * @param route Child Route
+     * @return timetable of child route
+     */
+    override fun getTimetable(route: Route): String? {
+        val prefix = "[${route.routeKey}]"
+        var result = ""
+
+        try {
+            val response = ConnectionHelper.kmb.getTimetable(
+                    route = route.routeKey.routeNo,
+                    bound = route.routeKey.bound.toString()).execute()
+
+            logd("$prefix isSuccessful = ${response.isSuccessful}")
+
+            if (response.isSuccessful) {
+                var lastDayType = ""
+                val kmbTimetableRes = response.body()
+
+                kmbTimetableRes?.data?.toList()?.sortedBy { it.first }?.forEach { pair ->
+                    var variantHeader = true
+                    pair.second?.forEach {
+                        it?.let { rec ->
+                            result += toTimetableMd(
+                                route = route,
+                                rec = rec,
+                                variantHeader = variantHeader,
+                                tableHeader = rec.dayType != lastDayType,
+                                thematicBreak = result.isNotEmpty())
+                            variantHeader = false
+                            lastDayType = rec.dayType.orEmpty()
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            loge("getTimetable failed!", e)
+        }
+
+        //logd(result)
+        return result
+    }
+
+    private fun toTimetableMd(route: Route, rec: KmbTimetableRes.Timetable, variantHeader: Boolean, tableHeader: Boolean, thematicBreak: Boolean): String {
+        var result = ""
+
+        val boundText = (route.routeKey.bound == 1L).yn(rec.boundText1, rec.boundText2)
+        val boundTime = (route.routeKey.bound == 1L).yn(rec.boundTime1, rec.boundTime2)
+
+        if (!boundText.isNullOrBlank()) {
+            // From To Header
+            if (variantHeader) {
+                if (thematicBreak) {
+                    result += "\n***\n"
+                }
+                val variant = rec.serviceTypeChi.isNullOrBlank().yn(App.instance.getString(R.string.normal_route), rec.serviceTypeChi)
+                result += "## $variant\n"
+            } else if (tableHeader) {
+                result += "***"
+            }
+
+            // Table Header
+            if (tableHeader || variantHeader) {
+                result += "\n\n${toHeader(rec.dayType.orEmpty())}|"
+                if (!boundTime.isNullOrBlank()) {
+                    result += App.instance.getString(R.string.headway_mins)
+                }
+                result += "\n---|"
+                if (!boundTime.isNullOrBlank()) {
+                    result += "---"
+                }
+                result += "\n"
+            }
+
+            // Table Content
+            result += "$boundText|"
+            if (!boundTime.isNullOrBlank()) {
+                result += boundTime
+            }
+            result += "\n"
+        }
+
+        return result
+    }
+
+    private fun toHeader(dayType: String): String {
+        val resId = when (dayType.trim()) {
+            "MF" -> R.string.mon_to_fri
+            "MS" -> R.string.mon_to_sat
+            "S" -> R.string.sat
+            "H" -> R.string.sun_holidays
+            "D" -> R.string.daily
+            else -> null
+        }
+
+        return resId.isNull("", App.instance.getString(resId!!))
     }
 
     /**

@@ -64,6 +64,14 @@ interface BaseConnection {
      */
     fun getTimetableUrl(route: Route): String?
 
+    /**
+     * Get timetable of route
+     *
+     * @param route Child Route
+     * @return timetable of child route
+     */
+    fun getTimetable(route: Route): String?
+
     @Deprecated("Use 'updateEta(List<Stop>): Unit' instead.")
     fun updateEta(stop: Stop)
 

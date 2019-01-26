@@ -3,14 +3,10 @@ package hoo.etahk.remote.response
 import com.google.gson.annotations.SerializedName
 
 data class GistRes(
-    @SerializedName("files") val files: Files? = Files(),
+    @SerializedName("files") val files: Map<String, File?>? = mapOf(),
     @SerializedName("created_at") val createdAt: String? = "",
     @SerializedName("updated_at") val updatedAt: String? = ""
 ) {
-    data class Files(
-        @SerializedName("kmb") val kmb: File? = File()
-    )
-
     data class File(
         @SerializedName("filename") val filename: String? = "",
         @SerializedName("type") val type: String? = "",

@@ -366,6 +366,10 @@ object NwfbConnection: BaseConnection {
                 syscode2 = getSystemCode2()).request().url().toString()
     }
 
+    override fun getTimetable(route: Route): String? {
+        return null
+    }
+
     /**
      * Get Eta of list of stops and update into DB
      *

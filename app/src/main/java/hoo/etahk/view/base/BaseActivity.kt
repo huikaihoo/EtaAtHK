@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.ActivityManager
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +50,13 @@ abstract class BaseActivity : AppCompatActivity() {
         setTaskDescription(ActivityManager.TaskDescription(null,
             Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_launcher_large),
             colorPrimary))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_empty, menu)
+
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

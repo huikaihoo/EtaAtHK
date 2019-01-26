@@ -162,6 +162,16 @@ class RouteActivity : BaseActivity() {
                 true
             }
             R.id.menu_timetable -> {
+                if (viewModel.routeKey?.company == "KMB" || viewModel.routeKey?.company == "LWB") {
+                    startActivity<TimetableActivity>(
+                        Constants.Argument.ARG_COMPANY to viewModel.routeKey?.company,
+                        Constants.Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
+                        Constants.Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
+                        Constants.Argument.ARG_GOTO_BOUND to (container.currentItem + 1).toLong()
+                    )
+                    return true
+                }
+
                 val url = viewModel.getTimetableUrl(
                     viewModel.routeKey?.company ?: "",
                     viewModel.routeKey?.routeNo ?: "",
@@ -169,7 +179,7 @@ class RouteActivity : BaseActivity() {
                     1L
                 )
 
-                if (!url.isNullOrBlank())
+                if (url.isNotBlank())
                     Utils.startCustomTabs(this, url)
                 true
             }

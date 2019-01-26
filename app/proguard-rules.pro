@@ -66,5 +66,13 @@
 -keepclassmembers class org.xmlpull.** { *; }
 
 
+### Markwon ###
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+-keep class com.caverock.androidsvg.** { *; }
+-dontwarn com.caverock.androidsvg.**
+
+
 ### ETA@HK ###
 -keep class hoo.etahk.** { *; }

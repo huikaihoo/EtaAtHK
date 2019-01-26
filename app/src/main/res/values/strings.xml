@@ -138,6 +138,15 @@
     <string name="eta_msg_no_eta_info">No ETA Information</string>
     <string name="eta_msg_loading">Loading\u2026</string>
 
+    <!-- Timetable -->
+    <string name="mon_to_fri">Mondays to Fridays</string>
+    <string name="mon_to_sat">Mondays to Saturdays</string>
+    <string name="sat">Saturdays</string>
+    <string name="sun_holidays">Sundays and Public Holidays</string>
+    <string name="daily">Daily</string>
+    <string name="normal_route">Normal Route</string>
+    <string name="headway_mins">Headway (mins)</string>
+
     <!-- Dialog -->
     <string name="title_add_location">Add new location</string>
     <string name="title_add_group">Add new destination</string>

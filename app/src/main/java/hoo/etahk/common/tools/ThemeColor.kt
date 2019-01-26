@@ -2,7 +2,7 @@ package hoo.etahk.common.tools
 
 import hoo.etahk.view.App
 
-class ThemeColor{
+class ThemeColor {
 
     constructor(_colorPrimaryResId: Int, _colorPrimaryDarkResId: Int, _colorPrimaryAccentResId: Int) {
         colorPrimaryResId = _colorPrimaryResId

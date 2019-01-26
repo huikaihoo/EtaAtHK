@@ -1,7 +1,6 @@
 package hoo.etahk.remote.api
 
 import hoo.etahk.remote.response.*
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -39,6 +38,6 @@ interface KmbApi {
 
     @GET("Function/FunctionRequest.ashx?action=getschedule")
     fun getTimetable(@Query("route") route: String,
-                     @Query("bound") bound: String): Call<ResponseBody>
+                     @Query("bound") bound: String): Call<KmbTimetableRes>
 
 }
