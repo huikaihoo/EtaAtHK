@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import hoo.etahk.R
+import hoo.etahk.common.Utils
 import hoo.etahk.model.relation.LocationAndGroups
-import hoo.etahk.view.App
 
 
 /**
@@ -31,7 +31,7 @@ class FollowPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return App.instance.getString(R.string.to_prefix) + dataSource!!.groups[position].name
+        return Utils.getString(R.string.to_prefix) + dataSource!!.groups[position].name
     }
 
     override fun getItemPosition(`object`: Any): Int {

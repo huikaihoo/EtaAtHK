@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import hoo.etahk.R
+import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Route
-import hoo.etahk.view.App
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -29,7 +29,7 @@ class RoutePagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return App.instance.getString(R.string.to_prefix) +
+        return Utils.getString(R.string.to_prefix) +
                 when (position) {
                     0 -> dataSource!!.to.value
                     1 -> dataSource!!.from.value

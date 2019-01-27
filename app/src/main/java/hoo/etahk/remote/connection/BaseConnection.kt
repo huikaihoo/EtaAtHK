@@ -2,6 +2,7 @@ package hoo.etahk.remote.connection
 
 import android.util.Base64
 import com.mcxiaoke.koi.ext.closeQuietly
+import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.ZipHelper
@@ -105,12 +106,13 @@ interface BaseConnection {
      * @param updateTime update time of GistDatabaseRes
      * @return Gist Database
      */
-    fun toGistDatabaseRes(gistFile: GistRes.File, updateTime: Long): GistDatabaseRes {
+    fun toGistDatabaseRes(company: String, gistFile: GistRes.File, updateTime: Long): GistDatabaseRes {
         try {
             val rawUrl = gistFile.rawUrl ?: ""
             val version = rawUrl.substring(rawUrl.lastIndexOf("raw/") + 4, rawUrl.lastIndexOf("/"))
-            val company = rawUrl.substring(rawUrl.lastIndexOf("/") + 1, rawUrl.length)
             val file = File("${App.instance.cacheDir.path}/$company", "$version.zip")
+
+            logd("company = $company; version = $version; rawUrl = $rawUrl")
 
             if (version.isNotBlank() && company.isNotBlank()) {
                 file.parentFile.mkdirs()
@@ -129,10 +131,13 @@ interface BaseConnection {
                     } else {
                         // Get from rawUrl
                         val response = ConnectionHelper.gist.getContent(rawUrl).execute()
+                        logd("[$version] isSuccessful = ${response.isSuccessful}")
+
                         if (response.isSuccessful) {
                             result = response.body()?.string() ?: ""
                         }
                     }
+                    logd("[$version] result.length = ${result.length}")
 
                     // Decode to zip file
                     if (result.isNotBlank()) {
@@ -140,11 +145,15 @@ interface BaseConnection {
                         fos.write(Base64.decode(result, Base64.NO_WRAP))
                         fos.closeQuietly()
                     }
+                } else {
+                    logd("[$version] file already exist")
                 }
             }
 
             if (file.isFile) {
                 return ZipHelper.zipToGistDatabaseRes(ZipFile("${App.instance.cacheDir.path}/$company/$version.zip"), updateTime)
+            } else {
+                loge("[$version] file not exist")
             }
         } catch (e: Exception) {
             loge("toGistDatabaseRes failed!", e)

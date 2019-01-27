@@ -17,7 +17,6 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.startActivity
-import hoo.etahk.view.App
 import hoo.etahk.view.fh.FHActivity
 import hoo.etahk.view.follow.FollowActivity
 import hoo.etahk.view.search.BusSearchActivity
@@ -65,7 +64,7 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
         if (tv.text.isBlank()) {
             val strDate = Utils.getDateTimeString(navViewModel.getLastUpdate().value)
             if (!strDate.isBlank()) {
-                tv.text = App.instance.getString(R.string.last_update) + strDate
+                tv.text = getString(R.string.last_update) + strDate
             }
         }
 
@@ -73,7 +72,7 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
             it?.let {
                 val strDate = Utils.getDateTimeString(it)
                 if (!strDate.isBlank()) {
-                    tv?.text = App.instance.getString(R.string.last_update) + strDate
+                    tv?.text = getString(R.string.last_update) + strDate
                 } else {
                     tv?.text = ""
                 }

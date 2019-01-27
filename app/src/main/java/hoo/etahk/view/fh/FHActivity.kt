@@ -1,19 +1,22 @@
 package hoo.etahk.view.fh
 
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
-import android.os.Bundle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.view.Menu
-import android.view.MenuItem
 import com.mcxiaoke.koi.ext.Bundle
 import com.mcxiaoke.koi.ext.newIntent
+import getValue
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.createShortcut
+import hoo.etahk.common.extensions.extras
+import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.tag
 import hoo.etahk.model.relation.RouteFavouriteEx
 import hoo.etahk.model.relation.RouteHistoryEx
@@ -37,7 +40,7 @@ class FHActivity : NavActivity() {
         historyAdapter.context = this
 
         viewModel = ViewModelProviders.of(this).get(FHViewModel::class.java)
-        viewModel.currentType = Constants.MiscType.valueOf(intent.extras.getString(Constants.Argument.ARG_MISC_TYPE))
+        viewModel.currentType = Constants.MiscType.valueOf(getExtra(Constants.Argument.ARG_MISC_TYPE))
 
         super.initNavigationDrawer()
 
@@ -116,8 +119,7 @@ class FHActivity : NavActivity() {
 
                 when (viewModel.currentType) {
                     Constants.MiscType.ROUTE_FAVOURITE -> {
-                        Utils.createShortcut(
-                            this,
+                        createShortcut(
                             tag() + "_" + viewModel.currentType.toString(),
                             R.string.sc_favourite_s,
                             R.string.sc_favourite_l,
@@ -126,8 +128,7 @@ class FHActivity : NavActivity() {
                         )
                     }
                     Constants.MiscType.ROUTE_HISTORY -> {
-                        Utils.createShortcut(
-                            this,
+                        createShortcut(
                             tag() + "_" + viewModel.currentType.toString(),
                             R.string.sc_favourite_s,
                             R.string.sc_favourite_l,

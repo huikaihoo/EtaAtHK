@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.prependImage
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.StopDiffCallback
@@ -40,16 +41,16 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
             var additionInfo = ""
             if (stop.info.partial == 1L) {
-                additionInfo = " (" + App.instance.getString(R.string.stop_only_for_particular_time) + ")"
+                additionInfo = " (" + Utils.getString(R.string.stop_only_for_particular_time) + ")"
             }
 
             if (stop.fare > 0 && dataSource.size > (position + 1)) {
                 var fareHoliday = ""
                 if (stop.info.fareHoliday > 0.0 && stop.info.fareHoliday != stop.fare) {
-                    additionInfo += " [" + App.instance.getString(R.string.stop_fare_holiday) +
-                            App.instance.getString(R.string.price_2dp).format(stop.info.fareHoliday) + "]"
+                    additionInfo += " [" + Utils.getString(R.string.stop_fare_holiday) +
+                            Utils.getString(R.string.price_2dp).format(stop.info.fareHoliday) + "]"
                 }
-                itemView.fare.text = App.instance.getString(R.string.price_2dp).format(stop.fare) + fareHoliday
+                itemView.fare.text = Utils.getString(R.string.price_2dp).format(stop.fare) + fareHoliday
 
             } else {
                 itemView.fare.text = ""
@@ -84,7 +85,7 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
             // ETA Result
             if (!stop.displayEta || etaResults.isEmpty()) {
-                itemView.eta_0.text = App.instance.getString(R.string.eta_msg_loading)
+                itemView.eta_0.text = Utils.getString(R.string.eta_msg_loading)
                 itemView.eta_1.text = ""
                 itemView.eta_2.text = ""
             } else {
@@ -101,18 +102,18 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                     if (tv != null && i < etaResults.size) {
                         var text = SpannableStringBuilder()
                         if (stop.isLoading) {
-                            text = Utils.appendImageToTextView(tv, R.drawable.ic_text_loading, text)
+                            text = tv.prependImage(R.drawable.ic_text_loading, text)
                         } else if (etaStatus != Constants.EtaStatus.SUCCESS) {
-                            text = Utils.appendImageToTextView(tv, R.drawable.ic_text_failed, text)
+                            text = tv.prependImage(R.drawable.ic_text_failed, text)
                         }
                         if (etaResults[i].valid && !etaResults[i].gps) {
-                            text = Utils.appendImageToTextView(tv, R.drawable.ic_text_gps_off, text)
+                            text =tv.prependImage(R.drawable.ic_text_gps_off, text)
                         }
                         if (etaResults[i].wifi) {
-                            text = Utils.appendImageToTextView(tv, R.drawable.ic_text_wifi, text)
+                            text = tv.prependImage(R.drawable.ic_text_wifi, text)
                         }
                         if (etaResults[i].valid && etaResults[i].capacity >= 0L) {
-                            text = Utils.appendImageToTextView(tv, Utils.getCapacityResId(etaResults[i].capacity), text)
+                            text = tv.prependImage(Utils.getCapacityResId(etaResults[i].capacity), text)
                         }
                         text.append(etaResults[i].getDisplayMsg())
                         tv.text = text

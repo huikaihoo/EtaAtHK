@@ -2,7 +2,7 @@ package hoo.etahk
 
 import androidx.annotation.StringRes
 import com.google.gson.GsonBuilder
-import hoo.etahk.view.App
+import hoo.etahk.common.Utils
 import org.junit.Before
 import org.robolectric.shadows.ShadowLog
 
@@ -23,6 +23,6 @@ abstract class BaseUnitTest {
     }
 
     fun getStringFromResource(@StringRes resId: Int): String {
-        return javaClass.getResource("/${App.instance.getString(resId)}")?.readText() ?: ""
+        return javaClass.getResource("/${Utils.getString(resId)}")?.readText() ?: ""
     }
 }

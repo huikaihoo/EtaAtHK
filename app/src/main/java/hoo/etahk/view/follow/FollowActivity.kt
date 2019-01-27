@@ -20,14 +20,11 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.mcxiaoke.koi.ext.newIntent
+import com.mcxiaoke.koi.ext.restart
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Argument
-import hoo.etahk.common.Utils
-import hoo.etahk.common.extensions.logd
-import hoo.etahk.common.extensions.loge
-import hoo.etahk.common.extensions.tag
-import hoo.etahk.common.extensions.toLocation
+import hoo.etahk.common.extensions.*
 import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.model.relation.LocationAndGroups
@@ -322,7 +319,7 @@ class FollowActivity : NavActivity() {
                     .setPositiveButton(listener = DialogInterface.OnClickListener {dialog, which ->
                         viewModel.insertGroup(inputDialog.view.input.text.toString())
                         Snackbar.make(find(android.R.id.content), R.string.msg_add_group_success, Snackbar.LENGTH_SHORT).show()
-                        restartActivity()
+                        restart()
                     })
                     .show()
                 true
@@ -339,7 +336,7 @@ class FollowActivity : NavActivity() {
                             group.name = inputDialog.view.input.text.toString()
                             viewModel.updateGroup(group)
                             Snackbar.make(find(android.R.id.content), R.string.msg_one_group_renamed, Snackbar.LENGTH_SHORT).show()
-                            restartActivity()
+                            restart()
                         })
                         .show()
                 }
@@ -355,7 +352,7 @@ class FollowActivity : NavActivity() {
                         .setPositiveButton(android.R.string.ok) { dialog, which ->
                             viewModel.deleteGroup(group)
                             Snackbar.make(find(android.R.id.content), R.string.msg_one_group_removed, Snackbar.LENGTH_SHORT).show()
-                            restartActivity()
+                            restart()
                         }
                         .setNegativeButton(android.R.string.cancel, null)
                         .show()
@@ -368,8 +365,7 @@ class FollowActivity : NavActivity() {
                 true
             }
             R.id.menu_add_shortcut -> {
-                Utils.createShortcut(
-                    this,
+                createShortcut(
                     tag(),
                     R.string.sc_follow_s,
                     R.string.sc_follow_l,

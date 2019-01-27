@@ -5,31 +5,27 @@ import android.content.SharedPreferences
  */
 
 inline fun <reified T> SharedPreferences.get(key: String): T {
-    when(T::class) {
-        Boolean::class -> return this.getBoolean(key, false) as T
-        Float::class -> return this.getFloat(key, 0.0f) as T
-        Int::class -> return this.getInt(key, 0) as T
-        Long::class -> return this.getLong(key, 0L) as T
-        String::class -> return this.getString(key, "") as T
+    return when(T::class) {
+        Boolean::class -> this.getBoolean(key, false) as T
+        Float::class -> this.getFloat(key, 0.0f) as T
+        Int::class -> this.getInt(key, 0) as T
+        Long::class -> this.getLong(key, 0L) as T
+        String::class -> this.getString(key, "") as T
+        is Set<*> -> this.getStringSet(key, setOf<String>()) as T
+        else -> "" as T
     }
-
-    return "" as T
 }
 
 inline fun <reified T> SharedPreferences.get(key: String, defaultValue: T): T {
-    when(T::class) {
-        Boolean::class -> return this.getBoolean(key, defaultValue as Boolean) as T
-        Float::class -> return this.getFloat(key, defaultValue as Float) as T
-        Int::class -> return this.getInt(key, defaultValue as Int) as T
-        Long::class -> return this.getLong(key, defaultValue as Long) as T
-        String::class -> return this.getString(key, defaultValue as String) as T
-        else -> {
-            if (defaultValue is Set<*>)
-                return this.getStringSet(key, defaultValue as Set<String>) as T
-        }
+    return when(T::class) {
+        Boolean::class -> this.getBoolean(key, defaultValue as Boolean) as T
+        Float::class -> this.getFloat(key, defaultValue as Float) as T
+        Int::class -> this.getInt(key, defaultValue as Int) as T
+        Long::class -> this.getLong(key, defaultValue as Long) as T
+        String::class -> this.getString(key, defaultValue as String) as T
+        is Set<*> -> this.getStringSet(key, defaultValue as Set<String>) as T
+        else -> "" as T
     }
-
-    return defaultValue
 }
 
 inline fun <reified T> SharedPreferences.put(key: String, value: T) {
@@ -41,10 +37,7 @@ inline fun <reified T> SharedPreferences.put(key: String, value: T) {
         Int::class -> editor.putInt(key, value as Int)
         Long::class -> editor.putLong(key, value as Long)
         String::class -> editor.putString(key, value as String)
-        else -> {
-            if (value is Set<*>)
-                editor.putStringSet(key, value as Set<String>)
-        }
+        is Set<*> -> editor.putStringSet(key, value as Set<String>)
     }
 
     editor.apply()

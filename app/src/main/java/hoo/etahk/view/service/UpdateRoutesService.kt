@@ -62,7 +62,7 @@ class UpdateRoutesService: Service() {
         return Service.START_STICKY
     }
 
-    override fun onBind(indent: Intent?): IBinder? {
+    override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 }

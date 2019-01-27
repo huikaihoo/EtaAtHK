@@ -7,13 +7,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import getValue
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Argument
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.Utils
-import hoo.etahk.common.extensions.tag
+import hoo.etahk.common.extensions.*
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.view.base.BaseActivity
@@ -58,7 +59,7 @@ class RouteActivity : BaseActivity() {
     private lateinit var viewModel: RouteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(getTheme(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getLong(Argument.ARG_TYPE_CODE)))
+        setTheme(getTheme(getExtra(Argument.ARG_COMPANY), getExtra(Argument.ARG_TYPE_CODE)))
         window.navigationBarColor = Utils.getThemeColorPrimaryDark(this)
         super.setTaskDescription()
 
@@ -68,12 +69,12 @@ class RouteActivity : BaseActivity() {
         setSupportActionBar(toolbar)
 
         viewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
-        viewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
-        viewModel.anotherCompany = intent.extras.getString(Argument.ARG_ANOTHER_COMPANY, "")
+        viewModel.routeKey = RouteKey(getExtra(Argument.ARG_COMPANY), getExtra(Argument.ARG_ROUTE_NO), -1L, -1L)
+        viewModel.anotherCompany = getExtra(Argument.ARG_ANOTHER_COMPANY)
         viewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
 
-        intent.extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
-        intent.extras.putLong(Argument.ARG_GOTO_SEQ, -1L)
+        extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
+        extras.putLong(Argument.ARG_GOTO_SEQ, -1L)
 
         // Setup Fragment
         pagerAdapter = RoutePagerAdapter(supportFragmentManager)
@@ -120,7 +121,7 @@ class RouteActivity : BaseActivity() {
                 }
             })
             if (!viewModel.isGotoBoundUsed) {
-                val gotoBound = intent.extras.getLong(Argument.ARG_GOTO_BOUND)
+                val gotoBound = getExtra<Long>(Argument.ARG_GOTO_BOUND)
                 if (gotoBound > 0) {
                     viewModel.isGotoBoundUsed = true
                     viewModel.selectedTabPosition = if (gotoBound >= 2L) 1 else 0
@@ -140,7 +141,7 @@ class RouteActivity : BaseActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_route, menu)
 
-        if (intent.extras.getString(Argument.ARG_ANOTHER_COMPANY, "").isNotEmpty()) {
+        if (getExtra<String>(Argument.ARG_ANOTHER_COMPANY).isNotBlank()) {
             menu.findItem(R.id.menu_another_company).isVisible = true
         }
 
@@ -180,7 +181,7 @@ class RouteActivity : BaseActivity() {
                 )
 
                 if (url.isNotBlank())
-                    Utils.startCustomTabs(this, url)
+                    startCustomTabs(url)
                 true
             }
             R.id.menu_another_company -> {
@@ -219,8 +220,7 @@ class RouteActivity : BaseActivity() {
                     else -> R.drawable.ic_shortcut_bus_night
                 }
 
-                Utils.createShortcut(
-                    this,
+                createShortcut(
                     tag() + "_" + viewModel.routeKey?.routeStr,
                     viewModel.routeKey!!.getCompanyName() + " " + viewModel.routeKey!!.routeNo,
                     shortcutResId,

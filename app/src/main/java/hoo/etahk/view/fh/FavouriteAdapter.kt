@@ -8,7 +8,6 @@ import hoo.etahk.common.Utils
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.RouteFavouriteDiffCallback
 import hoo.etahk.model.relation.RouteFavouriteEx
-import hoo.etahk.view.App
 import hoo.etahk.view.base.BasePagedAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.route.RouteActivity
@@ -34,7 +33,7 @@ class FavouriteAdapter : BasePagedAdapter<FHActivity, RouteFavouriteEx>(RouteFav
                 itemView.from_to.text = "NOT EXIST"
                 itemView.route_desc.text = Utils.getStringResourceByName(favourite.company)
             } else {
-                val directionArrow = App.instance.getString(
+                val directionArrow = Utils.getString(
                     when (route.direction) {
                         0L -> R.string.arrow_circular
                         1L -> R.string.arrow_one_way

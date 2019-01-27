@@ -8,7 +8,6 @@ import hoo.etahk.common.Utils
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.RouteHistoryDiffCallback
 import hoo.etahk.model.relation.RouteHistoryEx
-import hoo.etahk.view.App
 import hoo.etahk.view.base.BasePagedAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.route.RouteActivity
@@ -34,7 +33,7 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
             if (route == null) {
                 itemView.from_to.text = "NOT EXIST"
             } else {
-                val directionArrow = App.instance.getString(
+                val directionArrow = Utils.getString(
                     when (route.direction) {
                         0L -> R.string.arrow_circular
                         1L -> R.string.arrow_one_way

@@ -1,32 +1,14 @@
 package hoo.etahk.common
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.Icon
-import android.net.Uri
 import android.os.Build
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.ImageSpan
 import android.util.Log
 import android.util.TypedValue
-import android.widget.TextView
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
-import androidx.core.content.pm.ShortcutInfoCompat
-import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.graphics.drawable.IconCompat
+import androidx.annotation.StringRes
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
-import hoo.etahk.common.browser.CustomTabsHelper
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.view.App
 import java.text.SimpleDateFormat
@@ -81,11 +63,15 @@ object Utils {
         return value.data
     }
 
+    fun getString(@StringRes resId: Int): String {
+        return App.instance.getString(resId)
+    }
+
     fun getStringResourceByName(name: String): String {
         val resId = App.instance.applicationContext.resources.getIdentifier(name, "string", App.instance.packageName)
         return when (resId) {
             0 -> ""
-            else -> App.instance.getString(resId)
+            else -> getString(resId)
         }
     }
 
@@ -279,160 +265,5 @@ object Utils {
             10L -> R.drawable.ic_text_capacity_10
             else -> R.drawable.ic_text_capacity_0
         }
-    }
-
-    fun appendImageToTextView(textView: TextView,  resId: Int, spannableStringBuilder: SpannableStringBuilder): SpannableStringBuilder {
-        return appendImageToString(Math.round(textView.lineHeight * 0.8).toInt(), textView.currentTextColor, resId, spannableStringBuilder)
-    }
-
-    private fun appendImageToString(size: Int, color: Int, resId: Int, spannableStringBuilder: SpannableStringBuilder): SpannableStringBuilder {
-        var drawable = ContextCompat.getDrawable(App.instance, resId)
-        if (drawable != null) {
-            drawable = DrawableCompat.wrap(drawable)
-            drawable.setBounds(0, 0, size, size)
-            DrawableCompat.setTint(drawable.mutate(), color)
-
-            val imageSpan = ImageSpan(drawable!!, ImageSpan.ALIGN_BASELINE)
-            val originalLength = spannableStringBuilder.length
-            spannableStringBuilder.append("  ")
-            spannableStringBuilder.setSpan(imageSpan, originalLength, originalLength + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        }
-        return spannableStringBuilder
-    }
-
-    /**
-     * Source: https://stackoverflow.com/questions/33696488/getting-bitmap-from-vector-drawable
-     */
-    fun getBitmapFromVectorDrawable(context: Context, drawableId: Int): Bitmap {
-        var drawable = ContextCompat.getDrawable(context, drawableId)
-        drawable = DrawableCompat.wrap(drawable!!).mutate()
-
-        val bitmap = Bitmap.createBitmap(
-            drawable!!.intrinsicWidth,
-            drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-
-        return bitmap
-    }
-
-    fun createShortcut(context: Context,
-                       shortcutId: String,
-                       shortLabelResId: Int,
-                       longLabelResId: Int,
-                       iconResId: Int,
-                       intent: Intent) {
-        createShortcut(context, shortcutId, context.getString(shortLabelResId), context.getString(longLabelResId), iconResId, intent)
-    }
-
-    fun createShortcut(context: Context,
-                       shortcutId: String,
-                       label: String,
-                       iconResId: Int,
-                       intent: Intent) {
-        createShortcut(context, shortcutId, label, label, iconResId, intent)
-    }
-
-    /**
-     * Source: https://developer.android.com/guide/topics/ui/shortcuts/creating-shortcuts
-     */
-    private fun createShortcut(context: Context,
-                               shortcutId: String,
-                               shortLabel: String,
-                               longLabel: String,
-                               iconResId: Int,
-                               intent: Intent) {
-
-        intent.action = Intent.ACTION_VIEW
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val shortcutManager = context.getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager
-
-            //check if device supports Pin Shortcut or not
-            if (shortcutManager.isRequestPinShortcutSupported) {
-
-                val pinShortcutInfo =
-                    ShortcutInfo.Builder(context, shortcutId)
-                        .setShortLabel(shortLabel)
-                        .setLongLabel(longLabel)
-                        .setIcon(Icon.createWithResource(context, iconResId))
-                        .setIntent(intent)
-                        .build()
-
-                // Create the PendingIntent object only if your app needs to be notified
-                // that the user allowed the shortcut to be pinned. Note that, if the
-                // pinning operation fails, your app isn't notified. We assume here that the
-                // app has implemented a method called createShortcutResultIntent() that
-                // returns a broadcast intent.
-                val pinnedShortcutCallbackIntent =
-                    shortcutManager.createShortcutResultIntent(pinShortcutInfo)
-
-                // Configure the intent so that your app's broadcast receiver gets
-                // the callback successfully.
-                val successCallback =
-                    PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
-
-                //finally ask user to add the shortcut to home screen
-                shortcutManager.requestPinShortcut(
-                    pinShortcutInfo,
-                    successCallback.intentSender
-                )
-            }
-        } else {
-            if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
-                val pinShortcutInfo =
-                    ShortcutInfoCompat.Builder(context, shortcutId)
-                        .setShortLabel(shortLabel)
-                        .setLongLabel(longLabel)
-                        .setIcon(IconCompat.createWithResource(context, iconResId))
-                        .setIntent(intent)
-                        .build()
-
-                // Create the PendingIntent object only if your app needs to be notified
-                // that the user allowed the shortcut to be pinned. Note that, if the
-                // pinning operation fails, your app isn't notified. We assume here that the
-                // app has implemented a method called createShortcutResultIntent() that
-                // returns a broadcast intent.
-                val pinnedShortcutCallbackIntent =
-                    ShortcutManagerCompat.createShortcutResultIntent(context, pinShortcutInfo)
-
-                // Configure the intent so that your app's broadcast receiver gets
-                // the callback successfully.
-                val successCallback =
-                    PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
-
-                //finally ask user to add the shortcut to home screen
-                ShortcutManagerCompat.requestPinShortcut(
-                    context,
-                    pinShortcutInfo,
-                    successCallback.intentSender
-                )
-            }
-        }
-    }
-
-    /**
-     * Method to launch a Custom Tabs Activity.
-     * @param context The source Context.
-     * @param url The URL to load in the Custom Tab.
-     * @param id Toolbar color's resource id
-     */
-    fun startCustomTabs(context: Context, url: String) {
-        val packageName = CustomTabsHelper.getPackageNameToUse(context)
-
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.setShowTitle(true)
-            .addDefaultShareMenuItem()
-            .enableUrlBarHiding()
-            .setToolbarColor(getThemeColorPrimary(context))
-            .build()
-
-        if (packageName != null) {
-            customTabsIntent.intent.setPackage(packageName)
-        }
-
-        customTabsIntent.launchUrl(context, Uri.parse(url))
     }
 }

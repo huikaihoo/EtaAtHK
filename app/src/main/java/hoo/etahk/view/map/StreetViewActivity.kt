@@ -7,6 +7,7 @@ import com.google.android.gms.maps.SupportStreetViewPanoramaFragment
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Argument
+import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.view.base.TransparentActivity
 
 class StreetViewActivity : TransparentActivity(), OnStreetViewPanoramaReadyCallback {
@@ -25,8 +26,8 @@ class StreetViewActivity : TransparentActivity(), OnStreetViewPanoramaReadyCallb
             .findFragmentById(R.id.street_view) as SupportStreetViewPanoramaFragment
 
         // Get Activity based data
-        supportActionBar?.title = intent.getStringExtra(Argument.ARG_ACTIONBAR_TITLE)
-        supportActionBar?.subtitle = intent.getStringExtra(Argument.ARG_ACTIONBAR_SUBTITLE)
+        supportActionBar?.title = getExtra(Argument.ARG_ACTIONBAR_TITLE)
+        supportActionBar?.subtitle = getExtra(Argument.ARG_ACTIONBAR_SUBTITLE)
         latLng = LatLng(
             intent.getDoubleExtra(Argument.ARG_LATITUDE, 0.0),
             intent.getDoubleExtra(Argument.ARG_LONGITUDE, 0.0)

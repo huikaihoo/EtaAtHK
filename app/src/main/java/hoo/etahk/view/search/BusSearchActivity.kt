@@ -16,6 +16,7 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.createShortcut
 import hoo.etahk.common.extensions.tag
 import hoo.etahk.common.tools.ThemeColor
 import hoo.etahk.view.base.NavActivity
@@ -208,8 +209,7 @@ class BusSearchActivity : NavActivity() {
 
         return when (item.itemId) {
             R.id.menu_add_shortcut -> {
-                Utils.createShortcut(
-                    this,
+                createShortcut(
                     tag(),
                     R.string.sc_bus_s,
                     R.string.sc_bus_l,

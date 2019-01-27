@@ -73,7 +73,7 @@ object ConnectionHelper: BaseConnection {
     }
 
     override fun getParentRoutes(company: String): ParentRoutesMap? {
-        return getConnection(company)?.getParentRoutes()
+        return getConnection(company)?.getParentRoutes(company)
     }
 
     override fun getParentRoute(routeKey: RouteKey): Route? {

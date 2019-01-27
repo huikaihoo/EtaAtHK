@@ -15,6 +15,7 @@ import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.startCustomTabs
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.transfer.data.Exporter
 import hoo.etahk.transfer.data.Importer
@@ -122,13 +123,13 @@ class GeneralPrefFragment : BasePrefFragment() {
 
         val privacyPolicy = findPreference(R.string.pref_privacy_policy)
         privacyPolicy.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            Utils.startCustomTabs((activity as AppCompatActivity), getString(R.string.privacy_policy_url))
+            (activity as AppCompatActivity).startCustomTabs(getString(R.string.privacy_policy_url))
             true
         }
 
         val disclaimer = findPreference(R.string.pref_disclaimer)
         disclaimer.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            Utils.startCustomTabs((activity as AppCompatActivity), getString(R.string.disclaimer_url))
+            (activity as AppCompatActivity).startCustomTabs(getString(R.string.disclaimer_url))
             true
         }
 

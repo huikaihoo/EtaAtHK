@@ -10,7 +10,6 @@ import hoo.etahk.model.data.FollowLocation
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
-import hoo.etahk.view.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -20,13 +19,13 @@ object FollowRepo {
     fun initLocationsAndGroups() {
         GlobalScope.launch(Dispatchers.Default) {
             if (AppHelper.db.locationDao().count() <= 0) {
-                AppHelper.db.locationDao().insert(FollowLocation(name = App.instance.getString(R.string.home), displaySeq = 1))
-                AppHelper.db.locationDao().insert(FollowLocation(name = App.instance.getString(R.string.work), displaySeq = 2))
+                AppHelper.db.locationDao().insert(FollowLocation(name = Utils.getString(R.string.home), displaySeq = 1))
+                AppHelper.db.locationDao().insert(FollowLocation(name = Utils.getString(R.string.work), displaySeq = 2))
 
                 AppHelper.db.locationDao().selectOnce().forEach {
                     val groupName = when (it.name) {
-                        App.instance.getString(R.string.home) -> App.instance.getString(R.string.work)
-                        App.instance.getString(R.string.work) -> App.instance.getString(R.string.home)
+                        Utils.getString(R.string.home) -> Utils.getString(R.string.work)
+                        Utils.getString(R.string.work) -> Utils.getString(R.string.home)
                         else -> ""
                     }
                     if (!groupName.isBlank()) {

@@ -10,7 +10,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProviders
 import hoo.etahk.BuildConfig
 import hoo.etahk.R
-import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.startCustomTabs
 import hoo.etahk.view.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_follow.*
 
@@ -71,7 +71,7 @@ class SettingsActivity : BaseActivity() {
                 true
             }
             R.id.menu_github -> {
-                Utils.startCustomTabs(this, getString(R.string.github_url))
+                startCustomTabs(getString(R.string.github_url))
                 true
             }
             else -> super.onOptionsItemSelected(item)

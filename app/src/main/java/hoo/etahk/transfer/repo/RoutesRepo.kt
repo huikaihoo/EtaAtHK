@@ -3,7 +3,6 @@ package hoo.etahk.transfer.repo
 import androidx.lifecycle.LiveData
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
-import hoo.etahk.common.extensions.isNull
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
@@ -59,7 +58,7 @@ object RoutesRepo {
     fun getTimetableUrl(company: String, routeNo: String, bound: Long, variant: Long): String {
         val route = AppHelper.db.childRouteDao().selectOnce(company, routeNo, bound, variant)
 
-        return route.isNull("", ConnectionHelper.getTimetableUrl(route!!).orEmpty())
+        return if (route != null) ConnectionHelper.getTimetableUrl(route).orEmpty() else ""
     }
 
     fun getTimetable(route: Route): String {

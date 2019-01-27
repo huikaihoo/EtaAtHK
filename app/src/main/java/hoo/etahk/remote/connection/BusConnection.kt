@@ -3,7 +3,6 @@ package hoo.etahk.remote.connection
 import com.google.firebase.perf.metrics.AddTrace
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Utils
-import hoo.etahk.common.extensions.DB
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
@@ -42,15 +41,15 @@ object BusConnection : BaseConnection {
             runBlocking {
                 val jobs = arrayListOf<Job>()
 
-                parentRoutesResult.keys.forEach { company ->
-                    jobs += GlobalScope.launch(Dispatchers.DB) {
-                        parentRoutesResult[company] = ConnectionHelper.getParentRoutes(company)
+                parentRoutesResult.keys.forEach {
+                    jobs += GlobalScope.launch(Dispatchers.IO) {
+                        parentRoutesResult[it] = ConnectionHelper.getParentRoutes(it)
                     }
                 }
 
-                etaRoutesResult.keys.forEach { company ->
-                    jobs += GlobalScope.launch(Dispatchers.DB) {
-                        etaRoutesResult[company] = ConnectionHelper.getEtaRoutes(company)
+                etaRoutesResult.keys.forEach {
+                    jobs += GlobalScope.launch(Dispatchers.Default) {
+                        etaRoutesResult[it] = ConnectionHelper.getEtaRoutes(it)
                     }
                 }
 

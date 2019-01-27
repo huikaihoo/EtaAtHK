@@ -5,11 +5,11 @@ import android.view.View
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.ParentRouteDiffCallback
-import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.base.FilterDiffAdapter
 import hoo.etahk.view.route.RouteActivity
@@ -33,7 +33,7 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
         @SuppressLint("SetTextI18n")
         override fun onBind(context: BusSearchFragment?, position: Int, dataSource: List<Route>) {
             val route = dataSource[position]
-            val directionArrow = App.instance.getString(
+            val directionArrow = Utils.getString(
                     when (route.direction) {
                         0L -> R.string.arrow_circular
                         1L -> R.string.arrow_one_way

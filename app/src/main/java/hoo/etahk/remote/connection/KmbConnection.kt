@@ -5,7 +5,10 @@ import com.google.firebase.perf.metrics.AddTrace
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
-import hoo.etahk.common.extensions.*
+import hoo.etahk.common.extensions.DB
+import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.extensions.loge
+import hoo.etahk.common.extensions.yn
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
@@ -18,7 +21,6 @@ import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 import hoo.etahk.remote.response.*
-import hoo.etahk.view.App
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,7 +51,7 @@ object KmbConnection: BaseConnection {
             if (response.isSuccessful) {
                 val gistFile = response.body()?.files?.get(company.toLowerCase())
                 val gistDatabaseRes =
-                    if (gistFile != null) toGistDatabaseRes(gistFile, t) else GistDatabaseRes()
+                    if (gistFile != null) toGistDatabaseRes(company.toLowerCase(), gistFile, t) else GistDatabaseRes()
 
                 logd("gistDatabaseRes.isValid = ${gistDatabaseRes.isValid}")
 
@@ -98,7 +100,7 @@ object KmbConnection: BaseConnection {
     override fun getChildRoutes(parentRoute: Route) {
         for (bound in 1..parentRoute.boundCount) {
             try {
-                val prefix = "${parentRoute.routeKey.routeNo}][$bound]"
+                val prefix = "[${parentRoute.routeKey.routeNo}][$bound]"
 
                 val response = ConnectionHelper.kmb.getBoundVariant(
                             route = parentRoute.routeKey.routeNo,
@@ -305,7 +307,7 @@ object KmbConnection: BaseConnection {
                 if (thematicBreak) {
                     result += "\n***\n"
                 }
-                val variant = rec.serviceTypeChi.isNullOrBlank().yn(App.instance.getString(R.string.normal_route), rec.serviceTypeChi)
+                val variant = rec.serviceTypeChi.isNullOrBlank().yn(Utils.getString(R.string.normal_route), rec.serviceTypeChi)
                 result += "## $variant\n"
             } else if (tableHeader) {
                 result += "***"
@@ -315,7 +317,7 @@ object KmbConnection: BaseConnection {
             if (tableHeader || variantHeader) {
                 result += "\n\n${toHeader(rec.dayType.orEmpty())}|"
                 if (!boundTime.isNullOrBlank()) {
-                    result += App.instance.getString(R.string.headway_mins)
+                    result += Utils.getString(R.string.headway_mins)
                 }
                 result += "\n---|"
                 if (!boundTime.isNullOrBlank()) {
@@ -345,7 +347,7 @@ object KmbConnection: BaseConnection {
             else -> null
         }
 
-        return resId.isNull("", App.instance.getString(resId!!))
+        return if (resId != null) Utils.getString(resId) else ""
     }
 
     /**
@@ -387,7 +389,7 @@ object KmbConnection: BaseConnection {
                                     }
                                     //logd(AppHelper.gson.toJson(etaResults))
                                 } else {
-                                    etaResults.add(toEtaResult(stop, App.instance.getString(R.string.eta_msg_no_eta_info)))
+                                    etaResults.add(toEtaResult(stop, Utils.getString(R.string.eta_msg_no_eta_info)))
                                 }
 
                                 if (!etaResults.isEmpty()) {

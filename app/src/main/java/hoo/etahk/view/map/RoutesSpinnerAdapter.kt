@@ -3,12 +3,12 @@ package hoo.etahk.view.map
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
-import androidx.appcompat.widget.ThemedSpinnerAdapter
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.ThemedSpinnerAdapter
 import hoo.etahk.R
+import hoo.etahk.common.Utils
 import hoo.etahk.model.relation.RouteAndStops
-import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseArrayAdapter
 import kotlinx.android.synthetic.main.item_spinner_small.view.*
 
@@ -29,7 +29,7 @@ class RoutesSpinnerAdapter(context: Context): BaseArrayAdapter<RouteAndStops>(co
 
         val route = getItem(position).route
 
-        val directionArrow = App.instance.getString(
+        val directionArrow = Utils.getString(
             when (route.direction) {
                 0L -> R.string.arrow_circular
                 else -> R.string.arrow_one_way

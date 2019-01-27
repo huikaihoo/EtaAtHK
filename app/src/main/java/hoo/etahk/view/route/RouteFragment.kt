@@ -17,12 +17,12 @@ import com.google.android.material.snackbar.Snackbar
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
-import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
 import kotlinx.coroutines.Dispatchers
@@ -116,7 +116,7 @@ class RouteFragment : BaseFragment() {
                     val groupList = mutableListOf<FollowGroup>()
                     locationAndGroups.forEach { groupList.addAll(it.groups) }
 
-                    val displayList = Array(groupList.size) { i -> groupList[i].locationName + App.instance.getString(R.string.to_middle) + groupList[i].name }
+                    val displayList = Array(groupList.size) { i -> groupList[i].locationName + getString(R.string.to_middle) + groupList[i].name }
                     val checkedList = BooleanArray(groupList.size){ false }
                     var checkedCnt = 0
 
@@ -189,8 +189,8 @@ class RouteFragment : BaseFragment() {
             routeStopsAdapter.dataSource = it
 
             if (size > 0 && !viewModel.isGotoSeqUsed) {
-                val gotoBound = activity!!.intent.extras!!.getLong(Constants.Argument.ARG_GOTO_BOUND)
-                val gotoSeq = activity!!.intent.extras!!.getLong(Constants.Argument.ARG_GOTO_SEQ)
+                val gotoBound = activity!!.getExtra<Long>(Constants.Argument.ARG_GOTO_BOUND)
+                val gotoSeq = activity!!.getExtra<Long>(Constants.Argument.ARG_GOTO_SEQ)
                 if (gotoBound == fragmentViewModel.routeKey!!.bound && gotoSeq > 0) {
                     GlobalScope.launch(Dispatchers.Main) {
                         for (i in it?.indices!! ) {

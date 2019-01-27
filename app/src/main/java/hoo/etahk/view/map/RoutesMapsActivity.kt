@@ -22,6 +22,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Argument
+import hoo.etahk.common.extensions.extras
+import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.relation.RouteAndStops
@@ -40,9 +42,9 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(RoutesMapViewModel::class.java)
-        viewModel.routeKey = RouteKey(intent.extras.getString(Argument.ARG_COMPANY), intent.extras.getString(Argument.ARG_ROUTE_NO), -1L, -1L)
+        viewModel.routeKey = RouteKey(getExtra(Argument.ARG_COMPANY), getExtra(Argument.ARG_ROUTE_NO), -1L, -1L)
 
-        intent.extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
+        extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
 
         spinnerAdapter = RoutesSpinnerAdapter(this)
 
@@ -80,7 +82,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
             spinner?.isEnabled = (it.size > 1)
             if (isEmptyBefore) {
                 if (!viewModel.isGotoBoundUsed) {
-                    val gotoBound = intent.extras.getLong(Argument.ARG_GOTO_BOUND)
+                    val gotoBound = getExtra<Long>(Argument.ARG_GOTO_BOUND)
                     logd("gotoBound = $gotoBound")
                     if (gotoBound > 0) {
                         viewModel.isGotoBoundUsed = true

@@ -26,9 +26,12 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mcxiaoke.koi.ext.onClick
 import com.mcxiaoke.koi.ext.onTextChange
+import getValue
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Argument
+import hoo.etahk.common.extensions.extras
+import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.view.base.BaseActivity
@@ -52,10 +55,10 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
         viewModel = ViewModelProviders.of(this).get(LocationEditViewModel::class.java)
         if (!viewModel.isInit) {
             viewModel.isInit = true
-            viewModel.locationId = intent.extras?.getLong(Argument.ARG_LOCATION_ID)
-            viewModel.name = intent.extras?.getString(Argument.ARG_NAME) ?: ""
-            viewModel.latitude = intent.extras?.getDouble(Argument.ARG_LATITUDE, -1.0)
-            viewModel.longitude = intent.extras?.getDouble(Argument.ARG_LONGITUDE, -1.0)
+            viewModel.locationId = getExtra(Argument.ARG_LOCATION_ID)
+            viewModel.name = getExtra(Argument.ARG_NAME)
+            viewModel.latitude = getExtra(Argument.ARG_LATITUDE, -1.0)
+            viewModel.longitude = getExtra(Argument.ARG_LONGITUDE, -1.0)
             logd("${viewModel.locationId} ${viewModel.name} ${viewModel.latitude} ${viewModel.longitude}")
 
             if (viewModel.name.isNotBlank()) {

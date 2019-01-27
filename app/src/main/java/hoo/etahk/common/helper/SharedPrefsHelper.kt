@@ -14,7 +14,6 @@ import hoo.etahk.common.Constants.AppMode.BETA
 import hoo.etahk.common.Constants.AppMode.DEV
 import hoo.etahk.common.Constants.AppMode.RELEASE
 import hoo.etahk.common.Utils
-import hoo.etahk.view.App
 import put
 import java.util.*
 
@@ -63,22 +62,22 @@ object SharedPrefsHelper {
     }
 
     inline fun <reified T> get(@StringRes resId: Int): T {
-        return default.get(App.instance.getString(resId))
+        return default.get(Utils.getString(resId))
     }
 
     inline fun <reified T> get(@StringRes resId: Int, defaultValue: T): T {
-        return default.get(App.instance.getString(resId), defaultValue)
+        return default.get(Utils.getString(resId), defaultValue)
     }
 
     inline fun <reified T> put(@StringRes resId: Int, value: T) {
-        default.put(App.instance.getString(resId), value)
+        default.put(Utils.getString(resId), value)
     }
 
     inline fun <reified T> putFromRemote(@StringRes resId: Int, ignoreValue: T) {
         if (get(R.string.param_enable_remote_config, true)) {
-            val remoteValue = remote.get<T>(App.instance.getString(resId))
+            val remoteValue = remote.get<T>(Utils.getString(resId))
             if (remoteValue != ignoreValue) {
-                put(resId, remote.get<T>(App.instance.getString(resId)))
+                put(resId, remote.get<T>(Utils.getString(resId)))
             }
         }
     }

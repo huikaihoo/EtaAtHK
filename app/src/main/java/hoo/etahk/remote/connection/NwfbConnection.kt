@@ -22,7 +22,6 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
-import hoo.etahk.view.App
 import kotlinx.coroutines.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -510,13 +509,13 @@ object NwfbConnection: BaseConnection {
     // ETA Related
     private fun getInvalidMsg(responseStr: String): String {
         return when (responseStr.contains("\\|DISABLED\\|".toRegex())) {
-            true -> App.instance.getString(R.string.eta_msg_no_eta_service)
+            true -> Utils.getString(R.string.eta_msg_no_eta_service)
             false -> {
                 when (responseStr.contains("\\|HTML\\|".toRegex())) {
                     true -> when (responseStr.contains("服務時間已過")) {
-                        true -> App.instance.getString(R.string.eta_msg_not_in_service_hours)
+                        true -> Utils.getString(R.string.eta_msg_not_in_service_hours)
                         // TODO("Extract ETA message")
-                        false -> App.instance.getString(R.string.eta_msg_no_eta_service)
+                        false -> Utils.getString(R.string.eta_msg_no_eta_service)
                     }
                     false -> ""
                 }

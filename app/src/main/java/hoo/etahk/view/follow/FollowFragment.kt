@@ -25,7 +25,6 @@ import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.FollowItem
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
-import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.fragment_recycler.view.*
@@ -73,7 +72,7 @@ class FollowFragment : BaseFragment() {
         fragmentViewModel = ViewModelProviders.of(this).get(FollowFragmentViewModel::class.java)
 
 //        if (fragmentViewModel.groupId == null)
-//            fragmentViewModel.groupId = arguments!!.getInt(ARG_POSITION).toLong()
+//            fragmentViewModel.groupId = extras!!.getInt(ARG_POSITION).toLong()
 
         // Recycler View
         rootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
@@ -166,7 +165,7 @@ class FollowFragment : BaseFragment() {
                         if (removeIndex >= 0)
                             groupList.removeAt(removeIndex)
 
-                        val displayList = Array(groupList.size) { i -> groupList[i].locationName + App.instance.getString(R.string.to_middle) + groupList[i].name }
+                        val displayList = Array(groupList.size) { i -> groupList[i].locationName + getString(R.string.to_middle) + groupList[i].name }
                         var selectedIndex = -1
 
                         lateinit var positiveButton: Button

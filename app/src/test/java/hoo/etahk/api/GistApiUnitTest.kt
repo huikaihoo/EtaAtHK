@@ -78,7 +78,10 @@ class GistApiUnitTest: BaseUnitTest() {
 
     @Test
     fun getContent() {
-        val rawUrlList = gistIdMap.map { getRawUrl(it.key, it.value) }
+        val rawUrlList = gistIdMap.map {
+            System.out.println("$it / ${it.value.isNotEmpty()}")
+            if(it.value.isNotEmpty()) getRawUrl(it.key, it.value) else ""
+        }.filter { it.isNotEmpty() }
 
         for (rawUrl in rawUrlList) {
             val company = rawUrl.substring(rawUrl.lastIndexOf("/") + 1, rawUrl.length)

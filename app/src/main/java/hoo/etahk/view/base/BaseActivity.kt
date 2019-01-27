@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.getBitmapFromVectorDrawable
 import hoo.etahk.view.settings.SettingsActivity
 import org.jetbrains.anko.startActivity
 
@@ -48,7 +49,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun setTaskDescription(colorPrimary: Int) {
         setTaskDescription(ActivityManager.TaskDescription(null,
-            Utils.getBitmapFromVectorDrawable(this, R.drawable.ic_launcher_large),
+            getBitmapFromVectorDrawable(R.drawable.ic_launcher_large),
             colorPrimary))
     }
 
@@ -130,11 +131,5 @@ abstract class BaseActivity : AppCompatActivity() {
 
     open fun onRequestPermissionResult(isSuccess: Boolean, permission: String) {
 
-    }
-
-    fun restartActivity() {
-        val currentIntent = intent
-        finish()
-        startActivity(currentIntent)
     }
 }
