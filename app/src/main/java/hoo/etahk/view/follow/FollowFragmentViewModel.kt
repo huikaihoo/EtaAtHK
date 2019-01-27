@@ -60,9 +60,7 @@ class FollowFragmentViewModel : ViewModel() {
     }
 
     fun removeObservers(lifecycleOwner: LifecycleOwner) {
-        followItems?.let{
-            it.removeObservers(lifecycleOwner)
-        }
+        followItems?.removeObservers(lifecycleOwner)
     }
 
     private fun subscribeToRepo() {

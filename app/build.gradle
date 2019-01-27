@@ -143,7 +143,7 @@ dependencies {
     // Debug
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
+    //debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 
     // Unit Test
     testImplementation 'androidx.arch.core:core-testing:2.0.0'

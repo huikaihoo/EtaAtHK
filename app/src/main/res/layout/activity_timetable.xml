@@ -50,6 +50,7 @@
             android:paddingBottom="?attr/actionBarSize"
             android:textSize="16sp"
             android:lineSpacingExtra="2dp"
+            app:mv_configurationProvider="hoo.etahk.common.view.MarkwonViewConfigurationProvider"
             tools:text="content"  />
 
     </ScrollView>

@@ -227,7 +227,7 @@ class FollowFragment : BaseFragment() {
     }
 
     private fun subscribeItemsChanges() {
-        fragmentViewModel.getFollowItems().observe(viewLifecycleOwner, Observer<List<ItemAndStop>> {
+        fragmentViewModel.getFollowItems().observe(this, Observer<List<ItemAndStop>> {
             if (!isItemsDisplaySeqChanged) {
                 val size = it?.size ?: 0
                 val last = viewModel.getLastUpdateTime().value ?: 0L
