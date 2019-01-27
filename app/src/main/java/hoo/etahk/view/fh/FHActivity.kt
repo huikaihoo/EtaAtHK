@@ -11,11 +11,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mcxiaoke.koi.ext.Bundle
 import com.mcxiaoke.koi.ext.newIntent
-import getValue
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.createShortcut
-import hoo.etahk.common.extensions.extras
 import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.tag
 import hoo.etahk.model.relation.RouteFavouriteEx
@@ -40,7 +39,7 @@ class FHActivity : NavActivity() {
         historyAdapter.context = this
 
         viewModel = ViewModelProviders.of(this).get(FHViewModel::class.java)
-        viewModel.currentType = Constants.MiscType.valueOf(getExtra(Constants.Argument.ARG_MISC_TYPE))
+        viewModel.currentType = Constants.MiscType.valueOf(getExtra(Argument.ARG_MISC_TYPE))
 
         super.initNavigationDrawer()
 
@@ -114,7 +113,7 @@ class FHActivity : NavActivity() {
         return when (item.itemId) {
             R.id.menu_add_shortcut -> {
                 val intent = newIntent<FHActivity>(0, Bundle {
-                    putString(Constants.Argument.ARG_MISC_TYPE, viewModel.currentType.toString())
+                    putString(Argument.ARG_MISC_TYPE, viewModel.currentType.toString())
                 })
 
                 when (viewModel.currentType) {

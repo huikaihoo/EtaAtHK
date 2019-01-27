@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener
 import hoo.etahk.R
-import hoo.etahk.common.Constants
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.model.data.Route
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
@@ -102,12 +102,12 @@ class BusSearchFragment : BaseFragment() {
             when (menuItem.itemId) {
                 R.id.popup_view -> {
                     activity?.startActivity<RouteActivity>(
-                        Constants.Argument.ARG_COMPANY to route.anotherCompany,
-                        Constants.Argument.ARG_ROUTE_NO to route.routeKey.routeNo,
-                        Constants.Argument.ARG_TYPE_CODE to route.routeKey.typeCode,
-                        Constants.Argument.ARG_ANOTHER_COMPANY to route.routeKey.company,
-                        Constants.Argument.ARG_GOTO_BOUND to -1L,
-                        Constants.Argument.ARG_GOTO_SEQ to -1L
+                        Argument.ARG_COMPANY to route.anotherCompany,
+                        Argument.ARG_ROUTE_NO to route.routeKey.routeNo,
+                        Argument.ARG_TYPE_CODE to route.routeKey.typeCode,
+                        Argument.ARG_ANOTHER_COMPANY to route.routeKey.company,
+                        Argument.ARG_GOTO_BOUND to -1L,
+                        Argument.ARG_GOTO_SEQ to -1L
                     )
                 }
                 R.id.popup_add -> {

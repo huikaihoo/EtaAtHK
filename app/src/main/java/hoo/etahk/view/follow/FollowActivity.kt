@@ -23,7 +23,8 @@ import com.mcxiaoke.koi.ext.newIntent
 import com.mcxiaoke.koi.ext.restart
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.Constants.Argument
+import hoo.etahk.common.constants.Argument
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.extensions.*
 import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.common.view.AlertDialogBuilder
@@ -66,7 +67,7 @@ class FollowActivity : NavActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         viewModel = ViewModelProviders.of(this).get(FollowViewModel::class.java)
-        viewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
+        viewModel.durationInMillis = SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
         viewModel.enableSorting.value = false
 
         if (viewModel.needUpdateParentRoute()) {

@@ -16,6 +16,7 @@ import com.mcxiaoke.koi.ext.find
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.startActivity
 import hoo.etahk.view.fh.FHActivity
 import hoo.etahk.view.follow.FollowActivity
@@ -107,7 +108,7 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
             R.id.nav_fh -> {
                 startActivity<FHActivity>(
                     Intent.FLAG_ACTIVITY_REORDER_TO_FRONT,
-                    Constants.Argument.ARG_MISC_TYPE to Constants.MiscType.ROUTE_FAVOURITE.toString()
+                    Argument.ARG_MISC_TYPE to Constants.MiscType.ROUTE_FAVOURITE.toString()
                 )
             }
             R.id.nav_bus -> {

@@ -7,6 +7,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.prependImage
 import hoo.etahk.model.data.Stop
@@ -71,7 +72,7 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                 if (!prevIsLoading && ( (currEtaTime/60L) in 1..(prevEtaTime/60L- 1L) || (prevEtaTime < 0L && currEtaTime > 0L)))
                     highlight = true
             } else {
-                if (etaResults.isNotEmpty() && etaResults[0].valid && etaResults[0].getDiffInMinutes() <= Constants.SharePrefs.DEFAULT_HIGHLIGHT_B4_DEPARTURE)
+                if (etaResults.isNotEmpty() && etaResults[0].valid && etaResults[0].getDiffInMinutes() <= SharePrefs.DEFAULT_HIGHLIGHT_B4_DEPARTURE)
                     highlight = true
             }
 

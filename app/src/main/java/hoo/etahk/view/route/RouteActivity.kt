@@ -7,12 +7,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import getValue
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.Constants.Argument
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.RouteType
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.*
 import hoo.etahk.model.data.Route
@@ -69,9 +69,10 @@ class RouteActivity : BaseActivity() {
         setSupportActionBar(toolbar)
 
         viewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
-        viewModel.routeKey = RouteKey(getExtra(Argument.ARG_COMPANY), getExtra(Argument.ARG_ROUTE_NO), -1L, -1L)
+        viewModel.routeKey = RouteKey(getExtra(Argument.ARG_COMPANY), getExtra(
+            Argument.ARG_ROUTE_NO), -1L, -1L)
         viewModel.anotherCompany = getExtra(Argument.ARG_ANOTHER_COMPANY)
-        viewModel.durationInMillis = Constants.SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
+        viewModel.durationInMillis = SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
 
         extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
         extras.putLong(Argument.ARG_GOTO_SEQ, -1L)
@@ -156,19 +157,19 @@ class RouteActivity : BaseActivity() {
         return when (item.itemId) {
             R.id.menu_maps -> {
                 startActivity<RoutesMapsActivity>(
-                    Constants.Argument.ARG_COMPANY to viewModel.routeKey?.company,
-                    Constants.Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
-                    Constants.Argument.ARG_GOTO_BOUND to (container.currentItem + 1).toLong()
+                    Argument.ARG_COMPANY to viewModel.routeKey?.company,
+                    Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
+                    Argument.ARG_GOTO_BOUND to (container.currentItem + 1).toLong()
                 )
                 true
             }
             R.id.menu_timetable -> {
                 if (viewModel.routeKey?.company == "KMB" || viewModel.routeKey?.company == "LWB") {
                     startActivity<TimetableActivity>(
-                        Constants.Argument.ARG_COMPANY to viewModel.routeKey?.company,
-                        Constants.Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
-                        Constants.Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
-                        Constants.Argument.ARG_GOTO_BOUND to (container.currentItem + 1).toLong()
+                        Argument.ARG_COMPANY to viewModel.routeKey?.company,
+                        Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
+                        Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
+                        Argument.ARG_GOTO_BOUND to (container.currentItem + 1).toLong()
                     )
                     return true
                 }
@@ -186,12 +187,12 @@ class RouteActivity : BaseActivity() {
             }
             R.id.menu_another_company -> {
                 startActivity<RouteActivity>(
-                    Constants.Argument.ARG_COMPANY to viewModel.anotherCompany,
-                    Constants.Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
-                    Constants.Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
-                    Constants.Argument.ARG_ANOTHER_COMPANY to viewModel.routeKey?.company,
-                    Constants.Argument.ARG_GOTO_BOUND to -1L,
-                    Constants.Argument.ARG_GOTO_SEQ to -1L
+                    Argument.ARG_COMPANY to viewModel.anotherCompany,
+                    Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
+                    Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
+                    Argument.ARG_ANOTHER_COMPANY to viewModel.routeKey?.company,
+                    Argument.ARG_GOTO_BOUND to -1L,
+                    Argument.ARG_GOTO_SEQ to -1L
                 )
                 true
             }
@@ -202,12 +203,12 @@ class RouteActivity : BaseActivity() {
             }
             R.id.menu_add_shortcut -> {
                 val intent = intentFor<RouteActivity>(
-                    Constants.Argument.ARG_COMPANY to viewModel.routeKey?.company,
-                    Constants.Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
-                    Constants.Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
-                    Constants.Argument.ARG_ANOTHER_COMPANY to viewModel.anotherCompany,
-                    Constants.Argument.ARG_GOTO_BOUND to -1L,
-                    Constants.Argument.ARG_GOTO_SEQ to -1L
+                    Argument.ARG_COMPANY to viewModel.routeKey?.company,
+                    Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
+                    Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
+                    Argument.ARG_ANOTHER_COMPANY to viewModel.anotherCompany,
+                    Argument.ARG_GOTO_BOUND to -1L,
+                    Argument.ARG_GOTO_SEQ to -1L
                 )
 
                 val theme = getTheme(viewModel.routeKey?.company?: "", viewModel.routeKey?.typeCode?: RouteType.NONE)

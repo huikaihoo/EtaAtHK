@@ -6,7 +6,7 @@ import com.google.android.gms.maps.StreetViewPanorama
 import com.google.android.gms.maps.SupportStreetViewPanoramaFragment
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
-import hoo.etahk.common.Constants.Argument
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.view.base.TransparentActivity
 

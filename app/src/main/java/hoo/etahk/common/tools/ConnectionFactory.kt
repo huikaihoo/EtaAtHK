@@ -5,7 +5,7 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants.AppMode
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.NetworkType
-import hoo.etahk.common.Constants.SharePrefs
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper

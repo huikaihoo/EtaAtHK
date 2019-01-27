@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.common.view.ItemTouchHelperCallback
@@ -141,12 +142,12 @@ class FollowFragment : BaseFragment() {
                             val route = fragmentViewModel.getParentRouteOnce(it.routeKey.company, it.routeKey.routeNo)
 
                             activity?.startActivity<RouteActivity>(
-                                Constants.Argument.ARG_COMPANY to it.routeKey.company,
-                                Constants.Argument.ARG_ROUTE_NO to it.routeKey.routeNo,
-                                Constants.Argument.ARG_TYPE_CODE to it.routeKey.typeCode,
-                                Constants.Argument.ARG_ANOTHER_COMPANY to route.anotherCompany,
-                                Constants.Argument.ARG_GOTO_BOUND to it.routeKey.bound,
-                                Constants.Argument.ARG_GOTO_SEQ to it.seq
+                                Argument.ARG_COMPANY to it.routeKey.company,
+                                Argument.ARG_ROUTE_NO to it.routeKey.routeNo,
+                                Argument.ARG_TYPE_CODE to it.routeKey.typeCode,
+                                Argument.ARG_ANOTHER_COMPANY to route.anotherCompany,
+                                Argument.ARG_GOTO_BOUND to it.routeKey.bound,
+                                Argument.ARG_GOTO_SEQ to it.seq
                             )
                         }
                     }

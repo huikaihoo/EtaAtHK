@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.view.AlertDialogBuilder
@@ -189,8 +190,8 @@ class RouteFragment : BaseFragment() {
             routeStopsAdapter.dataSource = it
 
             if (size > 0 && !viewModel.isGotoSeqUsed) {
-                val gotoBound = activity!!.getExtra<Long>(Constants.Argument.ARG_GOTO_BOUND)
-                val gotoSeq = activity!!.getExtra<Long>(Constants.Argument.ARG_GOTO_SEQ)
+                val gotoBound = activity!!.getExtra<Long>(Argument.ARG_GOTO_BOUND)
+                val gotoSeq = activity!!.getExtra<Long>(Argument.ARG_GOTO_SEQ)
                 if (gotoBound == fragmentViewModel.routeKey!!.bound && gotoSeq > 0) {
                     GlobalScope.launch(Dispatchers.Main) {
                         for (i in it?.indices!! ) {

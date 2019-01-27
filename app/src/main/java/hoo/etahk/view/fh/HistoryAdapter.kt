@@ -3,8 +3,8 @@ package hoo.etahk.view.fh
 import android.annotation.SuppressLint
 import android.view.View
 import hoo.etahk.R
-import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.RouteHistoryDiffCallback
 import hoo.etahk.model.relation.RouteHistoryEx
@@ -55,12 +55,12 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
 
         private fun startRouteActivity(context: FHActivity?, routeKey: RouteKey, anotherCompany: String = ""){
             context?.startActivity<RouteActivity>(
-                Constants.Argument.ARG_COMPANY to routeKey.company,
-                Constants.Argument.ARG_ROUTE_NO to routeKey.routeNo,
-                Constants.Argument.ARG_TYPE_CODE to routeKey.typeCode,
-                Constants.Argument.ARG_ANOTHER_COMPANY to anotherCompany,
-                Constants.Argument.ARG_GOTO_BOUND to -1L,
-                Constants.Argument.ARG_GOTO_SEQ to -1L
+                Argument.ARG_COMPANY to routeKey.company,
+                Argument.ARG_ROUTE_NO to routeKey.routeNo,
+                Argument.ARG_TYPE_CODE to routeKey.typeCode,
+                Argument.ARG_ANOTHER_COMPANY to anotherCompany,
+                Argument.ARG_GOTO_BOUND to -1L,
+                Argument.ARG_GOTO_SEQ to -1L
             )
         }
     }

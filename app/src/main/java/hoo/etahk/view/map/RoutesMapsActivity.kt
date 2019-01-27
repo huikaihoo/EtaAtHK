@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import hoo.etahk.R
-import hoo.etahk.common.Constants.Argument
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.extras
 import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.logd
@@ -42,7 +42,8 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(RoutesMapViewModel::class.java)
-        viewModel.routeKey = RouteKey(getExtra(Argument.ARG_COMPANY), getExtra(Argument.ARG_ROUTE_NO), -1L, -1L)
+        viewModel.routeKey = RouteKey(getExtra(Argument.ARG_COMPANY), getExtra(
+            Argument.ARG_ROUTE_NO), -1L, -1L)
 
         extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
 

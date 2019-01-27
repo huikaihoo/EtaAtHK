@@ -4,7 +4,7 @@ import android.os.Environment
 import android.os.Environment.MEDIA_MOUNTED
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.Constants.SharePrefs
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge

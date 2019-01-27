@@ -26,11 +26,9 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mcxiaoke.koi.ext.onClick
 import com.mcxiaoke.koi.ext.onTextChange
-import getValue
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.Constants.Argument
-import hoo.etahk.common.extensions.extras
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import hoo.etahk.R
-import hoo.etahk.common.Constants.SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE
+import hoo.etahk.common.constants.SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.SharedPrefsHelper

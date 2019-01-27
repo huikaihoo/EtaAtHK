@@ -13,8 +13,7 @@ import androidx.preference.Preference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
-import hoo.etahk.common.Constants
-import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.startCustomTabs
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.transfer.data.Exporter
@@ -137,7 +136,7 @@ class GeneralPrefFragment : BasePrefFragment() {
 
         licenses.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.startActivity<OssLicensesMenuActivity>(
-                Constants.Argument.ARG_TITLE to getString(R.string.pref_title_licenses)
+                Argument.ARG_TITLE to getString(R.string.pref_title_licenses)
             )
             true
         }

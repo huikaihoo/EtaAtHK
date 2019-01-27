@@ -7,6 +7,7 @@ import com.mcxiaoke.koi.ext.Bundle
 import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.constants.Argument
 import hoo.etahk.view.fh.FHActivity
 import hoo.etahk.view.follow.FollowActivity
 import hoo.etahk.view.search.BusSearchActivity
@@ -22,13 +23,13 @@ class ShortcutsActivity : AppCompatActivity() {
             }
             getString(R.string.aan_sc_favourite) -> {
                 val intent = newIntent<FHActivity>(0, Bundle {
-                    putString(Constants.Argument.ARG_MISC_TYPE, Constants.MiscType.ROUTE_FAVOURITE.toString())
+                    putString(Argument.ARG_MISC_TYPE, Constants.MiscType.ROUTE_FAVOURITE.toString())
                 })
                 setupShortcut(R.string.sc_favourite_s, R.drawable.ic_shortcut_favourite, intent)
             }
             getString(R.string.aan_sc_history) -> {
                 val intent = newIntent<FHActivity>(0, Bundle {
-                    putString(Constants.Argument.ARG_MISC_TYPE, Constants.MiscType.ROUTE_HISTORY.toString())
+                    putString(Argument.ARG_MISC_TYPE, Constants.MiscType.ROUTE_HISTORY.toString())
                 })
                 setupShortcut(R.string.sc_history_s, R.drawable.ic_shortcut_history, intent)
             }
