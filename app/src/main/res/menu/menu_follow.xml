@@ -8,7 +8,7 @@
         android:title="@string/show_nearby_stops"
         android:orderInCategory="10"
         android:icon="@drawable/ic_menu_nearby"
-        android:enabled="false"
+        android:visible="false"
         app:showAsAction="always" />
 
     <item

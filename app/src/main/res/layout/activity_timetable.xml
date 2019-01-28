@@ -45,13 +45,14 @@
 
         <ru.noties.markwon.view.MarkwonView
             android:id="@+id/markwon_view"
+            android:fontFamily="@font/noto_sans"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="?attr/actionBarSize"
             android:textSize="16sp"
             android:lineSpacingExtra="2dp"
             app:mv_configurationProvider="hoo.etahk.common.view.MarkwonViewConfigurationProvider"
-            tools:text="content"  />
+            app:mv_markdown="@string/eta_msg_loading" />
 
     </ScrollView>
 

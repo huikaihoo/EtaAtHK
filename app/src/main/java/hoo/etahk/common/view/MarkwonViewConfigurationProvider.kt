@@ -20,7 +20,6 @@ class MarkwonViewConfigurationProvider: IMarkwonView.ConfigurationProvider {
             .softBreakAddsNewLine(true)
             .theme(theme)
             .build()
-
     }
 
 }

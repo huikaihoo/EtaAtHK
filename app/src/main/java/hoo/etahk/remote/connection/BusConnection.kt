@@ -42,7 +42,7 @@ object BusConnection : BaseConnection {
                 val jobs = arrayListOf<Job>()
 
                 parentRoutesResult.keys.forEach {
-                    jobs += GlobalScope.launch(Dispatchers.IO) {
+                    jobs += GlobalScope.launch(Dispatchers.Default) {
                         parentRoutesResult[it] = ConnectionHelper.getParentRoutes(it)
                     }
                 }
