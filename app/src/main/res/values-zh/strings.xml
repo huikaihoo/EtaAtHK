@@ -120,6 +120,7 @@
     <string name="daily">每日</string>
     <string name="normal_route">正常路線</string>
     <string name="headway_mins">班次 (分鐘)</string>
+    <string name="failed_to_load">載入失敗</string>
 
     <!-- Dialog -->
     <string name="title_add_location">加入新的起點</string>

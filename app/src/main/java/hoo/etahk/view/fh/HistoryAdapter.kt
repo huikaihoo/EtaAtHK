@@ -33,14 +33,7 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
             if (route == null) {
                 itemView.from_to.text = "NOT EXIST"
             } else {
-                val directionArrow = Utils.getString(
-                    when (route.direction) {
-                        0L -> R.string.arrow_circular
-                        1L -> R.string.arrow_one_way
-                        else -> R.string.arrow_two_ways
-                    })
-
-                itemView.from_to.text = route.from.value + directionArrow + route.to.value
+                itemView.from_to.text = route.from.value + route.getDirectionArrow() + route.to.value
 
                 val routeKey = RouteKey(
                     company = history.company,

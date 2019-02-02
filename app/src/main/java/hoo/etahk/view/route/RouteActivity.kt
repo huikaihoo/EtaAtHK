@@ -9,11 +9,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.RouteType
-import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.Argument
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.extensions.*
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -98,14 +98,7 @@ class RouteActivity : BaseActivity() {
 
     private fun setActionBarSubtitle(route: Route) {
         if (supportActionBar?.subtitle.isNullOrBlank() ) {
-            val directionArrow = getString(
-                    when (route.direction) {
-                        0L -> R.string.arrow_circular
-                        1L -> R.string.arrow_one_way
-                        else -> R.string.arrow_two_ways
-                    })
-
-            supportActionBar?.subtitle = route.from.value + directionArrow + route.to.value
+            supportActionBar?.subtitle = route.from.value + route.getDirectionArrow() + route.to.value
         }
     }
 
@@ -164,16 +157,6 @@ class RouteActivity : BaseActivity() {
                 true
             }
             R.id.menu_timetable -> {
-                if (viewModel.routeKey?.company == "KMB" || viewModel.routeKey?.company == "LWB") {
-                    startActivity<TimetableActivity>(
-                        Argument.ARG_COMPANY to viewModel.routeKey?.company,
-                        Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
-                        Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
-                        Argument.ARG_GOTO_BOUND to (container.currentItem + 1).toLong()
-                    )
-                    return true
-                }
-
                 val url = viewModel.getTimetableUrl(
                     viewModel.routeKey?.company ?: "",
                     viewModel.routeKey?.routeNo ?: "",
@@ -181,8 +164,16 @@ class RouteActivity : BaseActivity() {
                     1L
                 )
 
-                if (url.isNotBlank())
+                if (url.isNotBlank()) {
                     startCustomTabs(url)
+                } else {
+                    startActivity<TimetableActivity>(
+                        Argument.ARG_COMPANY to viewModel.routeKey?.company,
+                        Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
+                        Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
+                        Argument.ARG_GOTO_BOUND to (container.currentItem + 1).toLong()
+                    )
+                }
                 true
             }
             R.id.menu_another_company -> {

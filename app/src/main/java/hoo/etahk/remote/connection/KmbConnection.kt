@@ -247,7 +247,7 @@ object KmbConnection: BaseConnection {
      * @param route Child Route
      */
     override fun getTimetableUrl(route: Route): String? {
-        return ConnectionHelper.kmb.getTimetable(route = route.routeKey.routeNo, bound = route.routeKey.bound.toString()).request().url().toString()
+        return null
     }
 
     /**
@@ -275,7 +275,7 @@ object KmbConnection: BaseConnection {
                     var variantHeader = true
                     pair.second?.forEach {
                         it?.let { rec ->
-                            result += toTimetableMd(
+                            result += toTimetableMarkdown(
                                 route = route,
                                 rec = rec,
                                 variantHeader = variantHeader,
@@ -295,7 +295,7 @@ object KmbConnection: BaseConnection {
         return result
     }
 
-    private fun toTimetableMd(route: Route, rec: KmbTimetableRes.Timetable, variantHeader: Boolean, tableHeader: Boolean, thematicBreak: Boolean): String {
+    private fun toTimetableMarkdown(route: Route, rec: KmbTimetableRes.Timetable, variantHeader: Boolean, tableHeader: Boolean, thematicBreak: Boolean): String {
         var result = ""
 
         val boundText = (route.routeKey.bound == 1L).yn(rec.boundText1, rec.boundText2)

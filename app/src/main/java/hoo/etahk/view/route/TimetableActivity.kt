@@ -32,8 +32,7 @@ class TimetableActivity : BaseActivity() {
 
         // Setup Actionbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = getExtra<String>(Argument.ARG_COMPANY) + " " + getExtra(
-            Argument.ARG_ROUTE_NO)
+        supportActionBar?.title = getExtra<String>(Argument.ARG_COMPANY) + " " + getExtra(Argument.ARG_ROUTE_NO)
 
         scroll_view.isSmoothScrollingEnabled = false
 
@@ -55,13 +54,15 @@ class TimetableActivity : BaseActivity() {
     }
 
     private fun showTimetable() {
-        val directionArrow = getString(
-            when (viewModel.route!!.direction) {
-                0L -> R.string.arrow_circular
-                else -> R.string.arrow_one_way
-            })
-        supportActionBar?.subtitle = viewModel.route!!.from.value + directionArrow + viewModel.route!!.to.value
+        val route = viewModel.route
 
-        markwon_view.markdown = viewModel.content
+        if (route != null) {
+            supportActionBar?.title = route.routeKey.getCompanyName() + " " + route.routeKey.routeNo
+            supportActionBar?.subtitle = route.from.value + route.getDirectionArrow() + route.to.value
+
+            markwon_view.markdown = viewModel.content
+        } else {
+            markwon_view.markdown = getString(R.string.failed_to_load)
+        }
     }
 }

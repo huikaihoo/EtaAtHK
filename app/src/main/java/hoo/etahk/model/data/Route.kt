@@ -3,6 +3,7 @@ package hoo.etahk.model.data
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
+import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
@@ -47,6 +48,19 @@ data class Route(
             result += Utils.getStringResourceByName(company.toLowerCase())
         }
         return result
+    }
+
+    fun getDirectionArrow(): String {
+        return Utils.getString( when (direction) {
+            0L -> R.string.arrow_circular
+            1L -> R.string.arrow_one_way
+            else -> {
+                if (routeKey.bound == 0L)
+                    R.string.arrow_two_ways
+                else
+                    R.string.arrow_one_way
+            }
+        } )
     }
 
     fun getToByBound(): StringLang {

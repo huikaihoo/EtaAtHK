@@ -146,6 +146,7 @@
     <string name="daily">Daily</string>
     <string name="normal_route">Normal Route</string>
     <string name="headway_mins">Headway (mins)</string>
+    <string name="failed_to_load">Failed to load</string>
 
     <!-- Dialog -->
     <string name="title_add_location">Add new location</string>

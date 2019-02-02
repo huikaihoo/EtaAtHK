@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.ThemedSpinnerAdapter
 import hoo.etahk.R
-import hoo.etahk.common.Utils
 import hoo.etahk.model.relation.RouteAndStops
 import hoo.etahk.view.base.BaseArrayAdapter
 import kotlinx.android.synthetic.main.item_spinner_small.view.*
@@ -29,14 +28,8 @@ class RoutesSpinnerAdapter(context: Context): BaseArrayAdapter<RouteAndStops>(co
 
         val route = getItem(position).route
 
-        val directionArrow = Utils.getString(
-            when (route.direction) {
-                0L -> R.string.arrow_circular
-                else -> R.string.arrow_one_way
-            })
-
         // TODO("Add Alert icon to variant")
-        view.title.text = route.from.value + directionArrow + route.to.value
+        view.title.text = route.from.value + route.getDirectionArrow() + route.to.value
         view.subtitle.text = route.details.value
 
         return view
