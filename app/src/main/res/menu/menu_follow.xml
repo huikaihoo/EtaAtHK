@@ -20,57 +20,51 @@
 
     <item
         android:title="@string/location_options"
-        android:orderInCategory="100">
+        android:orderInCategory="100"
+        app:showAsAction="never">
         <menu>
             <item
                 android:id="@+id/menu_add_location"
                 android:orderInCategory="110"
-                android:title="@string/add_location"
-                app:showAsAction="never" />
+                android:title="@string/add_location" />
             <item
                 android:id="@+id/menu_edit_location"
                 android:orderInCategory="120"
-                android:title="@string/edit_c_location"
-                app:showAsAction="never" />
+                android:title="@string/edit_c_location" />
             <item
                 android:id="@+id/menu_remove_location"
                 android:orderInCategory="130"
-                android:title="@string/remove_c_location"
-                app:showAsAction="never" />
+                android:title="@string/remove_c_location" />
             <item
                 android:id="@+id/menu_sort_locations"
                 android:orderInCategory="140"
                 android:title="@string/sort_locations"
-                android:enabled="false"
-                app:showAsAction="never" />
+                android:visible="false" />
         </menu>
     </item>
 
     <item
         android:title="@string/group_options"
-        android:orderInCategory="200">
+        android:orderInCategory="200"
+        app:showAsAction="never">
         <menu>
             <item
                 android:id="@+id/menu_add_group"
-                android:orderInCategory="110"
-                android:title="@string/add_group"
-                app:showAsAction="never" />
+                android:orderInCategory="210"
+                android:title="@string/add_group" />
             <item
                 android:id="@+id/menu_rename_group"
-                android:orderInCategory="120"
-                android:title="@string/rename_c_group"
-                app:showAsAction="never" />
+                android:orderInCategory="220"
+                android:title="@string/rename_c_group" />
             <item
                 android:id="@+id/menu_remove_group"
-                android:orderInCategory="130"
-                android:title="@string/remove_c_group"
-                app:showAsAction="never" />
+                android:orderInCategory="230"
+                android:title="@string/remove_c_group" />
             <item
                 android:id="@+id/menu_sort_groups"
-                android:orderInCategory="140"
+                android:orderInCategory="240"
                 android:title="@string/sort_groups"
-                android:enabled="false"
-                app:showAsAction="never" />
+                android:enabled="false" />
         </menu>
     </item>
 

@@ -101,10 +101,6 @@
         <!-- Service -->
         <service android:name=".view.service.UpdateRoutesService" />
 
-        <!-- Test -->
-        <activity android:name=".view.test.MainActivity" />
-        <activity android:name=".view.test.BvActivity" />
-
         <!-- Shortcut -->
         <activity android:name=".view.ShortcutsActivity" />
 

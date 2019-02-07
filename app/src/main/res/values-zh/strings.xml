@@ -132,8 +132,8 @@
     <string name="title_add_group">加入新的目的地</string>
     <string name="title_edit_location">編輯起點</string>
     <string name="title_rename_group">重新命名目的地</string>
-    <string name="title_select_groups_to_add">選擇要加入的目的地：</string>
-    <string name="title_select_groups_to_move">選擇要移動到的目的地：</string>
+    <string name="title_add_item_to">加入車站到：</string>
+    <string name="title_move_item_to">移動車站到：</string>
     <string name="title_conform_delete_location">要移除目前的起點嗎？</string>
     <string name="title_conform_delete_group">要移除目前的目的地嗎？</string>
     <string name="title_conform_delete_item">要移除選取的車站嗎？</string>

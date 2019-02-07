@@ -123,7 +123,7 @@ class RouteFragment : BaseFragment() {
 
                     lateinit var positiveButton: Button
                     val dialog = AlertDialogBuilder(activity!!)
-                        .setTitle(R.string.title_select_groups_to_add)
+                        .setTitle(R.string.title_add_item_to)
                         .setMultiChoiceItems(displayList, checkedList) { dialog, position, checked ->
                             checkedList[position] = checked
                             checkedCnt += if (checked) 1 else -1

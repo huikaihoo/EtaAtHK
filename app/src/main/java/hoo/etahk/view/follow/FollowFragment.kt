@@ -171,7 +171,7 @@ class FollowFragment : BaseFragment() {
 
                         lateinit var positiveButton: Button
                         val dialog = AlertDialogBuilder(activity!!)
-                            .setTitle(R.string.title_select_groups_to_move)
+                            .setTitle(R.string.title_move_item_to)
                             .setSingleChoiceItems(displayList, selectedIndex) { dialog, which ->
                                 selectedIndex = which
                                 positiveButton.isEnabled = (selectedIndex >= 0)
