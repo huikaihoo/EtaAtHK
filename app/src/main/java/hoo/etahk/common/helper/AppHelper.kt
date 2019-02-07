@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import androidx.annotation.StringRes
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.room.Room
@@ -13,23 +14,26 @@ import com.google.gson.GsonBuilder
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.applyLocale
+import hoo.etahk.common.extensions.yn
 import hoo.etahk.model.AppDatabase
+import java.util.*
 
 
+@SuppressLint("StaticFieldLeak")
 object AppHelper {
+    private lateinit var languageContext: Context
+
     lateinit var gson: Gson private set
     lateinit var db: AppDatabase private set
-    @SuppressLint("StaticFieldLeak")
     lateinit var notificationManager: NotificationManagerCompat private set
 
-    fun init() {
-        gson = GsonBuilder()
-                .serializeNulls()
-                .create()
-    }
-
     fun init(context: Context) {
-        init()
+        languageContext = context
+
+        gson = GsonBuilder()
+            .serializeNulls()
+            .create()
 
         db = when (Utils.isUnitTest) {
             true ->
@@ -58,6 +62,14 @@ object AppHelper {
             val manager = ContextCompat.getSystemService(context, NotificationManager::class.java)
             manager?.createNotificationChannels(channelList)
         }
+    }
+
+    fun applyAppLocale(language: String) {
+        languageContext = languageContext.applyLocale((language.isBlank()).yn(Locale.getDefault().language, language))
+    }
+
+    fun getString(@StringRes resId: Int): String {
+        return languageContext.getString(resId)
     }
 }
 

@@ -5,12 +5,12 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import android.util.TypedValue
-import androidx.annotation.StringRes
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
 import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.extensions.loge
+import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.view.App
 import java.text.SimpleDateFormat
 import java.util.*
@@ -64,15 +64,11 @@ object Utils {
         return value.data
     }
 
-    fun getString(@StringRes resId: Int): String {
-        return App.instance.getString(resId)
-    }
-
     fun getStringResourceByName(name: String): String {
         val resId = App.instance.applicationContext.resources.getIdentifier(name, "string", App.instance.packageName)
         return when (resId) {
             0 -> ""
-            else -> getString(resId)
+            else -> AppHelper.getString(resId)
         }
     }
 

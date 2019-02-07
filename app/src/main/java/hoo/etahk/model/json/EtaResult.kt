@@ -2,8 +2,8 @@ package hoo.etahk.model.json
 
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time.ONE_MINUTE_IN_SECONDS
-import hoo.etahk.common.Utils
 import hoo.etahk.common.Utils.getCurrentTimestamp
+import hoo.etahk.common.helper.AppHelper
 
 data class EtaResult(
     var company: String = "",
@@ -30,7 +30,7 @@ data class EtaResult(
             true -> {
                 val min = getDiffInMinutes()
                 if (min > 0)
-                    " " + getDiffInMinutes() + Utils.getString(R.string.min)
+                    " " + getDiffInMinutes() + AppHelper.getString(R.string.min)
                 else
                     ""
             }

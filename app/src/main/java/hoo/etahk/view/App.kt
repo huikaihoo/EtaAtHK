@@ -1,10 +1,15 @@
 package hoo.etahk.view
 
 import android.app.Application
+import android.content.Context
+import android.preference.PreferenceManager
 import com.crashlytics.android.Crashlytics
 import com.facebook.stetho.Stetho
+import get
+import hoo.etahk.R
 import hoo.etahk.common.Constants.AppMode.DEV
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.applyLocale
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
@@ -16,19 +21,27 @@ class App : Application() {
         lateinit var instance: App private set
     }
 
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base?.applyLocale(PreferenceManager.getDefaultSharedPreferences(base).get(base.getString(R.string.pref_language))))
+    }
+
     override fun onCreate() {
         super.onCreate()
         instance = this
 
         initSharePrefs()
+        initAppHelper()
         initCrashlytics()
         initStetho()
-        initAppHelper()
         initConnectionHelper()
     }
 
     private fun initSharePrefs() {
         SharedPrefsHelper.init(this)
+    }
+
+    private fun initAppHelper() {
+        AppHelper.init(this)
     }
 
     private fun initCrashlytics() {
@@ -41,10 +54,6 @@ class App : Application() {
     private fun initStetho() {
         if (SharedPrefsHelper.getAppMode() == DEV && !Utils.isUnitTest)
             Stetho.initializeWithDefaults(this)
-    }
-
-    private fun initAppHelper() {
-        AppHelper.init(this)
     }
 
     private fun initConnectionHelper() {

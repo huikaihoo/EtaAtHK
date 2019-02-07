@@ -62,22 +62,22 @@ object SharedPrefsHelper {
     }
 
     inline fun <reified T> get(@StringRes resId: Int): T {
-        return default.get(Utils.getString(resId))
+        return default.get(AppHelper.getString(resId))
     }
 
     inline fun <reified T> get(@StringRes resId: Int, defaultValue: T): T {
-        return default.get(Utils.getString(resId), defaultValue)
+        return default.get(AppHelper.getString(resId), defaultValue)
     }
 
     inline fun <reified T> put(@StringRes resId: Int, value: T) {
-        default.put(Utils.getString(resId), value)
+        default.put(AppHelper.getString(resId), value)
     }
 
     inline fun <reified T> putFromRemote(@StringRes resId: Int, ignoreValue: T) {
         if (get(R.string.param_enable_remote_config, true)) {
-            val remoteValue = remote.get<T>(Utils.getString(resId))
+            val remoteValue = remote.get<T>(AppHelper.getString(resId))
             if (remoteValue != ignoreValue) {
-                put(resId, remote.get<T>(Utils.getString(resId)))
+                put(resId, remote.get<T>(AppHelper.getString(resId)))
             }
         }
     }

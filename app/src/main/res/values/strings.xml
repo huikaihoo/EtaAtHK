@@ -105,6 +105,11 @@
     <string name="arrow_two_ways" translatable="false">\u0020⇄\u0020</string>
     <string name="html_link" translatable="false">&lt;a href=\'%1$s\'>%2$s&lt;/a></string>
 
+    <!-- Language -->
+    <string name="system_default">System Default</string>
+    <string name="tc">Traditional Chinese (繁體中文)</string>
+    <string name="en">English</string>
+
     <!-- Company -->
     <string name="kmb">KMB</string>
     <string name="lwb">LWB</string>
@@ -181,6 +186,7 @@
 
     <!-- General Preference -->
     <string name="pref_general" translatable="false">general</string>
+    <string name="pref_language" translatable="false">language</string>
     <string name="pref_update_routes" translatable="false">update_routes</string>
     <string name="pref_backup_restore" translatable="false">backup_restore</string>
     <string name="pref_backup" translatable="false">backup</string>
@@ -202,6 +208,7 @@
     <string name="disclaimer_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/blob/master/app/src/main/res/raw/disclaimer.md</string>
 
     <string name="pref_category_title_general">General</string>
+    <string name="pref_title_language">Language (語言)</string>
     <string name="pref_title_update_routes">Update routes data now</string>
     <string name="pref_category_title_backup_restore">Backup and Restore</string>
     <string name="pref_title_backup">Backup</string>
@@ -221,6 +228,17 @@
     <string name="pref_category_title_testing">Testing</string>
     <string name="pref_title_parameters">Parameters</string>
     <string name="pref_summary_parameters">View and edit parameters</string>
+
+    <string-array name="pref_entries_language">
+        <item>@string/system_default</item>
+        <item>@string/tc</item>
+        <item>@string/en</item>
+    </string-array>
+    <string-array name="pref_values_language" translatable="false">
+        <item></item>
+        <item>zh</item>
+        <item>en</item>
+    </string-array>
 
     <!-- Parameters Preference -->
     <string name="param_category_firebase" translatable="false">Firebase</string>

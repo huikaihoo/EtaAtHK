@@ -25,13 +25,13 @@ class ParametersPrefFragment : BasePrefFragment() {
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
-        bindPreferenceSummaryToValue(R.string.param_user_uuid)
-        bindPreferenceSummaryToValue(R.string.param_enable_remote_config)
-        bindPreferenceSummaryToValue(R.string.param_app_mode)
-        bindPreferenceSummaryToValue(R.string.param_paged_list_page_size)
-        bindPreferenceSummaryToValue(R.string.param_gist_id_kmb)
-        bindPreferenceSummaryToValue(R.string.param_gist_id_nwfb)
-        bindPreferenceSummaryToValue(R.string.param_user_agent)
+        bindPreferenceSummary(R.string.param_user_uuid)
+        bindPreferenceSummary(R.string.param_enable_remote_config)
+        bindPreferenceSummary(R.string.param_app_mode)
+        bindPreferenceSummary(R.string.param_paged_list_page_size)
+        bindPreferenceSummary(R.string.param_gist_id_kmb)
+        bindPreferenceSummary(R.string.param_gist_id_nwfb)
+        bindPreferenceSummary(R.string.param_user_agent)
     }
 
     override fun onResume() {

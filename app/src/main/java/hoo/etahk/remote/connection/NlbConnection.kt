@@ -284,7 +284,7 @@ object NlbConnection: BaseConnection {
                                         val msg = it.text()
                                         // TODO("Need to Support English")
                                         if (msg.contains("沒有班次途經本站".toRegex())) {
-                                            etaResults.add(toEtaResult(stop, Utils.getString(R.string.eta_msg_not_in_service_hours)))
+                                            etaResults.add(toEtaResult(stop, AppHelper.getString(R.string.eta_msg_not_in_service_hours)))
                                         } else if (!msg.contains("請提早到達巴士站候車".toRegex())) {
                                             etaResults.add(toEtaResult(stop, it))
                                         }
@@ -292,7 +292,7 @@ object NlbConnection: BaseConnection {
                                     //logd(AppHelper.gson.toJson(etaResults))
                                     if (etaResults.isEmpty()) {
                                         etaResults.add(
-                                            toEtaResult(stop, Utils.getString(R.string.eta_msg_no_eta_info))
+                                            toEtaResult(stop, AppHelper.getString(R.string.eta_msg_no_eta_info))
                                         )
                                     }
                                 }

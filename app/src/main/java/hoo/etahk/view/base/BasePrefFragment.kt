@@ -1,7 +1,12 @@
 package hoo.etahk.view.base
 
 import androidx.annotation.StringRes
-import androidx.preference.*
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
+import hoo.etahk.common.extensions.setSummary
+import hoo.etahk.common.helper.SharedPrefsHelper
 
 abstract class BasePrefFragment: PreferenceFragmentCompat() {
 
@@ -10,71 +15,27 @@ abstract class BasePrefFragment: PreferenceFragmentCompat() {
          * A preference value change listener that updates the preference's summary
          * to reflect its new value.
          */
-        private val bindPreferenceSummaryToValueListener =
-            Preference.OnPreferenceChangeListener { preference, value ->
-                val stringValue = value.toString()
-
-                if (preference is ListPreference) {
-                    // For list preferences, look up the correct display value in
-                    // the preference's 'entries' list.
-                    val index = preference.findIndexOfValue(stringValue)
-
-                    // Set the summary to reflect the new value.
-                    preference.setSummary(
-                        if (index >= 0)
-                            preference.entries[index]
-                        else
-                            null
-                    )
-                } else if ( preference !is SwitchPreference &&
-                            preference !is CheckBoxPreference ){
-                    // For all other preferences, set the summary to the value's
-                    // simple string representation.
-                    preference.summary = stringValue
-                }
+        private val bindSummaryOnPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { preference, newValue ->
+                preference?.setSummary(newValue)
                 true
             }
-
-        /**
-         * Binds a preference's summary to its value. More specifically, when the
-         * preference's value is changed, its summary (line of text below the
-         * preference title) is updated to reflect the value. The summary is also
-         * immediately updated upon calling this method. The exact display format is
-         * dependent on the type of preference.
-
-         * @see .bindPreferenceSummaryToValueListener
-         */
-        fun bindPreferenceSummaryToValue(preference: Preference) {
-            // Set the listener to watch for value changes.
-            preference.onPreferenceChangeListener = bindPreferenceSummaryToValueListener
-
-            // Trigger the listener immediately with the preference's
-            // current value.
-            if ( preference is SwitchPreference ||
-                 preference is CheckBoxPreference )
-            {
-                bindPreferenceSummaryToValueListener.onPreferenceChange(
-                    preference,
-                    PreferenceManager
-                        .getDefaultSharedPreferences(preference.context)
-                        .getBoolean(preference.key, false)
-                )
-            } else {
-                bindPreferenceSummaryToValueListener.onPreferenceChange(
-                    preference,
-                    PreferenceManager
-                        .getDefaultSharedPreferences(preference.context)
-                        .getString(preference.key, "")
-                )
-            }
-        }
     }
 
     fun findPreference(@StringRes resId: Int): Preference {
         return super.findPreference(getString(resId))
     }
 
-    fun bindPreferenceSummaryToValue(@StringRes resId: Int) {
-        bindPreferenceSummaryToValue(findPreference(resId))
+    fun bindPreferenceSummary(@StringRes resId: Int, onPreferenceChangeListener: Preference.OnPreferenceChangeListener = bindSummaryOnPreferenceChangeListener) {
+        val preference = findPreference(resId)
+        preference.onPreferenceChangeListener = onPreferenceChangeListener
+
+        // Trigger the listener immediately with the preference's
+        // current value.
+        if ( preference is SwitchPreference || preference is CheckBoxPreference ) {
+            preference.setSummary(SharedPrefsHelper.get<Boolean>(resId))
+        } else {
+            preference.setSummary(SharedPrefsHelper.get<String>(resId) as Any?)
+        }
     }
 }

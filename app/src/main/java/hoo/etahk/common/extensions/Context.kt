@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Icon
@@ -21,6 +22,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.IconCompat
 import hoo.etahk.common.Utils.getThemeColorPrimary
 import hoo.etahk.common.browser.CustomTabsHelper
+import java.util.*
 
 /**
  * Method to launch a Custom Tabs Activity.
@@ -130,7 +132,6 @@ private fun createShortcut(context: Context, shortcutId: String, shortLabel: Str
     }
 }
 
-
 /**
  * Source: https://stackoverflow.com/questions/33696488/getting-bitmap-from-vector-drawable
  */
@@ -147,4 +148,21 @@ fun Context.getBitmapFromVectorDrawable(@DrawableRes resId: Int): Bitmap {
     drawable.draw(canvas)
 
     return bitmap
+}
+
+/**
+ * Source: https://github.com/YarikSOffice/LanguageTest
+ */
+fun Context.applyLocale(language: String): Context {
+    return if (language.isNotBlank()) {
+        val locale = Locale(language)
+        //Locale.setDefault(locale)
+
+        val config = Configuration(this.resources.configuration)
+        config.setLocale(locale)
+
+        this.createConfigurationContext(config)
+    } else {
+        this
+    }
 }

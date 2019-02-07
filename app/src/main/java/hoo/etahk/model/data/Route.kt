@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import hoo.etahk.R
 import hoo.etahk.common.Utils
+import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 
@@ -51,7 +52,7 @@ data class Route(
     }
 
     fun getDirectionArrow(): String {
-        return Utils.getString( when (direction) {
+        return AppHelper.getString( when (direction) {
             0L -> R.string.arrow_circular
             1L -> R.string.arrow_one_way
             else -> {

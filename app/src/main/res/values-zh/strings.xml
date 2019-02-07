@@ -79,6 +79,11 @@
     <string name="to_middle">\u0020往\u0020</string>
     <string name="min">分鐘</string>
 
+    <!-- Language -->
+    <string name="system_default">系統預設</string>
+    <string name="tc">繁體中文</string>
+    <string name="en">英文 (English)</string>
+
     <!-- Company -->
     <string name="kmb">九巴</string>
     <string name="lwb">龍運</string>
@@ -155,6 +160,8 @@
 
     <!-- Settings -->
     <string name="pref_category_title_general">一般</string>
+    <string name="pref_title_language">語言 (Language)</string>
+
     <string name="pref_title_update_routes">立即更新路線資料</string>
     <string name="pref_category_title_backup_restore">備份和還原</string>
     <string name="pref_title_backup">備份</string>

@@ -7,6 +7,7 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.prependImage
+import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.view.ItemTouchHelperAdapter
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.ItemDiffCallback
@@ -42,9 +43,9 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
                 val etaResults = stop.etaResults
 
                 itemView.stop_title.text = stop.routeKey.getCompanyName() + " " + stop.routeKey.routeNo
-                itemView.stop_desc.text = stop.name.value + " " + Utils.getString(R.string.to_prefix) + stop.to.value
+                itemView.stop_desc.text = stop.name.value + " " + AppHelper.getString(R.string.to_prefix) + stop.to.value
                 if (stop.fare > 0) {
-                    itemView.fare.text = Utils.getString(R.string.price_2dp).format(stop.fare)
+                    itemView.fare.text = AppHelper.getString(R.string.price_2dp).format(stop.fare)
                 } else {
                     itemView.fare.text = ""
                 }

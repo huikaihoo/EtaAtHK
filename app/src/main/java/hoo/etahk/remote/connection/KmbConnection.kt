@@ -307,7 +307,7 @@ object KmbConnection: BaseConnection {
                 if (thematicBreak) {
                     result += "\n***\n"
                 }
-                val variant = rec.serviceTypeChi.isNullOrBlank().yn(Utils.getString(R.string.normal_route), rec.serviceTypeChi)
+                val variant = rec.serviceTypeChi.isNullOrBlank().yn(AppHelper.getString(R.string.normal_route), rec.serviceTypeChi)
                 result += "## $variant\n"
             } else if (tableHeader) {
                 result += "***"
@@ -317,7 +317,7 @@ object KmbConnection: BaseConnection {
             if (tableHeader || variantHeader) {
                 result += "\n\n${toHeader(rec.dayType.orEmpty())}|"
                 if (!boundTime.isNullOrBlank()) {
-                    result += Utils.getString(R.string.headway_mins)
+                    result += AppHelper.getString(R.string.headway_mins)
                 }
                 result += "\n---|"
                 if (!boundTime.isNullOrBlank()) {
@@ -347,7 +347,7 @@ object KmbConnection: BaseConnection {
             else -> null
         }
 
-        return if (resId != null) Utils.getString(resId) else ""
+        return if (resId != null) AppHelper.getString(resId) else ""
     }
 
     /**
@@ -389,7 +389,7 @@ object KmbConnection: BaseConnection {
                                     }
                                     //logd(AppHelper.gson.toJson(etaResults))
                                 } else {
-                                    etaResults.add(toEtaResult(stop, Utils.getString(R.string.eta_msg_no_eta_info)))
+                                    etaResults.add(toEtaResult(stop, AppHelper.getString(R.string.eta_msg_no_eta_info)))
                                 }
 
                                 if (!etaResults.isEmpty()) {

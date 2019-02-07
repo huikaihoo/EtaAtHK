@@ -10,6 +10,7 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.prependImage
+import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.StopDiffCallback
@@ -42,16 +43,16 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
             var additionInfo = ""
             if (stop.info.partial == 1L) {
-                additionInfo = " (" + Utils.getString(R.string.stop_only_for_particular_time) + ")"
+                additionInfo = " (" + AppHelper.getString(R.string.stop_only_for_particular_time) + ")"
             }
 
             if (stop.fare > 0 && dataSource.size > (position + 1)) {
                 var fareHoliday = ""
                 if (stop.info.fareHoliday > 0.0 && stop.info.fareHoliday != stop.fare) {
-                    additionInfo += " [" + Utils.getString(R.string.stop_fare_holiday) +
-                            Utils.getString(R.string.price_2dp).format(stop.info.fareHoliday) + "]"
+                    additionInfo += " [" + AppHelper.getString(R.string.stop_fare_holiday) +
+                            AppHelper.getString(R.string.price_2dp).format(stop.info.fareHoliday) + "]"
                 }
-                itemView.fare.text = Utils.getString(R.string.price_2dp).format(stop.fare) + fareHoliday
+                itemView.fare.text = AppHelper.getString(R.string.price_2dp).format(stop.fare) + fareHoliday
 
             } else {
                 itemView.fare.text = ""
@@ -86,7 +87,7 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
             // ETA Result
             if (!stop.displayEta || etaResults.isEmpty()) {
-                itemView.eta_0.text = Utils.getString(R.string.eta_msg_loading)
+                itemView.eta_0.text = AppHelper.getString(R.string.eta_msg_loading)
                 itemView.eta_1.text = ""
                 itemView.eta_2.text = ""
             } else {

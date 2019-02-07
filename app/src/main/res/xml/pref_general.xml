@@ -5,6 +5,13 @@
         android:title="@string/pref_category_title_general"
         android:order="10">
 
+        <ListPreference
+            android:key="@string/pref_language"
+            android:title="@string/pref_title_language"
+            android:entries="@array/pref_entries_language"
+            android:entryValues="@array/pref_values_language"
+            android:defaultValue="" />
+
         <Preference
             android:key="@string/pref_update_routes"
             android:title="@string/pref_title_update_routes"

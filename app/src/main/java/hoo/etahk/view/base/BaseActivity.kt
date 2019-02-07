@@ -2,6 +2,7 @@ package hoo.etahk.view.base
 
 import android.Manifest
 import android.app.ActivityManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
@@ -12,10 +13,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.mcxiaoke.koi.ext.restart
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.extensions.applyLocale
 import hoo.etahk.common.extensions.getBitmapFromVectorDrawable
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.view.settings.SettingsActivity
 import org.jetbrains.anko.startActivity
 
@@ -28,8 +32,14 @@ abstract class BaseActivity : AppCompatActivity() {
         )
     }
 
+    val language = SharedPrefsHelper.get<String>(R.string.pref_language)
+
     var userIsInteracting: Boolean = false
     var autoSetTaskDescription = true
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base?.applyLocale(SharedPrefsHelper.get(R.string.pref_language)))
+    }
 
     override fun onUserInteraction() {
         super.onUserInteraction()
@@ -41,6 +51,13 @@ abstract class BaseActivity : AppCompatActivity() {
         if (autoSetTaskDescription) {
             setTaskDescription()
         }
+    }
+
+    override fun onResume() {
+        if (language != SharedPrefsHelper.get<String>(R.string.pref_language)) {
+            restart()
+        }
+        super.onResume()
     }
 
     fun setTaskDescription() {

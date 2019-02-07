@@ -36,6 +36,6 @@ abstract class BaseUnitTest {
     }
 
     fun getStringFromResource(@StringRes resId: Int): String {
-        return javaClass.getResource("/${Utils.getString(resId)}")?.readText() ?: ""
+        return javaClass.getResource("/${AppHelper.getString(resId)}")?.readText() ?: ""
     }
 }

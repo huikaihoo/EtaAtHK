@@ -12,9 +12,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.Preference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mcxiaoke.koi.ext.newIntent
+import com.mcxiaoke.koi.ext.restart
 import hoo.etahk.R
 import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.startCustomTabs
+import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.transfer.data.Exporter
 import hoo.etahk.transfer.data.Importer
@@ -50,6 +52,11 @@ class GeneralPrefFragment : BasePrefFragment() {
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
+        bindPreferenceSummary(R.string.pref_language, Preference.OnPreferenceChangeListener { preference, newValue ->
+            AppHelper.applyAppLocale(newValue.toString())
+            activity?.restart()
+            true
+        })
 
         // General
         val updateRoutes = findPreference(R.string.pref_update_routes)

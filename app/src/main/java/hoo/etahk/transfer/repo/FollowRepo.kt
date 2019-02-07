@@ -19,13 +19,13 @@ object FollowRepo {
     fun initLocationsAndGroups() {
         GlobalScope.launch(Dispatchers.Default) {
             if (AppHelper.db.locationDao().count() <= 0) {
-                AppHelper.db.locationDao().insert(FollowLocation(name = Utils.getString(R.string.home), displaySeq = 1))
-                AppHelper.db.locationDao().insert(FollowLocation(name = Utils.getString(R.string.work), displaySeq = 2))
+                AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.home), displaySeq = 1))
+                AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.work), displaySeq = 2))
 
                 AppHelper.db.locationDao().selectOnce().forEach {
                     val groupName = when (it.name) {
-                        Utils.getString(R.string.home) -> Utils.getString(R.string.work)
-                        Utils.getString(R.string.work) -> Utils.getString(R.string.home)
+                        AppHelper.getString(R.string.home) -> AppHelper.getString(R.string.work)
+                        AppHelper.getString(R.string.work) -> AppHelper.getString(R.string.home)
                         else -> ""
                     }
                     if (!groupName.isBlank()) {

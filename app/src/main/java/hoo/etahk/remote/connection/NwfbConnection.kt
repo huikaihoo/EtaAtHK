@@ -7,9 +7,9 @@ import com.mcxiaoke.koi.HASH
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Eta
-import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.Utils
 import hoo.etahk.common.Utils.timeStrToMsg
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
@@ -413,7 +413,7 @@ object NwfbConnection: BaseConnection {
                                     etaResults.add(toEtaResult(stop, msg))
 
                                 } else {
-                                    responseStr = responseStr!!.replace(".*\\|##\\|".toRegex(), "")
+                                    responseStr = responseStr.replace(".*\\|##\\|".toRegex(), "")
                                     val nwfbResponse = responseStr.split("<br>")
 
                                     nwfbResponse.forEach {
@@ -480,7 +480,7 @@ object NwfbConnection: BaseConnection {
                             etaResults.add(toEtaResult(stop, msg))
 
                         } else {
-                            responseStr = responseStr!!.replace(".*\\|##\\|".toRegex(), "")
+                            responseStr = responseStr.replace(".*\\|##\\|".toRegex(), "")
                             val nwfbResponse = responseStr.split("<br>")
 
                             nwfbResponse.forEach {
@@ -510,13 +510,13 @@ object NwfbConnection: BaseConnection {
     // ETA Related
     private fun getInvalidMsg(responseStr: String): String {
         return when (responseStr.contains("\\|DISABLED\\|".toRegex())) {
-            true -> Utils.getString(R.string.eta_msg_no_eta_service)
+            true -> AppHelper.getString(R.string.eta_msg_no_eta_service)
             false -> {
                 when (responseStr.contains("\\|HTML\\|".toRegex())) {
                     true -> when (responseStr.contains("服務時間已過")) {
-                        true -> Utils.getString(R.string.eta_msg_not_in_service_hours)
+                        true -> AppHelper.getString(R.string.eta_msg_not_in_service_hours)
                         // TODO("Extract ETA message")
-                        false -> Utils.getString(R.string.eta_msg_no_eta_service)
+                        false -> AppHelper.getString(R.string.eta_msg_no_eta_service)
                     }
                     false -> ""
                 }
