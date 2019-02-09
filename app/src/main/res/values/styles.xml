@@ -64,6 +64,10 @@
         <item name="android:fontFamily">@font/noto_sans</item>
     </style>
 
+    <style name="AppTheme.TextAppearance.Body1" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/noto_sans</item>
+    </style>
+
     <style name="AppTheme.TextAppearance.ActionBar.Title" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:fontFamily">@font/noto_sans</item>
     </style>

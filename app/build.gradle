@@ -123,7 +123,7 @@ dependencies {
     implementation 'com.mcxiaoke.koi:core:0.5.5'
 
     // RecyclerView FastScroll
-    implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.20'
+    implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.0'
     //implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'
 
     // JSON / HTML Parser
