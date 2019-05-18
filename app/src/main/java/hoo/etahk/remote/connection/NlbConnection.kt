@@ -6,7 +6,6 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.Time.ONE_MINUTE_IN_SECONDS
 import hoo.etahk.common.Utils
-import hoo.etahk.common.extensions.DB
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
@@ -20,7 +19,10 @@ import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 import hoo.etahk.remote.request.NlbEtaReq
 import hoo.etahk.remote.response.NlbDatabaseRes
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
@@ -80,8 +82,9 @@ object NlbConnection: BaseConnection {
                 // 3. Get Stops
                 val routeStopsMap = (nlbDatabaseRes.routeStops ?: listOf()).groupBy { it!!.routeId!! }
                 val stopsMap = (nlbDatabaseRes.stops ?: listOf()).groupBy { it!!.stopId!! }
+                val stops = mutableListOf<Stop>()
+
                 childRoutes.forEach { route ->
-                    val stops = mutableListOf<Stop>()
 
                     routeStopsMap[route.info.rdv]?.forEach { rawRouteStop ->
                         val rawStops = stopsMap[rawRouteStop?.stopId ?: ""]
@@ -90,12 +93,10 @@ object NlbConnection: BaseConnection {
                             stops.add(toStop(route, rawRouteStop!!, rawStop, t))
                         }
                     }
+                }
 
-                    GlobalScope.launch(Dispatchers.DB) {
-                        if (stops.isNotEmpty()) {
-                            AppHelper.db.stopDao().insertOrUpdate(route.routeKey, stops, t)
-                        }
-                    }
+                if (stops.isNotEmpty()) {
+                    AppHelper.db.stopDao().insertOnDeleteOld(listOf(Company.NLB), stops)
                 }
 
                 logd("onResponse ${result.size}")
@@ -206,8 +207,8 @@ object NlbConnection: BaseConnection {
             name = StringLang(rawStop.stopNameC?: "", rawStop.stopNameE?: "", rawStop.stopNameS?: ""),
             to = route.to,
             details = StringLang((rawStop.stopLocationC?: ""), rawStop.stopLocationE?: "", rawStop.stopNameS?: ""),
-            longitude = rawStop.longitude ?: 0.0,
             latitude = rawStop.latitude ?: 0.0,
+            longitude = rawStop.longitude ?: 0.0,
             fare = rawRouteStop.fare ?: 0.0,
             info = Info(rdv = route.info.rdv,
                 stopId = rawRouteStop.stopId ?: "",
@@ -301,9 +302,6 @@ object NlbConnection: BaseConnection {
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
                                 }
-
-                                stop.etaStatus = Constants.EtaStatus.SUCCESS
-                                stop.etaResults = etaResults
                             }
                         } catch (e: Exception) {
                             loge("updateEta::stops.forEach failed!", e)
@@ -340,7 +338,7 @@ object NlbConnection: BaseConnection {
         val etaTime = getEtaTime(msg)
         val scheduledOnly = Utils.isScheduledOnly(msg)
 
-        msg =  msg.replace("到達/離開".toRegex(), "")
+        msg = msg.replace("到達/離開".toRegex(), "")
                     .replace("([0-9]+)分鐘".toRegex(), "")
                     .trim()
         msg = Utils.timestampToTimeStr(etaTime) + " " + msg

@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="colorPrimary">#07234D</color>
     <color name="colorPrimaryDark">#041835</color>
-    <color name="colorAccent">#384f70</color>
+    <color name="colorAccent">#3A4A79</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorMenuWhite">#F5F5F5</color>
@@ -52,6 +52,10 @@
     <color name="colorNlb">#00887B</color>
     <color name="colorNlbDark">#005F56</color>
     <color name="colorNlbAccent">#337066</color>
+
+    <color name="colorGmb">#009800</color>
+    <color name="colorGmbDark">#006A00</color>
+    <color name="colorGmbAccent">#53CA40</color>
 
     <color name="colorTram">#007549</color>
     <color name="colorTramDark">#005133</color>

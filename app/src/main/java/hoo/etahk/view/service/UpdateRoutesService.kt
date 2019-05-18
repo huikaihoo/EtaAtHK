@@ -6,6 +6,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import hoo.etahk.R
+import hoo.etahk.common.Constants.BroadcastIndent.FINISH_UPDATE_ROUTES
 import hoo.etahk.common.Constants.Notification.NOTIFICATION_UPDATE_ROUTES
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
@@ -44,6 +45,7 @@ class UpdateRoutesService: Service() {
                     }
                     RoutesRepo.updateParentRoutes()
                     logd("Finish working thread (Complete)")
+                    sendBroadcast(Intent(FINISH_UPDATE_ROUTES))
                     stopSelf()
                 }
             }.addOnFailureListener { e ->

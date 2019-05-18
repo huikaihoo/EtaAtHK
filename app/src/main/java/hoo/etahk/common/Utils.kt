@@ -173,6 +173,20 @@ object Utils {
     }
 
     /**
+     * Function to return timestamp in EAT Time String
+     * @return timestamp in second
+     */
+    @SuppressLint("SimpleDateFormat")
+    fun dateStrToTimestamp(timeStr: String, pattern: String): Long {
+        return try {
+            SimpleDateFormat(pattern, Locale.US).parse(timeStr).time / Time.ONE_SECOND_IN_MILLIS
+        } catch (e: Exception) {
+            loge("XXX", e)
+            -1L
+        }
+    }
+
+    /**
      * Function to return EAT Time String from timestamp
      *
      * @param timestamp timestamp in second
@@ -189,6 +203,7 @@ object Utils {
                 .replace("\uE2B4".toRegex(), "璧")
                 .replace("\uE88C".toRegex(), "埗")
                 .replace("\uE1D0".toRegex(), "栢")
+                .replace("\uE05E".toRegex(), "匯")
     }
 
     fun phaseFromTo(str: String): String {

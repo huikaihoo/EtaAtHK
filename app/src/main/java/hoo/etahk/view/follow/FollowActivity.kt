@@ -20,7 +20,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.mcxiaoke.koi.ext.newIntent
-import com.mcxiaoke.koi.ext.restart
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.constants.Argument
@@ -39,6 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.find
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivityForResult
 
 
@@ -68,7 +68,7 @@ class FollowActivity : NavActivity() {
 
         viewModel = ViewModelProviders.of(this).get(FollowViewModel::class.java)
         viewModel.durationInMillis = SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
-        viewModel.enableSorting.value = false
+        viewModel.isLocationIdUsed = getExtra(Argument.ARG_LOCATION_ID, -1L) == -1L
 
         if (viewModel.needUpdateParentRoute()) {
             ContextCompat.startForegroundService(this, newIntent<UpdateRoutesService>())
@@ -110,6 +110,14 @@ class FollowActivity : NavActivity() {
 
         viewModel.initLocationsAndGroups()
 
+        if (!viewModel.isSnackbarShowed) {
+            viewModel.isSnackbarShowed = true
+            val msg = getExtra(Argument.ARG_SNACKBAR_MSG, "")
+            if (msg.isNotBlank()) {
+                Snackbar.make(find(android.R.id.content), msg, Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
         if (SharedPrefsHelper.get(R.string.param_accept_terms, false)) {
             checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
@@ -137,8 +145,10 @@ class FollowActivity : NavActivity() {
     }
 
     private fun showPolicyDialog() {
-        val privacyPolicy = getString(R.string.html_link, getString(R.string.privacy_policy_url), getString(R.string.pref_title_privacy_policy))
-        val disclaimer = getString(R.string.html_link, getString(R.string.disclaimer_url), getString(R.string.pref_title_disclaimer))
+        val privacyPolicy = getString(R.string.html_link, getString(R.string.privacy_policy_url), getString(
+            R.string.pref_title_privacy_policy))
+        val disclaimer = getString(R.string.html_link, getString(R.string.disclaimer_url), getString(
+            R.string.pref_title_disclaimer))
 
         val dialog = AlertDialogBuilder(this)
             .setMessage(
@@ -158,9 +168,9 @@ class FollowActivity : NavActivity() {
         dialog.find<TextView>(android.R.id.message).movementMethod = LinkMovementMethod.getInstance()
     }
 
-
     private fun subscribeUiChanges() {
-        if (!viewModel.getFollowLocations().hasActiveObservers()) {
+        logd("subscribeUiChanges")
+//        if (!viewModel.getFollowLocations().hasActiveObservers()) {
             viewModel.getFollowLocations().observe(this, Observer<List<LocationAndGroups>> {
                 val lastLocation = viewModel.lastLocation
 
@@ -169,12 +179,18 @@ class FollowActivity : NavActivity() {
                 val selectedLocation = viewModel.selectedLocation.value
 
                 logd("B4 = ${selectedLocation?.location}")
-                if (selectedLocation == null) {
-                    viewModel.selectedLocation.value = spinnerAdapter.dataSource[0]
-                } else {
-                    if (it.none { it.location.Id == selectedLocation.location.Id }) {
-                        viewModel.selectedLocation.value = spinnerAdapter.dataSource[0]
+                if (!viewModel.isLocationIdUsed) {
+                    val target = getExtra(Argument.ARG_LOCATION_ID, -1L)
+                    spinnerAdapter.dataSource.forEach {
+                        if (it.location.Id == target) {
+                            viewModel.isLocationIdUsed = true
+                            viewModel.selectedLocation.value = it
+                        }
                     }
+                } else if (selectedLocation == null) {
+                    viewModel.selectedLocation.value = spinnerAdapter.dataSource[0]
+                } else if (it.isNotEmpty() && it.none { it.location.Id == selectedLocation.location.Id }) {
+                    viewModel.selectedLocation.value = spinnerAdapter.dataSource[0]
                 }
                 logd("AF = ${viewModel.selectedLocation.value?.location}")
 
@@ -195,7 +211,7 @@ class FollowActivity : NavActivity() {
                     updateFragments(viewModel.selectedLocation.value)
                 }
             })
-        }
+//        }
 
         if (!viewModel.getMillisLeft().hasActiveObservers()) {
             viewModel.getMillisLeft().observe(this, Observer<Long> {
@@ -266,6 +282,8 @@ class FollowActivity : NavActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_follow, menu)
+
+        viewModel.enableSorting.value = menu.findItem(R.id.menu_sort_items).isChecked
         return true
     }
 
@@ -320,7 +338,10 @@ class FollowActivity : NavActivity() {
                     .setPositiveButton(listener = DialogInterface.OnClickListener {dialog, which ->
                         viewModel.insertGroup(inputDialog.view.input.text.toString())
                         Snackbar.make(find(android.R.id.content), R.string.msg_add_group_success, Snackbar.LENGTH_SHORT).show()
-                        restart()
+                        restart(intentFor<FollowActivity>(
+                            Argument.ARG_LOCATION_ID to location?.location?.Id,
+                            Argument.ARG_SNACKBAR_MSG to getString(R.string.msg_add_group_success)
+                        ))
                     })
                     .show()
                 true
@@ -337,7 +358,6 @@ class FollowActivity : NavActivity() {
                             group.name = inputDialog.view.input.text.toString()
                             viewModel.updateGroup(group)
                             Snackbar.make(find(android.R.id.content), R.string.msg_one_group_renamed, Snackbar.LENGTH_SHORT).show()
-                            restart()
                         })
                         .show()
                 }
@@ -353,7 +373,10 @@ class FollowActivity : NavActivity() {
                         .setPositiveButton(android.R.string.ok) { dialog, which ->
                             viewModel.deleteGroup(group)
                             Snackbar.make(find(android.R.id.content), R.string.msg_one_group_removed, Snackbar.LENGTH_SHORT).show()
-                            restart()
+                            restart(intentFor<FollowActivity>(
+                                Argument.ARG_LOCATION_ID to location.location.Id,
+                                Argument.ARG_SNACKBAR_MSG to getString(R.string.msg_one_group_removed)
+                            ))
                         }
                         .setNegativeButton(android.R.string.cancel, null)
                         .show()
@@ -366,13 +389,24 @@ class FollowActivity : NavActivity() {
                 true
             }
             R.id.menu_add_shortcut -> {
-                createShortcut(
-                    tag(),
-                    R.string.sc_follow_s,
-                    R.string.sc_follow_l,
-                    R.drawable.ic_shortcut_follow,
-                    newIntent<FollowActivity>(0)
-                )
+                if (location == null) {
+                    createShortcut(
+                        tag(),
+                        R.string.sc_follow_s,
+                        R.string.sc_follow_l,
+                        R.drawable.ic_shortcut_follow,
+                        newIntent<FollowActivity>(0)
+                    )
+                } else {
+                    createShortcut(
+                        tag() + "_" + location.location.Id,
+                        location.location.name,
+                        R.drawable.ic_shortcut_follow,
+                        intentFor<FollowActivity>(
+                            Argument.ARG_LOCATION_ID to location.location.Id
+                        )
+                    )
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

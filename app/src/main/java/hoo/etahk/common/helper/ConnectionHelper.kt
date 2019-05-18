@@ -19,6 +19,7 @@ object ConnectionHelper: BaseConnection {
     private lateinit var okHttpEtaKmb: OkHttpClient
     private lateinit var okHttpEtaNwfb: OkHttpClient
     private lateinit var okHttpEtaNlb: OkHttpClient
+    private lateinit var okHttpEtaTram: OkHttpClient
 
     // KMB
     lateinit var kmb: KmbApi private set
@@ -31,6 +32,9 @@ object ConnectionHelper: BaseConnection {
     lateinit var nlbEta: NlbApi private set
     // GOV
     lateinit var gov: GovApi private set
+    // Tram
+    lateinit var tram: TramApi private set
+    lateinit var tramEta: TramApi private set
     // GIST
     lateinit var gist: GistApi private set
 
@@ -40,6 +44,7 @@ object ConnectionHelper: BaseConnection {
         okHttpEtaKmb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
         okHttpEtaNwfb = ConnectionFactory.createClient(NetworkType.ETA, Company.NWFB)
         okHttpEtaNlb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
+        okHttpEtaTram = ConnectionFactory.createClient(NetworkType.ETA, Company.TRAM)
 
         kmb = ConnectionFactory.createRetrofit(okHttpLong, Url.KMB_URL).create()
         kmbEta = ConnectionFactory.createRetrofit(okHttpEtaKmb, Url.KMB_URL).create()
@@ -49,6 +54,9 @@ object ConnectionHelper: BaseConnection {
 
         nlb = ConnectionFactory.createRetrofit(okHttpLong, Url.NLB_URL).create()
         nlbEta = ConnectionFactory.createRetrofit(okHttpEtaNlb, Url.NLB_URL).create()
+
+        tram = ConnectionFactory.createRetrofit(okHttpLong, Url.TRAM_URL).create()
+        tramEta = ConnectionFactory.createRetrofit(okHttpEtaTram, Url.TRAM_URL).create()
 
         gov = ConnectionFactory.createRetrofit(okHttpLong, Url.GOV_URL).create()
 
@@ -64,6 +72,7 @@ object ConnectionHelper: BaseConnection {
             Company.NWFB -> NwfbConnection
             Company.CTB -> NwfbConnection
             Company.NLB -> NlbConnection
+            Company.TRAM -> TramConnection
             else -> null
         }
     }

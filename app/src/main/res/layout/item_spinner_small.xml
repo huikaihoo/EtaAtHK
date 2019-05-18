@@ -9,8 +9,8 @@
     android:focusable="false"
     android:paddingStart="6dp"
     android:paddingEnd="6dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
+    android:paddingTop="@dimen/half_margin"
+    android:paddingBottom="@dimen/half_margin"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 

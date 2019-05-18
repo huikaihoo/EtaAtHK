@@ -19,5 +19,5 @@ interface NlbApi {
     fun getEta(@Body request : NlbEtaReq): Call<NlbEtaRes>
 
     @GET("api/passenger/route.php?action=getDetail")
-    fun getTimetable(@Query("routeId") str: String): Call<ResponseBody>
+    fun getTimetable(@Query("routeId") routeId: String): Call<ResponseBody>
 }

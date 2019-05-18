@@ -1,6 +1,7 @@
 package hoo.etahk.model.data
 
 import androidx.room.Ignore
+import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Company.CTB
 import hoo.etahk.common.Constants.Company.DB
 import hoo.etahk.common.Constants.Company.KMB
@@ -18,6 +19,7 @@ import hoo.etahk.common.Constants.RouteType.BUS_HKI_NIGHT
 import hoo.etahk.common.Constants.RouteType.BUS_KL_NT
 import hoo.etahk.common.Constants.RouteType.BUS_KL_NT_NIGHT
 import hoo.etahk.common.Constants.RouteType.NONE
+import hoo.etahk.common.Constants.RouteType.TRAM
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.loge
 
@@ -60,27 +62,30 @@ data class RouteKey (
     }
 
     private fun splitRouteNo() {
-        val routeParts = routeNo.split("[^A-Z0-9]+|(?<=[A-Z])(?=[0-9])|(?<=[0-9])(?=[A-Z])".toRegex())
-        val noPrefix = routeParts[0].isEmpty() || routeParts[0][0] in '0'..'9'
-        try {
-            for(i in routeParts.indices) {
-                when (i) {
-                    0 ->
-                        if (noPrefix)
-                            num = routeParts[i].toLong()
-                        else
-                            prefix = routeParts[i].trim()
-                    1 ->
-                        if (noPrefix)
+        if (routeNo.isNotBlank()) {
+            try {
+                val routeParts = routeNo.split("[^A-Z0-9]+|(?<=[A-Z])(?=[0-9])|(?<=[0-9])(?=[A-Z])".toRegex())
+                val noPrefix = routeParts[0].isEmpty() || routeParts[0][0] in '0'..'9'
+
+                for(i in routeParts.indices) {
+                    when (i) {
+                        0 ->
+                            if (noPrefix)
+                                num = routeParts[i].toLong()
+                            else
+                                prefix = routeParts[i].trim()
+                        1 ->
+                            if (noPrefix)
+                                suffix = routeParts[i].trim()
+                            else
+                                num = routeParts[i].toLong()
+                        2 ->
                             suffix = routeParts[i].trim()
-                        else
-                            num = routeParts[i].toLong()
-                    2 ->
-                        suffix = routeParts[i].trim()
+                    }
                 }
+            } catch (e: Exception) {
+                loge("splitRouteNo failed!", e)
             }
-        } catch (e: Exception) {
-            loge("splitRouteNo failed!", e)
         }
     }
 
@@ -89,7 +94,9 @@ data class RouteKey (
         val t = num.tens()
 
         typeCode =
-            if (prefix == "NA") {
+            if (company == Constants.Company.TRAM) {
+                TRAM
+            }else if (prefix == "NA") {
                 BUS_AIRPORT_LANTAU_NIGHT
             } else if (prefix == "N") {
                 if (company == LWB || company == NLB || (company == CTB && (t == 1L || t == 2L || t == 4L))) {
@@ -115,7 +122,7 @@ data class RouteKey (
                 BUS_CROSS_HARBOUR
             } else if (company == DB || company == PI) {
                 BUS_AIRPORT_LANTAU
-            } else if (routeNo == "629") {   // Start of prefix: # M P T W X
+            } else if (routeNo == "629" || t == 38L) {   // Start of prefix: # M P T W X
                 BUS_HKI
             } else if (company == CTB && (routeNo == "20" || routeNo == "22" || suffix == "R")) {
                 BUS_KL_NT

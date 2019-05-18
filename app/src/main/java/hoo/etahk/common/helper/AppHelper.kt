@@ -68,6 +68,22 @@ object AppHelper {
         languageContext = languageContext.applyLocale((language.isBlank()).yn(Locale.getDefault().language, language))
     }
 
+    fun resetAppDb() {
+        db.close()
+        db = when (Utils.isUnitTest) {
+            true ->
+                Room.inMemoryDatabaseBuilder(languageContext, AppDatabase::class.java)
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build()
+            false ->
+                Room.databaseBuilder(languageContext, AppDatabase::class.java, Constants.DATABASE_NAME)
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build()
+        }
+    }
+
     fun getString(@StringRes resId: Int): String {
         return languageContext.getString(resId)
     }

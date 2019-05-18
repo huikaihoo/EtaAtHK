@@ -299,7 +299,7 @@ object NwfbConnection: BaseConnection {
 
                     if (!responseStr.isNullOrBlank()) {
                         val stops = mutableListOf<Stop>()
-                        val nwfbResponse = responseStr!!.split("<br>")
+                        val nwfbResponse = responseStr.split("<br>")
 
                         nwfbResponse.forEach {
                             val records = it.split("\\|\\|".toRegex())
@@ -428,7 +428,6 @@ object NwfbConnection: BaseConnection {
                                 if (!etaResults.isEmpty()) {
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
-                                    stop.etaUpdateTime = t
                                     //logd(AppHelper.gson.toJson(stop.etaResults))
                                 }
                             }

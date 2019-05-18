@@ -14,7 +14,8 @@ data class GistDatabaseRes(
         @SerializedName("parent_cnt") val parentCnt: Int? = 0,
         @SerializedName("child_cnt") val childCnt: Int? = 0,
         @SerializedName("stops_cnt") val stopsCnt: Int? = 0,
-        @SerializedName("routes") val routes: List<String?>? = listOf()
+        @SerializedName("routes") val routes: List<String?>? = listOf(),
+        @SerializedName("timestamp") val timestamp: Long? = -1L
     )
 
     val isValid: Boolean

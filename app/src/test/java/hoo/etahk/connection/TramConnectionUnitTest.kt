@@ -1,11 +1,9 @@
 package hoo.etahk.connection
 
 import hoo.etahk.BaseUnitTest
-import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.SharedPrefsHelper
-import hoo.etahk.remote.connection.KmbConnection
+import hoo.etahk.remote.connection.TramConnection
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -13,21 +11,17 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class KmbConnectionUnitTest: BaseUnitTest() {
+class TramConnectionUnitTest: BaseUnitTest() {
 
     override val printLog = false
 
-    private val gistId = getStringFromResource(R.string.param_gist_id_kmb)
-
-    private val routeNo = "6C"
+    private val routeNo = "TRAM"
     private val bound = 1L
     private val variant = 1L
 
     @Test
     fun getParentRoutes() {
-        SharedPrefsHelper.put(R.string.param_gist_id_kmb, gistId)
-
-        val result = KmbConnection.getParentRoutes(Constants.Company.KMB)?.getAll()?.sortedBy { it.routeKey.routeNo }
+        val result = TramConnection.getParentRoutes(Constants.Company.TRAM)?.getAll()?.sortedBy { it.routeKey.routeNo }
         result?.forEach {
             System.out.println("route = $it")
         }
@@ -40,7 +34,7 @@ class KmbConnectionUnitTest: BaseUnitTest() {
 
         // Check Child Routes
         val childRouteCount = AppHelper.db.childRouteDao().count()
-        val childRoute = AppHelper.db.childRouteDao().selectOnce(Constants.Company.KMB, routeNo)
+        val childRoute = AppHelper.db.childRouteDao().selectOnce(Constants.Company.TRAM, routeNo)
         System.out.println("childRouteCount = $childRouteCount")
         System.out.println(gson.toJson(childRoute))
 
@@ -48,7 +42,7 @@ class KmbConnectionUnitTest: BaseUnitTest() {
 
         // Check Stops
         val stopCount = AppHelper.db.stopDao().count()
-        val stopList = AppHelper.db.stopDao().selectOnce(Constants.Company.KMB, routeNo, bound, variant)
+        val stopList = AppHelper.db.stopDao().selectOnce(Constants.Company.TRAM, routeNo, bound, variant)
 
         System.out.println("stopCount = $stopCount")
         System.out.println(gson.toJson(stopList))

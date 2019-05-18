@@ -38,6 +38,7 @@ class RouteActivity : BaseActivity() {
                 company == Company.NWFB -> R.style.AppTheme_Nwfb
                 company == Company.CTB -> R.style.AppTheme_Ctb
                 company == Company.NLB -> R.style.AppTheme_Nlb
+                company == Company.TRAM -> R.style.AppTheme_Tram
                 else -> R.style.AppTheme_Night
             }
         }

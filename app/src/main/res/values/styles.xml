@@ -108,6 +108,12 @@
         <item name="colorAccent">@color/colorNlbAccent</item>
     </style>
 
+    <style name="AppTheme.Tram" parent="AppTheme">
+        <item name="colorPrimary">@color/colorTram</item>
+        <item name="colorPrimaryDark">@color/colorTramDark</item>
+        <item name="colorAccent">@color/colorTramAccent</item>
+    </style>
+
     <style name="AppTheme.Night" parent="AppTheme">
         <item name="colorPrimary">@color/colorNight</item>
         <item name="colorPrimaryDark">@color/colorNightDark</item>

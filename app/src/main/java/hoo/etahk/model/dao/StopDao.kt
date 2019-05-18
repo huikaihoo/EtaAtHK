@@ -80,9 +80,20 @@ abstract class StopDao {
         }
     }
 
+    @Transaction
+    open fun insertOnDeleteOld(companies: List<String>, stops: List<Stop>) {
+        companies.forEach {
+            delete(it)
+        }
+        insert(stops)
+    }
+
     // Delete
 //    @Delete
 //    abstract fun delete(stop: Stop)
+
+    @Query("DELETE FROM stop WHERE company = :company")
+    abstract fun delete(company: String)
 
     @Query("DELETE FROM stop $STOP_COND AND updateTime < :updateTime")
     abstract fun delete(company: String,

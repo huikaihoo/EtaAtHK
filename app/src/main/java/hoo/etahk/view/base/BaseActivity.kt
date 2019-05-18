@@ -2,7 +2,10 @@ package hoo.etahk.view.base
 
 import android.Manifest
 import android.app.ActivityManager
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
@@ -23,6 +26,7 @@ import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.view.settings.SettingsActivity
 import org.jetbrains.anko.startActivity
 
+
 abstract class BaseActivity : AppCompatActivity() {
 
     companion object {
@@ -32,10 +36,12 @@ abstract class BaseActivity : AppCompatActivity() {
         )
     }
 
-    val language = SharedPrefsHelper.get<String>(R.string.pref_language)
+    private val language = SharedPrefsHelper.get<String>(R.string.pref_language)
+    private var broadcastReceiver: BaseBroadcastReceiver? = null
 
-    var userIsInteracting: Boolean = false
+    var userIsInteracting = false
     var autoSetTaskDescription = true
+    var broadcastIntentList = listOf<String>()
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base?.applyLocale(SharedPrefsHelper.get(R.string.pref_language)))
@@ -57,7 +63,25 @@ abstract class BaseActivity : AppCompatActivity() {
         if (language != SharedPrefsHelper.get<String>(R.string.pref_language)) {
             restart()
         }
+        if (broadcastIntentList.isNotEmpty()) {
+            broadcastReceiver = BaseBroadcastReceiver()
+            val intentFilter = IntentFilter()
+            broadcastIntentList.forEach {
+                intentFilter.addAction(it)
+            }
+
+            registerReceiver(broadcastReceiver, intentFilter)
+        }
         super.onResume()
+    }
+
+    public override fun onPause() {
+        super.onPause()
+
+        if (broadcastReceiver != null) {
+            unregisterReceiver(broadcastReceiver)
+            broadcastReceiver = null
+        }
     }
 
     fun setTaskDescription() {
@@ -73,7 +97,6 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_empty, menu)
-
         return true
     }
 
@@ -147,6 +170,19 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     open fun onRequestPermissionResult(isSuccess: Boolean, permission: String) {
+
+    }
+
+    inner class BaseBroadcastReceiver : BroadcastReceiver() {
+        // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+        override fun onReceive(context: Context, intent: Intent) {
+            if (broadcastIntentList.contains(intent.action)) {
+                onBroadcastReceive(intent)
+            }
+        }
+    }
+
+    open fun onBroadcastReceive(intent: Intent) {
 
     }
 }

@@ -31,6 +31,7 @@ object RoutesRepo {
 
     fun updateParentRoutes() {
         ConnectionHelper.getParentRoutes(Constants.Company.BUS)
+        ConnectionHelper.getParentRoutes(Constants.Company.TRAM)
     }
 
     // Parents route by Company and routeNo

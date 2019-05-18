@@ -42,5 +42,6 @@ object SharePrefs {
     const val GOV_API_PARAMETER_APP_VERSION = "3.6"
     const val GOV2_API_PARAMETER_APP_VERSION = "1.0"
     const val GOV_API_PARAMETER_COMPANY_ALL_BUS = "-1"
-    const val GOV_API_PARAMETER_COMPANY_ALL_BUS_MINIBUS = "0"
+    const val GOV_API_PARAMETER_COMPANY_ALL_BUS_GMB = "0"
+    const val GOV_API_PARAMETER_COMPANY_ALL_GMB = "20"
 }

@@ -8,10 +8,10 @@
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:paddingStart="12dp"
-    android:paddingEnd="12dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingStart="@dimen/three_quarters_margin"
+    android:paddingEnd="@dimen/three_quarters_margin"
+    android:paddingTop="@dimen/half_margin"
+    android:paddingBottom="@dimen/half_margin">
 
     <TextView
         android:id="@+id/stop_title"
@@ -31,8 +31,8 @@
         android:fontFamily="@font/noto_sans_condensed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/half_margin"
+        android:layout_marginEnd="@dimen/half_margin"
         android:ellipsize="end"
         android:maxLines="1"
         app:layout_constraintBaseline_toBaselineOf="@+id/stop_title"
@@ -45,7 +45,7 @@
         android:fontFamily="@font/noto_sans_condensed"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="@dimen/half_margin"
         android:ellipsize="end"
         android:maxLines="2"
         app:layout_constraintHorizontal_bias="0.0"

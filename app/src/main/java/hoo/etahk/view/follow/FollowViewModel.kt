@@ -17,6 +17,9 @@ class FollowViewModel : TimerViewModel() {
     val enableSorting = MutableLiveData<Boolean>()
     var lastLocation: Location? = null
 
+    var isLocationIdUsed: Boolean = false
+    var isSnackbarShowed: Boolean = false
+
     init {
         subscribeToRepo()
     }

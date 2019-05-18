@@ -15,4 +15,5 @@ object Argument {
     const val ARG_LOCATION_ID = "location_id"
     const val ARG_NAME = "name"
     const val ARG_TITLE = "title"
+    const val ARG_SNACKBAR_MSG = "snack_msg"
 }

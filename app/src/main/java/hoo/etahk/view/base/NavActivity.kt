@@ -20,9 +20,11 @@ import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.startActivity
 import hoo.etahk.view.fh.FHActivity
 import hoo.etahk.view.follow.FollowActivity
+import hoo.etahk.view.route.RouteActivity
 import hoo.etahk.view.search.BusSearchActivity
 import hoo.etahk.view.settings.SettingsActivity
 import kotlinx.android.synthetic.main.nav_header.view.*
+import org.jetbrains.anko.startActivity
 
 abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -114,8 +116,18 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
             R.id.nav_bus -> {
                 startActivity<BusSearchActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             }
-            R.id.nav_tram -> {
+            R.id.nav_gmb -> {
 
+            }
+            R.id.nav_tram -> {
+                startActivity<RouteActivity>(
+                    Argument.ARG_COMPANY to Constants.Company.TRAM,
+                    Argument.ARG_ROUTE_NO to "TRAM",
+                    Argument.ARG_TYPE_CODE to Constants.RouteType.TRAM,
+                    Argument.ARG_ANOTHER_COMPANY to "",
+                    Argument.ARG_GOTO_BOUND to -1L,
+                    Argument.ARG_GOTO_SEQ to -1L
+                )
             }
             R.id.nav_mtr -> {
 

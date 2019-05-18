@@ -5,7 +5,6 @@ import com.google.firebase.perf.metrics.AddTrace
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
-import hoo.etahk.common.extensions.DB
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.extensions.yn
@@ -71,11 +70,8 @@ object KmbConnection: BaseConnection {
                     }
                     logd("After insert child routes")
 
-                    val stopsMap = gistDatabaseRes.stops.groupBy { it.routeKey }
-                    stopsMap.forEach { (routeKey, stops) ->
-                        GlobalScope.launch(Dispatchers.DB) {
-                            AppHelper.db.stopDao().insertOrUpdate(routeKey, stops, t)
-                        }
+                    if (gistDatabaseRes.stops.isNotEmpty()) {
+                        AppHelper.db.stopDao().insertOnDeleteOld(listOf(Constants.Company.KMB, Constants.Company.NLB), gistDatabaseRes.stops)
                     }
                 }
 
@@ -397,9 +393,6 @@ object KmbConnection: BaseConnection {
                                     stop.etaResults = etaResults
                                     //logd(AppHelper.gson.toJson(stop.etaResults))
                                 }
-
-                                stop.etaStatus = Constants.EtaStatus.SUCCESS
-                                stop.etaResults = etaResults
                             }
                         } catch (e: Exception) {
                             loge("updateEta::stops.forEach failed!", e)

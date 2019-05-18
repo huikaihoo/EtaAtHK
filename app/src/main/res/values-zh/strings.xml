@@ -75,6 +75,7 @@
     <!-- Common -->
     <string name="clear">清除</string>
     <string name="exit_app">退出應用程式</string>
+    <string name="to">往</string>
     <string name="to_prefix">往\u0020</string>
     <string name="to_middle">\u0020往\u0020</string>
     <string name="min">分鐘</string>

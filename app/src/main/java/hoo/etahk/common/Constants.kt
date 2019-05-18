@@ -52,6 +52,10 @@ object Constants {
         const val NOTIFICATION_UPDATE_ROUTES = 101
     }
 
+    object BroadcastIndent {
+        const val FINISH_UPDATE_ROUTES = "hoo.etahk.broadcast.FinishUpdateRoutes"
+    }
+
     object Company {
         const val BUS = "BUS"
         const val GOV = "GOV"
@@ -65,6 +69,8 @@ object Constants {
         const val DB = "DB"
         const val PI = "PI"
         const val LRT_FEEDER = "LRTFeeder"
+        // Green Minibus Bus
+        const val GMB = "GMB"
         // Tram
         const val TRAM = "TRAM"
         // MTR Train
@@ -82,6 +88,9 @@ object Constants {
         const val BUS_HKI_NIGHT = 12L
         const val BUS_CROSS_HARBOUR_NIGHT = 13L
         const val BUS_AIRPORT_LANTAU_NIGHT = 14L
+        const val GMB_HKI = 21L
+        const val GMB_KL = 22L
+        const val GMB_NT = 23L
         const val TRAM = 30L
         const val MTR = 100L
     }
@@ -99,6 +108,7 @@ object Constants {
         const val NLB_URL = "https://nlb.kcbh.com.hk:8443/"
         const val GOV_URL = "http://app1.hketransport.td.gov.hk/"
         const val GOV2_URL = "http://cms.hkemobility.gov.hk/"
+        const val TRAM_URL = "http://hktramways.com/"
         const val GIST_URL = "https://api.github.com/gists/"
     }
 
@@ -149,6 +159,14 @@ object Constants {
         const val NWFB_STOP_RECORD_DETAILS = 7
         const val NWFB_STOP_RECORD_TO = 8
         const val NWFB_STOP_RECORD_FARE = 10
+
+        const val TRAM_STOP_RECORD_SIZE = 6
+        const val TRAM_STOP_RECORD_STOP_ID = 0
+        const val TRAM_STOP_RECORD_NAME_EN = 1
+        const val TRAM_STOP_RECORD_NAME_TC = 2
+        const val TRAM_STOP_RECORD_NAME_SC = 3
+        const val TRAM_STOP_RECORD_LATITUDE = 4
+        const val TRAM_STOP_RECORD_LONGITUDE = 5
     }
 
     object Eta {
@@ -157,6 +175,10 @@ object Constants {
         const val NWFB_ETA_RECORD_DISTANCE = 13
         const val NWFB_ETA_RECORD_ETA_TIME = 16
         const val NWFB_ETA_RECORD_MSG = 26
+
+        const val TRAM_ETA_RECORD_ETA_TIME = "eat"
+        const val TRAM_ETA_RECORD_DEST_TC = "tram_dest_tc"
+        const val TRAM_ETA_RECORD_DEST_EN = "tram_dest_en"
     }
 }
 

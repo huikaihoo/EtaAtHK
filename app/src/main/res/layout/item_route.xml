@@ -7,10 +7,10 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
+    android:paddingLeft="@dimen/normal_margin"
+    android:paddingRight="@dimen/normal_margin"
+    android:paddingTop="@dimen/half_margin"
+    android:paddingBottom="@dimen/half_margin"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 

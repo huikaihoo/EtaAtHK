@@ -85,6 +85,7 @@
     <!-- Common -->
     <string name="clear">Clear</string>
     <string name="exit_app">Exit App</string>
+    <string name="to">To\u0020</string>
     <string name="to_prefix">To\u0020</string>
     <string name="to_middle">\u0020to\u0020</string>
     <string name="min">min</string>

@@ -2,7 +2,7 @@ package hoo.etahk
 
 import androidx.annotation.StringRes
 import com.google.gson.GsonBuilder
-import hoo.etahk.common.Utils
+import hoo.etahk.common.helper.AppHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
