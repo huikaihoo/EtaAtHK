@@ -11,9 +11,9 @@ apply plugin: 'kotlin-kapt'
 def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
-def versionSuffix = "-alpha.2"
+def versionSuffix = "-alpha.3"
 
-def versionBuild = 9
+def versionBuild = 10
 
 def static getBuildTime() {
     def date = new Date()

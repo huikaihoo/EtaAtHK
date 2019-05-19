@@ -29,8 +29,8 @@ class App : Application() {
         super.onCreate()
         instance = this
 
-        initSharePrefs()
         initAppHelper()
+        initSharePrefs()
         initCrashlytics()
         initStetho()
         initConnectionHelper()
