@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.view.View
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import hoo.etahk.R
-import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.BaseDiffCallback
@@ -38,13 +38,23 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
             itemView.from_to.text = route.from.value + route.getDirectionArrow() + route.to.value
             itemView.route_desc.text = route.getParentDesc()
 
-            itemView.setOnClickListener { startRouteActivity(context, route.routeKey, route.anotherCompany) }
+            itemView.setOnClickListener {
+                if (route.companyDetails.size > 1) {
+                    when (SharedPrefsHelper.get<String>(R.string.pref_bus_jointly)) {
+                        "0" -> startRouteActivity(context, route.routeKey, route.routeKey.company, route.anotherCompany)
+                        "1" -> startRouteActivity(context, route.routeKey, route.anotherCompany, route.routeKey.company)
+                        "2" -> context?.showCompaniesPopupMenu(itemView, route)
+                    }
+                } else {
+                    startRouteActivity(context, route.routeKey, route.routeKey.company, route.anotherCompany)
+                }
+            }
             itemView.setOnLongClickListener { context?.showRoutePopupMenu(itemView, route); true }
         }
 
-        private fun startRouteActivity(context: BusSearchFragment?, routeKey: RouteKey, anotherCompany: String = ""){
+        private fun startRouteActivity(context: BusSearchFragment?, routeKey: RouteKey, company: String, anotherCompany: String = ""){
             context?.activity?.startActivity<RouteActivity>(
-                Argument.ARG_COMPANY to routeKey.company,
+                Argument.ARG_COMPANY to company,
                 Argument.ARG_ROUTE_NO to routeKey.routeNo,
                 Argument.ARG_TYPE_CODE to routeKey.typeCode,
                 Argument.ARG_ANOTHER_COMPANY to anotherCompany,

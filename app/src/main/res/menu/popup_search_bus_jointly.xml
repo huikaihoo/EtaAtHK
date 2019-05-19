@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/popup_company_kmb_lwb"
+        android:title="@string/kmb" />
+    <item
+        android:id="@+id/popup_company_nwfb_ctb"
+        android:title="@string/nwfb" />
+</menu>

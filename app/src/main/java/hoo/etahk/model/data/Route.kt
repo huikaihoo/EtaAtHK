@@ -6,6 +6,7 @@ import androidx.room.Entity
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 
@@ -40,6 +41,18 @@ data class Route(
 
     val anotherCompany: String
         get() = if (companyDetails.size > 1) companyDetails[1] else ""
+
+    val companyDetailsByPref: List<String>
+        get() {
+            return if (companyDetails.size > 1) {
+                if (SharedPrefsHelper.get<String>(R.string.pref_bus_jointly) == "1")
+                    listOf(companyDetails[1], companyDetails[0])
+                else
+                    companyDetails
+            } else {
+                companyDetails
+            }
+        }
 
     fun getParentDesc(): String {
         var result = ""

@@ -76,6 +76,7 @@
     <string name="refresh_route_info">Refresh Route Info</string>
     <string name="add_to_favourite">Add to favourite</string>
     <string name="view_another_company">View in another company</string>
+    <string name="view_company_route">View %1$s %2$s</string>
     <string name="add_to_follow_stop">Add to following stops</string>
     <string name="view_route">View route</string>
 
@@ -174,10 +175,12 @@
     <string name="msg_one_item_removed">One item is removed</string>
     <string name="msg_add_to_favourite_success">Added to favourite successfully</string>
 
-    <!-- General Preference -->
+    <!-- General Preference [Key] -->
     <string name="pref_general" translatable="false">general</string>
     <string name="pref_language" translatable="false">language</string>
     <string name="pref_update_routes" translatable="false">update_routes</string>
+    <string name="pref_bus" translatable="false">bus</string>
+    <string name="pref_bus_jointly" translatable="false">bus_jointly</string>
     <string name="pref_backup_restore" translatable="false">backup_restore</string>
     <string name="pref_backup" translatable="false">backup</string>
     <string name="pref_restore" translatable="false">restore</string>
@@ -190,6 +193,7 @@
     <string name="pref_testing" translatable="false">testing</string>
     <string name="pref_parameters" translatable="false">parameters</string>
 
+    <!-- General Preference [not translatable] -->
     <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018-2019</string>
     <string name="play_store_app_url" translatable="false">market://details?id=</string>
     <string name="play_store_developer_url" translatable="false">market://search?q=pub:Simon+Hui</string>
@@ -197,8 +201,13 @@
     <string name="privacy_policy_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/blob/master/app/src/main/res/raw/privacy_policy.md</string>
     <string name="disclaimer_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/blob/master/app/src/main/res/raw/disclaimer.md</string>
 
+    <!-- General Preference -->
     <string name="pref_category_title_general">General</string>
     <string name="pref_title_language">Language (語言)</string>
+
+    <string name="pref_category_title_bus">Bus</string>
+    <string name="pref_title_bus_jointly">Jointly operated routes</string>
+
     <string name="pref_title_update_routes">Update routes data now</string>
     <string name="pref_category_title_backup_restore">Backup and Restore</string>
     <string name="pref_title_backup">Backup</string>
@@ -219,6 +228,7 @@
     <string name="pref_title_parameters">Parameters</string>
     <string name="pref_summary_parameters">View and edit parameters</string>
 
+    <!-- General Preference [entries] -->
     <string-array name="pref_entries_language">
         <item>@string/system_default</item>
         <item>@string/tc</item>
@@ -228,6 +238,17 @@
         <item></item>
         <item>zh</item>
         <item>en</item>
+    </string-array>
+
+    <string-array name="pref_entries_bus_jointly">
+        <item>Open KMB/LWB route by default</item>
+        <item>Open NWFB/CTB route by default</item>
+        <item>Always ask</item>
+    </string-array>
+    <string-array name="pref_values_bus_jointly" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
     </string-array>
 
     <!-- Parameters Preference -->

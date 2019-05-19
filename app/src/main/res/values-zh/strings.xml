@@ -65,7 +65,8 @@
 
     <string name="refresh_route_info">更新路線資料</string>
     <string name="add_to_favourite">加入至最愛路線</string>
-    <string name="view_another_company">以另一公司檢視</string>
+    <string name="view_another_company">切換到另一公司</string>
+    <string name="view_company_route">檢視 %1$s %2$s</string>
     <string name="add_to_follow_stop">加入至追蹤車站</string>
     <string name="view_route">檢視路線</string>
 
@@ -159,9 +160,12 @@
     <string name="msg_one_item_removed">已移除一個項目</string>
     <string name="msg_add_to_favourite_success">成功加入至最愛路線</string>
 
-    <!-- Settings -->
+    <!-- General Preference -->
     <string name="pref_category_title_general">一般</string>
     <string name="pref_title_language">語言 (Language)</string>
+
+    <string name="pref_category_title_bus">巴士</string>
+    <string name="pref_title_bus_jointly">聯營路線</string>
 
     <string name="pref_title_update_routes">立即更新路線資料</string>
     <string name="pref_category_title_backup_restore">備份和還原</string>
@@ -182,4 +186,11 @@
     <string name="pref_category_title_testing">測試</string>
     <string name="pref_title_parameters">參數</string>
     <string name="pref_summary_parameters">檢視/編輯參數</string>
+
+    <!-- General Preference [entries] -->
+    <string-array name="pref_entries_bus_jointly">
+        <item>預設開啟 九巴/龍運 路線</item>
+        <item>預設開啟 新巴/城巴 路線</item>
+        <item>總是詢問</item>
+    </string-array>
 </resources>

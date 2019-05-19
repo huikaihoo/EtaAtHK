@@ -20,6 +20,20 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="@string/pref_bus"
+        android:title="@string/pref_category_title_bus"
+        android:order="20">
+
+        <ListPreference
+            android:key="@string/pref_bus_jointly"
+            android:title="@string/pref_title_bus_jointly"
+            android:entries="@array/pref_entries_bus_jointly"
+            android:entryValues="@array/pref_values_bus_jointly"
+            android:defaultValue="2" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="@string/pref_backup_restore"
         android:title="@string/pref_category_title_backup_restore"
         android:order="80">

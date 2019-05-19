@@ -66,6 +66,9 @@ class GeneralPrefFragment : BasePrefFragment() {
             true
         }
 
+        // Bus
+        bindPreferenceSummary(R.string.pref_bus_jointly)
+
         // Backup and Restore
         val backup = findPreference(R.string.pref_backup)
 

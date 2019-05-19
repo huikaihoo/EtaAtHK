@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener
 import hoo.etahk.R
+import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
+import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
@@ -90,22 +93,75 @@ class BusSearchFragment : BaseFragment() {
         return rootView
     }
 
-    fun showRoutePopupMenu(view: View, route: Route) {
+    fun showCompaniesPopupMenu(view: View, route: Route) {
         val popup = PopupMenu(activity!!, view, Gravity.END)
-        if (route.companyDetails.size <= 1) {
-            popup.inflate(R.menu.popup_search_route)
+
+        popup.inflate(R.menu.popup_search_bus_jointly)
+
+        popup.menu[0].title = getString(
+            R.string.view_company_route,
+            Utils.getStringResourceByName(route.routeKey.company.toLowerCase()),
+            route.routeKey.routeNo
+        )
+        popup.menu[1].title = getString(
+            R.string.view_company_route,
+            Utils.getStringResourceByName(route.anotherCompany.toLowerCase()),
+            route.routeKey.routeNo
+        )
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.popup_company_kmb_lwb -> {
+                    activity?.startActivity<RouteActivity>(
+                        Argument.ARG_COMPANY to route.routeKey.company,
+                        Argument.ARG_ROUTE_NO to route.routeKey.routeNo,
+                        Argument.ARG_TYPE_CODE to route.routeKey.typeCode,
+                        Argument.ARG_ANOTHER_COMPANY to route.anotherCompany,
+                        Argument.ARG_GOTO_BOUND to -1L,
+                        Argument.ARG_GOTO_SEQ to -1L
+                    )
+                }
+                R.id.popup_company_nwfb_ctb -> {
+                    activity?.startActivity<RouteActivity>(
+                        Argument.ARG_COMPANY to route.anotherCompany,
+                        Argument.ARG_ROUTE_NO to route.routeKey.routeNo,
+                        Argument.ARG_TYPE_CODE to route.routeKey.typeCode,
+                        Argument.ARG_ANOTHER_COMPANY to route.routeKey.company,
+                        Argument.ARG_GOTO_BOUND to -1L,
+                        Argument.ARG_GOTO_SEQ to -1L
+                    )
+                }
+            }
+            true
+        }
+        popup.show()
+    }
+
+    fun showRoutePopupMenu(view: View, route: Route) {
+        val pref = SharedPrefsHelper.get<String>(R.string.pref_bus_jointly)
+        val companyDetailsByPref = route.companyDetailsByPref
+
+        val popup = PopupMenu(activity!!, view, Gravity.END)
+
+        if (route.companyDetails.size <= 1 || pref == "2") {
+            popup.inflate(R.menu.popup_search)
         } else {
-            popup.inflate(R.menu.popup_search_route_bus)
+            popup.inflate(R.menu.popup_search_bus)
+            popup.menu[0].title = getString(
+                R.string.view_company_route,
+                Utils.getStringResourceByName(companyDetailsByPref[1].toLowerCase()),
+                route.routeKey.routeNo
+            )
         }
 
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.popup_view -> {
                     activity?.startActivity<RouteActivity>(
-                        Argument.ARG_COMPANY to route.anotherCompany,
+                        Argument.ARG_COMPANY to companyDetailsByPref[1],
                         Argument.ARG_ROUTE_NO to route.routeKey.routeNo,
                         Argument.ARG_TYPE_CODE to route.routeKey.typeCode,
-                        Argument.ARG_ANOTHER_COMPANY to route.routeKey.company,
+                        Argument.ARG_ANOTHER_COMPANY to companyDetailsByPref[0],
                         Argument.ARG_GOTO_BOUND to -1L,
                         Argument.ARG_GOTO_SEQ to -1L
                     )
