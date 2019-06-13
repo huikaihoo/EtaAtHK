@@ -24,6 +24,7 @@ import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.common.view.ItemTouchHelperCallback
 import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.FollowItem
+import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.base.BaseFragment
@@ -63,6 +64,7 @@ class FollowFragment : BaseFragment() {
     private lateinit var fragmentViewModel: FollowFragmentViewModel
     private lateinit var itemTouchHelper: ItemTouchHelper
     private lateinit var itemTouchHelperCallback: ItemTouchHelperCallback
+    private var nearbyStopsAdapter: NearbyStopsAdapter = NearbyStopsAdapter()
     private var followItemsAdapter: FollowItemsAdapter = FollowItemsAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -105,6 +107,17 @@ class FollowFragment : BaseFragment() {
         return rootView
     }
 
+    fun updateEtaByStops(stops: List<Stop>) {
+        logd("updateEtaByStops")
+        GlobalScope.launch(Dispatchers.Main) {
+            rootView.refresh_layout.isRefreshing = true
+            stops.forEach { it.isLoading = true }
+            nearbyStopsAdapter.notifyDataSetChanged()
+        }
+
+        fragmentViewModel.updateEta(stops)
+    }
+
     fun updateEta(items: List<ItemAndStop>) {
         GlobalScope.launch(Dispatchers.Main) {
             rootView.refresh_layout.isRefreshing = true
@@ -112,7 +125,13 @@ class FollowFragment : BaseFragment() {
             followItemsAdapter.notifyDataSetChanged()
         }
 
-        fragmentViewModel.updateEta(items)
+        val stops = mutableListOf<Stop>()
+        items.forEach{ item ->
+            if(item.stop != null) {
+                stops.add(item.stop!!)
+            }
+        }
+        fragmentViewModel.updateEta(stops)
     }
 
     fun updateItemsDisplaySeq(items: List<ItemAndStop>) {
@@ -126,6 +145,33 @@ class FollowFragment : BaseFragment() {
             }
 
             fragmentViewModel.updateFollowItems(updatedItems.toList())
+        }
+    }
+
+    fun showItemPopupMenu(view: View, stop: Stop) {
+        logd("showItemPopupMenu")
+        val popup = PopupMenu(activity!!, view, Gravity.END)
+        popup.inflate(R.menu.popup_follow_nearby_stop)
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.popup_view -> {
+                    val route = fragmentViewModel.getParentRouteOnce(
+                        stop.routeKey.company,
+                        stop.routeKey.routeNo
+                    )
+
+                    activity?.startActivity<RouteActivity>(
+                        Argument.ARG_COMPANY to stop.routeKey.company,
+                        Argument.ARG_ROUTE_NO to stop.routeKey.routeNo,
+                        Argument.ARG_TYPE_CODE to stop.routeKey.typeCode,
+                        Argument.ARG_ANOTHER_COMPANY to route.anotherCompany,
+                        Argument.ARG_GOTO_BOUND to stop.routeKey.bound,
+                        Argument.ARG_GOTO_SEQ to stop.seq
+                    )
+                }
+            }
+            true
         }
     }
 
@@ -211,32 +257,37 @@ class FollowFragment : BaseFragment() {
         })
 
         viewModel.selectedLocation.observe(viewLifecycleOwner, Observer<LocationAndGroups> {
-            it?.let {
-                val position = arguments!!.getInt(ARG_POSITION)
-                logd("subscribeUiChanges $position")
-                if (position < it.groups.size && it.groups[position].Id?: 0L > 0L ) {
-                    if (fragmentViewModel.groupId != it.groups[position].Id) {
-                        //logd("subscribeUiChanges XX ${it.groups[position].Id}")
-                        fragmentViewModel.removeObservers(this)
-                        fragmentViewModel.groupId = it.groups[position].Id
-                        subscribeItemsChanges()
-                    }
+            val position = arguments!!.getInt(ARG_POSITION)
+            logd("subscribeUiChanges $position")
+
+            if (position < it.groups.size && it.groups[position].Id?: 0L > 0L ) {
+                if (fragmentViewModel.groupId != it.groups[position].Id) {
+                    //logd("subscribeUiChanges XX ${it.groups[position].Id}")
+                    fragmentViewModel.removeObservers(this)
+                    fragmentViewModel.isNearbyStops = it.location.pin
+                    fragmentViewModel.groupId = it.groups[position].Id
+                    subscribeItemsChanges(position)
                 }
             }
         })
     }
 
-    private fun subscribeItemsChanges() {
-        fragmentViewModel.getFollowItems().observe(this, Observer<List<ItemAndStop>> {
-            if (!isItemsDisplaySeqChanged) {
-                val size = it?.size ?: 0
-                val last = viewModel.getLastUpdateTime().value ?: 0L
+    private fun subscribeItemsChanges(position: Int) {
+        if (fragmentViewModel.isNearbyStops) {
+            rootView.recycler_view.adapter = nearbyStopsAdapter
+            fragmentViewModel.resetNearbyStops(position, viewModel.lastLocation, this)
 
-                var errorCount = 0
-                var updatedCount = 0
+            // Nearby Stops
+            fragmentViewModel.nearbyStops?.observe(this, Observer {
 
-                it?.forEach { item ->
-                    item.stop?.let { stop ->
+                if (!isItemsDisplaySeqChanged) {
+                    val size = it?.size ?: 0
+                    val last = viewModel.getLastUpdateTime().value ?: 0L
+
+                    var errorCount = 0
+                    var updatedCount = 0
+
+                    it.map { it.stop }.forEach { stop ->
                         if (stop.etaStatus != Constants.EtaStatus.SUCCESS) {
                             errorCount++
                         }
@@ -244,33 +295,88 @@ class FollowFragment : BaseFragment() {
                             updatedCount++
                         }
                     }
-                }
 
-                logd("F=$errorCount U=$updatedCount T=$size")
+                    logd("F=$errorCount U=$updatedCount T=$size")
 
-                it?.let { followItemsAdapter.dataSource = it }
-
-                if (!fragmentViewModel.isEtaInit && size > 0) {
-                    fragmentViewModel.isEtaInit = true
-                    fragmentViewModel.isRefreshingAll = true
-                    updateEta(it!!)
-                } else if (size == updatedCount) {
-                    rootView.refresh_layout.isRefreshing = false
-
-                    if (fragmentViewModel.isRefreshingAll) {
-                        logd("Start timer")
-                        fragmentViewModel.isRefreshingAll = false
-                        viewModel.startTimer()
+                    it.forEachIndexed { i, stop ->
+                        if (i == 0 || it[i-1].stop.name.value != stop.stop.name.value) {
+                            stop.showHeader = true
+                        }
                     }
-                }
+                    nearbyStopsAdapter.dataSource = it
 
-                // TODO ("Show Network Error Message based on Network Error")
-            }
-        })
+                    if (!fragmentViewModel.isEtaInit && size > 0) {
+                        fragmentViewModel.isEtaInit = true
+                        fragmentViewModel.isRefreshingAll = true
+                        updateEtaByStops(it.map{ it.stop })
+                    } else if (size == updatedCount) {
+                        rootView.refresh_layout.isRefreshing = false
+
+                        if (fragmentViewModel.isRefreshingAll) {
+                            logd("Start timer")
+                            fragmentViewModel.isRefreshingAll = false
+                            viewModel.startTimer()
+                        }
+                    }
+
+                    // TODO ("Show Network Error Message based on Network Error")
+                }
+            })
+        } else {
+            rootView.recycler_view.adapter = followItemsAdapter
+
+            // Normal Group
+            fragmentViewModel.getFollowItems().observe(this, Observer<List<ItemAndStop>> {
+                if (!isItemsDisplaySeqChanged) {
+                    val size = it?.size ?: 0
+                    val last = viewModel.getLastUpdateTime().value ?: 0L
+
+                    var errorCount = 0
+                    var updatedCount = 0
+
+                    it?.forEach { item ->
+                        item.stop?.let { stop ->
+                            if (stop.etaStatus != Constants.EtaStatus.SUCCESS) {
+                                errorCount++
+                            }
+                            if (stop.etaUpdateTime >= 0L && stop.etaUpdateTime >= last) {
+                                updatedCount++
+                            }
+                        }
+                    }
+
+                    logd("F=$errorCount U=$updatedCount T=$size")
+
+                    it?.let { followItemsAdapter.dataSource = it }
+
+                    if (!fragmentViewModel.isEtaInit && size > 0) {
+                        fragmentViewModel.isEtaInit = true
+                        fragmentViewModel.isRefreshingAll = true
+                        updateEta(it!!)
+                    } else if (size == updatedCount) {
+                        rootView.refresh_layout.isRefreshing = false
+
+                        if (fragmentViewModel.isRefreshingAll) {
+                            logd("Start timer")
+                            fragmentViewModel.isRefreshingAll = false
+                            viewModel.startTimer()
+                        }
+                    }
+
+                    // TODO ("Show Network Error Message based on Network Error")
+                }
+            })
+        }
 
         viewModel.getLastUpdateTime().observe(viewLifecycleOwner, Observer<Long> {
             isItemsDisplaySeqChanged = false
-            if (it != null) {
+            if (fragmentViewModel.isNearbyStops) {
+                val stops = fragmentViewModel.nearbyStops?.value?.map{ it.stop }
+                if (stops != null && stops.isNotEmpty() && !fragmentViewModel.isRefreshingAll) {
+                    fragmentViewModel.isRefreshingAll = true
+                    updateEtaByStops(stops)
+                }
+            } else {
                 val items = fragmentViewModel.getFollowItems().value
                 if (items != null && items.isNotEmpty() && !fragmentViewModel.isRefreshingAll) {
                     fragmentViewModel.isRefreshingAll = true

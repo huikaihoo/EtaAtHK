@@ -138,7 +138,7 @@ class BusSearchFragment : BaseFragment() {
     }
 
     fun showRoutePopupMenu(view: View, route: Route) {
-        val pref = SharedPrefsHelper.get<String>(R.string.pref_bus_jointly)
+        val pref = SharedPrefsHelper.get(R.string.pref_bus_jointly, "2")
         val companyDetailsByPref = route.companyDetailsByPref
 
         val popup = PopupMenu(activity!!, view, Gravity.END)

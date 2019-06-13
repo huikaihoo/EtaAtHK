@@ -123,6 +123,7 @@
     <string name="overnight">Overnight</string>
 
     <!-- Location / Group Name -->
+    <string name="stops_nearby">Stops Nearby</string>
     <string name="home">Home</string>
     <string name="work">Work</string>
 
@@ -241,8 +242,8 @@
     </string-array>
 
     <string-array name="pref_entries_bus_jointly">
-        <item>Open KMB/LWB route by default</item>
-        <item>Open NWFB/CTB route by default</item>
+        <item>View KMB/LWB route by default</item>
+        <item>View NWFB/CTB route by default</item>
         <item>Always ask</item>
     </string-array>
     <string-array name="pref_values_bus_jointly" translatable="false">

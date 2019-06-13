@@ -174,7 +174,9 @@ class FollowActivity : NavActivity() {
             viewModel.getFollowLocations().observe(this, Observer<List<LocationAndGroups>> {
                 val lastLocation = viewModel.lastLocation
 
-                spinnerAdapter.dataSource = if (lastLocation == null) it else it.sortedBy { lastLocation.distanceTo(it.location.location.toLocation()) }
+                spinnerAdapter.dataSource = if (lastLocation == null) it else it.sortedBy {
+                    if (it.location.pin) -1.0f else lastLocation.distanceTo(it.location.location.toLocation())
+                }
 
                 val selectedLocation = viewModel.selectedLocation.value
 

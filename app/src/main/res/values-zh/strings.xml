@@ -108,6 +108,7 @@
     <string name="overnight">通宵</string>
 
     <!-- Location / Group Name -->
+    <string name="stops_nearby">附近車站</string>
     <string name="home">屋企</string>
     <string name="work">公司</string>
 
@@ -189,8 +190,8 @@
 
     <!-- General Preference [entries] -->
     <string-array name="pref_entries_bus_jointly">
-        <item>預設開啟 九巴/龍運 路線</item>
-        <item>預設開啟 新巴/城巴 路線</item>
+        <item>預設檢視 九巴/龍運 路線</item>
+        <item>預設檢視 新巴/城巴 路線</item>
         <item>總是詢問</item>
     </string-array>
 </resources>

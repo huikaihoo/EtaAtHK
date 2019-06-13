@@ -10,6 +10,9 @@ abstract class LocationDao {
     @Query("SELECT COUNT(*) FROM followLocation")
     abstract fun count(): Int
 
+    @Query("SELECT COUNT(*) FROM followLocation WHERE pin = 1")
+    abstract fun countPin(): Int
+
     // Export / Import
     @Query("SELECT * FROM followLocation ORDER BY Id")
     abstract fun exportData(): List<FollowLocation>

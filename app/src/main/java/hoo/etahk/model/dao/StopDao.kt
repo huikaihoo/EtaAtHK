@@ -2,6 +2,8 @@ package hoo.etahk.model.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import hoo.etahk.common.Constants
+import hoo.etahk.model.custom.NearbyStop
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 
@@ -14,6 +16,16 @@ abstract class StopDao {
             "AND routeNo = :routeNo " +
             "AND bound = :bound " +
             "AND variant = :variant "
+
+        const val DISTANCE =
+            "((latitude - :latitude) * (latitude - :latitude)) + ((longitude - :longitude) * (longitude - :longitude))"
+
+        const val NEARBY_STOP_COND =
+            "WHERE stop.company = x.company " +
+            "AND stop.routeNo = x.routeNo " +
+            "AND stop.bound = x.bound " +
+            "AND stop.variant = 1 " +
+            "AND x.distance = $DISTANCE "
     }
 
     // Count
@@ -38,6 +50,30 @@ abstract class StopDao {
                             routeNo: String,
                             bound: Long,
                             variant: Long): List<Stop>
+
+    @Query("""
+        SELECT stop.*, x.distance FROM stop,
+        (   SELECT company, routeNo, bound, MIN($DISTANCE) AS distance FROM stop
+            GROUP BY company, routeNo, bound ORDER BY $DISTANCE LIMIT 50
+        ) AS x
+        $NEARBY_STOP_COND
+        ORDER BY x.distance, routeNo, stop.company, seq
+    """)
+    abstract fun selectNearby(latitude: Double,
+                              longitude: Double): LiveData<List<NearbyStop>>
+
+    @Query("""
+        SELECT stop.*, x.distance FROM stop,
+        (   SELECT company, routeNo, bound, MIN($DISTANCE) AS distance FROM stop
+            WHERE routeNo IN (SELECT DISTINCT dataStrB FROM Misc WHERE miscType = :miscType)
+            GROUP BY company, routeNo, bound ORDER BY $DISTANCE LIMIT 50
+        ) AS x
+        $NEARBY_STOP_COND
+        ORDER BY x.distance, routeNo, stop.company, seq
+    """)
+    abstract fun selectNearbyFav(latitude: Double,
+                                 longitude: Double,
+                                 miscType: Constants.MiscType = Constants.MiscType.ROUTE_FAVOURITE): LiveData<List<NearbyStop>>
 
 //    @Query("SELECT * FROM stop " +
 //            "WHERE company = :company " +

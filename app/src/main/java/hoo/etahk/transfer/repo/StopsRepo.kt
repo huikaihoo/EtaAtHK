@@ -1,11 +1,13 @@
 package hoo.etahk.transfer.repo
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.model.custom.NearbyStop
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.RouteAndStops
@@ -31,6 +33,14 @@ object StopsRepo {
                 route.routeKey.routeNo,
                 route.routeKey.bound,
                 route.routeKey.variant)
+    }
+
+    fun getNearbyStops(location: Location): LiveData<List<NearbyStop>> {
+        return AppHelper.db.stopDao().selectNearby(location.latitude, location.longitude)
+    }
+
+    fun getNearbyStopsFav(location: Location): LiveData<List<NearbyStop>> {
+        return AppHelper.db.stopDao().selectNearbyFav(location.latitude, location.longitude)
     }
 
     fun updateStops(route: Route, needEtaUpdate: Boolean){

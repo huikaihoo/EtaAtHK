@@ -43,7 +43,7 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
                     when (SharedPrefsHelper.get<String>(R.string.pref_bus_jointly)) {
                         "0" -> startRouteActivity(context, route.routeKey, route.routeKey.company, route.anotherCompany)
                         "1" -> startRouteActivity(context, route.routeKey, route.anotherCompany, route.routeKey.company)
-                        "2" -> context?.showCompaniesPopupMenu(itemView, route)
+                        else -> context?.showCompaniesPopupMenu(itemView, route)
                     }
                 } else {
                     startRouteActivity(context, route.routeKey, route.routeKey.company, route.anotherCompany)

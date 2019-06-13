@@ -1,8 +1,10 @@
 package hoo.etahk.view.follow
 
+import android.location.Location
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import hoo.etahk.model.custom.NearbyStop
 import hoo.etahk.model.data.FollowItem
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
@@ -13,8 +15,11 @@ import hoo.etahk.transfer.repo.RoutesRepo
 import hoo.etahk.transfer.repo.StopsRepo
 
 class FollowFragmentViewModel : ViewModel() {
+    var nearbyStops: LiveData<List<NearbyStop>>? = null
+        private set
     private var followItems: LiveData<List<ItemAndStop>>? = null
 
+    var isNearbyStops = false
     var isEtaInit = false
 
     var groupId: Long? = null
@@ -28,6 +33,15 @@ class FollowFragmentViewModel : ViewModel() {
 
     var isRefreshingAll: Boolean = false
 
+    // Nearby Stops
+    fun resetNearbyStops(position: Int, location: Location?, lifecycleOwner: LifecycleOwner) {
+        removeObservers(lifecycleOwner)
+        if (location != null) {
+            nearbyStops = if (position == 0) StopsRepo.getNearbyStops(location) else StopsRepo.getNearbyStopsFav(location)
+        }
+    }
+
+    // Normal Group
     fun getParentRouteOnce(company: String, routeNo: String): Route {
         return RoutesRepo.getParentRouteOnce(company, routeNo)
     }
@@ -48,23 +62,18 @@ class FollowFragmentViewModel : ViewModel() {
         FollowRepo.deleteItem(item)
     }
 
-    fun updateEta(items: List<ItemAndStop>) {
-        val stops = mutableListOf<Stop>()
-        items.forEach{ item ->
-            if(item.stop != null) {
-                stops.add(item.stop!!)
-            }
-        }
+    fun updateEta(stops: List<Stop>) {
         StopsRepo.updateEta(stops, false)
-        //FollowRepo.updateEta(items)
     }
 
     fun removeObservers(lifecycleOwner: LifecycleOwner) {
         followItems?.removeObservers(lifecycleOwner)
+        nearbyStops?.removeObservers(lifecycleOwner)
     }
 
     private fun subscribeToRepo() {
-        followItems = FollowRepo.getItems(groupId!!)
+        if (!isNearbyStops) {
+            followItems = FollowRepo.getItems(groupId!!)
+        }
     }
-
 }

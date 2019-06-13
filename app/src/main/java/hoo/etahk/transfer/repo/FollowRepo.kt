@@ -18,9 +18,31 @@ object FollowRepo {
 
     fun initLocationsAndGroups() {
         GlobalScope.launch(Dispatchers.Default) {
-            if (AppHelper.db.locationDao().count() <= 0) {
-                AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.home), displaySeq = 1))
-                AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.work), displaySeq = 2))
+            // Insert nearby location
+            if (AppHelper.db.locationDao().countPin() <= 0) {
+                AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.stops_nearby), pin = true, displaySeq = 1))
+
+                AppHelper.db.locationDao().selectOnce().forEach {
+                    if (it.name == AppHelper.getString(R.string.stops_nearby)) {
+                        AppHelper.db.groupDao().insert(FollowGroup(
+                            locationId = it.Id!!,
+                            name = AppHelper.getString(R.string.all),
+                            displaySeq = 1L,
+                            updateTime = Utils.getCurrentTimestamp()))
+
+                        AppHelper.db.groupDao().insert(FollowGroup(
+                            locationId = it.Id!!,
+                            name = AppHelper.getString(R.string.sc_favourite_s),
+                            displaySeq = 2L,
+                            updateTime = Utils.getCurrentTimestamp()))
+                    }
+                }
+            }
+
+            // Insert default location (home & work)
+            if (AppHelper.db.locationDao().count() <= 1) {
+                AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.home), displaySeq = 2))
+                AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.work), displaySeq = 3))
 
                 AppHelper.db.locationDao().selectOnce().forEach {
                     val groupName = when (it.name) {
