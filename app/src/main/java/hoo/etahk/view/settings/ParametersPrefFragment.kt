@@ -31,6 +31,7 @@ class ParametersPrefFragment : BasePrefFragment() {
         bindPreferenceSummary(R.string.param_paged_list_page_size)
         bindPreferenceSummary(R.string.param_gist_id_kmb)
         bindPreferenceSummary(R.string.param_gist_id_nwfb)
+        bindPreferenceSummary(R.string.param_gist_id_mtrb)
         bindPreferenceSummary(R.string.param_user_agent)
     }
 

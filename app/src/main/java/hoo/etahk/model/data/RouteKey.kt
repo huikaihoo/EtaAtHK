@@ -7,6 +7,7 @@ import hoo.etahk.common.Constants.Company.DB
 import hoo.etahk.common.Constants.Company.KMB
 import hoo.etahk.common.Constants.Company.LRT_FEEDER
 import hoo.etahk.common.Constants.Company.LWB
+import hoo.etahk.common.Constants.Company.MTRB
 import hoo.etahk.common.Constants.Company.NLB
 import hoo.etahk.common.Constants.Company.NWFB
 import hoo.etahk.common.Constants.Company.PI
@@ -128,7 +129,7 @@ data class RouteKey (
                 BUS_KL_NT
             } else if (h == 1L || h == 3L || h == 6L || h == 9L || routeNo == "W1") {
                 BUS_CROSS_HARBOUR
-            } else if (company == KMB || company == LRT_FEEDER || t == 70L || t == 79L) {
+            } else if (company == KMB || company == LRT_FEEDER || company == MTRB || t == 70L || t == 79L) {
                 BUS_KL_NT
             } else if (company == NWFB || company == CTB) {
                 BUS_HKI

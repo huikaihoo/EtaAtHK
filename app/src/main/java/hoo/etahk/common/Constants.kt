@@ -65,16 +65,18 @@ object Constants {
         const val NWFB = "NWFB"
         const val CTB = "CTB"
         const val NLB = "NLB"
+        const val MTRB = "MTRB" // MTR Bus
         // Not Support ETA (Bus)
         const val DB = "DB"
         const val PI = "PI"
         const val LRT_FEEDER = "LRTFeeder"
-        // Green Minibus Bus
+        // Green Minibus
         const val GMB = "GMB"
         // Tram
         const val TRAM = "TRAM"
-        // MTR Train
+        // MTR
         const val MTR = "MTR"
+        const val AES = "AES" // Airport Express Shuttle
     }
 
     object RouteType {

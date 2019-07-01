@@ -4,8 +4,8 @@ import android.os.Environment
 import android.os.Environment.MEDIA_MOUNTED
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
@@ -69,6 +69,7 @@ class Exporter: FilesWorker() {
             if (SharedPrefsHelper.getAppMode() == Constants.AppMode.DEV) {
                 sharedPrefData.gistIdKmb = SharedPrefsHelper.get(R.string.param_gist_id_kmb)
                 sharedPrefData.gistIdNwfb = SharedPrefsHelper.get(R.string.param_gist_id_nwfb)
+                sharedPrefData.gistIdMtrb = SharedPrefsHelper.get(R.string.param_gist_id_mtrb)
             }
             sharedPrefData.userAgent = SharedPrefsHelper.get(R.string.param_user_agent, SharePrefs.DEFAULT_USER_AGENT)
 

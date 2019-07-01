@@ -12,6 +12,7 @@ data class SharedPrefData(
     // Gist
     var gistIdKmb: String = "",
     var gistIdNwfb: String = "",
+    var gistIdMtrb: String = "",
     // OkHttp
     var userAgent: String = SharePrefs.DEFAULT_USER_AGENT
 )

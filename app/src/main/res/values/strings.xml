@@ -107,8 +107,10 @@
     <string name="nwfb">NWFB</string>
     <string name="ctb">CTB</string>
     <string name="nlb">NLB</string>
+    <string name="mtrb">MTR Bus</string>
     <string name="tram">Tram</string>
     <string name="mtr">MTR</string>
+    <string name="aes">AE Shuttle</string>
 
     <!-- Route Type -->
     <string name="all">All</string>
@@ -263,6 +265,7 @@
     <string name="param_category_gist" translatable="false">Gist</string>
     <string name="param_gist_id_kmb" translatable="false">gist_id_kmb</string>
     <string name="param_gist_id_nwfb" translatable="false">gist_id_nwfb</string>
+    <string name="param_gist_id_mtrb" translatable="false">gist_id_mtrb</string>
     <string name="param_category_ok_http" translatable="false">OkHttp</string>
     <string name="param_user_agent" translatable="false">user_agent</string>
 </resources>

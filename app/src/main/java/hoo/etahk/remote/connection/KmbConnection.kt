@@ -71,7 +71,7 @@ object KmbConnection: BaseConnection {
                     logd("After insert child routes")
 
                     if (gistDatabaseRes.stops.isNotEmpty()) {
-                        AppHelper.db.stopDao().insertOnDeleteOld(listOf(Constants.Company.KMB, Constants.Company.NLB), gistDatabaseRes.stops)
+                        AppHelper.db.stopDao().insertOnDeleteOld(listOf(Constants.Company.KMB, Constants.Company.LWB), gistDatabaseRes.stops)
                     }
                 }
 

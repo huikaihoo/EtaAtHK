@@ -1,5 +1,6 @@
 package hoo.etahk.common.tools
 
+import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import hoo.etahk.R
 import hoo.etahk.common.Constants.AppMode
@@ -10,6 +11,7 @@ import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
+import hoo.etahk.view.App.Companion.networkFlipperPlugin
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -78,7 +80,7 @@ object ConnectionFactory {
         }
 
         builder = when (SharedPrefsHelper.getAppMode()) {
-            AppMode.DEV -> builder.addNetworkInterceptor(StethoInterceptor())
+            AppMode.DEV -> builder.addNetworkInterceptor(StethoInterceptor()).addNetworkInterceptor(FlipperOkhttpInterceptor(networkFlipperPlugin))
             else -> builder
         }
 

@@ -4,9 +4,16 @@ import android.app.Application
 import android.content.Context
 import android.preference.PreferenceManager
 import com.crashlytics.android.Crashlytics
+import com.facebook.flipper.android.AndroidFlipperClient
+import com.facebook.flipper.android.utils.FlipperUtils
+import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
+import com.facebook.flipper.plugins.inspector.DescriptorMapping
+import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
+import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
+import com.facebook.soloader.SoLoader
 import com.facebook.stetho.Stetho
 import get
-import hoo.etahk.R
 import hoo.etahk.common.Constants.AppMode.DEV
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.applyLocale
@@ -19,10 +26,12 @@ class App : Application() {
 
     companion object {
         lateinit var instance: App private set
+        val networkFlipperPlugin: NetworkFlipperPlugin = NetworkFlipperPlugin()
     }
 
     override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base?.applyLocale(PreferenceManager.getDefaultSharedPreferences(base).get(base.getString(R.string.pref_language))))
+        super.attachBaseContext(base?.applyLocale(PreferenceManager.getDefaultSharedPreferences(base).get(base.getString(
+            hoo.etahk.R.string.pref_language))))
     }
 
     override fun onCreate() {
@@ -33,6 +42,7 @@ class App : Application() {
         initSharePrefs()
         initCrashlytics()
         initStetho()
+        initFlipper()
         initConnectionHelper()
     }
 
@@ -54,6 +64,23 @@ class App : Application() {
     private fun initStetho() {
         if (SharedPrefsHelper.getAppMode() == DEV && !Utils.isUnitTest)
             Stetho.initializeWithDefaults(this)
+    }
+
+    private fun initFlipper() {
+        if (SharedPrefsHelper.getAppMode() == DEV && !Utils.isUnitTest) {
+            SoLoader.init(this, false)
+
+            if (FlipperUtils.shouldEnableFlipper(this)) {
+                val client = AndroidFlipperClient.getInstance(this)
+
+                client.addPlugin(InspectorFlipperPlugin(this, DescriptorMapping.withDefaults()))
+                client.addPlugin(networkFlipperPlugin)
+                client.addPlugin(DatabasesFlipperPlugin(this))
+                client.addPlugin(SharedPreferencesFlipperPlugin(this))
+
+                client.start()
+            }
+        }
     }
 
     private fun initConnectionHelper() {

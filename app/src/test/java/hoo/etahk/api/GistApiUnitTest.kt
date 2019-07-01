@@ -27,7 +27,8 @@ class GistApiUnitTest: BaseUnitTest() {
 
     private val gistIdMap = hashMapOf(
         "kmb" to getStringFromResource(R.string.param_gist_id_kmb),
-        "nwfb" to getStringFromResource(R.string.param_gist_id_nwfb))
+        "nwfb" to getStringFromResource(R.string.param_gist_id_nwfb),
+        "mtrb" to getStringFromResource(R.string.param_gist_id_mtrb))
 
     private fun getRawUrl(company: String, gistId: String): String {
         var rawUrl: String? = null

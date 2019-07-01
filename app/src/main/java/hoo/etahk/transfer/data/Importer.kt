@@ -132,6 +132,8 @@ class Importer: FilesWorker() {
                 SharedPrefsHelper.put(R.string.param_gist_id_kmb, appData.sharedPrefData!!.gistIdKmb)
             if (appData.sharedPrefData!!.gistIdNwfb.isNotBlank())
                 SharedPrefsHelper.put(R.string.param_gist_id_nwfb, appData.sharedPrefData!!.gistIdNwfb)
+            if (appData.sharedPrefData!!.gistIdMtrb.isNotBlank())
+                SharedPrefsHelper.put(R.string.param_gist_id_mtrb, appData.sharedPrefData!!.gistIdMtrb)
             if (appData.sharedPrefData!!.userAgent.isNotBlank())
                 SharedPrefsHelper.put(R.string.param_user_agent, appData.sharedPrefData!!.userAgent)
 

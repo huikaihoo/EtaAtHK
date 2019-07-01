@@ -92,8 +92,10 @@
     <string name="nwfb">新巴</string>
     <string name="ctb">城巴</string>
     <string name="nlb">嶼巴</string>
+    <string name="mtrb">港鐵巴士</string>
     <string name="tram">電車</string>
     <string name="mtr">港鐵</string>
+    <string name="aes">機場快線穿梭巴士</string>
 
     <!-- Route Type -->
     <string name="all">全部</string>
