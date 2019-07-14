@@ -12,6 +12,9 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 
+    <uses-feature android:name="android.hardware.location.network" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false"  />
+
     <application
         android:name=".view.App"
         android:allowBackup="true"
@@ -85,7 +88,9 @@
             android:theme="@style/AppTheme.Transparent" />
         <activity
             android:name=".view.map.StreetViewActivity"
-            android:theme="@style/AppTheme.Transparent" /> <!-- Settings Activity -->
+            android:theme="@style/AppTheme.Transparent" />
+
+        <!-- Settings Activity -->
         <activity android:name=".view.settings.SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
@@ -101,6 +106,12 @@
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:theme="@style/AppTheme.WithActionBar" />
+
+        <!-- Location Picker -->
+        <activity
+            android:name="com.schibstedspain.leku.LocationPickerActivity"
+            android:label="@string/select_location"
+            android:theme="@style/AppTheme.Transparent" />
 
         <!-- Service -->
         <service android:name=".view.service.UpdateRoutesService" />

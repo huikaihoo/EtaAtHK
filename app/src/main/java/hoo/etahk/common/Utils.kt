@@ -2,6 +2,7 @@ package hoo.etahk.common
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Address
 import android.os.Build
 import android.util.Log
 import android.util.TypedValue
@@ -196,6 +197,14 @@ object Utils {
     fun timestampToTimeStr(timestamp: Long): String {
         val etaTimeFormat = SimpleDateFormat("HH:mm")
         return etaTimeFormat.format(Date(timestamp * 1000))
+    }
+
+    fun getNameFromAddress(address: Address): String {
+        return if (address.featureName.isBlank()) {
+            address.toString()
+        } else {
+            address.featureName
+        }
     }
 
     fun replaceSpecialCharacters(str: String): String {

@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
 import android.location.Location
 import android.os.Bundle
 import android.view.Menu
@@ -26,14 +27,22 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mcxiaoke.koi.ext.onClick
 import com.mcxiaoke.koi.ext.onTextChange
+import com.schibstedspain.leku.ADDRESS
+import com.schibstedspain.leku.LATITUDE
+import com.schibstedspain.leku.LOCATION_ADDRESS
+import com.schibstedspain.leku.LONGITUDE
+import com.schibstedspain.leku.LocationPickerActivity
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.view.base.BaseActivity
-import kotlinx.android.synthetic.main.activity_location_edit.*
+import kotlinx.android.synthetic.main.activity_location_edit.button
+import kotlinx.android.synthetic.main.activity_location_edit.input
+import kotlinx.android.synthetic.main.activity_location_edit.toolbar
 
 
 class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
@@ -84,7 +93,15 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
             menuSave?.isEnabled = text.isNotBlank()
         }
         button.onClick {
-            startActivityForResult(PlacePicker.IntentBuilder().build(this), Constants.Request.REQUEST_PLACE_PICKER)
+            val locationPickerIntent = LocationPickerActivity.Builder()
+                .withMapStyle(R.raw.map_style_dark)
+                .shouldReturnOkOnBackPressed()
+                .withSatelliteViewHidden()
+                .withGoogleTimeZoneEnabled()
+                .withSearchHidden()
+                .withVoiceSearchHidden()
+                .build(this)
+            startActivityForResult(locationPickerIntent, Constants.Request.REQUEST_PLACE_PICKER_LEKU)
         }
     }
 
@@ -139,6 +156,8 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        logd("**************************")
+        logd("${requestCode} ${resultCode} ${data.toString()}")
         when (requestCode) {
             Constants.Request.REQUEST_PLACE_PICKER -> {
                 if (resultCode == RESULT_OK) {
@@ -149,7 +168,23 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
                     applyLocation()
                 }
             }
+            Constants.Request.REQUEST_PLACE_PICKER_LEKU -> {
+                if (resultCode == RESULT_OK && data != null) {
+
+                    val fullAddress = data.getParcelableExtra<Address?>(ADDRESS)
+                    viewModel.name = if (fullAddress != null) {
+                        Utils.getNameFromAddress(fullAddress)
+                    } else {
+                        data.getExtra(LOCATION_ADDRESS)
+                    }
+                    viewModel.latitude = data.getExtra(LATITUDE)
+                    viewModel.longitude = data.getExtra(LONGITUDE)
+                    applyLocation()
+                }
+            }
         }
+
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
