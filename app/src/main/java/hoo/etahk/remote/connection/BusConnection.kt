@@ -11,8 +11,12 @@ import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
-import kotlinx.coroutines.*
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.SortedMap
 
 object BusConnection : BaseConnection {
 
@@ -32,7 +36,7 @@ object BusConnection : BaseConnection {
 
         // 1. Get Result from Multiple Sources
         val parentRoutesResult: SortedMap<String, ParentRoutesMap?> =
-            sortedMapOf(Company.GOV to null, Company.KMB to null, Company.NLB to null, Company.NWFB to null)
+            sortedMapOf(Company.GOV to null, Company.KMB to null, Company.NLB to null, Company.NWFB to null, Company.MTRB to null)  // sequence is important
 
         val etaRoutesResult: SortedMap<String, List<String>?> =
             sortedMapOf(Company.KMB to null, Company.NWFB to null)
@@ -72,11 +76,24 @@ object BusConnection : BaseConnection {
 
         parentRoutesResult.filter { it.key != Company.GOV && it.value != null }.forEach { (company, parentRoutesMap) ->
             for(companyRoute in parentRoutesMap!!.getAll()) {
-                val govRoute = govResult.get(companyRoute.routeKey)
-                val newRouteList = newResult.get(companyRoute.routeKey.routeNo)
+                var govRoute = govResult.get(companyRoute.routeKey)
                 var newRoute: Route? = null
 
+                // Check if any route inside govResult is same as companyRoute but with different company code
+                // Example: companyRoute of MTRB will have company code in KMB / LRTFeeder in govResult
+                if (govRoute == null && company == Company.MTRB) {
+                    val possibleRouteList = govResult.get(companyRoute.routeKey.routeNo)
+                    possibleRouteList?.forEach {
+                        if ( it.companyDetails.size == 1 && ( it.routeKey.company == Company.KMB || it.routeKey.company == Company.LRT_FEEDER ) ) {
+                            govRoute = it
+                        }
+                    }
+                }
+
                 // Check if any route inside newRouteList is same as companyRoute
+                // Example: Jointly operated routes not exist in govResult
+                val newRouteList = newResult.get(companyRoute.routeKey.routeNo)
+
                 if (govRoute == null && company == Company.NWFB && !newRouteList.isNullOrEmpty()) {
                     newRouteList.forEach {
                         if ( it.companyDetails.size == 1 &&
@@ -95,7 +112,7 @@ object BusConnection : BaseConnection {
                 }
 
                 when {
-                    govRoute != null -> mergeRoute(company, govRoute, companyRoute)
+                    govRoute != null -> mergeRoute(company, govRoute!!, companyRoute)
                     newRoute != null -> mergeRoute(company, newRoute!!, companyRoute)
                     else -> newResult.add(companyRoute)
                 }
@@ -170,7 +187,7 @@ object BusConnection : BaseConnection {
     private fun mergeRoute(company: String, baseRoute: Route, companyRoute: Route) {
         baseRoute.direction = companyRoute.direction // TODO: need to remove when offline data is ready
         when (company) {
-            Company.KMB ->  {
+            Company.KMB -> {
                 if ( companyRoute.boundCount > 1 &&
                     ( Utils.isLocationMatch(baseRoute.from.value, companyRoute.to.value) ||
                       Utils.isLocationMatch(companyRoute.from.value, baseRoute.to.value) ) ) {
@@ -196,6 +213,12 @@ object BusConnection : BaseConnection {
                 } else {
                     baseRoute.info.boundIds = companyRoute.info.boundIds
                 }
+            }
+            Company.MTRB -> {
+                baseRoute.routeKey = companyRoute.routeKey
+                baseRoute.companyDetails = companyRoute.companyDetails
+                baseRoute.from = companyRoute.from
+                baseRoute.to = companyRoute.to
             }
         }
     }

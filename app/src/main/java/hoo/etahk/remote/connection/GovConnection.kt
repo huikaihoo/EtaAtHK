@@ -151,6 +151,7 @@ object GovConnection: BaseConnection {
 
     private fun toRoute(records: List<String>, t: Long): Route {
         val companies = records[Constants.Route.GOV_ROUTE_RECORD_COMPANIES].split("\\+".toRegex())
+        val routeNo = records[Constants.Route.GOV_ROUTE_RECORD_ROUTE_NO].replace("[ ]+.*".toRegex(), "").trim()
 
         val direction = when {
             records[Constants.Route.GOV_ROUTE_RECORD_BOUND_COUNT].toInt() > 1 -> records[Constants.Route.GOV_ROUTE_RECORD_BOUND_COUNT].toLong()
@@ -160,7 +161,7 @@ object GovConnection: BaseConnection {
 
         return Route(
             routeKey = RouteKey(company = companies[0],
-                routeNo = records[Constants.Route.GOV_ROUTE_RECORD_ROUTE_NO],
+                routeNo = routeNo,
                 bound = 0L,
                 variant = 0L),
             direction = direction,

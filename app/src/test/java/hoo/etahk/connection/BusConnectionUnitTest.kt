@@ -16,21 +16,43 @@ class BusConnectionUnitTest: BaseUnitTest() {
 
     override val printLog = false
 
-    private val gistId = getStringFromResource(R.string.param_gist_id_kmb)
+    private val gistIdMap = hashMapOf(
+        R.string.param_gist_id_kmb to getStringFromResource(R.string.param_gist_id_kmb),
+        R.string.param_gist_id_nwfb to getStringFromResource(R.string.param_gist_id_nwfb),
+        R.string.param_gist_id_mtrb to getStringFromResource(R.string.param_gist_id_mtrb)
+    )
+
+    private val companies = listOf(
+        Constants.Company.KMB, Constants.Company.LWB,
+        Constants.Company.NWFB, Constants.Company.CTB,
+        Constants.Company.NLB, Constants.Company.MTRB
+    )
 
     @Test
     fun getParentRoutes() {
-        SharedPrefsHelper.put(R.string.param_gist_id_kmb, gistId)
+        gistIdMap.forEach { (resId, gistId) ->
+            if (gistId.isNotEmpty())
+                SharedPrefsHelper.put(resId, gistId)
+        }
 
         val result = BusConnection.getParentRoutes(Constants.Company.BUS)?.getAll()?.sortedWith(compareBy({it.routeKey.typeCode}, {it.displaySeq}, {it.routeKey.variant}))
         result?.forEach {
-            System.out.println("route = $it")
+            println("route = $it")
         }
 
         // Check Parent Routes
         val parentRouteCount = result?.size ?: 0
-        System.out.println("parentRouteCount = $parentRouteCount")
+        println("parentRouteCount = $parentRouteCount")
 
-        assert(parentRouteCount > 0 && result != null && result.isNotEmpty())
+        assert(parentRouteCount > 0 && !result.isNullOrEmpty())
+
+        val companyCountMap = result!!.groupingBy { it.routeKey.company }.eachCount()
+        companyCountMap.forEach { (company, count) ->
+            println("[$company] = $count")
+        }
+
+        companies.forEach {
+            assert(companyCountMap.containsKey(it))
+        }
     }
 }

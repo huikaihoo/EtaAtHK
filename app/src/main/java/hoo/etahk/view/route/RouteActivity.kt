@@ -14,12 +14,19 @@ import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.constants.SharePrefs
-import hoo.etahk.common.extensions.*
+import hoo.etahk.common.extensions.createShortcut
+import hoo.etahk.common.extensions.extras
+import hoo.etahk.common.extensions.getExtra
+import hoo.etahk.common.extensions.startCustomTabs
+import hoo.etahk.common.extensions.tag
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.view.base.BaseActivity
 import hoo.etahk.view.map.RoutesMapsActivity
-import kotlinx.android.synthetic.main.activity_route.*
+import kotlinx.android.synthetic.main.activity_route.container
+import kotlinx.android.synthetic.main.activity_route.progress_bar
+import kotlinx.android.synthetic.main.activity_route.tabs
+import kotlinx.android.synthetic.main.activity_route.toolbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -38,6 +45,7 @@ class RouteActivity : BaseActivity() {
                 company == Company.NWFB -> R.style.AppTheme_Nwfb
                 company == Company.CTB -> R.style.AppTheme_Ctb
                 company == Company.NLB -> R.style.AppTheme_Nlb
+                company == Company.MTRB -> R.style.AppTheme_Mtrb
                 company == Company.TRAM -> R.style.AppTheme_Tram
                 else -> R.style.AppTheme_Night
             }
@@ -92,7 +100,6 @@ class RouteActivity : BaseActivity() {
         // Setup Progressbar
         progress_bar.max = viewModel.durationInMillis.toInt()
         progress_bar.progress = 0
-
 
         subscribeUiChanges()
     }

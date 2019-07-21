@@ -37,6 +37,8 @@ object SharePrefs {
     const val NWFB_API_PARAMETER_PLATFORM = "android"
     const val NWFB_API_PARAMETER_APP_VERSION = "3.5.5"
     const val NWFB_API_PARAMETER_APP_VERSION_2 = "49"
+    // MTRB
+    const val MTRB_API_PARAMETER_VERSION = "1"
     // GOV
     const val GOV_API_PARAMETER_PLATFORM = "android"
     const val GOV_API_PARAMETER_APP_VERSION = "3.6"

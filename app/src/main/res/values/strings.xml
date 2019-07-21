@@ -134,6 +134,7 @@
     <string name="stop_fare_holiday">Fare in holiday:\u0020</string>
     <string name="eta_msg_no_eta_service">No ETA Service</string>
     <string name="eta_msg_not_in_service_hours">Not in service hours</string>
+    <string name="eta_msg_service_suspended">Service Temporarily Suspended</string>
     <string name="eta_msg_no_eta_info">No ETA Information</string>
     <string name="eta_msg_loading">Loading\u2026</string>
 

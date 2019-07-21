@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar.Bridge">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorMenuWhite</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:fontFamily">@font/noto_sans</item>
@@ -112,6 +113,12 @@
         <item name="colorPrimary">@color/colorTram</item>
         <item name="colorPrimaryDark">@color/colorTramDark</item>
         <item name="colorAccent">@color/colorTramAccent</item>
+    </style>
+
+    <style name="AppTheme.Mtrb" parent="AppTheme">
+        <item name="colorPrimary">@color/colorHki</item>
+        <item name="colorPrimaryDark">@color/colorHkiDark</item>
+        <item name="colorAccent">@color/colorHkiAccent</item>
     </style>
 
     <style name="AppTheme.Night" parent="AppTheme">

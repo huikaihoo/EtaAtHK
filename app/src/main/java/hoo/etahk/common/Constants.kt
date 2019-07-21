@@ -111,6 +111,8 @@ object Constants {
         const val NLB_URL = "https://nlb.kcbh.com.hk:8443/"
         const val GOV_URL = "http://app1.hketransport.td.gov.hk/"
         const val GOV2_URL = "http://cms.hkemobility.gov.hk/"
+        const val MTRB_URL = "https://mavmwfs1004.azurewebsites.net/MTRBus/BusService.svc/"
+        const val AES_URL = "https://mavmwfs1004.azurewebsites.net/AES/AESService.svc/"
         const val TRAM_URL = "http://hktramways.com/"
         const val GIST_URL = "https://api.github.com/gists/"
     }

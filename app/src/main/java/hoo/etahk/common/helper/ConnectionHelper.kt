@@ -8,8 +8,21 @@ import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
-import hoo.etahk.remote.api.*
-import hoo.etahk.remote.connection.*
+import hoo.etahk.remote.api.GistApi
+import hoo.etahk.remote.api.GovApi
+import hoo.etahk.remote.api.KmbApi
+import hoo.etahk.remote.api.MtrbApi
+import hoo.etahk.remote.api.NlbApi
+import hoo.etahk.remote.api.NwfbApi
+import hoo.etahk.remote.api.TramApi
+import hoo.etahk.remote.connection.BaseConnection
+import hoo.etahk.remote.connection.BusConnection
+import hoo.etahk.remote.connection.GovConnection
+import hoo.etahk.remote.connection.KmbConnection
+import hoo.etahk.remote.connection.MtrbConnection
+import hoo.etahk.remote.connection.NlbConnection
+import hoo.etahk.remote.connection.NwfbConnection
+import hoo.etahk.remote.connection.TramConnection
 import okhttp3.OkHttpClient
 import retrofit2.create
 
@@ -19,6 +32,7 @@ object ConnectionHelper: BaseConnection {
     private lateinit var okHttpEtaKmb: OkHttpClient
     private lateinit var okHttpEtaNwfb: OkHttpClient
     private lateinit var okHttpEtaNlb: OkHttpClient
+    private lateinit var okHttpEtaMtrb: OkHttpClient
     private lateinit var okHttpEtaTram: OkHttpClient
 
     // KMB
@@ -30,11 +44,14 @@ object ConnectionHelper: BaseConnection {
     // NLB
     lateinit var nlb: NlbApi private set
     lateinit var nlbEta: NlbApi private set
-    // GOV
-    lateinit var gov: GovApi private set
+    // MTRB
+    lateinit var mtrb: MtrbApi private set
+    lateinit var mtrbEta: MtrbApi private set
     // Tram
     lateinit var tram: TramApi private set
     lateinit var tramEta: TramApi private set
+    // GOV
+    lateinit var gov: GovApi private set
     // GIST
     lateinit var gist: GistApi private set
 
@@ -44,7 +61,8 @@ object ConnectionHelper: BaseConnection {
         okHttpEtaKmb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
         okHttpEtaNwfb = ConnectionFactory.createClient(NetworkType.ETA, Company.NWFB)
         okHttpEtaNlb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
-        okHttpEtaTram = ConnectionFactory.createClient(NetworkType.ETA, Company.TRAM)
+        okHttpEtaMtrb = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
+        okHttpEtaTram = ConnectionFactory.createClient(NetworkType.ETA, Company.KMB)
 
         kmb = ConnectionFactory.createRetrofit(okHttpLong, Url.KMB_URL).create()
         kmbEta = ConnectionFactory.createRetrofit(okHttpEtaKmb, Url.KMB_URL).create()
@@ -54,6 +72,9 @@ object ConnectionHelper: BaseConnection {
 
         nlb = ConnectionFactory.createRetrofit(okHttpLong, Url.NLB_URL).create()
         nlbEta = ConnectionFactory.createRetrofit(okHttpEtaNlb, Url.NLB_URL).create()
+
+        mtrb = ConnectionFactory.createRetrofit(okHttpLong, Url.MTRB_URL).create()
+        mtrbEta = ConnectionFactory.createRetrofit(okHttpEtaMtrb, Url.MTRB_URL).create()
 
         tram = ConnectionFactory.createRetrofit(okHttpLong, Url.TRAM_URL).create()
         tramEta = ConnectionFactory.createRetrofit(okHttpEtaTram, Url.TRAM_URL).create()
@@ -72,6 +93,7 @@ object ConnectionHelper: BaseConnection {
             Company.NWFB -> NwfbConnection
             Company.CTB -> NwfbConnection
             Company.NLB -> NlbConnection
+            Company.MTRB -> MtrbConnection
             Company.TRAM -> TramConnection
             else -> null
         }

@@ -16,10 +16,12 @@ import kotlinx.coroutines.launch
 
 object FollowRepo {
 
+    private const val enableNearbyLocation = false
+
     fun initLocationsAndGroups() {
         GlobalScope.launch(Dispatchers.Default) {
             // Insert nearby location
-            if (AppHelper.db.locationDao().countPin() <= 0) {
+            if (AppHelper.db.locationDao().countPin() <= 0 && enableNearbyLocation) {
                 AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.stops_nearby), pin = true, displaySeq = 1))
 
                 AppHelper.db.locationDao().selectOnce().forEach {

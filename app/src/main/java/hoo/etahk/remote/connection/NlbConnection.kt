@@ -85,7 +85,6 @@ object NlbConnection: BaseConnection {
                 val stops = mutableListOf<Stop>()
 
                 childRoutes.forEach { route ->
-
                     routeStopsMap[route.info.rdv]?.forEach { rawRouteStop ->
                         val rawStops = stopsMap[rawRouteStop?.stopId ?: ""]
                         if (!rawStops.isNullOrEmpty()) {
