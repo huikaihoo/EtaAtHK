@@ -467,7 +467,7 @@ object KmbConnection: BaseConnection {
                 scheduleOnly = Utils.isScheduledOnly(response.t ?: ""),
                 gps = (response.ei != null && response.ei == "N"),
                 variant = response.busServiceType,
-                wifi = (response.wifi != null && response.wifi == "Y"),
+                wifi = (response.wifi != null && response.wifi == "Y"),     // changed to store wheelchair
                 capacity = Utils.phaseCapacity(response.ol ?: "")
         )
     }

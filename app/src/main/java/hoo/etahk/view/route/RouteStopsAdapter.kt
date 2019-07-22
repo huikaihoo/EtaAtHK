@@ -115,7 +115,7 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                             text =tv.prependImage(R.drawable.ic_text_gps_off, text)
                         }
                         if (etaResults[i].wifi) {
-                            text = tv.prependImage(R.drawable.ic_text_wifi, text)
+                            text = tv.prependImage(R.drawable.ic_text_wheelchair, text)
                         }
                         if (etaResults[i].valid && etaResults[i].capacity >= 0L) {
                             text = tv.prependImage(Utils.getCapacityResId(etaResults[i].capacity), text)

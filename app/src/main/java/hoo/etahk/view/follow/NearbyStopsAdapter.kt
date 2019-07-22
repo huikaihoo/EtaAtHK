@@ -14,9 +14,14 @@ import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.NearbyStopDiffCallback
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.base.DiffAdapter
-import kotlinx.android.synthetic.main.item_header.view.*
-import kotlinx.android.synthetic.main.item_stop.view.*
-import kotlinx.android.synthetic.main.item_stop_with_header.view.*
+import kotlinx.android.synthetic.main.item_header.view.header_title
+import kotlinx.android.synthetic.main.item_stop.view.eta_0
+import kotlinx.android.synthetic.main.item_stop.view.eta_1
+import kotlinx.android.synthetic.main.item_stop.view.eta_2
+import kotlinx.android.synthetic.main.item_stop.view.fare
+import kotlinx.android.synthetic.main.item_stop.view.stop_desc
+import kotlinx.android.synthetic.main.item_stop.view.stop_title
+import kotlinx.android.synthetic.main.item_stop_with_header.view.stop
 
 class NearbyStopsAdapter : DiffAdapter<FollowFragment, NearbyStop>() {
 
@@ -76,7 +81,7 @@ class NearbyStopsAdapter : DiffAdapter<FollowFragment, NearbyStop>() {
                         text = tv.prependImage(R.drawable.ic_text_gps_off, text)
                     }
                     if (etaResults[i].wifi) {
-                        text = tv.prependImage(R.drawable.ic_text_wifi, text)
+                        text = tv.prependImage(R.drawable.ic_text_wheelchair, text)
                     }
                     if (etaResults[i].valid && etaResults[i].capacity >= 0L) {
                         text = tv.prependImage(Utils.getCapacityResId(etaResults[i].capacity), text)

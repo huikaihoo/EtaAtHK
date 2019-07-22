@@ -336,17 +336,26 @@ object NlbConnection: BaseConnection {
         var msg = element.text()
         val etaTime = getEtaTime(msg)
         val scheduledOnly = Utils.isScheduledOnly(msg)
+        var wheelchair = false
 
         msg = msg.replace("到達/離開".toRegex(), "")
                     .replace("([0-9]+)分鐘".toRegex(), "")
                     .trim()
         msg = Utils.timestampToTimeStr(etaTime) + " " + msg
 
+        element.children().forEach {
+            if (it.attr("alt") == "輪椅") {
+                wheelchair = true
+            }
+        }
+
         return EtaResult(
             company = stop.routeKey.company,
             etaTime = etaTime,
             msg = Utils.timeStrToMsg(msg),
             scheduleOnly = scheduledOnly,
-            gps = etaTime >= 0L && !scheduledOnly)
+            gps = etaTime >= 0L && !scheduledOnly,
+            wifi = wheelchair               // changed to store wheelchair
+        )
     }
 }

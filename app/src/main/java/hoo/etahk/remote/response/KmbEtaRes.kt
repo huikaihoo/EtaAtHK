@@ -16,6 +16,6 @@ data class KmbEtaRes(
         @SerializedName("ol") val ol: String? = "",     // Bus Capacity
         @SerializedName("t") val t: String? = "",       // time (hh:mm xxxx)
         @SerializedName("w") val w: String? = "",       // wheelchair (Y/N/"")
-        @SerializedName("wifi") val wifi: String? = ""  // wifi (null/Y)
+        @SerializedName("wifi") val wifi: String? = ""  // wifi -> > two wheelchair (null/Y)
     )
 }

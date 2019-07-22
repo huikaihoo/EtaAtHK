@@ -12,7 +12,7 @@ data class EtaResult(
     var scheduleOnly: Boolean = false,
     var gps: Boolean = false,
     var variant: Long = 0L,
-    var wifi: Boolean = false,
+    var wifi: Boolean = false,      // changed to store wheelchair
     var capacity: Long = -1L,
     var distance: Long = 0L
 ) {
