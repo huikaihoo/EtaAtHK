@@ -157,7 +157,7 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         logd("**************************")
-        logd("${requestCode} ${resultCode} ${data.toString()}")
+        logd("$requestCode $resultCode ${data.toString()}")
         when (requestCode) {
             Constants.Request.REQUEST_PLACE_PICKER -> {
                 if (resultCode == RESULT_OK) {
@@ -248,8 +248,8 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
             viewModel.nameHistory.add(viewModel.name)
         }
 
-        if (!viewModel.nameHistory.isEmpty()) {
-            input.setAdapter(ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, viewModel.nameHistory.toList()))
+        if (viewModel.nameHistory.isNotEmpty()) {
+            input.setAdapter(ArrayAdapter(this, android.R.layout.simple_list_item_1, viewModel.nameHistory.toList()))
         }
     }
 }

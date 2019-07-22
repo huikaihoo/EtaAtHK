@@ -34,21 +34,21 @@ class GistApiUnitTest: BaseUnitTest() {
         var rawUrl: String? = null
 
         val call = ConnectionHelper.gist.getGist(gistId)
-        System.out.println("url = ${call.request().url()}")
+        println("url = ${call.request().url()}")
 
         try {
             val response = call.execute()
-            System.out.println("isSuccessful = ${response.isSuccessful}")
+            println("isSuccessful = ${response.isSuccessful}")
 
             if (response.isSuccessful) {
                 val result = response.body()
                 assert(!result?.files.isNullOrEmpty())
 
                 rawUrl = result?.files?.get(company)?.rawUrl
-                System.out.println("[${company.toUpperCase()}] rawUrl = $rawUrl")
+                println("[${company.toUpperCase()}] rawUrl = $rawUrl")
                 assert(!rawUrl.isNullOrBlank())
             } else {
-                System.out.println("error = ${response.errorBody()?.string()}")
+                println("error = ${response.errorBody()?.string()}")
                 assert(false)
             }
         } catch (e: Exception) {
@@ -80,18 +80,18 @@ class GistApiUnitTest: BaseUnitTest() {
     @Test
     fun getContent() {
         val rawUrlList = gistIdMap.map {
-            System.out.println("$it / ${it.value.isNotEmpty()}")
+            println("$it / ${it.value.isNotEmpty()}")
             if(it.value.isNotEmpty()) getRawUrl(it.key, it.value) else ""
         }.filter { it.isNotEmpty() }
 
         for (rawUrl in rawUrlList) {
             val company = rawUrl.substring(rawUrl.lastIndexOf("/") + 1, rawUrl.length)
             val call = ConnectionHelper.gist.getContent(rawUrl)
-            System.out.println("url = ${call.request().url()}")
+            println("url = ${call.request().url()}")
 
             try {
                 val response = call.execute()
-                System.out.println("isSuccessful = ${response.isSuccessful}")
+                println("isSuccessful = ${response.isSuccessful}")
 
                 if (response.isSuccessful) {
                     val result = response.body()?.string()
@@ -103,7 +103,7 @@ class GistApiUnitTest: BaseUnitTest() {
                     fos.write(Base64.decode(result!!, Base64.NO_WRAP))
                     fos.close()
 
-                    System.out.println("[$company.zip] exist = ${file.isFile}")
+                    println("[$company.zip] exist = ${file.isFile}")
                     assert(file.isFile)
 
                     val zipFile = ZipFile("${App.instance.filesDir.path}/$company.zip")
@@ -114,7 +114,7 @@ class GistApiUnitTest: BaseUnitTest() {
                         unzipFile(zipFile, zipFile.getEntry(json), "${App.instance.filesDir.path}/$json")
                         val jsonFile = File(App.instance.filesDir, json)
 
-                        System.out.println("[$json] exist = ${jsonFile.isFile}")
+                        println("[$json] exist = ${jsonFile.isFile}")
                         assert(jsonFile.isFile)
 
                         // Check the content of files inside zip
@@ -124,27 +124,27 @@ class GistApiUnitTest: BaseUnitTest() {
                             "metadata.json" -> {
                                 val metadata = gson.fromJson(reader, GistDatabaseRes.Metadata::class.java)
 
-                                System.out.println("[$json] content = $metadata")
+                                println("[$json] content = $metadata")
                                 assert(metadata.parentCnt ?: 0 > 0 && metadata.childCnt ?: 0 > 0 && metadata.stopsCnt ?: 0 > 0 && metadata.routes?.isNotEmpty() ?: false)
                             }
                             "stops.json" -> {
                                 val stops = gson.fromJson(reader, Array<Stop>::class.java).toList()
 
-                                System.out.println("[$json] size = ${stops.size}")
-                                System.out.println("[$json] first element = ${stops[0]}")
+                                println("[$json] size = ${stops.size}")
+                                println("[$json] first element = ${stops[0]}")
                                 assert(stops.isNotEmpty())
                             }
                             else -> {
                                 val routes = gson.fromJson(reader, Array<Route>::class.java).toList()
 
-                                System.out.println("[$json] size = ${routes.size}")
-                                System.out.println("[$json] first element = ${routes[0]}")
+                                println("[$json] size = ${routes.size}")
+                                println("[$json] first element = ${routes[0]}")
                                 assert(routes.isNotEmpty())
                             }
                         }
                     }
                 } else {
-                    System.out.println("error = ${response.errorBody()?.string()}")
+                    println("error = ${response.errorBody()?.string()}")
                     assert(false)
                 }
             } catch (e: Exception) {

@@ -65,6 +65,13 @@
             android:maxLines="1"
             android:persistent="true" />
 
+        <EditTextPreference
+            android:key="@string/param_gist_id_mtrb"
+            android:title="@string/param_gist_id_mtrb"
+            android:inputType="textNoSuggestions|textVisiblePassword"
+            android:maxLines="1"
+            android:persistent="true" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

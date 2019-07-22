@@ -15,7 +15,7 @@
     <!-- Notification Channel -->
     <string name="nc_id_update_routes" translatable="false">update_routes</string>
 
-    <string name="nc_name_update_routes" translatable="false">Update routes data</string>
+    <string name="nc_name_update_routes">Update routes data</string>
 
     <!-- Notification -->
     <string name="notification_title_update_routes">Updating routes data</string>

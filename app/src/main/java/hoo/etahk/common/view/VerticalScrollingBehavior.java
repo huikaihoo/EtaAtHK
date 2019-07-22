@@ -2,12 +2,14 @@ package hoo.etahk.common.view;
 
 import android.content.Context;
 import android.os.Parcelable;
+import android.util.AttributeSet;
+import android.view.View;
+
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.util.AttributeSet;
-import android.view.View;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -91,9 +93,11 @@ public abstract class VerticalScrollingBehavior<V extends View> extends Coordina
     }
 
     @Override
-    public void onNestedScroll(CoordinatorLayout coordinatorLayout, V child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type) {
+    public void onNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull V child,
+                               @NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed,
+                               int dyUnconsumed, @ViewCompat.NestedScrollType int type, @NonNull int[] consumed) {
         if (Math.abs(dyConsumed) > dyIgnore)
-            super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, type);
+            super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, type, consumed);
         if (dyUnconsumed > 0 && mTotalDyUnconsumed < 0) {
             mTotalDyUnconsumed = 0;
             mOverScrollDirection = ScrollDirection.SCROLL_DIRECTION_UP;

@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import hoo.etahk.R
-import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.relation.LocationAndGroups
 

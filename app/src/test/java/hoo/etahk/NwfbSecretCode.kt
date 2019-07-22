@@ -3,7 +3,7 @@ package hoo.etahk
 import android.util.Base64
 import com.mcxiaoke.koi.HASH
 import hoo.etahk.common.Utils
-import java.util.*
+import java.util.Random
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -17,7 +17,7 @@ object NwfbSecretCode {
             random += "0".repeat(5 - random.length)
 
             val timestamp = Utils.getCurrentTimestamp().toString()
-            var timestampStr = (timestamp.substring(2, 3) + timestamp.substring(9, 10)
+            val timestampStr = (timestamp.substring(2, 3) + timestamp.substring(9, 10)
                     + timestamp.substring(4, 5) + timestamp.substring(6, 7)
                     + timestamp.substring(3, 4) + timestamp.substring(0, 1)
                     + timestamp.substring(8, 9) + timestamp.substring(7, 8)

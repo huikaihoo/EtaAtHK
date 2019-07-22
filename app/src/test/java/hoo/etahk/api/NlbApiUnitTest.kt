@@ -18,25 +18,25 @@ class NlbApiUnitTest {
     @Test
     fun getParentRoutes() {
         val call = ConnectionHelper.nlb.getDatabase()
-        System.out.println("url = ${call.request().url()}")
+        println("url = ${call.request().url()}")
 
         try {
             val response = call.execute()
-            System.out.println("isSuccessful = ${response.isSuccessful}")
+            println("isSuccessful = ${response.isSuccessful}")
 
             if (response.isSuccessful) {
                 val result = response.body()
-                System.out.println("result = $result")
+                println("result = $result")
 
-                System.out.println("routeStops.size = ${result?.routeStops?.size}")
-                System.out.println("routes.size = ${result?.routes?.size}")
-                System.out.println("specialRoutes.size = ${result?.specialRoutes?.size}")
-                System.out.println("stopDistricts.size = ${result?.stopDistricts?.size}")
-                System.out.println("stops.size = ${result?.stops?.size}")
+                println("routeStops.size = ${result?.routeStops?.size}")
+                println("routes.size = ${result?.routes?.size}")
+                println("specialRoutes.size = ${result?.specialRoutes?.size}")
+                println("stopDistricts.size = ${result?.stopDistricts?.size}")
+                println("stops.size = ${result?.stops?.size}")
 
                 assert(result != null && !result.version.isNullOrEmpty())
             } else {
-                System.out.println("error = ${response.errorBody()?.string()}")
+                println("error = ${response.errorBody()?.string()}")
                 assert(false)
             }
         } catch (e: Exception) {
@@ -48,24 +48,24 @@ class NlbApiUnitTest {
     @Test
     fun getEta() {
         val call = ConnectionHelper.nlb.getEta(NlbEtaReq(routeId = routeId, stopId = stopId))
-        System.out.println("url = ${call.request().url()}")
+        println("url = ${call.request().url()}")
 
         try {
             val response = call.execute()
-            System.out.println("isSuccessful = ${response.isSuccessful}")
+            println("isSuccessful = ${response.isSuccessful}")
 
             if (response.isSuccessful) {
                 val result = response.body()
-                System.out.println("result = $result")
+                println("result = $result")
 
                 val x = Jsoup.parse(result!!.estimatedArrivalTime!!.html!!).body().getElementsByTag("div")
                 for (xe in x) {
-                    System.out.println("xe = ${xe.text()}")
+                    println("xe = ${xe.text()}")
                 }
 
                 assert(!result.estimatedArrivalTime?.html.isNullOrEmpty())
             } else {
-                System.out.println("error = ${response.errorBody()?.string()}")
+                println("error = ${response.errorBody()?.string()}")
                 assert(false)
             }
         } catch (e: Exception) {

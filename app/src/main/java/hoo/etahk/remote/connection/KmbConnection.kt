@@ -19,8 +19,16 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
-import hoo.etahk.remote.response.*
-import kotlinx.coroutines.*
+import hoo.etahk.remote.response.GistDatabaseRes
+import hoo.etahk.remote.response.KmbBoundVariantRes
+import hoo.etahk.remote.response.KmbEtaRes
+import hoo.etahk.remote.response.KmbStopsRes
+import hoo.etahk.remote.response.KmbTimetableRes
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -388,7 +396,7 @@ object KmbConnection: BaseConnection {
                                     etaResults.add(toEtaResult(stop, AppHelper.getString(R.string.eta_msg_no_eta_info)))
                                 }
 
-                                if (!etaResults.isEmpty()) {
+                                if (etaResults.isNotEmpty()) {
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
                                     //logd(AppHelper.gson.toJson(stop.etaResults))

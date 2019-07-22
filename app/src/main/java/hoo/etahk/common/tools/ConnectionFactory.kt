@@ -1,5 +1,6 @@
 package hoo.etahk.common.tools
 
+import android.annotation.SuppressLint
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import hoo.etahk.R
@@ -21,7 +22,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.security.SecureRandom
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.*
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSession
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 object ConnectionFactory {
 
@@ -131,6 +137,7 @@ object ConnectionFactory {
         }
     }
 
+    @SuppressLint("TrustAllX509TrustManager")
     class SSLTrustManager : X509TrustManager {
         override fun checkClientTrusted(
             x509Certificates: Array<java.security.cert.X509Certificate>,
@@ -149,6 +156,7 @@ object ConnectionFactory {
         }
     }
 
+    @SuppressLint("BadHostnameVerifier")
     private class TrustAllHostnameVerifier : HostnameVerifier {
         override fun verify(hostname: String, session: SSLSession): Boolean {
             return true

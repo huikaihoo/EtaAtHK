@@ -349,7 +349,7 @@ class FollowActivity : NavActivity() {
                 true
             }
             R.id.menu_rename_group -> {
-                if (location != null && !location.groups.isEmpty()) {
+                if (location != null && location.groups.isNotEmpty()) {
                     val group = location.groups[container.currentItem]
 
                     val inputDialog = InputDialog(this)

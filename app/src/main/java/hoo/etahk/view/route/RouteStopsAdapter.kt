@@ -7,8 +7,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import hoo.etahk.R
 import hoo.etahk.common.Constants
-import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.extensions.prependImage
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.data.Stop
@@ -17,7 +17,12 @@ import hoo.etahk.model.diff.StopDiffCallback
 import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.base.DiffAdapter
-import kotlinx.android.synthetic.main.item_stop.view.*
+import kotlinx.android.synthetic.main.item_stop.view.eta_0
+import kotlinx.android.synthetic.main.item_stop.view.eta_1
+import kotlinx.android.synthetic.main.item_stop.view.eta_2
+import kotlinx.android.synthetic.main.item_stop.view.fare
+import kotlinx.android.synthetic.main.item_stop.view.stop_desc
+import kotlinx.android.synthetic.main.item_stop.view.stop_title
 
 class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
@@ -47,13 +52,11 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
             }
 
             if (stop.fare > 0 && dataSource.size > (position + 1)) {
-                var fareHoliday = ""
                 if (stop.info.fareHoliday > 0.0 && stop.info.fareHoliday != stop.fare) {
                     additionInfo += " [" + AppHelper.getString(R.string.stop_fare_holiday) +
                             AppHelper.getString(R.string.price_2dp).format(stop.info.fareHoliday) + "]"
                 }
-                itemView.fare.text = AppHelper.getString(R.string.price_2dp).format(stop.fare) + fareHoliday
-
+                itemView.fare.text = AppHelper.getString(R.string.price_2dp).format(stop.fare)
             } else {
                 itemView.fare.text = ""
             }
@@ -70,7 +73,7 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
                 // TODO("Handle info.partial")
 
-                if (!prevIsLoading && ( (currEtaTime/60L) in 1..(prevEtaTime/60L- 1L) || (prevEtaTime < 0L && currEtaTime > 0L)))
+                if (!prevIsLoading && ( (currEtaTime/60L) in 1 until prevEtaTime/60L || (prevEtaTime < 0L && currEtaTime > 0L)))
                     highlight = true
             } else {
                 if (etaResults.isNotEmpty() && etaResults[0].valid && etaResults[0].getDiffInMinutes() <= SharePrefs.DEFAULT_HIGHLIGHT_B4_DEPARTURE)

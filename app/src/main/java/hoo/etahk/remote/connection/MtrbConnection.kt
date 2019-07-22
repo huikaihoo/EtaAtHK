@@ -47,7 +47,7 @@ object MtrbConnection: BaseConnection {
     override fun getParentRoutes(company: String): ParentRoutesMap? {
         val t = Utils.getCurrentTimestamp()
         val result = ParentRoutesMap()
-        val gistId = SharedPrefsHelper.get<String>(hoo.etahk.R.string.param_gist_id_mtrb)
+        val gistId = SharedPrefsHelper.get<String>(R.string.param_gist_id_mtrb)
 
         try {
             val response = ConnectionHelper.gist.getGist(gistId).execute()

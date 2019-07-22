@@ -23,7 +23,11 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -409,7 +413,7 @@ object NwfbConnection: BaseConnection {
                                 val etaResults = mutableListOf<EtaResult>()
                                 val msg = getInvalidMsg(responseStr ?: "")
 
-                                if (responseStr.isNullOrBlank() || !msg.isEmpty()) {
+                                if (responseStr.isNullOrBlank() || msg.isNotEmpty()) {
                                     etaResults.add(toEtaResult(stop, msg))
 
                                 } else {

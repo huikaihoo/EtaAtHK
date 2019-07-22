@@ -29,7 +29,8 @@ import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
-import kotlinx.android.synthetic.main.fragment_recycler.view.*
+import kotlinx.android.synthetic.main.fragment_recycler.view.recycler_view
+import kotlinx.android.synthetic.main.fragment_recycler.view.refresh_layout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -89,7 +90,10 @@ class FollowFragment : BaseFragment() {
                 (rootView.recycler_view.layoutManager as LinearLayoutManager).orientation
             )
         )
-        itemTouchHelperCallback = ItemTouchHelperCallback(followItemsAdapter, false, false)
+        itemTouchHelperCallback = ItemTouchHelperCallback(followItemsAdapter,
+            enableDrag = false,
+            enableSwipe = false
+        )
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(rootView.recycler_view)
 

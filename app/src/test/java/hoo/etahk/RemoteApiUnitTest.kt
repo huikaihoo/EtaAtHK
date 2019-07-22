@@ -20,10 +20,10 @@ class RemoteApiUnitTest {
         //val syscode2 = NwfbSecretCode.code
         //val syscode2 = NwfbSecretCodeOrig.getCode()
 
-        System.out.println(syscode)
-        System.out.println(syscode2)
+        println(syscode)
+        println(syscode2)
 
-        System.out.println("$request&syscode=$syscode&p=android&version=3.5&syscode2=$syscode2")
+        println("$request&syscode=$syscode&p=android&version=3.5&syscode2=$syscode2")
     }
 
     @Test
@@ -31,9 +31,9 @@ class RemoteApiUnitTest {
         val request = "cms.hkemobility.gov.hk/et/getrouteinfo4.php?route_name=&company_index=-1&lang=TC&region="
 
         val syscode = GovConnection.getSystemCode()
-        System.out.println(syscode)
+        println(syscode)
 
-        System.out.println("$request&syscode=$syscode&p=android&version=1.0")
+        println("$request&syscode=$syscode&p=android&version=1.0")
     }
 
 }

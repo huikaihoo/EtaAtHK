@@ -20,18 +20,18 @@ class TramApiUnitTest {
     @Test
     fun getParentRoutes() {
         val call = ConnectionHelper.tram.getDatabase()
-        System.out.println("url = ${call.request().url()}")
+        println("url = ${call.request().url()}")
 
         try {
             val response = call.execute()
-            System.out.println("isSuccessful = ${response.isSuccessful}")
+            println("isSuccessful = ${response.isSuccessful}")
 
             if (response.isSuccessful) {
                 val result = response.body()?.string()
-                System.out.println("result = $result")
+                println("result = $result")
                 assert(!result.isNullOrBlank())
             } else {
-                System.out.println("error = ${response.errorBody()?.string()}")
+                println("error = ${response.errorBody()?.string()}")
                 assert(false)
             }
         } catch (e: Exception) {
@@ -43,28 +43,28 @@ class TramApiUnitTest {
     @Test
     fun getEta() {
         val call = ConnectionHelper.tram.getEta(stopId)
-        System.out.println("url = ${call.request().url()}")
+        println("url = ${call.request().url()}")
 
         try {
             val response = call.execute()
-            System.out.println("isSuccessful = ${response.isSuccessful}")
+            println("isSuccessful = ${response.isSuccessful}")
 
             if (response.isSuccessful) {
                 val result = response.body()?.string()
-                System.out.println("result = $result")
+                println("result = $result")
 
                 val x = Jsoup.parse(result!!).body().getElementsByTag("metadata")
                 for (xe in x) {
-                    System.out.println("xe = ${xe.attributes()}")
+                    println("xe = ${xe.attributes()}")
 
                     val etaTime = Utils.dateStrToTimestamp(xe.attr(Constants.Eta.TRAM_ETA_RECORD_ETA_TIME), "MMM d yyyy  h:mma")
                     val msg = Utils.timestampToTimeStr(etaTime) + " " + AppHelper.getString(R.string.to) + xe.attr(Constants.Eta.TRAM_ETA_RECORD_DEST_TC)
-                    System.out.println(msg)
+                    println(msg)
                 }
 
                 assert(!result.isNullOrBlank())
             } else {
-                System.out.println("error = ${response.errorBody()?.string()}")
+                println("error = ${response.errorBody()?.string()}")
                 assert(false)
             }
         } catch (e: Exception) {

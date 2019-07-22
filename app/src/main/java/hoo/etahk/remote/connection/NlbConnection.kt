@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import kotlin.math.max
 
 object NlbConnection: BaseConnection {
 
@@ -130,7 +131,7 @@ object NlbConnection: BaseConnection {
                             }
                         }
                         if (childRoute.routeKey.bound == bound){
-                            variant = Math.max(variant, childRoute.routeKey.variant + 1)
+                            variant = max(variant, childRoute.routeKey.variant + 1)
                         }
                     }
                 }
@@ -296,7 +297,7 @@ object NlbConnection: BaseConnection {
                                     }
                                 }
 
-                                if (!etaResults.isEmpty()) {
+                                if (etaResults.isNotEmpty()) {
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
                                 }

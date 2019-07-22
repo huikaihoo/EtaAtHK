@@ -18,12 +18,12 @@ class GovConnectionUnitTest: BaseUnitTest() {
     fun getParentRoutes() {
         val result = GovConnection.getParentRoutes(Constants.Company.GOV)?.getAll()?.sortedBy { it.routeKey.routeNo }
         result?.forEach {
-            System.out.println("route = $it")
+            println("route = $it")
         }
 
         // Check Parent Routes
         val parentRouteCount = result?.size ?: 0
-        System.out.println("parentRouteCount = $parentRouteCount")
+        println("parentRouteCount = $parentRouteCount")
 
         assert(parentRouteCount > 0 && result != null && result.isNotEmpty())
     }

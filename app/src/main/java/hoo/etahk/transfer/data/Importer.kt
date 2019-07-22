@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.os.Environment
 import hoo.etahk.BuildConfig
 import hoo.etahk.R
-import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.DATABASE_NAME
 import hoo.etahk.common.Constants.DATABASE_VERSION
 import hoo.etahk.common.extensions.logd
@@ -94,7 +93,7 @@ class Importer: FilesWorker() {
             wdb.execSQL("DELETE FROM sqlite_sequence")
             wdb.close()
 
-            if (appData.databaseData!!.version == Constants.DATABASE_VERSION) {
+            if (appData.databaseData!!.version == DATABASE_VERSION) {
                 if (appData.databaseData!!.misc.isNotEmpty()) {
                     AppHelper.db.miscDao().deleteAll()
                     AppHelper.db.miscDao().importData(appData.databaseData!!.misc)

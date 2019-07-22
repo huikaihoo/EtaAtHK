@@ -8,9 +8,10 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import hoo.etahk.view.App
+import kotlin.math.roundToInt
 
 fun TextView.prependImage(@DrawableRes resId: Int, spannableStringBuilder: SpannableStringBuilder): SpannableStringBuilder =
-    prependImageToString(Math.round(this.lineHeight * 0.8).toInt(), this.currentTextColor, resId, spannableStringBuilder)
+    prependImageToString((this.lineHeight * 0.8).roundToInt(), this.currentTextColor, resId, spannableStringBuilder)
 
 private fun prependImageToString(size: Int, color: Int, @DrawableRes resId: Int, spannableStringBuilder: SpannableStringBuilder): SpannableStringBuilder {
     var drawable = ContextCompat.getDrawable(App.instance, resId)

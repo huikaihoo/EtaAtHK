@@ -15,7 +15,6 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.OrderBy
 import hoo.etahk.common.Constants.RouteType
-import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.createShortcut
 import hoo.etahk.common.extensions.tag
 import hoo.etahk.common.tools.ThemeColor

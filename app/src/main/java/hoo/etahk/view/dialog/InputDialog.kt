@@ -36,7 +36,7 @@ class InputDialog (val context: Context) {
 
     fun setText(str: String): InputDialog {
         view.input.setText(str)
-        view.input.setAdapter(ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, arrayOf(str)))
+        view.input.setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1, arrayOf(str)))
         return this
     }
 

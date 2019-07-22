@@ -29,20 +29,20 @@ class MtrbConnectionUnitTest: BaseUnitTest() {
 
         val result = MtrbConnection.getParentRoutes(Constants.Company.MTRB)?.getAll()?.sortedBy { it.routeKey.routeNo }
         result?.forEach {
-            System.out.println("route = $it")
+            println("route = $it")
         }
 
         // Check Parent Routes
         val parentRouteCount = result?.size ?: 0
-        System.out.println("parentRouteCount = $parentRouteCount")
+        println("parentRouteCount = $parentRouteCount")
 
         assert(parentRouteCount > 0 && result != null && result.isNotEmpty())
 
         // Check Child Routes
         val childRouteCount = AppHelper.db.childRouteDao().count()
         val childRoute = AppHelper.db.childRouteDao().selectOnce(Constants.Company.MTRB, routeNo)
-        System.out.println("childRouteCount = $childRouteCount")
-        System.out.println(gson.toJson(childRoute))
+        println("childRouteCount = $childRouteCount")
+        println(gson.toJson(childRoute))
 
         assert(childRouteCount > 0 && childRoute.isNotEmpty())
 
@@ -50,8 +50,8 @@ class MtrbConnectionUnitTest: BaseUnitTest() {
         val stopCount = AppHelper.db.stopDao().count()
         val stopList = AppHelper.db.stopDao().selectOnce(Constants.Company.MTRB, routeNo, bound, variant)
 
-        System.out.println("stopCount = $stopCount")
-        System.out.println(gson.toJson(stopList))
+        println("stopCount = $stopCount")
+        println(gson.toJson(stopList))
 
         assert(stopCount > 0 && stopList.isNotEmpty())
     }

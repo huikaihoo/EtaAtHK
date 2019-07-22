@@ -17,18 +17,18 @@ class NwfbApiUnitTest {
             m = SharePrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
             syscode = NwfbConnection.getSystemCode()
         )
-        System.out.println("url = ${call.request().url()}")
+        println("url = ${call.request().url()}")
 
         try {
             val response = call.execute()
-            System.out.println("isSuccessful = ${response.isSuccessful}")
+            println("isSuccessful = ${response.isSuccessful}")
 
             if (response.isSuccessful) {
                 val result = response.body()?.string()
-                System.out.println("result = $result")
+                println("result = $result")
                 assert(!result.isNullOrBlank())
             } else {
-                System.out.println("error = ${response.errorBody()?.string()}")
+                println("error = ${response.errorBody()?.string()}")
                 assert(false)
             }
         } catch (e: Exception) {
