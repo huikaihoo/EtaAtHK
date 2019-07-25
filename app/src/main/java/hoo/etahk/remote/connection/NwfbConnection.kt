@@ -422,7 +422,7 @@ object NwfbConnection: BaseConnection {
 
                                     nwfbResponse.forEach {
                                         val records = it.split("(\\|\\|)|(\\|\\^\\|)".toRegex())
-                                        if(records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
+                                        if (records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
                                             etaResults.add(toEtaResult(records))
                                         }
                                         //logd(it)
@@ -488,7 +488,7 @@ object NwfbConnection: BaseConnection {
 
                             nwfbResponse.forEach {
                                 val records = it.split("(\\|\\|)|(\\|\\^\\|)".toRegex())
-                                if(records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
+                                if (records.size >= Eta.NWFB_ETA_RECORD_SIZE) {
                                     etaResults.add(toEtaResult(records))
                                 }
                                 //logd(it)

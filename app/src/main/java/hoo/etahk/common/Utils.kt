@@ -14,7 +14,8 @@ import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.view.App
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import kotlin.math.abs
 
 
@@ -200,8 +201,23 @@ object Utils {
     }
 
     fun getNameFromAddress(address: Address): String {
-        return if (address.featureName.isBlank()) {
-            address.toString()
+        return if (address.featureName.isBlank() ||
+            address.featureName.contains("Unnamed Road".toRegex()) ||
+            address.featureName.matches("香港".toRegex()) ||
+            address.featureName.matches("^[0-9]+[a-zA-Z]?(-[0-9]*[a-zA-Z]?)?$".toRegex()))
+        {
+            val fullAddress = address.getAddressLine(0)
+            if (fullAddress.contains(',')) {
+                if (fullAddress.startsWith("Unnamed Road")) {
+                    fullAddress.split(',')[1].trim()
+                } else {
+                    fullAddress.split(',')[0].trim()
+                }
+            } else if (!address.thoroughfare.isNullOrBlank() && fullAddress.contains(address.thoroughfare)){
+                fullAddress.substring(fullAddress.indexOf(address.thoroughfare))
+            } else {
+                fullAddress
+            }
         } else {
             address.featureName
         }

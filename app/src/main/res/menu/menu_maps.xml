@@ -8,6 +8,7 @@
         android:id="@+id/menu_spinner"
         android:orderInCategory="110"
         app:actionViewClass="android.widget.Spinner"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="MenuTitle" />
 
 </menu>

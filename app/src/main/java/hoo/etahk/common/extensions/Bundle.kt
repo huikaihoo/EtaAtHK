@@ -5,7 +5,7 @@ import android.os.Bundle
  */
 
 inline fun <reified T> Bundle.getValue(key: String): T {
-    return when(T::class) {
+    return when (T::class) {
         Boolean::class -> this.getBoolean(key, false) as T
         BooleanArray::class -> (this.getBooleanArray(key) ?: BooleanArray(0)) as T
         Byte::class -> this.getByte(key, 0) as T
@@ -27,7 +27,7 @@ inline fun <reified T> Bundle.getValue(key: String): T {
 }
 
 inline fun <reified T> Bundle.getValue(key: String, defaultValue: T): T {
-    return when(T::class) {
+    return when (T::class) {
         Boolean::class -> this.getBoolean(key, defaultValue as Boolean) as T
         BooleanArray::class -> (this.getBooleanArray(key) ?: defaultValue) as T
         Byte::class -> this.getByte(key, defaultValue as Byte) as T

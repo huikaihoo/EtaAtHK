@@ -95,7 +95,7 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
         button.onClick {
             val locationPickerIntent = LocationPickerActivity.Builder()
                 .withMapStyle(R.raw.map_style_dark)
-                .shouldReturnOkOnBackPressed()
+                .withUnnamedRoadHidden()
                 .withSatelliteViewHidden()
                 .withGoogleTimeZoneEnabled()
                 .withSearchHidden()
@@ -156,7 +156,6 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        logd("**************************")
         logd("$requestCode $resultCode ${data.toString()}")
         when (requestCode) {
             Constants.Request.REQUEST_PLACE_PICKER -> {
@@ -170,8 +169,9 @@ class LocationEditActivity : BaseActivity(), OnMapReadyCallback {
             }
             Constants.Request.REQUEST_PLACE_PICKER_LEKU -> {
                 if (resultCode == RESULT_OK && data != null) {
-
                     val fullAddress = data.getParcelableExtra<Address?>(ADDRESS)
+                    //logd(fullAddress.toString())
+
                     viewModel.name = if (fullAddress != null) {
                         Utils.getNameFromAddress(fullAddress)
                     } else {

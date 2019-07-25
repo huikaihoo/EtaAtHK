@@ -131,7 +131,7 @@ class FollowFragment : BaseFragment() {
 
         val stops = mutableListOf<Stop>()
         items.forEach{ item ->
-            if(item.stop != null) {
+            if (item.stop != null) {
                 stops.add(item.stop!!)
             }
         }

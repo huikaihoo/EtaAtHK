@@ -5,6 +5,7 @@
         android:title="@string/pref_category_title_general"
         android:order="10">
 
+        <!--suppress AndroidDomInspection -->
         <ListPreference
             android:key="@string/pref_language"
             android:title="@string/pref_title_language"

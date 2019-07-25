@@ -71,7 +71,7 @@ class GistApiUnitTest: BaseUnitTest() {
 
     @Test
     fun getGist() {
-        gistIdMap.forEach { company, gistId ->
+        gistIdMap.forEach { (company, gistId) ->
             if (gistId.isNotEmpty())
                 getRawUrl(company, gistId)
         }
@@ -81,7 +81,7 @@ class GistApiUnitTest: BaseUnitTest() {
     fun getContent() {
         val rawUrlList = gistIdMap.map {
             println("$it / ${it.value.isNotEmpty()}")
-            if(it.value.isNotEmpty()) getRawUrl(it.key, it.value) else ""
+            if (it.value.isNotEmpty()) getRawUrl(it.key, it.value) else ""
         }.filter { it.isNotEmpty() }
 
         for (rawUrl in rawUrlList) {

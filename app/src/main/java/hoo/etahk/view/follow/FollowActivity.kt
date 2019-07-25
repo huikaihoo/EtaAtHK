@@ -366,7 +366,7 @@ class FollowActivity : NavActivity() {
                 true
             }
             R.id.menu_remove_group -> {
-                if (location != null && !location.groups.isEmpty()) {
+                if (location != null && location.groups.isNotEmpty()) {
                     val group = location.groups[container.currentItem]
 
                     AlertDialogBuilder(this)

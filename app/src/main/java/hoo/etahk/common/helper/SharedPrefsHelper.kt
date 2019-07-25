@@ -15,7 +15,7 @@ import hoo.etahk.common.Constants.AppMode.DEV
 import hoo.etahk.common.Constants.AppMode.RELEASE
 import hoo.etahk.common.Utils
 import put
-import java.util.*
+import java.util.UUID
 
 
 object SharedPrefsHelper {
@@ -23,7 +23,7 @@ object SharedPrefsHelper {
     @SuppressLint("StaticFieldLeak")
     lateinit var remote: FirebaseRemoteConfig
 
-    val remoteCacheExpiration
+    private val minimumFetchInterval
         get() = if (getAppMode() == DEV) 10L else 43200L
 
     fun init(context: Context) {
@@ -32,15 +32,15 @@ object SharedPrefsHelper {
         if (!Utils.isUnitTest) {
             remote = FirebaseRemoteConfig.getInstance()
 
-            remote.setConfigSettings(FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(getAppMode() == DEV)
+            remote.setConfigSettingsAsync(FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(minimumFetchInterval)
                 .build())
             remote.setDefaults(R.xml.remote_config_defaults)
         }
     }
 
     fun getAppMode(): Long {
-        return when(BuildConfig.DEBUG) {
+        return when (BuildConfig.DEBUG) {
             true -> DEV
             false -> {
                 when (get<String>(R.string.param_app_mode)) {

@@ -68,7 +68,7 @@ data class RouteKey (
                 val routeParts = routeNo.split("[^A-Z0-9]+|(?<=[A-Z])(?=[0-9])|(?<=[0-9])(?=[A-Z])".toRegex())
                 val noPrefix = routeParts[0].isEmpty() || routeParts[0][0] in '0'..'9'
 
-                for(i in routeParts.indices) {
+                for (i in routeParts.indices) {
                     when (i) {
                         0 ->
                             if (noPrefix)

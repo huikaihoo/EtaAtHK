@@ -75,7 +75,7 @@ object BusConnection : BaseConnection {
         val newResult = ParentRoutesMap()
 
         parentRoutesResult.filter { it.key != Company.GOV && it.value != null }.forEach { (company, parentRoutesMap) ->
-            for(companyRoute in parentRoutesMap!!.getAll()) {
+            for (companyRoute in parentRoutesMap!!.getAll()) {
                 var govRoute = govResult.get(companyRoute.routeKey)
                 var newRoute: Route? = null
 
@@ -120,7 +120,7 @@ object BusConnection : BaseConnection {
         }
 
         // 3. Update ETA indicator to Gov Parents Routes
-        for((etaCompany, etaList) in etaRoutesResult) {
+        for ((etaCompany, etaList) in etaRoutesResult) {
             etaList?.forEach { routeNo ->
                 val govRoute = govResult.get(etaCompany, routeNo)
                 val newRoute = newResult.get(etaCompany, routeNo)

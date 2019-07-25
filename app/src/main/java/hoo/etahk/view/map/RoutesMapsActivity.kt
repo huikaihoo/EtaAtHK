@@ -151,7 +151,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         if (stops.isNotEmpty()) {
             stops.forEachIndexed { i, stop ->
                 val title = (i + 1).toString() + ". " + stop.name.value
-                val markerColor = when(i) {
+                val markerColor = when (i) {
                     0 -> BitmapDescriptorFactory.HUE_GREEN
                     stops.size - 1 -> BitmapDescriptorFactory.HUE_RED
                     else -> BitmapDescriptorFactory.HUE_AZURE

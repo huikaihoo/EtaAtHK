@@ -36,10 +36,9 @@ class UpdateRoutesService: Service() {
             startForeground(NOTIFICATION_UPDATE_ROUTES, notification)
 
             logd("Start working thread")
-            SharedPrefsHelper.remote.fetch(SharedPrefsHelper.remoteCacheExpiration).addOnCompleteListener { task ->
+            SharedPrefsHelper.remote.fetchAndActivate().addOnCompleteListener { task ->
                 thread(start = true) {
                     if (task.isSuccessful) {
-                        SharedPrefsHelper.remote.activateFetched()
                         SharedPrefsHelper.putFromRemote(R.string.param_gist_id_kmb, "")
                         SharedPrefsHelper.putFromRemote(R.string.param_gist_id_nwfb, "")
                         SharedPrefsHelper.putFromRemote(R.string.param_gist_id_mtrb, "")
@@ -51,7 +50,7 @@ class UpdateRoutesService: Service() {
                 }
             }.addOnFailureListener { e ->
                 thread(start = true) {
-                    loge("FirebaseRemoteConfig::fetch failed!", e)
+                    loge("FirebaseRemoteConfig::fetchAndActivate failed!", e)
                     stopSelf()
                 }
             }.addOnCanceledListener {

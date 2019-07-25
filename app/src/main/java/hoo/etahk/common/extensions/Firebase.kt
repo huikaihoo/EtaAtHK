@@ -6,7 +6,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
  */
 
 inline fun <reified T> FirebaseRemoteConfig.get(key: String): T {
-    return when(T::class) {
+    return when (T::class) {
         Boolean::class -> this.getBoolean(key) as T
         ByteArray::class -> this.getByteArray(key) as T
         Double::class -> this.getDouble(key) as T

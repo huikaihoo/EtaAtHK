@@ -210,8 +210,7 @@ class RouteActivity : BaseActivity() {
                     Argument.ARG_GOTO_SEQ to -1L
                 )
 
-                val theme = getTheme(viewModel.routeKey?.company?: "", viewModel.routeKey?.typeCode?: RouteType.NONE)
-                val shortcutResId = when (theme) {
+                val shortcutResId = when ( getTheme(viewModel.routeKey?.company?: "", viewModel.routeKey?.typeCode?: RouteType.NONE) ) {
                     R.style.AppTheme_Kmb -> R.drawable.ic_shortcut_bus_kmb
                     R.style.AppTheme_Lwb -> R.drawable.ic_shortcut_bus_lwb
                     R.style.AppTheme_Nwfb  -> R.drawable.ic_shortcut_bus_nwfb

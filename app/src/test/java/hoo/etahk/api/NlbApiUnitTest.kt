@@ -12,8 +12,8 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class NlbApiUnitTest {
 
-    private val routeId = "1" // 1 88
-    private val stopId = "37" // 28 105
+    private val routeId = "88" // 1 88
+    private val stopId = "78" // 28 105
 
     @Test
     fun getParentRoutes() {

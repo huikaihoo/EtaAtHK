@@ -130,7 +130,7 @@ class RouteFragment : BaseFragment() {
                             positiveButton.isEnabled = (checkedCnt > 0)
                         }
                         .setPositiveButton(android.R.string.ok) { dialog, which ->
-                            for(i in checkedList.indices) {
+                            for (i in checkedList.indices) {
                                 if (checkedList[i]) {
                                     fragmentViewModel.insertFollowItem(groupList[i].Id!!, stop)
                                 }
