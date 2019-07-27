@@ -19,8 +19,12 @@ import hoo.etahk.common.extensions.createShortcut
 import hoo.etahk.common.extensions.tag
 import hoo.etahk.common.tools.ThemeColor
 import hoo.etahk.view.base.NavActivity
-import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.activity_search_nav.*
+import kotlinx.android.synthetic.main.activity_search.appbar
+import kotlinx.android.synthetic.main.activity_search.container
+import kotlinx.android.synthetic.main.activity_search.fab
+import kotlinx.android.synthetic.main.activity_search.tabs
+import kotlinx.android.synthetic.main.activity_search.toolbar
+import kotlinx.android.synthetic.main.activity_search_nav.nav
 
 class BusSearchActivity : NavActivity() {
 
@@ -110,7 +114,7 @@ class BusSearchActivity : NavActivity() {
                 val oldTabPosition = viewModel.selectedTabPosition
                 val newTabPosition = tab.position
 
-                if (oldTabPosition in 0..searchList.size) {
+                if (oldTabPosition in 0 until searchList.size) {
                     changeColor(oldTabPosition, newTabPosition)
                 }
 
@@ -222,11 +226,11 @@ class BusSearchActivity : NavActivity() {
     }
 
     private fun changeColor(from: Int, to: Int) {
-        when (to in 0..searchList.size) {
+        when (to in 0 until searchList.size) {
             true -> {
                 // Change Task list color
                 super.setTaskDescription(searchList[to].color.colorPrimaryDark)
-                when (from in 0..searchList.size || from == to) {
+                when (from in 0 until searchList.size || from == to) {
                     true -> {
                         /**
                          * Source: https://stackoverflow.com/questions/28547820/how-can-i-change-the-action-bar-colour-with-animation

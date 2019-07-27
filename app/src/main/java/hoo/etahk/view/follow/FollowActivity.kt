@@ -24,16 +24,26 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.constants.SharePrefs
-import hoo.etahk.common.extensions.*
+import hoo.etahk.common.extensions.createShortcut
+import hoo.etahk.common.extensions.getExtra
+import hoo.etahk.common.extensions.logd
+import hoo.etahk.common.extensions.loge
+import hoo.etahk.common.extensions.restart
+import hoo.etahk.common.extensions.tag
+import hoo.etahk.common.extensions.toLocation
 import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.model.relation.LocationAndGroups
 import hoo.etahk.view.base.NavActivity
 import hoo.etahk.view.dialog.InputDialog
 import hoo.etahk.view.service.UpdateRoutesService
-import kotlinx.android.synthetic.main.activity_follow.*
-import kotlinx.android.synthetic.main.activity_follow_nav.*
-import kotlinx.android.synthetic.main.dialog_input.view.*
+import kotlinx.android.synthetic.main.activity_follow.container
+import kotlinx.android.synthetic.main.activity_follow.progress_bar
+import kotlinx.android.synthetic.main.activity_follow.spinner
+import kotlinx.android.synthetic.main.activity_follow.tabs
+import kotlinx.android.synthetic.main.activity_follow.toolbar
+import kotlinx.android.synthetic.main.activity_follow_nav.nav
+import kotlinx.android.synthetic.main.dialog_input.view.input
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -198,7 +208,7 @@ class FollowActivity : NavActivity() {
 
                 if (it.isNotEmpty()){
                     if ( spinner.selectedItemPosition < 0 ||
-                        (spinner.selectedItemPosition in 0..spinnerAdapter.dataSource.size &&
+                        (spinner.selectedItemPosition in 0 until spinnerAdapter.dataSource.size &&
                         spinnerAdapter.dataSource[spinner.selectedItemPosition].location.Id != viewModel.selectedLocation.value!!.location.Id) ) {
                         spinnerAdapter.dataSource.forEachIndexed { index, locationAndGroups ->
                             if (locationAndGroups.location.Id == viewModel.selectedLocation.value!!.location.Id) {

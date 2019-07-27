@@ -37,6 +37,29 @@ class KmbApiUnitTest {
     }
 
     @Test
+    fun getBoundVariant() {
+        val call = ConnectionHelper.kmb.getBoundVariant(route = route, bound = bound)
+        println("url = ${call.request().url()}")
+
+        try {
+            val response = call.execute()
+            println("isSuccessful = ${response.isSuccessful}")
+
+            if (response.isSuccessful) {
+                val result = response.body()
+                println("result = $result")
+                assert(result != null && result.result == true && result.data != null)
+            } else {
+                println("error = ${response.errorBody()?.string()}")
+                assert(false)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            assert(false)
+        }
+    }
+
+    @Test
     fun getTimetable() {
         val call = ConnectionHelper.kmb.getTimetable(
             route = route,

@@ -3,15 +3,16 @@ package hoo.etahk.view.dialog
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
-import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import com.mcxiaoke.koi.ext.onClick
 import com.mcxiaoke.koi.ext.onTextChange
 import hoo.etahk.R
 import hoo.etahk.common.view.AlertDialogBuilder
-import kotlinx.android.synthetic.main.dialog_input.view.*
+import kotlinx.android.synthetic.main.dialog_input.view.input
+import kotlinx.android.synthetic.main.dialog_input.view.input_layout
 
 class InputDialog (val context: Context) {
 
@@ -46,7 +47,12 @@ class InputDialog (val context: Context) {
     }
 
     fun show() {
-        val dialog = builder.show()
+        val dialog = builder.create()
+
+        dialog.setOnShowListener {
+            view.input.width = view.input_layout.width
+        }
+        dialog.show()
 
         val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         positiveButton.isEnabled = false
@@ -58,4 +64,5 @@ class InputDialog (val context: Context) {
             positiveButton.isEnabled = text.isNotBlank()
         }
     }
+
 }

@@ -40,6 +40,8 @@
         android:layout_marginEnd="@dimen/half_margin"
         app:hintEnabled="true"
         app:hintAnimationEnabled="true"
+        app:hintTextColor="@color/colorDialogAccent"
+        app:boxStrokeColor="@color/colorDialogAccent"
         app:hintTextAppearance="@style/AppTheme.TextAppearance.Hint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline"

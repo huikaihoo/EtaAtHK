@@ -11,9 +11,9 @@ apply plugin: 'kotlin-kapt'
 def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
-def versionSuffix = "-alpha.3"
+def versionSuffix = "-alpha.4"
 
-def versionBuild = 10
+def versionBuild = 11
 
 def static getBuildTime() {
     def date = new Date()
@@ -65,6 +65,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
     }
     applicationVariants.all { variant ->
         def flavor = variant.mergedFlavor
@@ -150,9 +153,12 @@ dependencies {
     // Debug
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
-    debugImplementation 'com.facebook.flipper:flipper:0.21.1'
+    debugImplementation 'com.facebook.flipper:flipper:0.23.3'
     debugImplementation 'com.facebook.soloader:soloader:0.6.1'
-    releaseImplementation 'com.facebook.flipper:flipper-noop:0.21.1'
+    //releaseImplementation 'com.facebook.flipper:flipper-noop:0.23.3'
+    releaseImplementation ('com.github.huikaihoo:flipper-android-no-op:0.1.1') {
+        exclude group: 'com.squareup.okhttp3'
+    }
     //debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 
     // Unit Test
