@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -29,6 +28,7 @@ import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.extensions.restart
+import hoo.etahk.common.extensions.startServiceCompat
 import hoo.etahk.common.extensions.tag
 import hoo.etahk.common.extensions.toLocation
 import hoo.etahk.common.helper.SharedPrefsHelper
@@ -81,7 +81,7 @@ class FollowActivity : NavActivity() {
         viewModel.isLocationIdUsed = getExtra(Argument.ARG_LOCATION_ID, -1L) == -1L
 
         if (viewModel.needUpdateParentRoute()) {
-            ContextCompat.startForegroundService(this, newIntent<UpdateRoutesService>())
+            this.startServiceCompat(newIntent<UpdateRoutesService>())
         }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)

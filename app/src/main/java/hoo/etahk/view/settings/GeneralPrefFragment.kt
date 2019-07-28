@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.Preference
@@ -16,6 +15,7 @@ import com.mcxiaoke.koi.ext.restart
 import hoo.etahk.R
 import hoo.etahk.common.constants.Argument
 import hoo.etahk.common.extensions.startCustomTabs
+import hoo.etahk.common.extensions.startServiceCompat
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.transfer.data.Exporter
@@ -62,7 +62,7 @@ class GeneralPrefFragment : BasePrefFragment() {
         val updateRoutes = findPreference(R.string.pref_update_routes)
 
         updateRoutes.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            ContextCompat.startForegroundService(App.instance, activity!!.newIntent<UpdateRoutesService>())
+            App.instance.startServiceCompat(activity!!.newIntent<UpdateRoutesService>())
             true
         }
 

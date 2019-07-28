@@ -22,7 +22,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.IconCompat
 import hoo.etahk.common.Utils.getThemeColorPrimary
 import hoo.etahk.common.browser.CustomTabsHelper
-import java.util.*
+import java.util.Locale
 
 /**
  * Method to launch a Custom Tabs Activity.
@@ -164,5 +164,16 @@ fun Context.applyLocale(language: String): Context {
         this.createConfigurationContext(config)
     } else {
         this
+    }
+}
+
+/**
+ * Source: https://stackoverflow.com/questions/55894636/android-9-pie-context-startforegroundservice-did-not-then-call-service-star
+ */
+fun Context.startServiceCompat(service: Intent) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        this.startForegroundService(service)
+    } else {
+        this.startService(service)
     }
 }
