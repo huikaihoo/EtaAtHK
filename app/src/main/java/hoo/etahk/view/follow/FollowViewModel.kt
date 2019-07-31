@@ -17,6 +17,7 @@ class FollowViewModel : TimerViewModel() {
     val enableSorting = MutableLiveData<Boolean>()
     var lastLocation: Location? = null
 
+    var isNearbyStops = false
     var isLocationIdUsed: Boolean = false
     var isSnackbarShowed: Boolean = false
 

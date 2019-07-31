@@ -24,7 +24,7 @@ data class Path(
         var longitude: Double = -1.0,
         var updateTime: Long = 0L) {
 
-    var location
+    var latLng
         get() = LatLng(latitude, longitude)
         set(value) {
             latitude = value.latitude

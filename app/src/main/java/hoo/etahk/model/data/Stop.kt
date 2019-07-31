@@ -1,9 +1,14 @@
 package hoo.etahk.model.data
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
+import androidx.room.Ignore
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.common.Constants
+import hoo.etahk.common.extensions.toLocation
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
@@ -38,8 +43,15 @@ data class Stop(
     var stopStr: String = routeKey.routeStr + "_" + seq
         get() = routeKey.routeStr + "_" + seq
 
-    var location
+    var latLng
         get() = LatLng(latitude, longitude)
+        set(value) {
+            latitude = value.latitude
+            longitude = value.longitude
+        }
+
+    var location
+        get() = latLng.toLocation()
         set(value) {
             latitude = value.latitude
             longitude = value.longitude

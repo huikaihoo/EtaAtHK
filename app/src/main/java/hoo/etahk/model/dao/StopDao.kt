@@ -1,8 +1,14 @@
 package hoo.etahk.model.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import hoo.etahk.common.Constants
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.model.custom.NearbyStop
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -54,25 +60,27 @@ abstract class StopDao {
     @Query("""
         SELECT stop.*, x.distance FROM stop,
         (   SELECT company, routeNo, bound, MIN($DISTANCE) AS distance FROM stop
-            GROUP BY company, routeNo, bound ORDER BY $DISTANCE LIMIT 50
+            GROUP BY company, routeNo, bound ORDER BY $DISTANCE LIMIT :limit
         ) AS x
         $NEARBY_STOP_COND
         ORDER BY x.distance, routeNo, stop.company, seq
     """)
     abstract fun selectNearby(latitude: Double,
-                              longitude: Double): LiveData<List<NearbyStop>>
+                              longitude: Double,
+                              limit: Int = SharePrefs.DEFAULT_NEARBY_STOPS_MAX_NUMBER): LiveData<List<NearbyStop>>
 
     @Query("""
         SELECT stop.*, x.distance FROM stop,
         (   SELECT company, routeNo, bound, MIN($DISTANCE) AS distance FROM stop
             WHERE routeNo IN (SELECT DISTINCT dataStrB FROM Misc WHERE miscType = :miscType)
-            GROUP BY company, routeNo, bound ORDER BY $DISTANCE LIMIT 50
+            GROUP BY company, routeNo, bound ORDER BY $DISTANCE LIMIT :limit
         ) AS x
         $NEARBY_STOP_COND
         ORDER BY x.distance, routeNo, stop.company, seq
     """)
     abstract fun selectNearbyFav(latitude: Double,
                                  longitude: Double,
+                                 limit: Int = SharePrefs.DEFAULT_NEARBY_STOPS_MAX_NUMBER,
                                  miscType: Constants.MiscType = Constants.MiscType.ROUTE_FAVOURITE): LiveData<List<NearbyStop>>
 
 //    @Query("SELECT * FROM stop " +

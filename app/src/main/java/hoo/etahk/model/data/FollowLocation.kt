@@ -3,6 +3,7 @@ package hoo.etahk.model.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.android.gms.maps.model.LatLng
+import hoo.etahk.common.extensions.toLocation
 
 @Entity
 data class FollowLocation(
@@ -18,8 +19,15 @@ data class FollowLocation(
         var displaySeq: Long = -1L,
         var updateTime: Long = 0L) {
 
-    var location
+    var latLng
         get() = LatLng(latitude, longitude)
+        set(value) {
+            latitude = value.latitude
+            longitude = value.longitude
+        }
+
+    var location
+        get() = latLng.toLocation()
         set(value) {
             latitude = value.latitude
             longitude = value.longitude

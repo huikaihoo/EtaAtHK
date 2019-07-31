@@ -1,6 +1,7 @@
 package hoo.etahk.view.follow
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -30,7 +31,6 @@ import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.extensions.restart
 import hoo.etahk.common.extensions.startServiceCompat
 import hoo.etahk.common.extensions.tag
-import hoo.etahk.common.extensions.toLocation
 import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.model.relation.LocationAndGroups
@@ -67,6 +67,7 @@ class FollowActivity : NavActivity() {
     private lateinit var viewModel: FollowViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    private var menu: Menu? = null
     private var onTabSelectedListener: TabLayout.ViewPagerOnTabSelectedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -185,7 +186,7 @@ class FollowActivity : NavActivity() {
                 val lastLocation = viewModel.lastLocation
 
                 spinnerAdapter.dataSource = if (lastLocation == null) it else it.sortedBy {
-                    if (it.location.pin) -1.0f else lastLocation.distanceTo(it.location.location.toLocation())
+                    if (it.location.pin) -1.0f else lastLocation.distanceTo(it.location.location)
                 }
 
                 val selectedLocation = viewModel.selectedLocation.value
@@ -199,10 +200,16 @@ class FollowActivity : NavActivity() {
                             viewModel.selectedLocation.value = it
                         }
                     }
-                } else if (selectedLocation == null) {
-                    viewModel.selectedLocation.value = spinnerAdapter.dataSource[0]
-                } else if (it.isNotEmpty() && it.none { it.location.Id == selectedLocation.location.Id }) {
-                    viewModel.selectedLocation.value = spinnerAdapter.dataSource[0]
+                } else if ( selectedLocation == null ||
+                    ( it.isNotEmpty() && it.none { it.location.Id == selectedLocation.location.Id } ) ) {
+                    var selectIndex = 0
+                    if (lastLocation != null &&
+                        spinnerAdapter.dataSource.size > 1 &&
+                        spinnerAdapter.dataSource[0].location.pin &&
+                        lastLocation.distanceTo(spinnerAdapter.dataSource[1].location.location) < SharePrefs.DEFAULT_SHOW_FOLLOW_LOCATION_DISTANCE) {
+                        selectIndex = 1
+                    }
+                    viewModel.selectedLocation.value = spinnerAdapter.dataSource[selectIndex]
                 }
                 logd("AF = ${viewModel.selectedLocation.value?.location}")
 
@@ -234,8 +241,27 @@ class FollowActivity : NavActivity() {
         }
     }
 
+    private fun updateOptionsMenu() {
+        val menu = this.menu
+
+        if (menu != null) {
+            val visible = !viewModel.isNearbyStops
+            menu.findItem(R.id.menu_location_options)?.isVisible = visible
+            menu.findItem(R.id.menu_group_options)?.isVisible = visible
+            menu.findItem(R.id.menu_sort_items)?.isVisible = visible
+
+            if (!visible && viewModel.enableSorting.value == true) {
+                menu.findItem(R.id.menu_sort_items)?.isChecked = false
+                viewModel.enableSorting.value = false
+            }
+        }
+    }
+
     private fun updateFragments(locationAndGroups: LocationAndGroups?) {
         if (locationAndGroups != null) {
+            viewModel.isNearbyStops = locationAndGroups.location.pin
+            updateOptionsMenu()
+
             onTabSelectedListener?.let { tabs.removeOnTabSelectedListener(it) }
 
             onTabSelectedListener = object : TabLayout.ViewPagerOnTabSelectedListener(container) {
@@ -262,9 +288,17 @@ class FollowActivity : NavActivity() {
                     val originalDataSource = spinnerAdapter.dataSource
 
                     if (lastLocation != null && originalDataSource.isNotEmpty()) {
-                        spinnerAdapter.dataSource = originalDataSource.sortedBy { lastLocation.distanceTo(it.location.location.toLocation()) }
-                        spinner.setSelection(0)
-                        updateFragments(spinnerAdapter.dataSource[0])
+                        spinnerAdapter.dataSource = originalDataSource.sortedBy {
+                            if (it.location.pin) -1.0f else lastLocation.distanceTo(it.location.location)
+                        }
+                        var selectIndex = 0
+                        if (spinnerAdapter.dataSource.size > 1 &&
+                            spinnerAdapter.dataSource[0].location.pin &&
+                            lastLocation.distanceTo(spinnerAdapter.dataSource[1].location.location) < SharePrefs.DEFAULT_SHOW_FOLLOW_LOCATION_DISTANCE) {
+                            selectIndex = 1
+                        }
+                        spinner.setSelection(selectIndex)
+                        updateFragments(spinnerAdapter.dataSource[selectIndex])
                     }
                 }
             } catch (e: SecurityException) {
@@ -276,6 +310,7 @@ class FollowActivity : NavActivity() {
     }
 
 
+    @SuppressLint("MissingSuperCall")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             Constants.Request.REQUEST_LOCATION_ADD -> {
@@ -294,6 +329,9 @@ class FollowActivity : NavActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_follow, menu)
+
+        this.menu = menu
+        updateOptionsMenu()
 
         viewModel.enableSorting.value = menu.findItem(R.id.menu_sort_items).isChecked
         return true

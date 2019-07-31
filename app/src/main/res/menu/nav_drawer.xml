@@ -8,37 +8,41 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_follow"
-            android:icon="@drawable/ic_nav_follow"
+            android:icon="@drawable/ic_nav_stop"
             android:title="@string/nav_follow" />
         <item
             android:id="@+id/nav_fh"
-            android:icon="@drawable/ic_nav_favourite"
+            android:icon="@drawable/ic_nav_fh"
             android:title="@string/nav_fh" />
     </group>
 
-    <group
-        android:id="@+id/nav_group_list"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_bus"
-            android:icon="@drawable/ic_nav_bus"
-            android:title="@string/nav_bus" />
-        <item
-            android:id="@+id/nav_gmb"
-            android:enabled="false"
-            android:icon="@drawable/ic_nav_minibus"
-            android:title="@string/nav_mb" />
-        <item
-            android:id="@+id/nav_tram"
-            android:enabled="false"
-            android:icon="@drawable/ic_nav_tram"
-            android:title="@string/nav_tram" />
-        <item
-            android:id="@+id/nav_mtr"
-            android:enabled="false"
-            android:icon="@drawable/ic_nav_mtr"
-            android:title="@string/nav_mtr" />
-    </group>
+    <item android:title="@string/nav_list_of_routes">
+        <menu>
+            <group
+                android:id="@+id/nav_group_list"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_bus"
+                    android:icon="@drawable/ic_nav_bus"
+                    android:title="@string/nav_bus" />
+                <item
+                    android:id="@+id/nav_gmb"
+                    android:enabled="false"
+                    android:icon="@drawable/ic_nav_minibus"
+                    android:title="@string/nav_mb" />
+                <item
+                    android:id="@+id/nav_tram"
+                    android:enabled="false"
+                    android:icon="@drawable/ic_nav_tram"
+                    android:title="@string/nav_tram" />
+                <item
+                    android:id="@+id/nav_mtr"
+                    android:enabled="false"
+                    android:icon="@drawable/ic_nav_mtr"
+                    android:title="@string/nav_mtr" />
+            </group>
+        </menu>
+    </item>
 
     <group android:id="@+id/nav_group_others">
         <item

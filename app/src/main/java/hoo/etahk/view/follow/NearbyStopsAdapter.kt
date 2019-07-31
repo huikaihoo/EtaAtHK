@@ -6,7 +6,6 @@ import android.view.View
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
-import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.prependImage
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.custom.NearbyStop
@@ -22,6 +21,7 @@ import kotlinx.android.synthetic.main.item_stop.view.fare
 import kotlinx.android.synthetic.main.item_stop.view.stop_desc
 import kotlinx.android.synthetic.main.item_stop.view.stop_title
 import kotlinx.android.synthetic.main.item_stop_with_header.view.stop
+import kotlin.math.roundToInt
 
 class NearbyStopsAdapter : DiffAdapter<FollowFragment, NearbyStop>() {
 
@@ -42,7 +42,15 @@ class NearbyStopsAdapter : DiffAdapter<FollowFragment, NearbyStop>() {
             val stop = dataSource[position].stop
 
             if (dataSource[position].showHeader) {
-                itemView.header_title.text = stop.name.value
+                var title = stop.name.value
+
+                val lastLocation= context?.lastLocation
+                if (lastLocation != null) {
+                    val distance = lastLocation.distanceTo(stop.location).roundToInt()
+                    title += " ($distance ${AppHelper.getQuantityString(R.plurals.meters, distance)})"
+                }
+
+                itemView.header_title.text = title
             }
 
             itemView.stop_title.text = stop.routeKey.getCompanyName() + " " + stop.routeKey.routeNo
@@ -51,12 +59,9 @@ class NearbyStopsAdapter : DiffAdapter<FollowFragment, NearbyStop>() {
             val etaResults = stop.etaResults
 
             itemView.stop_title.text = stop.routeKey.getCompanyName() + " " + stop.routeKey.routeNo
-            itemView.stop_desc.text =
-                stop.name.value + " " + AppHelper.getString(R.string.to_prefix) + stop.to.value
+            itemView.stop_desc.text = stop.name.value + " " + AppHelper.getString(R.string.to_prefix) + stop.to.value
             if (stop.fare > 0) {
-                itemView.fare.text = AppHelper.getString(R.string.price_2dp).format(stop.fare) + " " + dataSource[position].distance.toString()
-            } else {
-                itemView.fare.text = dataSource[position].distance.toString()
+                itemView.fare.text = AppHelper.getString(R.string.price_2dp).format(stop.fare)
             }
 
             // ETA Result
@@ -92,8 +97,8 @@ class NearbyStopsAdapter : DiffAdapter<FollowFragment, NearbyStop>() {
             }
 
             val stopView = if (dataSource[position].showHeader) itemView.stop else itemView
-            stopView.setOnClickListener { logd("onClick" + context.toString()); context?.updateEtaByStops(listOf(stop)) }
-            stopView.setOnLongClickListener { logd("onLongClick" + context.toString()); context?.showItemPopupMenu(stopView, stop); true }
+            stopView.setOnClickListener { context?.updateEtaByStops(listOf(stop)) }
+            stopView.setOnLongClickListener { context?.showItemPopupMenu(stopView, stop); true }
         }
     }
 }

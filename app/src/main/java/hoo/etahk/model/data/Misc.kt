@@ -31,7 +31,7 @@ data class Misc(
         var displaySeq: Long = -1L,
         var updateTime: Long = 0L) {
 
-    var location
+    var latLng
         get() = LatLng(latitude, longitude)
         set(value) {
             latitude = value.latitude

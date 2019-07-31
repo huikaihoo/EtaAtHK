@@ -139,8 +139,8 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         if (paths.isNotEmpty()) {
             val polylineOptions = PolylineOptions().color(getColor(R.color.colorLineRed))
             paths.forEachIndexed { i, path ->
-                polylineOptions.add(path.location)
-                latLngBoundsBuilder.include(path.location)
+                polylineOptions.add(path.latLng)
+                latLngBoundsBuilder.include(path.latLng)
             }
             googleMap?.addPolyline(polylineOptions)
         }
@@ -157,9 +157,9 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
                     else -> BitmapDescriptorFactory.HUE_AZURE
                 }
 
-                latLngBoundsBuilder.include(stop.location)
+                latLngBoundsBuilder.include(stop.latLng)
 
-                val markerOptions = MarkerOptions().position(stop.location).title(title).icon(BitmapDescriptorFactory.defaultMarker(markerColor))
+                val markerOptions = MarkerOptions().position(stop.latLng).title(title).icon(BitmapDescriptorFactory.defaultMarker(markerColor))
                 val marker = googleMap?.addMarker(markerOptions)
 
                 if (i == 0) {

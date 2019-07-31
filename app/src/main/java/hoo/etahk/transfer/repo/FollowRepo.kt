@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 
 object FollowRepo {
 
-    private const val enableNearbyLocation = false
+    private const val enableNearbyLocation = true
 
     fun initLocationsAndGroups() {
         GlobalScope.launch(Dispatchers.Default) {
-            // Insert nearby location
+            // Insert nearby latLng
             if (AppHelper.db.locationDao().countPin() <= 0 && enableNearbyLocation) {
                 AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.stops_nearby), pin = true, displaySeq = 1))
 
@@ -41,7 +41,7 @@ object FollowRepo {
                 }
             }
 
-            // Insert default location (home & work)
+            // Insert default latLng (home & work)
             if (AppHelper.db.locationDao().count() <= 1) {
                 AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.home), displaySeq = 2))
                 AppHelper.db.locationDao().insert(FollowLocation(name = AppHelper.getString(R.string.work), displaySeq = 3))

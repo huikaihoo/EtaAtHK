@@ -331,7 +331,7 @@ object NwfbConnection: BaseConnection {
             seq = seq,
             updateTime = t
         )
-        path.location = latLng
+        path.latLng = latLng
         return path
     }
 
@@ -429,7 +429,7 @@ object NwfbConnection: BaseConnection {
                                     }
                                 }
 
-                                if (!etaResults.isEmpty()) {
+                                if (etaResults.isNotEmpty()) {
                                     stop.etaStatus = Constants.EtaStatus.SUCCESS
                                     stop.etaResults = etaResults
                                     //logd(AppHelper.gson.toJson(stop.etaResults))
@@ -479,7 +479,7 @@ object NwfbConnection: BaseConnection {
                         val etaResults = mutableListOf<EtaResult>()
                         val msg = getInvalidMsg(responseStr ?: "")
 
-                        if (responseStr.isNullOrBlank() || !msg.isEmpty()) {
+                        if (responseStr.isNullOrBlank() || msg.isNotEmpty()) {
                             etaResults.add(toEtaResult(stop, msg))
 
                         } else {
@@ -495,7 +495,7 @@ object NwfbConnection: BaseConnection {
                             }
                         }
 
-                        if (!etaResults.isEmpty()) {
+                        if (etaResults.isNotEmpty()) {
                             stop.etaStatus = Constants.EtaStatus.SUCCESS
                             stop.etaResults = etaResults
                             stop.etaUpdateTime = t
@@ -512,18 +512,18 @@ object NwfbConnection: BaseConnection {
 
     // ETA Related
     private fun getInvalidMsg(responseStr: String): String {
-        return when (responseStr.contains("\\|DISABLED\\|".toRegex())) {
-            true -> AppHelper.getString(R.string.eta_msg_no_eta_service)
-            false -> {
-                when (responseStr.contains("\\|HTML\\|".toRegex())) {
-                    true -> when (responseStr.contains("服務時間已過")) {
-                        true -> AppHelper.getString(R.string.eta_msg_not_in_service_hours)
-                        // TODO("Extract ETA message")
-                        false -> AppHelper.getString(R.string.eta_msg_no_eta_service)
-                    }
-                    false -> ""
+        return when {
+            responseStr.contains("\\|DISABLED\\|".toRegex()) -> AppHelper.getString(R.string.eta_msg_no_eta_service)
+            responseStr.contains("\\|HTML\\|".toRegex()) -> {
+                if (responseStr.contains("服務時間已過")) {
+                    AppHelper.getString(R.string.eta_msg_not_in_service_hours)
+                } else {
+                    // TODO("Extract ETA message")
+                    AppHelper.getString(R.string.eta_msg_no_eta_service)
                 }
             }
+            responseStr.contains("\\|TEXT\\|".toRegex()) -> responseStr.replace(".*\\|TEXT\\|\\|".toRegex(), "").trim()
+            else -> ""
         }
     }
 

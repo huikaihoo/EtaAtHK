@@ -225,7 +225,7 @@ object KmbConnection: BaseConnection {
             section = section,
             updateTime = t
         )
-        path.location = latLng
+        path.latLng = latLng
         return path
     }
 
@@ -241,7 +241,7 @@ object KmbConnection: BaseConnection {
                 updateTime = t
         )
         if (routeStop.x != null && routeStop.y != null)
-            stop.location = Utils.hk1980GridToLatLng(routeStop.y, routeStop.x)
+            stop.latLng = Utils.hk1980GridToLatLng(routeStop.y, routeStop.x)
         return stop
     }
 

@@ -21,13 +21,14 @@
     <string name="notification_title_update_routes">Updating routes data</string>
 
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <string name="last_update">Last Update:\u0020</string>
 
-    <string name="nav_follow">Following Stops</string>
+    <string name="nav_follow">Nearby Stops</string>
     <string name="nav_fh">Common Routes</string>
+    <string name="nav_list_of_routes">List of Routes</string>
     <string name="nav_bus">Bus</string>
     <string name="nav_mb">Minibus</string>
     <string name="nav_tram">Tram</string>
@@ -90,6 +91,10 @@
     <string name="to_prefix">To\u0020</string>
     <string name="to_middle">\u0020to\u0020</string>
     <string name="min">min</string>
+    <plurals name="meters">
+        <item quantity="one">meter</item>
+        <item quantity="other">meters</item>
+    </plurals>
     <string name="price_2dp" translatable="false">$%.2f</string>
     <string name="arrow_circular" translatable="false">\u0020⟲\u0020</string>
     <string name="arrow_one_way" translatable="false">\u0020→\u0020</string>

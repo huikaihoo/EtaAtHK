@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -17,7 +18,7 @@ import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.applyLocale
 import hoo.etahk.common.extensions.yn
 import hoo.etahk.model.AppDatabase
-import java.util.*
+import java.util.Locale
 
 
 @SuppressLint("StaticFieldLeak")
@@ -86,6 +87,14 @@ object AppHelper {
 
     fun getString(@StringRes resId: Int): String {
         return languageContext.getString(resId)
+    }
+
+    fun getQuantityString(@PluralsRes resId: Int, quantity: Int): String {
+        return languageContext.resources.getQuantityString(resId, quantity)
+    }
+
+    fun getQuantityString(@PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any): String {
+        return languageContext.resources.getQuantityString(resId, quantity, formatArgs)
     }
 }
 

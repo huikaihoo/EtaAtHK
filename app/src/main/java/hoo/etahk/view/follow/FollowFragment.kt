@@ -19,6 +19,7 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.common.view.ItemTouchHelperCallback
@@ -27,6 +28,7 @@ import hoo.etahk.model.data.FollowItem
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.relation.ItemAndStop
 import hoo.etahk.model.relation.LocationAndGroups
+import hoo.etahk.view.base.BaseAdapter
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.fragment_recycler.view.recycler_view
@@ -59,6 +61,8 @@ class FollowFragment : BaseFragment() {
     }
 
     var isItemsDisplaySeqChanged = false
+    val lastLocation
+        get() = viewModel.lastLocation
 
     private lateinit var rootView: View
     private lateinit var viewModel: FollowViewModel
@@ -68,9 +72,13 @@ class FollowFragment : BaseFragment() {
     private var nearbyStopsAdapter: NearbyStopsAdapter = NearbyStopsAdapter()
     private var followItemsAdapter: FollowItemsAdapter = FollowItemsAdapter()
 
+    private val activeAdapter: BaseAdapter<FollowFragment,*>
+        get() = (if (fragmentViewModel.isNearbyStops) nearbyStopsAdapter else followItemsAdapter)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         followItemsAdapter.context = this
+        nearbyStopsAdapter.context = this
 
         viewModel= ViewModelProviders.of(activity!!).get(FollowViewModel::class.java)
         fragmentViewModel = ViewModelProviders.of(this).get(FollowFragmentViewModel::class.java)
@@ -82,7 +90,7 @@ class FollowFragment : BaseFragment() {
         rootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
 
         rootView.recycler_view.layoutManager = LinearLayoutManager(activity)
-        rootView.recycler_view.adapter = followItemsAdapter
+        rootView.recycler_view.adapter = activeAdapter
         rootView.recycler_view.itemAnimator = DefaultItemAnimator()
         rootView.recycler_view.addItemDecoration(
             DividerItemDecoration(
@@ -100,7 +108,7 @@ class FollowFragment : BaseFragment() {
         // Refresh Layout
         rootView.refresh_layout.setColorSchemeColors(Utils.getThemeColorPrimary(activity!!))
         rootView.refresh_layout.isRefreshing = false
-        fragmentViewModel.isRefreshingAll = followItemsAdapter.dataSource.isEmpty()
+        fragmentViewModel.isRefreshingAll = activeAdapter.dataSource.isEmpty()
         rootView.refresh_layout.setOnRefreshListener {
             isItemsDisplaySeqChanged = false
             viewModel.stopTimer()
@@ -177,6 +185,7 @@ class FollowFragment : BaseFragment() {
             }
             true
         }
+        popup.show()
     }
 
     fun showItemPopupMenu(view: View, item: ItemAndStop) {
@@ -302,12 +311,20 @@ class FollowFragment : BaseFragment() {
 
                     logd("F=$errorCount U=$updatedCount T=$size")
 
-                    it.forEachIndexed { i, stop ->
-                        if (i == 0 || it[i-1].stop.name.value != stop.stop.name.value) {
+                    // Sort and filter Nearby stops
+                    val stops = if (lastLocation == null) it else it.filter {nearbyStop ->
+                        viewModel.lastLocation!!.distanceTo(nearbyStop.stop.location) < SharePrefs.DEFAULT_NEARBY_STOPS_DISTANCE
+                    }.sortedBy { nearbyStop ->
+                        viewModel.lastLocation!!.distanceTo(nearbyStop.stop.location)
+                    }
+
+                    // Mark the stops that need to show header (stops compare with previous one has different position)
+                    stops.forEachIndexed { i, stop ->
+                        if (i == 0 || stop.stop.location.distanceTo(stops[i-1].stop.location) > SharePrefs.DEFAULT_SAME_STOP_DISTANCE) {
                             stop.showHeader = true
                         }
                     }
-                    nearbyStopsAdapter.dataSource = it
+                    nearbyStopsAdapter.dataSource = stops
 
                     if (!fragmentViewModel.isEtaInit && size > 0) {
                         fragmentViewModel.isEtaInit = true
@@ -373,7 +390,9 @@ class FollowFragment : BaseFragment() {
         }
 
         viewModel.getLastUpdateTime().observe(viewLifecycleOwner, Observer<Long> {
+            //logd("getLastUpdateTime ${fragmentViewModel.isNearbyStops}")
             isItemsDisplaySeqChanged = false
+
             if (fragmentViewModel.isNearbyStops) {
                 val stops = fragmentViewModel.nearbyStops?.value?.map{ it.stop }
                 if (stops != null && stops.isNotEmpty() && !fragmentViewModel.isRefreshingAll) {

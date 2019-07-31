@@ -11,7 +11,7 @@ abstract class LocationGroupsDao {
 
     // Select
     @Transaction
-    @Query("SELECT * FROM followLocation where displaySeq > 0 ORDER BY displaySeq")
+    @Query("SELECT * FROM followLocation where displaySeq > 0 ORDER BY pin DESC, displaySeq")
     abstract fun select(): LiveData<List<LocationAndGroups>>
 
     @Transaction

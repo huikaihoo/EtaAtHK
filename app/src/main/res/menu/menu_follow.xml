@@ -19,6 +19,7 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_location_options"
         android:title="@string/location_options"
         android:orderInCategory="100"
         app:showAsAction="never">
@@ -44,6 +45,7 @@
     </item>
 
     <item
+        android:id="@+id/menu_group_options"
         android:title="@string/group_options"
         android:orderInCategory="200"
         app:showAsAction="never">
