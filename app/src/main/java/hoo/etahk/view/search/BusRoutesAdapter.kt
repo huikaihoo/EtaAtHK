@@ -5,6 +5,7 @@ import android.view.View
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import hoo.etahk.R
 import hoo.etahk.common.constants.Argument
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -13,7 +14,9 @@ import hoo.etahk.model.diff.ParentRouteDiffCallback
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.base.FilterDiffAdapter
 import hoo.etahk.view.route.RouteActivity
-import kotlinx.android.synthetic.main.item_route.view.*
+import kotlinx.android.synthetic.main.item_route.view.from_to
+import kotlinx.android.synthetic.main.item_route.view.route_desc
+import kotlinx.android.synthetic.main.item_route.view.route_no
 import org.jetbrains.anko.startActivity
 
 class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
@@ -41,8 +44,8 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
             itemView.setOnClickListener {
                 if (route.companyDetails.size > 1) {
                     when (SharedPrefsHelper.get<String>(R.string.pref_bus_jointly)) {
-                        "0" -> startRouteActivity(context, route.routeKey, route.routeKey.company, route.anotherCompany)
-                        "1" -> startRouteActivity(context, route.routeKey, route.anotherCompany, route.routeKey.company)
+                        SharePrefs.BUS_JOINTLY_DEFAULT_KMB_LWB -> startRouteActivity(context, route.routeKey, route.routeKey.company, route.anotherCompany)
+                        SharePrefs.BUS_JOINTLY_DEFAULT_NWFB_CTB -> startRouteActivity(context, route.routeKey, route.anotherCompany, route.routeKey.company)
                         else -> context?.showCompaniesPopupMenu(itemView, route)
                     }
                 } else {

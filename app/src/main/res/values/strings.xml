@@ -67,7 +67,7 @@
 
     <string name="get_my_location">Get Current Location</string>
     <string name="show_nearby_stops">Show Nearby Stops</string>
-    <string name="enable_sort">Enable Sorting</string>
+    <string name="enable_sort_items">Enable Sorting</string>
     <string name="create_shortcut">Create Shortcut</string>
 
     <string name="rename">Rename</string>
@@ -183,6 +183,8 @@
     <string name="msg_one_group_removed">One destination is removed</string>
     <string name="msg_one_item_removed">One item is removed</string>
     <string name="msg_add_to_favourite_success">Added to favourite successfully</string>
+    <string name="msg_remove_from_favourite_success">Removed from favourite successfully</string>
+    <string name="msg_remove_from_history_success">Removed from history successfully</string>
 
     <!-- General Preference [Key] -->
     <string name="pref_general" translatable="false">general</string>

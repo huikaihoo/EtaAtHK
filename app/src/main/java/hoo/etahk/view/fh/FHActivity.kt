@@ -1,27 +1,40 @@
 package hoo.etahk.view.fh
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.mcxiaoke.koi.ext.Bundle
 import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.extensions.createShortcut
 import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.tag
+import hoo.etahk.common.helper.SharedPrefsHelper
+import hoo.etahk.model.data.Route
+import hoo.etahk.model.misc.BaseMisc
 import hoo.etahk.model.relation.RouteFavouriteEx
 import hoo.etahk.model.relation.RouteHistoryEx
 import hoo.etahk.view.base.NavActivity
-import kotlinx.android.synthetic.main.activity_fh.*
-import kotlinx.android.synthetic.main.activity_fh_nav.*
+import hoo.etahk.view.route.RouteActivity
+import kotlinx.android.synthetic.main.activity_fh.recycler_view
+import kotlinx.android.synthetic.main.activity_fh.toolbar
+import kotlinx.android.synthetic.main.activity_fh_nav.bnv
+import kotlinx.android.synthetic.main.activity_fh_nav.nav
+import org.jetbrains.anko.startActivity
 
 class FHActivity : NavActivity() {
 
@@ -81,6 +94,98 @@ class FHActivity : NavActivity() {
             }
             else -> false
         }
+    }
+
+    fun showCompaniesPopupMenu(view: View, route: Route) {
+        val popup = PopupMenu(this, view, Gravity.END)
+
+        popup.inflate(R.menu.popup_bus_jointly)
+
+        popup.menu.findItem(R.id.popup_company_kmb_lwb).title = getString(
+            R.string.view_company_route,
+            Utils.getStringResourceByName(route.routeKey.company.toLowerCase()),
+            route.routeKey.routeNo
+        )
+        popup.menu.findItem(R.id.popup_company_nwfb_ctb).title = getString(
+            R.string.view_company_route,
+            Utils.getStringResourceByName(route.anotherCompany.toLowerCase()),
+            route.routeKey.routeNo
+        )
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.popup_company_kmb_lwb -> {
+                    startActivity<RouteActivity>(
+                        Argument.ARG_COMPANY to route.routeKey.company,
+                        Argument.ARG_ROUTE_NO to route.routeKey.routeNo,
+                        Argument.ARG_TYPE_CODE to route.routeKey.typeCode,
+                        Argument.ARG_ANOTHER_COMPANY to route.anotherCompany,
+                        Argument.ARG_GOTO_BOUND to -1L,
+                        Argument.ARG_GOTO_SEQ to -1L
+                    )
+                }
+                R.id.popup_company_nwfb_ctb -> {
+                    startActivity<RouteActivity>(
+                        Argument.ARG_COMPANY to route.anotherCompany,
+                        Argument.ARG_ROUTE_NO to route.routeKey.routeNo,
+                        Argument.ARG_TYPE_CODE to route.routeKey.typeCode,
+                        Argument.ARG_ANOTHER_COMPANY to route.routeKey.company,
+                        Argument.ARG_GOTO_BOUND to -1L,
+                        Argument.ARG_GOTO_SEQ to -1L
+                    )
+                }
+            }
+            true
+        }
+        popup.show()
+    }
+
+    fun showRoutePopupMenu(view: View, route: Route, misc: BaseMisc) {
+        val pref = SharedPrefsHelper.get(R.string.pref_bus_jointly, SharePrefs.BUS_JOINTLY_ALWAYS_ASK)
+        val companyDetailsByPref = route.companyDetailsByPref
+
+        val popup = PopupMenu(this, view, Gravity.END)
+
+        popup.inflate(R.menu.popup_fh)
+
+        val viewItem = popup.menu.findItem(R.id.popup_view)
+        if (route.companyDetails.size <= 1 || pref == SharePrefs.BUS_JOINTLY_ALWAYS_ASK) {
+            viewItem.isVisible = false
+        } else {
+            viewItem.title = getString(
+                R.string.view_company_route,
+                Utils.getStringResourceByName(companyDetailsByPref[1].toLowerCase()),
+                route.routeKey.routeNo
+            )
+        }
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.popup_view -> {
+                    startActivity<RouteActivity>(
+                        Argument.ARG_COMPANY to companyDetailsByPref[1],
+                        Argument.ARG_ROUTE_NO to route.routeKey.routeNo,
+                        Argument.ARG_TYPE_CODE to route.routeKey.typeCode,
+                        Argument.ARG_ANOTHER_COMPANY to companyDetailsByPref[0],
+                        Argument.ARG_GOTO_BOUND to -1L,
+                        Argument.ARG_GOTO_SEQ to -1L
+                    )
+                }
+                R.id.popup_remove -> {
+                    viewModel.deleteMisc(misc)
+                    when (viewModel.currentType) {
+                        Constants.MiscType.ROUTE_FAVOURITE -> {
+                            Snackbar.make(view, R.string.msg_remove_from_favourite_success, Snackbar.LENGTH_SHORT).show()
+                        }
+                        Constants.MiscType.ROUTE_HISTORY -> {
+                            Snackbar.make(view, R.string.msg_remove_from_history_success, Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            true
+        }
+        popup.show()
     }
 
     private fun subscribeUiChanges() {

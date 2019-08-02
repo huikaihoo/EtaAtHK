@@ -117,7 +117,7 @@ object MtrbConnection: BaseConnection {
      * @param route Child Route
      */
     override fun getTimetableUrl(route: Route): String? {
-        return null
+        return ConnectionHelper.mtrb.getTimetable(route.routeKey.routeNo).request().url().toString()
     }
 
     override fun getTimetable(route: Route): String? {

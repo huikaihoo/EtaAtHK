@@ -389,8 +389,10 @@ class FollowFragment : BaseFragment() {
             })
         }
 
-        viewModel.getLastUpdateTime().observe(viewLifecycleOwner, Observer<Long> {
-            //logd("getLastUpdateTime ${fragmentViewModel.isNearbyStops}")
+        logd("b4 getLastUpdateTime")
+        viewModel.getLastUpdateTime().removeObservers(this)
+        viewModel.getLastUpdateTime().observe(this, Observer<Long> {
+            logd("getLastUpdateTime $it")
             isItemsDisplaySeqChanged = false
 
             if (fragmentViewModel.isNearbyStops) {

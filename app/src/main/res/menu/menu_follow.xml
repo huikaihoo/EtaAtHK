@@ -73,7 +73,7 @@
     <item
         android:id="@+id/menu_sort_items"
         android:orderInCategory="310"
-        android:title="@string/enable_sort"
+        android:title="@string/enable_sort_items"
         android:checkable="true"
         app:showAsAction="never" />
 

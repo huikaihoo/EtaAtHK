@@ -11,7 +11,9 @@ import hoo.etahk.model.relation.RouteHistoryEx
 import hoo.etahk.view.base.BasePagedAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.route.RouteActivity
-import kotlinx.android.synthetic.main.item_route.view.*
+import kotlinx.android.synthetic.main.item_route.view.from_to
+import kotlinx.android.synthetic.main.item_route.view.route_desc
+import kotlinx.android.synthetic.main.item_route.view.route_no
 import org.jetbrains.anko.startActivity
 
 class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistoryDiffCallback()) {
@@ -42,7 +44,7 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
                     variant = route.routeKey.variant)
 
                 itemView.setOnClickListener { startRouteActivity(context, routeKey, route.anotherCompany) }
-                //itemView.setOnLongClickListener { context?.showRoutePopupMenu(itemView, route); true }
+                itemView.setOnLongClickListener { context?.showRoutePopupMenu(itemView, route, history); true }
             }
         }
 

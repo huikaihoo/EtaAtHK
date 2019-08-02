@@ -1,7 +1,13 @@
 package hoo.etahk.common.constants
 
 object SharePrefs {
-    // General
+    // Preference
+    // Bus
+    const val BUS_JOINTLY_DEFAULT_KMB_LWB = "0"
+    const val BUS_JOINTLY_DEFAULT_NWFB_CTB = "1"
+    const val BUS_JOINTLY_ALWAYS_ASK = "2"
+
+    // General (To-Do)
     const val DEFAULT_DATA_VALIDITY_PERIOD = 1
     const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
     const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5

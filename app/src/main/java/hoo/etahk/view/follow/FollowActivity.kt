@@ -246,7 +246,8 @@ class FollowActivity : NavActivity() {
 
         if (menu != null) {
             val visible = !viewModel.isNearbyStops
-            menu.findItem(R.id.menu_location_options)?.isVisible = visible
+            menu.findItem(R.id.menu_edit_location)?.isVisible = visible
+            menu.findItem(R.id.menu_remove_location)?.isVisible = visible
             menu.findItem(R.id.menu_group_options)?.isVisible = visible
             menu.findItem(R.id.menu_sort_items)?.isVisible = visible
 
@@ -451,7 +452,7 @@ class FollowActivity : NavActivity() {
                     createShortcut(
                         tag() + "_" + location.location.Id,
                         location.location.name,
-                        R.drawable.ic_shortcut_follow,
+                        if (location.location.pin) R.drawable.ic_shortcut_nearby else R.drawable.ic_shortcut_follow,
                         intentFor<FollowActivity>(
                             Argument.ARG_LOCATION_ID to location.location.Id
                         )

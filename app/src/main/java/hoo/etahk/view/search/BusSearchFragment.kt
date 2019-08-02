@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -17,12 +16,14 @@ import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateCh
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
+import hoo.etahk.common.constants.SharePrefs
 import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
-import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
+import kotlinx.android.synthetic.main.activity_search.fab
+import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.recycler_view
+import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.refresh_layout
 import org.jetbrains.anko.startActivity
 
 class BusSearchFragment : BaseFragment() {
@@ -96,14 +97,14 @@ class BusSearchFragment : BaseFragment() {
     fun showCompaniesPopupMenu(view: View, route: Route) {
         val popup = PopupMenu(activity!!, view, Gravity.END)
 
-        popup.inflate(R.menu.popup_search_bus_jointly)
+        popup.inflate(R.menu.popup_bus_jointly)
 
-        popup.menu[0].title = getString(
+        popup.menu.findItem(R.id.popup_company_kmb_lwb).title = getString(
             R.string.view_company_route,
             Utils.getStringResourceByName(route.routeKey.company.toLowerCase()),
             route.routeKey.routeNo
         )
-        popup.menu[1].title = getString(
+        popup.menu.findItem(R.id.popup_company_nwfb_ctb).title = getString(
             R.string.view_company_route,
             Utils.getStringResourceByName(route.anotherCompany.toLowerCase()),
             route.routeKey.routeNo
@@ -138,16 +139,18 @@ class BusSearchFragment : BaseFragment() {
     }
 
     fun showRoutePopupMenu(view: View, route: Route) {
-        val pref = SharedPrefsHelper.get(R.string.pref_bus_jointly, "2")
+        val pref = SharedPrefsHelper.get(R.string.pref_bus_jointly, SharePrefs.BUS_JOINTLY_ALWAYS_ASK)
         val companyDetailsByPref = route.companyDetailsByPref
 
         val popup = PopupMenu(activity!!, view, Gravity.END)
 
-        if (route.companyDetails.size <= 1 || pref == "2") {
-            popup.inflate(R.menu.popup_search)
+        popup.inflate(R.menu.popup_search)
+
+        val viewItem = popup.menu.findItem(R.id.popup_view)
+        if (route.companyDetails.size <= 1 || pref == SharePrefs.BUS_JOINTLY_ALWAYS_ASK) {
+            viewItem.isVisible = false
         } else {
-            popup.inflate(R.menu.popup_search_bus)
-            popup.menu[0].title = getString(
+            viewItem.title = getString(
                 R.string.view_company_route,
                 Utils.getStringResourceByName(companyDetailsByPref[1].toLowerCase()),
                 route.routeKey.routeNo

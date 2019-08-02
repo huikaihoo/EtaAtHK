@@ -25,8 +25,8 @@
     <string name="nav_mtr">鐵路</string>
 
     <!-- Shortcut -->
-    <string name="sc_follow_s">追蹤車站</string>
-    <string name="sc_follow_l">追蹤車站</string>
+    <string name="sc_follow_s">附近車站</string>
+    <string name="sc_follow_l">附近車站</string>
     <string name="sc_favourite_s">我的最愛</string>
     <string name="sc_favourite_l">我的最愛</string>
     <string name="sc_history_s">歷史</string>
@@ -43,13 +43,13 @@
     <string name="play_store">Play 商店</string>
     <string name="github">GitHub</string>
 
-    <string name="location_options">起點選項</string>
+    <string name="location_options">自訂起點選項</string>
     <string name="add_location">新增起點</string>
     <string name="edit_c_location">編輯起點</string>
     <string name="remove_c_location">移除起點</string>
     <string name="sort_locations">編輯起點排序</string>
 
-    <string name="group_options">目的地選項</string>
+    <string name="group_options">自訂目的地選項</string>
     <string name="add_group">新增目的地</string>
     <string name="rename_c_group">重新命名目的地</string>
     <string name="remove_c_group">移除目的地</string>
@@ -57,7 +57,7 @@
 
     <string name="get_my_location">取得目前位置</string>
     <string name="show_nearby_stops">顯示附近車站</string>
-    <string name="enable_sort">編輯排序</string>
+    <string name="enable_sort_items">編輯車站排序</string>
     <string name="create_shortcut">建立捷徑</string>
 
     <string name="rename">重新命名</string>
@@ -167,6 +167,8 @@
     <string name="msg_one_group_removed">已移除一個目的地</string>
     <string name="msg_one_item_removed">已移除一個項目</string>
     <string name="msg_add_to_favourite_success">成功加入至最愛路線</string>
+    <string name="msg_remove_from_favourite_success">已從最愛路線中移除</string>
+    <string name="msg_remove_from_history_success">已從路線歷史中移除</string>
 
     <!-- General Preference -->
     <string name="pref_category_title_general">一般</string>
