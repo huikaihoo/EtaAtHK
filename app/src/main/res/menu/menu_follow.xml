@@ -7,7 +7,7 @@
         android:id="@+id/menu_show_nearby_stops"
         android:title="@string/show_nearby_stops"
         android:orderInCategory="10"
-        android:icon="@drawable/ic_menu_nearby"
+        android:icon="@drawable/ic_fab_nearby"
         android:visible="false"
         app:showAsAction="always" />
 

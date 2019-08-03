@@ -31,7 +31,7 @@ class FollowPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return AppHelper.getString(R.string.to_prefix) + dataSource!!.groups[position].name
+        return ( if (dataSource!!.location.pin) "" else AppHelper.getString(R.string.to_prefix) ) + dataSource!!.groups[position].name
     }
 
     override fun getItemPosition(`object`: Any): Int {

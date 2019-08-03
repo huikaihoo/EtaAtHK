@@ -38,6 +38,7 @@ import hoo.etahk.view.base.NavActivity
 import hoo.etahk.view.dialog.InputDialog
 import hoo.etahk.view.service.UpdateRoutesService
 import kotlinx.android.synthetic.main.activity_follow.container
+import kotlinx.android.synthetic.main.activity_follow.fab
 import kotlinx.android.synthetic.main.activity_follow.progress_bar
 import kotlinx.android.synthetic.main.activity_follow.spinner
 import kotlinx.android.synthetic.main.activity_follow.tabs
@@ -113,6 +114,14 @@ class FollowActivity : NavActivity() {
         container.adapter = pagerAdapter
         tabs.setupWithViewPager(container)
 
+        // Setup Fab
+        fab.setOnClickListener {
+            val index = if (spinner.selectedItemPosition == 0 && spinner.count > 1) 1 else 0
+            GlobalScope.launch(Dispatchers.Main) {
+                spinner.setSelection(index, true)
+            }
+        }
+
         super.initNavigationDrawer()
 
         // Setup Progressbar
@@ -125,7 +134,7 @@ class FollowActivity : NavActivity() {
             viewModel.isSnackbarShowed = true
             val msg = getExtra(Argument.ARG_SNACKBAR_MSG, "")
             if (msg.isNotBlank()) {
-                Snackbar.make(find(android.R.id.content), msg, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(container, msg, Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -258,10 +267,19 @@ class FollowActivity : NavActivity() {
         }
     }
 
+    private fun updateFab() {
+        if (viewModel.isNearbyStops) {
+            fab.setImageResource(R.drawable.ic_fab_follow)
+        } else {
+            fab.setImageResource(R.drawable.ic_fab_nearby)
+        }
+    }
+
     private fun updateFragments(locationAndGroups: LocationAndGroups?) {
         if (locationAndGroups != null) {
             viewModel.isNearbyStops = locationAndGroups.location.pin
             updateOptionsMenu()
+            updateFab()
 
             onTabSelectedListener?.let { tabs.removeOnTabSelectedListener(it) }
 
@@ -316,12 +334,12 @@ class FollowActivity : NavActivity() {
         when (requestCode) {
             Constants.Request.REQUEST_LOCATION_ADD -> {
                 if (resultCode == RESULT_OK) {
-                    Snackbar.make(find(android.R.id.content), R.string.msg_add_location_success, Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(container, R.string.msg_add_location_success, Snackbar.LENGTH_SHORT).show()
                 }
             }
             Constants.Request.REQUEST_LOCATION_UPDATE -> {
                 if (resultCode == RESULT_OK) {
-                    Snackbar.make(find(android.R.id.content), R.string.msg_one_location_updated, Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(container, R.string.msg_one_location_updated, Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
@@ -375,7 +393,7 @@ class FollowActivity : NavActivity() {
                         .setMessage(R.string.content_conform_delete)
                         .setPositiveButton(android.R.string.ok) { dialog, which ->
                             viewModel.deleteLocation(location.location)
-                            Snackbar.make(find(android.R.id.content), R.string.msg_one_location_removed, Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(container, R.string.msg_one_location_removed, Snackbar.LENGTH_SHORT).show()
                         }
                         .setNegativeButton(android.R.string.cancel, null)
                         .show()
@@ -388,7 +406,7 @@ class FollowActivity : NavActivity() {
                     .setHint(R.string.hint_group_name)
                     .setPositiveButton(listener = DialogInterface.OnClickListener {dialog, which ->
                         viewModel.insertGroup(inputDialog.view.input.text.toString())
-                        Snackbar.make(find(android.R.id.content), R.string.msg_add_group_success, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(container, R.string.msg_add_group_success, Snackbar.LENGTH_SHORT).show()
                         restart(intentFor<FollowActivity>(
                             Argument.ARG_LOCATION_ID to location?.location?.Id,
                             Argument.ARG_SNACKBAR_MSG to getString(R.string.msg_add_group_success)
@@ -408,7 +426,7 @@ class FollowActivity : NavActivity() {
                         .setPositiveButton(listener = DialogInterface.OnClickListener { dialog, which ->
                             group.name = inputDialog.view.input.text.toString()
                             viewModel.updateGroup(group)
-                            Snackbar.make(find(android.R.id.content), R.string.msg_one_group_renamed, Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(container, R.string.msg_one_group_renamed, Snackbar.LENGTH_SHORT).show()
                         })
                         .show()
                 }
@@ -423,7 +441,7 @@ class FollowActivity : NavActivity() {
                         .setMessage(R.string.content_conform_delete)
                         .setPositiveButton(android.R.string.ok) { dialog, which ->
                             viewModel.deleteGroup(group)
-                            Snackbar.make(find(android.R.id.content), R.string.msg_one_group_removed, Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(container, R.string.msg_one_group_removed, Snackbar.LENGTH_SHORT).show()
                             restart(intentFor<FollowActivity>(
                                 Argument.ARG_LOCATION_ID to location.location.Id,
                                 Argument.ARG_SNACKBAR_MSG to getString(R.string.msg_one_group_removed)
