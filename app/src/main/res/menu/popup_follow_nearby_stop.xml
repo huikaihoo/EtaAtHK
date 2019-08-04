@@ -3,4 +3,10 @@
     <item
         android:id="@+id/popup_view"
         android:title="@string/view_route"/>
+    <item
+        android:id="@+id/popup_add_fav"
+        android:title="@string/add_to_favourite" />
+    <item
+        android:id="@+id/popup_add_item"
+        android:title="@string/add_to_follow_stop" />
 </menu>

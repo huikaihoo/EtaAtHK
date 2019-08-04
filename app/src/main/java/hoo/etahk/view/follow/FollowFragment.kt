@@ -161,18 +161,17 @@ class FollowFragment : BaseFragment() {
     }
 
     fun showItemPopupMenu(view: View, stop: Stop) {
-        logd("showItemPopupMenu")
         val popup = PopupMenu(activity!!, view, Gravity.END)
         popup.inflate(R.menu.popup_follow_nearby_stop)
+
+        val route = fragmentViewModel.getParentRouteOnce(
+            stop.routeKey.company,
+            stop.routeKey.routeNo
+        )
 
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.popup_view -> {
-                    val route = fragmentViewModel.getParentRouteOnce(
-                        stop.routeKey.company,
-                        stop.routeKey.routeNo
-                    )
-
                     activity?.startActivity<RouteActivity>(
                         Argument.ARG_COMPANY to stop.routeKey.company,
                         Argument.ARG_ROUTE_NO to stop.routeKey.routeNo,
@@ -181,6 +180,41 @@ class FollowFragment : BaseFragment() {
                         Argument.ARG_GOTO_BOUND to stop.routeKey.bound,
                         Argument.ARG_GOTO_SEQ to stop.seq
                     )
+                }
+                R.id.popup_add_fav -> {
+                    fragmentViewModel.insertRouteFavourite(route)
+                    Snackbar.make(view, R.string.msg_add_to_favourite_success, Snackbar.LENGTH_SHORT).show()
+                }
+                R.id.popup_add_item -> {
+                    val locationAndGroups = fragmentViewModel.getAllFollowLocations()
+                    val groupList = mutableListOf<FollowGroup>()
+                    locationAndGroups.forEach { groupList.addAll(it.groups) }
+
+                    val displayList = Array(groupList.size) { i -> groupList[i].locationName + getString(R.string.to_middle) + groupList[i].name }
+                    val checkedList = BooleanArray(groupList.size){ false }
+                    var checkedCnt = 0
+
+                    lateinit var positiveButton: Button
+                    val dialog = AlertDialogBuilder(activity!!)
+                        .setTitle(R.string.title_add_item_to)
+                        .setMultiChoiceItems(displayList, checkedList) { dialog, position, checked ->
+                            checkedList[position] = checked
+                            checkedCnt += if (checked) 1 else -1
+                            positiveButton.isEnabled = (checkedCnt > 0)
+                        }
+                        .setPositiveButton(android.R.string.ok) { dialog, which ->
+                            for (i in checkedList.indices) {
+                                if (checkedList[i]) {
+                                    fragmentViewModel.insertFollowItem(groupList[i].Id!!, stop)
+                                }
+                            }
+                            Snackbar.make(view, R.string.msg_add_to_follow_stop_success, Snackbar.LENGTH_SHORT).show()
+                        }
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
+
+                    positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    positiveButton.isEnabled = false
                 }
             }
             true
@@ -320,6 +354,7 @@ class FollowFragment : BaseFragment() {
 
                     // Mark the stops that need to show header (stops compare with previous one has different position)
                     stops.forEachIndexed { i, stop ->
+                        // TODO("Better way to group bus stops")
                         if (i == 0 || stop.stop.location.distanceTo(stops[i-1].stop.location) > SharePrefs.DEFAULT_SAME_STOP_DISTANCE) {
                             stop.showHeader = true
                         }

@@ -4,6 +4,6 @@
         android:id="@+id/popup_view"
         android:title="@string/view_another_company" />
     <item
-        android:id="@+id/popup_add"
+        android:id="@+id/popup_add_fav"
         android:title="@string/add_to_favourite" />
 </menu>

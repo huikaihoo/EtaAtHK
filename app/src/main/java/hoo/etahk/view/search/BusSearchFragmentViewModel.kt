@@ -21,8 +21,8 @@ class BusSearchFragmentViewModel : ViewModel() {
         return parentRoutes!!
     }
 
-    fun insertRouteFavourite(routeKey: RouteKey) {
-        MiscRepo.insertRouteFavourite(routeKey)
+    fun insertRouteFavourite(routeKey: RouteKey, anotherCompany: String) {
+        MiscRepo.insertRouteFavourite(routeKey, if (anotherCompany.isBlank()) null else anotherCompany)
     }
 
     private fun subscribeToRepo() {

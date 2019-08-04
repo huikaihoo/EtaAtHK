@@ -25,7 +25,8 @@ import hoo.etahk.model.data.FollowGroup
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
 import hoo.etahk.view.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.*
+import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.recycler_view
+import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.refresh_layout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -112,7 +113,7 @@ class RouteFragment : BaseFragment() {
         popup.inflate(R.menu.popup_route_stop)
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.popup_add -> {
+                R.id.popup_add_item -> {
                     val locationAndGroups = fragmentViewModel.getAllFollowLocations()
                     val groupList = mutableListOf<FollowGroup>()
                     locationAndGroups.forEach { groupList.addAll(it.groups) }

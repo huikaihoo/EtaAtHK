@@ -13,7 +13,9 @@ data class RouteFavourite(
     @ColumnInfo(name = "dataStrA")
     var company: String,
     @ColumnInfo(name = "dataStrB")
-    var routeNo: String
+    var routeNo: String,
+    @ColumnInfo(name = "dataStrC")
+    var anotherCompany: String?
 ) : BaseMisc(Constants.MiscType.ROUTE_FAVOURITE) {
 
     // For relationship: Do not touch it!
@@ -27,6 +29,7 @@ data class RouteFavourite(
             relationStr = relationStr,
             dataStrA = company,
             dataStrB = routeNo,
+            dataStrC = anotherCompany,
             displaySeq = displaySeq,
             updateTime = updateTime
         )

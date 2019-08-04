@@ -169,8 +169,8 @@ class BusSearchFragment : BaseFragment() {
                         Argument.ARG_GOTO_SEQ to -1L
                     )
                 }
-                R.id.popup_add -> {
-                    fragmentViewModel.insertRouteFavourite(route.routeKey)
+                R.id.popup_add_fav -> {
+                    fragmentViewModel.insertRouteFavourite(route.routeKey, route.anotherCompany)
                     Snackbar.make(view, R.string.msg_add_to_favourite_success, Snackbar.LENGTH_SHORT).show()
                 }
             }

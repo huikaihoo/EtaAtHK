@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import hoo.etahk.R
-import hoo.etahk.common.constants.SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.data.RouteKey
@@ -38,14 +38,15 @@ object MiscRepo {
         ).build()
     }
 
-    fun insertRouteFavourite(routeKey: RouteKey) {
+    fun insertRouteFavourite(routeKey: RouteKey, anotherCompany: String?) {
         GlobalScope.launch(Dispatchers.Default) {
             val favourite = AppHelper.db.miscFavouriteDao().selectOnce(routeKey.company, routeKey.routeNo)
             if (favourite == null) {
                 insert(
                     RouteFavourite(
                         company = routeKey.company,
-                        routeNo = routeKey.routeNo
+                        routeNo = routeKey.routeNo,
+                        anotherCompany = anotherCompany
                     )
                 )
             }

@@ -273,6 +273,7 @@ class FollowActivity : NavActivity() {
         } else {
             fab.setImageResource(R.drawable.ic_fab_nearby)
         }
+        fab.show()
     }
 
     private fun updateFragments(locationAndGroups: LocationAndGroups?) {

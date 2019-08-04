@@ -159,6 +159,10 @@ class FHActivity : NavActivity() {
             )
         }
 
+        if (viewModel.currentType == Constants.MiscType.ROUTE_FAVOURITE) {
+            popup.menu.findItem(R.id.popup_add_fav).isVisible = false
+        }
+
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.popup_view -> {
@@ -181,6 +185,10 @@ class FHActivity : NavActivity() {
                             Snackbar.make(view, R.string.msg_remove_from_history_success, Snackbar.LENGTH_SHORT).show()
                         }
                     }
+                }
+                R.id.popup_add_fav -> {
+                    viewModel.insertRouteFavourite(route)
+                    Snackbar.make(view, R.string.msg_add_to_favourite_success, Snackbar.LENGTH_SHORT).show()
                 }
             }
             true

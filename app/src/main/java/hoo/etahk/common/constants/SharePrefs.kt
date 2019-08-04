@@ -12,9 +12,9 @@ object SharePrefs {
     const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
     const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
     const val DEFAULT_SHOW_FOLLOW_LOCATION_DISTANCE = 1000.0
-    const val DEFAULT_SAME_STOP_DISTANCE = 10.0
+    const val DEFAULT_SAME_STOP_DISTANCE = 8.0
     const val DEFAULT_NEARBY_STOPS_DISTANCE = 500.0
-    const val DEFAULT_NEARBY_STOPS_MAX_NUMBER = 50
+    const val DEFAULT_NEARBY_STOPS_MAX_NUMBER = 75
 
     // Parameters
     // App

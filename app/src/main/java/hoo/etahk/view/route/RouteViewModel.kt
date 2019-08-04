@@ -47,7 +47,8 @@ class RouteViewModel: TimerViewModel() {
                 bound = 0L,
                 variant = 0L
             )
-            MiscRepo.insertRouteFavourite(routeKey)
+            val anotherCompany = if (it.companyDetails.size > 1) it.companyDetails[1] else null
+            MiscRepo.insertRouteFavourite(routeKey, anotherCompany)
         }
     }
 

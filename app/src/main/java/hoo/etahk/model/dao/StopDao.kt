@@ -72,7 +72,11 @@ abstract class StopDao {
     @Query("""
         SELECT stop.*, x.distance FROM stop,
         (   SELECT company, routeNo, bound, MIN($DISTANCE) AS distance FROM stop
-            WHERE routeNo IN (SELECT DISTINCT dataStrB FROM Misc WHERE miscType = :miscType)
+            WHERE (company, routeNo) IN 
+            (   SELECT DISTINCT dataStrA, dataStrB FROM Misc WHERE miscType = :miscType
+                UNION
+                SELECT DISTINCT dataStrC, dataStrB FROM Misc WHERE miscType = :miscType AND dataStrC IS NOT NULL
+            )
             GROUP BY company, routeNo, bound ORDER BY $DISTANCE LIMIT :limit
         ) AS x
         $NEARBY_STOP_COND

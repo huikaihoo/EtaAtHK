@@ -19,7 +19,7 @@ abstract class MiscFavouriteDao {
     abstract fun selectOnce(company: String, routeNo: String, miscType: Constants.MiscType = Constants.MiscType.ROUTE_FAVOURITE): RouteFavourite?
 
     @Transaction
-    @Query("SELECT Id, miscType, relationStr, dataStrA, dataStrB, displaySeq, updateTime FROM Misc WHERE miscType = :miscType ORDER BY displaySeq")
+    @Query("SELECT Id, miscType, relationStr, dataStrA, dataStrB, dataStrC, displaySeq, updateTime FROM Misc WHERE miscType = :miscType ORDER BY displaySeq")
     abstract fun selectDS(miscType: Constants.MiscType = Constants.MiscType.ROUTE_FAVOURITE): DataSource.Factory<Int, RouteFavouriteEx>
 }
 
