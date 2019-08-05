@@ -5,8 +5,7 @@ import android.view.View
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import hoo.etahk.R
 import hoo.etahk.common.constants.Argument
-import hoo.etahk.common.constants.SharePrefs
-import hoo.etahk.common.helper.SharedPrefsHelper
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.diff.BaseDiffCallback
@@ -43,9 +42,9 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
 
             itemView.setOnClickListener {
                 if (route.companyDetails.size > 1) {
-                    when (SharedPrefsHelper.get<String>(R.string.pref_bus_jointly)) {
-                        SharePrefs.BUS_JOINTLY_DEFAULT_KMB_LWB -> startRouteActivity(context, route.routeKey, route.routeKey.company, route.anotherCompany)
-                        SharePrefs.BUS_JOINTLY_DEFAULT_NWFB_CTB -> startRouteActivity(context, route.routeKey, route.anotherCompany, route.routeKey.company)
+                    when (SharedPrefs.busJointly) {
+                        SharedPrefs.BUS_JOINTLY_DEFAULT_KMB_LWB -> startRouteActivity(context, route.routeKey, route.routeKey.company, route.anotherCompany)
+                        SharedPrefs.BUS_JOINTLY_DEFAULT_NWFB_CTB -> startRouteActivity(context, route.routeKey, route.anotherCompany, route.routeKey.company)
                         else -> context?.showCompaniesPopupMenu(itemView, route)
                     }
                 } else {

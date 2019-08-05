@@ -16,8 +16,7 @@ import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateCh
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
-import hoo.etahk.common.constants.SharePrefs
-import hoo.etahk.common.helper.SharedPrefsHelper
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.model.data.Route
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
@@ -139,7 +138,7 @@ class BusSearchFragment : BaseFragment() {
     }
 
     fun showRoutePopupMenu(view: View, route: Route) {
-        val pref = SharedPrefsHelper.get(R.string.pref_bus_jointly, SharePrefs.BUS_JOINTLY_ALWAYS_ASK)
+        val pref =SharedPrefs.busJointly
         val companyDetailsByPref = route.companyDetailsByPref
 
         val popup = PopupMenu(activity!!, view, Gravity.END)
@@ -147,7 +146,7 @@ class BusSearchFragment : BaseFragment() {
         popup.inflate(R.menu.popup_search)
 
         val viewItem = popup.menu.findItem(R.id.popup_view)
-        if (route.companyDetails.size <= 1 || pref == SharePrefs.BUS_JOINTLY_ALWAYS_ASK) {
+        if (route.companyDetails.size <= 1 || pref == SharedPrefs.BUS_JOINTLY_ALWAYS_ASK) {
             viewItem.isVisible = false
         } else {
             viewItem.title = getString(

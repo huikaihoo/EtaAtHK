@@ -23,7 +23,7 @@ import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.constants.Argument
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.createShortcut
 import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.logd
@@ -79,7 +79,7 @@ class FollowActivity : NavActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         viewModel = ViewModelProviders.of(this).get(FollowViewModel::class.java)
-        viewModel.durationInMillis = SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
+        viewModel.durationInMillis = SharedPrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
         viewModel.isLocationIdUsed = getExtra(Argument.ARG_LOCATION_ID, -1L) == -1L
 
         if (viewModel.needUpdateParentRoute()) {
@@ -138,7 +138,7 @@ class FollowActivity : NavActivity() {
             }
         }
 
-        if (SharedPrefsHelper.get(R.string.param_accept_terms, false)) {
+        if (SharedPrefs.acceptedTerms) {
             checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
             showPolicyDialog()
@@ -165,6 +165,8 @@ class FollowActivity : NavActivity() {
     }
 
     private fun showPolicyDialog() {
+        SharedPrefs.resetParams()
+
         val privacyPolicy = getString(R.string.html_link, getString(R.string.privacy_policy_url), getString(
             R.string.pref_title_privacy_policy))
         val disclaimer = getString(R.string.html_link, getString(R.string.disclaimer_url), getString(
@@ -176,7 +178,7 @@ class FollowActivity : NavActivity() {
                     HtmlCompat.FROM_HTML_MODE_COMPACT
                 ))
             .setPositiveButton(android.R.string.ok) { dialog, which ->
-                SharedPrefsHelper.put(R.string.param_accept_terms, true)
+                SharedPrefs.acceptedTerms = true
                 checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
             }
             .setNegativeButton(R.string.exit_app) { dialog, which ->
@@ -215,7 +217,7 @@ class FollowActivity : NavActivity() {
                     if (lastLocation != null &&
                         spinnerAdapter.dataSource.size > 1 &&
                         spinnerAdapter.dataSource[0].location.pin &&
-                        lastLocation.distanceTo(spinnerAdapter.dataSource[1].location.location) < SharePrefs.DEFAULT_SHOW_FOLLOW_LOCATION_DISTANCE) {
+                        lastLocation.distanceTo(spinnerAdapter.dataSource[1].location.location) < SharedPrefs.DEFAULT_SHOW_FOLLOW_LOCATION_DISTANCE) {
                         selectIndex = 1
                     }
                     viewModel.selectedLocation.value = spinnerAdapter.dataSource[selectIndex]
@@ -314,7 +316,7 @@ class FollowActivity : NavActivity() {
                         var selectIndex = 0
                         if (spinnerAdapter.dataSource.size > 1 &&
                             spinnerAdapter.dataSource[0].location.pin &&
-                            lastLocation.distanceTo(spinnerAdapter.dataSource[1].location.location) < SharePrefs.DEFAULT_SHOW_FOLLOW_LOCATION_DISTANCE) {
+                            lastLocation.distanceTo(spinnerAdapter.dataSource[1].location.location) < SharedPrefs.DEFAULT_SHOW_FOLLOW_LOCATION_DISTANCE) {
                             selectIndex = 1
                         }
                         spinner.setSelection(selectIndex)

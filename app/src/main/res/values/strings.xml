@@ -50,6 +50,8 @@
     <string name="maps">Maps</string>
     <string name="timetable">Timetable</string>
     <string name="settings">Settings</string>
+    <string name="help">Help</string>
+    <string name="share">Share this app</string>
     <string name="play_store">Play Store</string>
     <string name="github">GitHub</string>
 
@@ -268,8 +270,13 @@
     <string name="param_enable_remote_config" translatable="false">enable_remote_config</string>
     <string name="param_category_app" translatable="false">App</string>
     <string name="param_app_mode" translatable="false">app_mode</string>
-    <string name="param_accept_terms" translatable="false">accept_terms</string>
+    <string name="param_accepted_terms" translatable="false">accepted_terms</string>
     <string name="param_paged_list_page_size" translatable="false">paged_list_page_size</string>
+    <string name="param_category_feature" translatable="false">Feature</string>
+    <string name="param_enable_bus_list" translatable="false">enable_bus_list</string>
+    <string name="param_enable_gmb_list" translatable="false">enable_gmb_list</string>
+    <string name="param_enable_tram_list" translatable="false">enable_tram_list</string>
+    <string name="param_enable_mtr_list" translatable="false">enable_mtr_list</string>
     <string name="param_category_gist" translatable="false">Gist</string>
     <string name="param_gist_id_kmb" translatable="false">gist_id_kmb</string>
     <string name="param_gist_id_nwfb" translatable="false">gist_id_nwfb</string>

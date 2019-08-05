@@ -7,6 +7,7 @@ import hoo.etahk.BuildConfig
 import hoo.etahk.R
 import hoo.etahk.common.Constants.DATABASE_NAME
 import hoo.etahk.common.Constants.DATABASE_VERSION
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
@@ -123,18 +124,20 @@ class Importer: FilesWorker() {
         logd("Start Restore Shared Preferences")
 
         return try {
+            if (appData.sharedPrefData!!.busJointly.isNotBlank())
+                SharedPrefs.busJointly = appData.sharedPrefData!!.busJointly
             if (appData.sharedPrefData!!.appMode.isNotBlank())
                 SharedPrefsHelper.put(R.string.param_app_mode, appData.sharedPrefData!!.appMode)
             if (appData.sharedPrefData!!.pagedListPageSize.isNotBlank())
-                SharedPrefsHelper.put(R.string.param_paged_list_page_size, appData.sharedPrefData!!.pagedListPageSize)
+                SharedPrefs.pagedListPageSize = appData.sharedPrefData!!.pagedListPageSize.toInt()
             if (appData.sharedPrefData!!.gistIdKmb.isNotBlank())
-                SharedPrefsHelper.put(R.string.param_gist_id_kmb, appData.sharedPrefData!!.gistIdKmb)
+                SharedPrefs.gistIdKmb = appData.sharedPrefData!!.gistIdKmb
             if (appData.sharedPrefData!!.gistIdNwfb.isNotBlank())
-                SharedPrefsHelper.put(R.string.param_gist_id_nwfb, appData.sharedPrefData!!.gistIdNwfb)
+                SharedPrefs.gistIdNwfb = appData.sharedPrefData!!.gistIdNwfb
             if (appData.sharedPrefData!!.gistIdMtrb.isNotBlank())
-                SharedPrefsHelper.put(R.string.param_gist_id_mtrb, appData.sharedPrefData!!.gistIdMtrb)
+                SharedPrefs.gistIdMtrb = appData.sharedPrefData!!.gistIdMtrb
             if (appData.sharedPrefData!!.userAgent.isNotBlank())
-                SharedPrefsHelper.put(R.string.param_user_agent, appData.sharedPrefData!!.userAgent)
+                SharedPrefs.userAgent = appData.sharedPrefData!!.userAgent
 
             true
         } catch (e: Exception) {

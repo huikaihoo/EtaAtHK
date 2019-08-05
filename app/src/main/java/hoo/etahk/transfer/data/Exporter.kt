@@ -5,7 +5,7 @@ import android.os.Environment.MEDIA_MOUNTED
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
@@ -62,16 +62,18 @@ class Exporter: FilesWorker() {
         logd("Start Prepare Shared Preferences")
 
         return try {
-            val sharedPrefData = SharedPrefData()
+            val sharedPrefData = SharedPrefData(
+                busJointly = SharedPrefs.busJointly,
+                userUUID = SharedPrefsHelper.get(R.string.param_user_uuid),
+                pagedListPageSize = SharedPrefs.pagedListPageSize.toString(),
+                userAgent = SharedPrefs.userAgent
+            )
 
-            sharedPrefData.userUUID = SharedPrefsHelper.get(R.string.param_user_uuid)
-            sharedPrefData.pagedListPageSize = SharedPrefsHelper.get(R.string.param_paged_list_page_size, SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE)
             if (SharedPrefsHelper.getAppMode() == Constants.AppMode.DEV) {
-                sharedPrefData.gistIdKmb = SharedPrefsHelper.get(R.string.param_gist_id_kmb)
-                sharedPrefData.gistIdNwfb = SharedPrefsHelper.get(R.string.param_gist_id_nwfb)
-                sharedPrefData.gistIdMtrb = SharedPrefsHelper.get(R.string.param_gist_id_mtrb)
+                sharedPrefData.gistIdKmb = SharedPrefs.gistIdKmb
+                sharedPrefData.gistIdNwfb = SharedPrefs.gistIdNwfb
+                sharedPrefData.gistIdMtrb = SharedPrefs.gistIdMtrb
             }
-            sharedPrefData.userAgent = SharedPrefsHelper.get(R.string.param_user_agent, SharePrefs.DEFAULT_USER_AGENT)
 
             appData.sharedPrefData = sharedPrefData
 

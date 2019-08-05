@@ -4,6 +4,14 @@
     tools:context="hoo.etahk.view.search.BusSearchActivity">
 
     <item
+        android:id="@+id/menu_share"
+        android:title="@string/share"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_menu_share"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menu_play_store"
         android:title="@string/play_store"
         android:orderInCategory="10"

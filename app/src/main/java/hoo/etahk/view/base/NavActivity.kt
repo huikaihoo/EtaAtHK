@@ -17,13 +17,14 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.startActivity
 import hoo.etahk.view.fh.FHActivity
 import hoo.etahk.view.follow.FollowActivity
 import hoo.etahk.view.route.RouteActivity
 import hoo.etahk.view.search.BusSearchActivity
 import hoo.etahk.view.settings.SettingsActivity
-import kotlinx.android.synthetic.main.nav_header.view.*
+import kotlinx.android.synthetic.main.nav_header.view.nav_last_update
 import org.jetbrains.anko.startActivity
 
 abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -57,6 +58,7 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
+        initNavigationItems()
         nav.setNavigationItemSelectedListener(this)
 
         navViewModel = ViewModelProviders.of(this).get(NavViewModel::class.java)
@@ -81,6 +83,15 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
                 }
             }
         })
+    }
+
+    private fun initNavigationItems() {
+        val menu = nav.menu
+
+        menu.findItem(R.id.nav_bus).isEnabled = SharedPrefs.enableBusList
+        menu.findItem(R.id.nav_gmb).isEnabled = SharedPrefs.enableGmbList
+        menu.findItem(R.id.nav_tram).isEnabled = SharedPrefs.enableTramList
+        menu.findItem(R.id.nav_mtr).isEnabled = SharedPrefs.enableMtrList
     }
 
     /**
@@ -130,6 +141,9 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
                 )
             }
             R.id.nav_mtr -> {
+
+            }
+            R.id.nav_help -> {
 
             }
             R.id.nav_settings -> {

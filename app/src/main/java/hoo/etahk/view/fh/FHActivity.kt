@@ -19,11 +19,10 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.createShortcut
 import hoo.etahk.common.extensions.getExtra
 import hoo.etahk.common.extensions.tag
-import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.misc.BaseMisc
 import hoo.etahk.model.relation.RouteFavouriteEx
@@ -141,7 +140,7 @@ class FHActivity : NavActivity() {
     }
 
     fun showRoutePopupMenu(view: View, route: Route, misc: BaseMisc) {
-        val pref = SharedPrefsHelper.get(R.string.pref_bus_jointly, SharePrefs.BUS_JOINTLY_ALWAYS_ASK)
+        val pref = SharedPrefs.busJointly
         val companyDetailsByPref = route.companyDetailsByPref
 
         val popup = PopupMenu(this, view, Gravity.END)
@@ -149,7 +148,7 @@ class FHActivity : NavActivity() {
         popup.inflate(R.menu.popup_fh)
 
         val viewItem = popup.menu.findItem(R.id.popup_view)
-        if (route.companyDetails.size <= 1 || pref == SharePrefs.BUS_JOINTLY_ALWAYS_ASK) {
+        if (route.companyDetails.size <= 1 || pref == SharedPrefs.BUS_JOINTLY_ALWAYS_ASK) {
             viewItem.isVisible = false
         } else {
             viewItem.title = getString(

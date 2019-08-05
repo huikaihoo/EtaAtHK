@@ -8,7 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import hoo.etahk.common.Constants
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.model.custom.NearbyStop
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -67,7 +67,7 @@ abstract class StopDao {
     """)
     abstract fun selectNearby(latitude: Double,
                               longitude: Double,
-                              limit: Int = SharePrefs.DEFAULT_NEARBY_STOPS_MAX_NUMBER): LiveData<List<NearbyStop>>
+                              limit: Int = SharedPrefs.DEFAULT_NEARBY_STOPS_MAX_NUMBER): LiveData<List<NearbyStop>>
 
     @Query("""
         SELECT stop.*, x.distance FROM stop,
@@ -84,7 +84,7 @@ abstract class StopDao {
     """)
     abstract fun selectNearbyFav(latitude: Double,
                                  longitude: Double,
-                                 limit: Int = SharePrefs.DEFAULT_NEARBY_STOPS_MAX_NUMBER,
+                                 limit: Int = SharedPrefs.DEFAULT_NEARBY_STOPS_MAX_NUMBER,
                                  miscType: Constants.MiscType = Constants.MiscType.ROUTE_FAVOURITE): LiveData<List<NearbyStop>>
 
 //    @Query("SELECT * FROM stop " +

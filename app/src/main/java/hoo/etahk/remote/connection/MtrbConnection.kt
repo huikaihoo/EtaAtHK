@@ -5,11 +5,11 @@ import com.mcxiaoke.koi.HASH
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
-import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -47,7 +47,7 @@ object MtrbConnection: BaseConnection {
     override fun getParentRoutes(company: String): ParentRoutesMap? {
         val t = Utils.getCurrentTimestamp()
         val result = ParentRoutesMap()
-        val gistId = SharedPrefsHelper.get<String>(R.string.param_gist_id_mtrb)
+        val gistId = SharedPrefs.gistIdMtrb
 
         try {
             val response = ConnectionHelper.gist.getGist(gistId).execute()

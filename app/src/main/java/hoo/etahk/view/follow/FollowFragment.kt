@@ -19,7 +19,7 @@ import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.view.AlertDialogBuilder
 import hoo.etahk.common.view.ItemTouchHelperCallback
@@ -347,7 +347,7 @@ class FollowFragment : BaseFragment() {
 
                     // Sort and filter Nearby stops
                     val stops = if (lastLocation == null) it else it.filter {nearbyStop ->
-                        viewModel.lastLocation!!.distanceTo(nearbyStop.stop.location) < SharePrefs.DEFAULT_NEARBY_STOPS_DISTANCE
+                        viewModel.lastLocation!!.distanceTo(nearbyStop.stop.location) < SharedPrefs.DEFAULT_NEARBY_STOPS_DISTANCE
                     }.sortedBy { nearbyStop ->
                         viewModel.lastLocation!!.distanceTo(nearbyStop.stop.location)
                     }
@@ -355,7 +355,7 @@ class FollowFragment : BaseFragment() {
                     // Mark the stops that need to show header (stops compare with previous one has different position)
                     stops.forEachIndexed { i, stop ->
                         // TODO("Better way to group bus stops")
-                        if (i == 0 || stop.stop.location.distanceTo(stops[i-1].stop.location) > SharePrefs.DEFAULT_SAME_STOP_DISTANCE) {
+                        if (i == 0 || stop.stop.location.distanceTo(stops[i-1].stop.location) > SharedPrefs.DEFAULT_SAME_STOP_DISTANCE) {
                             stop.showHeader = true
                         }
                     }

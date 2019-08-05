@@ -3,11 +3,10 @@ package hoo.etahk.common.tools
 import android.annotation.SuppressLint
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import hoo.etahk.R
 import hoo.etahk.common.Constants.AppMode
 import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.NetworkType
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
@@ -34,12 +33,12 @@ object ConnectionFactory {
     fun createClient(networkType: Long, company: String = ""): OkHttpClient {
         val dispatcher = Dispatcher()
 
-        dispatcher.maxRequests = SharePrefs.DEFAULT_MAX_REQUESTS_VAL
+        dispatcher.maxRequests = SharedPrefs.DEFAULT_MAX_REQUESTS_VAL
         dispatcher.maxRequestsPerHost = when {
-            networkType != NetworkType.ETA -> SharePrefs.DEFAULT_MAX_REQUESTS_PER_HOST_VAL
-            company == Company.KMB -> SharePrefs.ETA_KMB_MAX_REQUESTS_PER_HOST_VAL
-            company == Company.NWFB -> SharePrefs.ETA_NWFB_MAX_REQUESTS_PER_HOST_VAL
-            else -> SharePrefs.DEFAULT_MAX_REQUESTS_PER_HOST_VAL
+            networkType != NetworkType.ETA -> SharedPrefs.DEFAULT_MAX_REQUESTS_PER_HOST_VAL
+            company == Company.KMB -> SharedPrefs.ETA_KMB_MAX_REQUESTS_PER_HOST_VAL
+            company == Company.NWFB -> SharedPrefs.ETA_NWFB_MAX_REQUESTS_PER_HOST_VAL
+            else -> SharedPrefs.DEFAULT_MAX_REQUESTS_PER_HOST_VAL
         }
 
         var builder = OkHttpClient().newBuilder().dispatcher(dispatcher)
@@ -54,19 +53,19 @@ object ConnectionFactory {
         builder = when (networkType) {
             NetworkType.DEFAULT -> builder
             NetworkType.LONG ->
-                builder.connectTimeout(SharePrefs.LONG_CONNECTION_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
-                        .readTimeout(SharePrefs.LONG_READ_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
-                        .writeTimeout(SharePrefs.LONG_WRITE_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                builder.connectTimeout(SharedPrefs.LONG_CONNECTION_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                        .readTimeout(SharedPrefs.LONG_READ_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                        .writeTimeout(SharedPrefs.LONG_WRITE_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
             NetworkType.ETA ->
                 when (company) {
                     Company.KMB ->
-                        builder.connectTimeout(SharePrefs.ETA_KMB_CONNECTION_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
-                                .readTimeout(SharePrefs.ETA_KMB_READ_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
-                                .writeTimeout(SharePrefs.ETA_KMB_WRITE_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                        builder.connectTimeout(SharedPrefs.ETA_KMB_CONNECTION_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                                .readTimeout(SharedPrefs.ETA_KMB_READ_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                                .writeTimeout(SharedPrefs.ETA_KMB_WRITE_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
                     Company.NWFB ->
-                        builder.connectTimeout(SharePrefs.ETA_NWFB_CONNECTION_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
-                                .readTimeout(SharePrefs.ETA_NWFB_READ_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
-                                .writeTimeout(SharePrefs.ETA_NWFB_WRITE_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                        builder.connectTimeout(SharedPrefs.ETA_NWFB_CONNECTION_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                                .readTimeout(SharedPrefs.ETA_NWFB_READ_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
+                                .writeTimeout(SharedPrefs.ETA_NWFB_WRITE_TIMEOUT_VAL, TimeUnit.MILLISECONDS)
                     else -> builder
                 }
             else -> builder
@@ -79,7 +78,7 @@ object ConnectionFactory {
             val request = chain.request()
                 .newBuilder()
                 .removeHeader("User-Agent")
-                .addHeader("User-Agent", SharedPrefsHelper.get(R.string.param_user_agent, SharePrefs.DEFAULT_USER_AGENT))
+                .addHeader("User-Agent", SharedPrefs.userAgent)
                 //.addHeader("User-Agent", WebSettings.getDefaultUserAgent(App.instance))
                 .build()
             chain.proceed(request)

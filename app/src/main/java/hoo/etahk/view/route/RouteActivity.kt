@@ -13,7 +13,7 @@ import hoo.etahk.common.Constants.Company
 import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.createShortcut
 import hoo.etahk.common.extensions.extras
 import hoo.etahk.common.extensions.getExtra
@@ -81,7 +81,7 @@ class RouteActivity : BaseActivity() {
         viewModel.routeKey = RouteKey(getExtra(Argument.ARG_COMPANY), getExtra(
             Argument.ARG_ROUTE_NO), -1L, -1L)
         viewModel.anotherCompany = getExtra(Argument.ARG_ANOTHER_COMPANY)
-        viewModel.durationInMillis = SharePrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
+        viewModel.durationInMillis = SharedPrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
 
         extras.putLong(Argument.ARG_GOTO_BOUND, -1L)
         extras.putLong(Argument.ARG_GOTO_SEQ, -1L)

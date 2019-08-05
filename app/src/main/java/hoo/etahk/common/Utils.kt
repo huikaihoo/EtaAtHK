@@ -9,7 +9,7 @@ import android.util.TypedValue
 import com.google.android.gms.maps.model.LatLng
 import hoo.etahk.R
 import hoo.etahk.common.Constants.Time
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.view.App
@@ -31,7 +31,7 @@ object Utils {
     }
 
     fun getValidUpdateTimestamp(): Long {
-        return getCurrentTimestamp() - SharePrefs.DEFAULT_DATA_VALIDITY_PERIOD * Time.ONE_DAY_IN_SECONDS
+        return getCurrentTimestamp() - SharedPrefs.DEFAULT_DATA_VALIDITY_PERIOD * Time.ONE_DAY_IN_SECONDS
     }
 
     @SuppressLint("SimpleDateFormat")

@@ -1,6 +1,6 @@
 package hoo.etahk.api
 
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.remote.connection.NwfbConnection
 import org.junit.Test
@@ -14,7 +14,7 @@ class NwfbApiUnitTest {
     @Test
     fun getParentRoutes() {
         val call = ConnectionHelper.nwfb.getParentRoutes(
-            m = SharePrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
+            m = SharedPrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
             syscode = NwfbConnection.getSystemCode()
         )
         println("url = ${call.request().url()}")

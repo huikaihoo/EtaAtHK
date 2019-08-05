@@ -40,6 +40,8 @@
     <string name="maps">地圖</string>
     <string name="timetable">時間表</string>
     <string name="settings">設定</string>
+    <string name="help">說明</string>
+    <string name="share">分享此程式</string>
     <string name="play_store">Play 商店</string>
     <string name="github">GitHub</string>
 

@@ -31,8 +31,8 @@
             android:persistent="true" />
 
         <SwitchPreference
-            android:key="@string/param_accept_terms"
-            android:title="@string/param_accept_terms"
+            android:key="@string/param_accepted_terms"
+            android:title="@string/param_accepted_terms"
             android:defaultValue="false"
             android:persistent="true" />
 
@@ -47,9 +47,40 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="@string/param_category_feature"
+        android:title="@string/param_category_feature"
+        android:order="30">
+
+        <SwitchPreference
+            android:key="@string/param_enable_bus_list"
+            android:title="@string/param_enable_bus_list"
+            android:defaultValue="true"
+            android:persistent="true" />
+
+        <SwitchPreference
+            android:key="@string/param_enable_gmb_list"
+            android:title="@string/param_enable_gmb_list"
+            android:defaultValue="false"
+            android:persistent="true" />
+
+        <SwitchPreference
+            android:key="@string/param_enable_tram_list"
+            android:title="@string/param_enable_tram_list"
+            android:defaultValue="false"
+            android:persistent="true" />
+
+        <SwitchPreference
+            android:key="@string/param_enable_mtr_list"
+            android:title="@string/param_enable_mtr_list"
+            android:defaultValue="false"
+            android:persistent="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="@string/param_category_gist"
         android:title="@string/param_category_gist"
-        android:order="30">
+        android:order="40">
 
         <EditTextPreference
             android:key="@string/param_gist_id_kmb"
@@ -77,7 +108,7 @@
     <PreferenceCategory
         android:key="@string/param_category_ok_http"
         android:title="@string/param_category_ok_http"
-        android:order="40">
+        android:order="50">
 
         <EditTextPreference
             android:key="@string/param_user_agent"

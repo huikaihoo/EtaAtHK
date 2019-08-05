@@ -3,8 +3,8 @@ package hoo.etahk.connection
 import hoo.etahk.BaseUnitTest
 import hoo.etahk.R
 import hoo.etahk.common.Constants
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.remote.connection.MtrbConnection
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,7 +25,7 @@ class MtrbConnectionUnitTest: BaseUnitTest() {
 
     @Test
     fun getParentRoutes() {
-        SharedPrefsHelper.put(R.string.param_gist_id_mtrb, gistId)
+        SharedPrefs.gistIdMtrb = gistId
 
         val result = MtrbConnection.getParentRoutes(Constants.Company.MTRB)?.getAll()?.sortedBy { it.routeKey.routeNo }
         result?.forEach {

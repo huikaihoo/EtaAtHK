@@ -9,7 +9,7 @@ import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Eta
 import hoo.etahk.common.Utils
 import hoo.etahk.common.Utils.timeStrToMsg
-import hoo.etahk.common.constants.SharePrefs
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
@@ -102,7 +102,7 @@ object NwfbConnection: BaseConnection {
 
         try {
             val response = ConnectionHelper.nwfb.getParentRoutes(
-                    m = SharePrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
+                    m = SharedPrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
                     syscode = getSystemCode()).execute()
 
             if (response.isSuccessful) {

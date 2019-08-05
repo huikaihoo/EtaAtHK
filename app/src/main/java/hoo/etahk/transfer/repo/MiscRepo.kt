@@ -3,11 +3,9 @@ package hoo.etahk.transfer.repo
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import hoo.etahk.R
 import hoo.etahk.common.Utils
-import hoo.etahk.common.constants.SharePrefs.DEFAULT_PAGED_LIST_PAGE_SIZE
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.misc.BaseMisc
 import hoo.etahk.model.misc.RouteFavourite
@@ -21,7 +19,7 @@ import kotlinx.coroutines.launch
 object MiscRepo {
 
     private val pagedListConfig = PagedList.Config.Builder()
-        .setPageSize(SharedPrefsHelper.get(R.string.param_paged_list_page_size, DEFAULT_PAGED_LIST_PAGE_SIZE).toInt())
+        .setPageSize(SharedPrefs.pagedListPageSize)
         .build()
 
     fun getRouteFavourite(): LiveData<PagedList<RouteFavouriteEx>> {

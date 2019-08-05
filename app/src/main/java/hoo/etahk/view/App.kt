@@ -30,8 +30,7 @@ class App : Application() {
     }
 
     override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base?.applyLocale(PreferenceManager.getDefaultSharedPreferences(base).get(base.getString(
-            hoo.etahk.R.string.pref_language))))
+        super.attachBaseContext(base?.applyLocale(PreferenceManager.getDefaultSharedPreferences(base).get(base.getString(hoo.etahk.R.string.pref_language))))
     }
 
     override fun onCreate() {

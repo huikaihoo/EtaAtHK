@@ -20,9 +20,9 @@ import com.mcxiaoke.koi.ext.restart
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.applyLocale
 import hoo.etahk.common.extensions.getBitmapFromVectorDrawable
-import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.view.settings.SettingsActivity
 import org.jetbrains.anko.startActivity
 
@@ -36,7 +36,7 @@ abstract class BaseActivity : AppCompatActivity() {
         )
     }
 
-    private val language = SharedPrefsHelper.get<String>(R.string.pref_language)
+    private val language = SharedPrefs.language
     private var broadcastReceiver: BaseBroadcastReceiver? = null
 
     var userIsInteracting = false
@@ -44,7 +44,7 @@ abstract class BaseActivity : AppCompatActivity() {
     var broadcastIntentList = listOf<String>()
 
     override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base?.applyLocale(SharedPrefsHelper.get(R.string.pref_language)))
+        super.attachBaseContext(base?.applyLocale(SharedPrefs.language))
     }
 
     override fun onUserInteraction() {
@@ -60,7 +60,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        if (language != SharedPrefsHelper.get<String>(R.string.pref_language)) {
+        if (language != SharedPrefs.language) {
             restart()
         }
         if (broadcastIntentList.isNotEmpty()) {
