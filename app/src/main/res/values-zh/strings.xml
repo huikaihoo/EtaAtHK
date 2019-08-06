@@ -175,6 +175,7 @@
     <!-- General Preference -->
     <string name="pref_category_title_general">一般</string>
     <string name="pref_title_language">語言 (Language)</string>
+    <string name="pref_title_auto_update_routes_freq">自動更新路線資料頻率</string>
 
     <string name="pref_category_title_bus">巴士</string>
     <string name="pref_title_bus_jointly">聯營路線</string>

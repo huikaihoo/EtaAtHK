@@ -3,14 +3,17 @@ package hoo.etahk.view.follow
 import android.annotation.SuppressLint
 import android.text.SpannableStringBuilder
 import android.view.View
+import androidx.core.content.ContextCompat
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.prependImage
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.custom.NearbyStop
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.NearbyStopDiffCallback
+import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.base.DiffAdapter
 import kotlinx.android.synthetic.main.item_header.view.header_title
@@ -64,6 +67,15 @@ class NearbyStopsAdapter : DiffAdapter<FollowFragment, NearbyStop>() {
                 itemView.fare.text = AppHelper.getString(R.string.price_2dp).format(stop.fare)
             }
 
+            // ETA Text Color
+            val color = when (etaResults.isNotEmpty() && etaResults[0].valid && etaResults[0].getDiffInMinutes() <= SharedPrefs.DEFAULT_HIGHLIGHT_B4_DEPARTURE) {
+                true -> ContextCompat.getColor(App.instance, R.color.colorDialogAccent)
+                false -> ContextCompat.getColor(App.instance, R.color.colorWhite)
+            }
+
+            itemView.stop_title.setTextColor(color)
+            itemView.eta_0.setTextColor(color)
+
             // ETA Result
             for (i in 0..2) {
                 val tv = when (i) {
@@ -94,6 +106,16 @@ class NearbyStopsAdapter : DiffAdapter<FollowFragment, NearbyStop>() {
                     text.append(etaResults[i].getDisplayMsg())
                     tv.text = text
                 }
+            }
+
+            if (etaResults.size > 1) {
+                itemView.eta_0.maxLines = 1
+                itemView.eta_1.visibility = View.VISIBLE
+                itemView.eta_2.visibility = View.VISIBLE
+            } else {
+                itemView.eta_0.maxLines = 2
+                itemView.eta_1.visibility = View.GONE
+                itemView.eta_2.visibility = View.GONE
             }
 
             val stopView = if (dataSource[position].showHeader) itemView.stop else itemView

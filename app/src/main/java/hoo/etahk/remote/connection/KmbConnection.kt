@@ -460,12 +460,14 @@ object KmbConnection: BaseConnection {
     }
 
     private fun toEtaResult(stop: Stop, response: KmbEtaRes.Response): EtaResult {
+        val ignoreGps = response.t?.contains("[新|城]巴".toRegex()) ?: false
+
         return EtaResult(
                 company = stop.routeKey.company,
                 etaTime = Utils.timeStrToTimestamp(response.t ?: ""),
                 msg = Utils.timeStrToMsg(response.t ?: ""),
                 scheduleOnly = Utils.isScheduledOnly(response.t ?: ""),
-                gps = (response.ei != null && response.ei == "N"),
+                gps = ignoreGps || (response.ei != null && response.ei == "N"),
                 variant = response.busServiceType,
                 wifi = (response.wifi != null && response.wifi == "Y"),     // changed to store wheelchair
                 capacity = Utils.phaseCapacity(response.ol ?: "")

@@ -522,7 +522,7 @@ object NwfbConnection: BaseConnection {
                     AppHelper.getString(R.string.eta_msg_no_eta_service)
                 }
             }
-            responseStr.contains("\\|TEXT\\|".toRegex()) -> responseStr.replace(".*\\|TEXT\\|\\|".toRegex(), "").trim()
+            responseStr.contains("\\|TEXT\\|".toRegex()) -> responseStr.replace(".*\\|TEXT\\|\\|".toRegex(), "").replace("。".toRegex(), "").trim()
             else -> ""
         }
     }

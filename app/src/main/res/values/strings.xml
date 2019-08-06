@@ -191,6 +191,7 @@
     <!-- General Preference [Key] -->
     <string name="pref_general" translatable="false">general</string>
     <string name="pref_language" translatable="false">language</string>
+    <string name="pref_auto_update_routes_freq" translatable="false">auto_update_routes_freq</string>
     <string name="pref_update_routes" translatable="false">update_routes</string>
     <string name="pref_bus" translatable="false">bus</string>
     <string name="pref_bus_jointly" translatable="false">bus_jointly</string>
@@ -217,6 +218,7 @@
     <!-- General Preference -->
     <string name="pref_category_title_general">General</string>
     <string name="pref_title_language">Language (語言)</string>
+    <string name="pref_title_auto_update_routes_freq">Automatic updates routes data frequency</string>
 
     <string name="pref_category_title_bus">Bus</string>
     <string name="pref_title_bus_jointly">Jointly operated routes</string>

@@ -47,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/half_margin"
         android:ellipsize="end"
+        android:minLines="2"
         android:maxLines="2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

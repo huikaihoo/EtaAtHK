@@ -14,6 +14,10 @@ object SharedPrefs {
     val language: String
         get() = SharedPrefsHelper.get(R.string.pref_language)
 
+    val autoUpdateRoutesFreq: Int
+        get() = SharedPrefsHelper.get(R.string.pref_auto_update_routes_freq, DEFAULT_AUTO_UPDATE_ROUTES_FREQ)
+    const val DEFAULT_AUTO_UPDATE_ROUTES_FREQ = 1
+
     // Bus
     var busJointly: String
         get() = SharedPrefsHelper.get(R.string.pref_bus_jointly, BUS_JOINTLY_ALWAYS_ASK)
@@ -23,7 +27,6 @@ object SharedPrefs {
     const val BUS_JOINTLY_ALWAYS_ASK = "2"
 
     // General (To-Do)
-    const val DEFAULT_DATA_VALIDITY_PERIOD = 1
     const val DEFAULT_ETA_AUTO_REFRESH = 30L // 60L
     const val DEFAULT_HIGHLIGHT_B4_DEPARTURE = 5
     const val DEFAULT_SHOW_FOLLOW_LOCATION_DISTANCE = 1000.0

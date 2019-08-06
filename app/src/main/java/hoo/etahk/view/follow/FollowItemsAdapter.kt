@@ -3,19 +3,27 @@ package hoo.etahk.view.follow
 import android.annotation.SuppressLint
 import android.text.SpannableStringBuilder
 import android.view.View
+import androidx.core.content.ContextCompat
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
+import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.prependImage
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.view.ItemTouchHelperAdapter
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.ItemDiffCallback
 import hoo.etahk.model.relation.ItemAndStop
+import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.base.DiffAdapter
-import kotlinx.android.synthetic.main.item_stop.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.item_stop.view.eta_0
+import kotlinx.android.synthetic.main.item_stop.view.eta_1
+import kotlinx.android.synthetic.main.item_stop.view.eta_2
+import kotlinx.android.synthetic.main.item_stop.view.fare
+import kotlinx.android.synthetic.main.item_stop.view.stop_desc
+import kotlinx.android.synthetic.main.item_stop.view.stop_title
+import java.util.Collections
 
 class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouchHelperAdapter {
 
@@ -50,6 +58,15 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
                     itemView.fare.text = ""
                 }
 
+                // ETA Text Color
+                val color = when (etaResults.isNotEmpty() && etaResults[0].valid && etaResults[0].getDiffInMinutes() <= SharedPrefs.DEFAULT_HIGHLIGHT_B4_DEPARTURE) {
+                    true -> ContextCompat.getColor(App.instance, R.color.colorDialogAccent)
+                    false -> ContextCompat.getColor(App.instance, R.color.colorWhite)
+                }
+
+                itemView.stop_title.setTextColor(color)
+                itemView.eta_0.setTextColor(color)
+
                 // ETA Result
                 for (i in 0..2) {
                     val tv = when (i) {
@@ -80,6 +97,16 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
                         text.append(etaResults[i].getDisplayMsg())
                         tv.text = text
                     }
+                }
+
+                if (etaResults.size > 1) {
+                    itemView.eta_0.maxLines = 1
+                    itemView.eta_1.visibility = View.VISIBLE
+                    itemView.eta_2.visibility = View.VISIBLE
+                } else {
+                    itemView.eta_0.maxLines = 2
+                    itemView.eta_1.visibility = View.GONE
+                    itemView.eta_2.visibility = View.GONE
                 }
 
                 itemView.setOnClickListener { context?.updateEta(listOf(item)) }

@@ -126,6 +126,16 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                 }
             }
 
+            if (etaResults.size > 1) {
+                itemView.eta_0.maxLines = 1
+                itemView.eta_1.visibility = View.VISIBLE
+                itemView.eta_2.visibility = View.VISIBLE
+            } else {
+                itemView.eta_0.maxLines = 2
+                itemView.eta_1.visibility = View.GONE
+                itemView.eta_2.visibility = View.GONE
+            }
+
             if (context == null || !context.isGotoSeqUsed) {
                 itemView.setOnTouchListener { v, event ->
                     context?.isGotoSeqUsed = true

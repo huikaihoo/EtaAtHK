@@ -1,4 +1,7 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:key="@string/pref_general"
@@ -12,6 +15,15 @@
             android:entries="@array/pref_entries_language"
             android:entryValues="@array/pref_values_language"
             android:defaultValue="" />
+
+        <androidx.preference.SeekBarPreference
+            android:key="@string/pref_auto_update_routes_freq"
+            android:title="@string/pref_title_auto_update_routes_freq"
+            android:selectable="false"
+            android:max="7"
+            app:min="1"
+            app:defaultValue="1"
+            app:showSeekBarValue="true" />
 
         <Preference
             android:key="@string/pref_update_routes"

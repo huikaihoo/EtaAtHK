@@ -31,7 +31,7 @@ object Utils {
     }
 
     fun getValidUpdateTimestamp(): Long {
-        return getCurrentTimestamp() - SharedPrefs.DEFAULT_DATA_VALIDITY_PERIOD * Time.ONE_DAY_IN_SECONDS
+        return getCurrentTimestamp() - SharedPrefs.autoUpdateRoutesFreq * Time.ONE_DAY_IN_SECONDS
     }
 
     @SuppressLint("SimpleDateFormat")
