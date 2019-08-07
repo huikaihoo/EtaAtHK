@@ -12,7 +12,7 @@ import hoo.etahk.view.base.BasePagedAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.item_route.view.from_to
-import kotlinx.android.synthetic.main.item_route.view.route_desc
+import kotlinx.android.synthetic.main.item_route.view.route_company
 import kotlinx.android.synthetic.main.item_route.view.route_no
 import org.jetbrains.anko.startActivity
 
@@ -30,7 +30,7 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
             val history = dataSource[0].history
 
             itemView.route_no.text = history.routeNo
-            itemView.route_desc.text = Utils.getStringResourceByName(history.company.toLowerCase())
+            itemView.route_company.text = Utils.getStringResourceByName(history.company.toLowerCase())
 
             if (route == null) {
                 itemView.from_to.text = "NOT EXIST"

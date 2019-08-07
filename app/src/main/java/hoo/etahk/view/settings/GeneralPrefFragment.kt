@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.Preference
-import androidx.preference.SeekBarPreference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mcxiaoke.koi.ext.newIntent
 import com.mcxiaoke.koi.ext.restart
@@ -60,8 +59,6 @@ class GeneralPrefFragment : BasePrefFragment() {
             activity?.restart()
             true
         })
-
-        val autoUpdateRoutesFreq = findPreference(R.string.pref_auto_update_routes_freq) as SeekBarPreference
 
         val updateRoutes = findPreference(R.string.pref_update_routes)
 

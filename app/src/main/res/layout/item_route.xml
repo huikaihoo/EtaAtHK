@@ -26,6 +26,18 @@
         tools:text="888" />
 
     <TextView
+        android:id="@+id/route_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:layout_marginStart="@dimen/half_margin"
+        android:layout_marginEnd="@dimen/half_margin"
+        app:layout_constraintStart_toEndOf="@+id/route_no"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/route_no"
+        tools:text="(Mon to Fri only)" />
+
+    <TextView
         android:id="@+id/from_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +48,7 @@
         tools:text="XXX⇄YYY" />
 
     <TextView
-        android:id="@+id/route_desc"
+        android:id="@+id/route_company"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -44,7 +56,7 @@
         android:gravity="end"
         android:maxLines="1"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/route_no"
+        app:layout_constraintStart_toEndOf="@+id/route_details"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="大巴" />

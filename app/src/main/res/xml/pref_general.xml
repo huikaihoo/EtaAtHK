@@ -23,7 +23,8 @@
             android:max="7"
             app:min="1"
             app:defaultValue="1"
-            app:showSeekBarValue="true" />
+            app:showSeekBarValue="true"
+            app:updatesContinuously="true" />
 
         <Preference
             android:key="@string/pref_update_routes"

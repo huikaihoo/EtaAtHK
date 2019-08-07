@@ -23,7 +23,7 @@ abstract class BasePrefFragment: PreferenceFragmentCompat() {
     }
 
     fun findPreference(@StringRes resId: Int): Preference {
-        return super.findPreference(getString(resId))
+        return super.findPreference(getString(resId))!!
     }
 
     fun bindPreferenceSummary(@StringRes resId: Int, onPreferenceChangeListener: Preference.OnPreferenceChangeListener = bindSummaryOnPreferenceChangeListener) {

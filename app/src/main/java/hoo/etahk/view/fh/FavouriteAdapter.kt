@@ -13,7 +13,7 @@ import hoo.etahk.view.base.BasePagedAdapter
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.route.RouteActivity
 import kotlinx.android.synthetic.main.item_route.view.from_to
-import kotlinx.android.synthetic.main.item_route.view.route_desc
+import kotlinx.android.synthetic.main.item_route.view.route_company
 import kotlinx.android.synthetic.main.item_route.view.route_no
 import org.jetbrains.anko.startActivity
 
@@ -33,11 +33,11 @@ class FavouriteAdapter : BasePagedAdapter<FHActivity, RouteFavouriteEx>(RouteFav
             if (route == null) {
                 itemView.route_no.text = favourite.routeNo
                 itemView.from_to.text = "NOT EXIST"
-                itemView.route_desc.text = Utils.getStringResourceByName(favourite.company)
+                itemView.route_company.text = Utils.getStringResourceByName(favourite.company)
             } else {
                 itemView.route_no.text = route.routeKey.routeNo
                 itemView.from_to.text = route.from.value + route.getDirectionArrow() + route.to.value
-                itemView.route_desc.text = route.getParentDesc()
+                itemView.route_company.text = route.getCompanyDesc()
 
                 itemView.setOnClickListener {
                     if (route.companyDetails.size > 1) {
