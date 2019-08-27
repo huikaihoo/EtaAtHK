@@ -172,7 +172,7 @@
     <string name="msg_remove_from_favourite_success">已從最愛路線中移除</string>
     <string name="msg_remove_from_history_success">已從路線歷史中移除</string>
 
-    <!-- General Preference -->
+    <!-- Root Preference -->
     <string name="pref_category_title_general">一般</string>
     <string name="pref_title_language">語言 (Language)</string>
     <string name="pref_title_auto_update_routes_freq">自動更新路線資料頻率</string>

@@ -19,31 +19,6 @@ class ParametersPrefFragment : BasePrefFragment() {
      */
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_parameters)
-        setHasOptionsMenu(true)
-
-        // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-        // to their values. When their values change, their summaries are
-        // updated to reflect the new value, per the Android Design
-        // guidelines.
-
-        // Firebase
-        bindPreferenceSummary(R.string.param_user_uuid)
-        bindPreferenceSummary(R.string.param_enable_remote_config)
-        // App
-        bindPreferenceSummary(R.string.param_app_mode)
-        bindPreferenceSummary(R.string.param_accepted_terms)
-        bindPreferenceSummary(R.string.param_paged_list_page_size)
-        // Feature
-        bindPreferenceSummary(R.string.param_enable_bus_list)
-        bindPreferenceSummary(R.string.param_enable_gmb_list)
-        bindPreferenceSummary(R.string.param_enable_tram_list)
-        bindPreferenceSummary(R.string.param_enable_mtr_list)
-        // Gist
-        bindPreferenceSummary(R.string.param_gist_id_kmb)
-        bindPreferenceSummary(R.string.param_gist_id_nwfb)
-        bindPreferenceSummary(R.string.param_gist_id_mtrb)
-        // OkHttp
-        bindPreferenceSummary(R.string.param_user_agent)
     }
 
     override fun onResume() {

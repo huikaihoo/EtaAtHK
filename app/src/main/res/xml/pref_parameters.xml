@@ -1,40 +1,38 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:key="@string/param_category_firebase"
-        android:title="@string/param_category_firebase"
-        android:order="10">
+        android:title="@string/param_category_firebase">
 
         <EditTextPreference
             android:key="@string/param_user_uuid"
             android:title="@string/param_user_uuid"
             android:maxLines="1"
-            android:persistent="true" />
+            app:useSimpleSummaryProvider="true" />
 
         <SwitchPreference
             android:key="@string/param_enable_remote_config"
             android:title="@string/param_enable_remote_config"
-            android:defaultValue="true"
-            android:persistent="true" />
+            android:defaultValue="true" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="@string/param_category_app"
-        android:title="@string/param_category_app"
-        android:order="20">
+        android:title="@string/param_category_app">
 
         <EditTextPreference
             android:key="@string/param_app_mode"
             android:title="@string/param_app_mode"
             android:maxLines="1"
-            android:persistent="true" />
+            app:useSimpleSummaryProvider="true" />
 
         <SwitchPreference
             android:key="@string/param_accepted_terms"
             android:title="@string/param_accepted_terms"
-            android:defaultValue="false"
-            android:persistent="true" />
+            android:defaultValue="false" />
 
         <EditTextPreference
             android:key="@string/param_paged_list_page_size"
@@ -42,79 +40,72 @@
             android:inputType="number"
             android:defaultValue="20"
             android:maxLines="1"
-            android:persistent="true" />
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="@string/param_category_feature"
-        android:title="@string/param_category_feature"
-        android:order="30">
+        android:title="@string/param_category_feature">
 
         <SwitchPreference
             android:key="@string/param_enable_bus_list"
             android:title="@string/param_enable_bus_list"
-            android:defaultValue="true"
-            android:persistent="true" />
+            app:defaultValue="true" />
 
         <SwitchPreference
-            android:key="@string/param_enable_gmb_list"
-            android:title="@string/param_enable_gmb_list"
-            android:defaultValue="false"
-            android:persistent="true" />
+            app:key="@string/param_enable_gmb_list"
+            app:title="@string/param_enable_gmb_list"
+            app:defaultValue="false" />
 
         <SwitchPreference
             android:key="@string/param_enable_tram_list"
             android:title="@string/param_enable_tram_list"
-            android:defaultValue="false"
-            android:persistent="true" />
+            android:defaultValue="false" />
 
         <SwitchPreference
             android:key="@string/param_enable_mtr_list"
             android:title="@string/param_enable_mtr_list"
-            android:defaultValue="false"
-            android:persistent="true" />
+            android:defaultValue="false" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="@string/param_category_gist"
-        android:title="@string/param_category_gist"
-        android:order="40">
+        android:title="@string/param_category_gist">
 
         <EditTextPreference
             android:key="@string/param_gist_id_kmb"
             android:title="@string/param_gist_id_kmb"
             android:inputType="textNoSuggestions|textVisiblePassword"
             android:maxLines="1"
-            android:persistent="true" />
+            app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             android:key="@string/param_gist_id_nwfb"
             android:title="@string/param_gist_id_nwfb"
             android:inputType="textNoSuggestions|textVisiblePassword"
             android:maxLines="1"
-            android:persistent="true" />
+            app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             android:key="@string/param_gist_id_mtrb"
             android:title="@string/param_gist_id_mtrb"
             android:inputType="textNoSuggestions|textVisiblePassword"
             android:maxLines="1"
-            android:persistent="true" />
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="@string/param_category_ok_http"
-        android:title="@string/param_category_ok_http"
-        android:order="50">
+        android:title="@string/param_category_ok_http">
 
         <EditTextPreference
             android:key="@string/param_user_agent"
             android:title="@string/param_user_agent"
             android:maxLines="1"
-            android:persistent="true" />
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 

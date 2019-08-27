@@ -215,7 +215,7 @@
     <string name="privacy_policy_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/blob/master/app/src/main/res/raw/privacy_policy.md</string>
     <string name="disclaimer_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/blob/master/app/src/main/res/raw/disclaimer.md</string>
 
-    <!-- General Preference -->
+    <!-- Root Preference -->
     <string name="pref_category_title_general">General</string>
     <string name="pref_title_language">Language (語言)</string>
     <string name="pref_title_auto_update_routes_freq">Automatic updates routes data frequency</string>
@@ -243,7 +243,7 @@
     <string name="pref_title_parameters">Parameters</string>
     <string name="pref_summary_parameters">View and edit parameters</string>
 
-    <!-- General Preference [entries] -->
+    <!-- Root Preference [entries] -->
     <string-array name="pref_entries_language">
         <item>@string/system_default</item>
         <item>@string/tc</item>

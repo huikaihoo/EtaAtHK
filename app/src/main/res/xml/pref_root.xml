@@ -1,30 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
+<androidx.preference.PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:key="@string/pref_general"
-        android:title="@string/pref_category_title_general"
-        android:order="10">
+        android:title="@string/pref_category_title_general">
 
-        <!--suppress AndroidDomInspection -->
         <ListPreference
             android:key="@string/pref_language"
             android:title="@string/pref_title_language"
             android:entries="@array/pref_entries_language"
             android:entryValues="@array/pref_values_language"
-            android:defaultValue="" />
+            android:defaultValue=""
+            app:useSimpleSummaryProvider="true" />
 
         <androidx.preference.SeekBarPreference
             android:key="@string/pref_auto_update_routes_freq"
             android:title="@string/pref_title_auto_update_routes_freq"
             android:selectable="false"
-            android:max="7"
             app:min="1"
-            app:defaultValue="1"
+            android:max="7"
+            android:defaultValue="1"
             app:showSeekBarValue="true"
-            app:updatesContinuously="true" />
+            app:updatesContinuously="true"
+            app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:key="@string/pref_update_routes"
@@ -35,22 +34,21 @@
 
     <PreferenceCategory
         android:key="@string/pref_bus"
-        android:title="@string/pref_category_title_bus"
-        android:order="20">
+        android:title="@string/pref_category_title_bus">
 
         <ListPreference
             android:key="@string/pref_bus_jointly"
             android:title="@string/pref_title_bus_jointly"
             android:entries="@array/pref_entries_bus_jointly"
             android:entryValues="@array/pref_values_bus_jointly"
-            android:defaultValue="2" />
+            android:defaultValue="2"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="@string/pref_backup_restore"
-        android:title="@string/pref_category_title_backup_restore"
-        android:order="80">
+        android:title="@string/pref_category_title_backup_restore">
 
         <Preference
             android:key="@string/pref_backup"
@@ -68,8 +66,7 @@
 
     <PreferenceCategory
         android:key="@string/pref_about"
-        android:title="@string/pref_category_title_about"
-        android:order="120">
+        android:title="@string/pref_category_title_about">
 
         <Preference
             android:key="@string/pref_app_name"
@@ -101,16 +98,16 @@
             android:persistent="false">
 
             <!--<intent-->
-                <!--android:action="android.intent.action.VIEW"-->
-                <!--android:targetClass="hoo.hktranseta.main.WebViewActivity"-->
-                <!--android:targetPackage="hoo.hktranseta"-->
-                <!--android:data="@string/open_source_licenses_path">-->
-                <!--<extra-->
-                    <!--android:name="title"-->
-                    <!--android:value="@string/open_source_licenses" />-->
-                <!--<extra-->
-                    <!--android:name="url"-->
-                    <!--android:value="@string/open_source_licenses_path" />-->
+            <!--android:action="android.intent.action.VIEW"-->
+            <!--android:targetClass="hoo.hktranseta.main.WebViewActivity"-->
+            <!--android:targetPackage="hoo.hktranseta"-->
+            <!--android:data="@string/open_source_licenses_path">-->
+            <!--<extra-->
+            <!--android:name="title"-->
+            <!--android:value="@string/open_source_licenses" />-->
+            <!--<extra-->
+            <!--android:name="url"-->
+            <!--android:value="@string/open_source_licenses_path" />-->
             <!--</intent>-->
 
         </PreferenceScreen>
@@ -119,15 +116,46 @@
 
     <PreferenceCategory
         android:key="@string/pref_testing"
-        android:title="@string/pref_category_title_testing"
-        android:order="130">
+        android:title="@string/pref_category_title_testing">
 
         <Preference
             android:key="@string/pref_parameters"
             android:title="@string/pref_title_parameters"
             android:summary="@string/pref_summary_parameters"
-            android:singleLine="false" />
+            app:fragment="hoo.etahk.view.settings.ParametersSettingsFragment" />
 
     </PreferenceCategory>
 
-</PreferenceScreen>
+    <!--<PreferenceCategory app:title="@string/messages_header">-->
+
+        <!--<EditTextPreference-->
+            <!--app:key="signature"-->
+            <!--app:title="@string/signature_title"-->
+            <!--app:useSimpleSummaryProvider="true" />-->
+
+        <!--<ListPreference-->
+            <!--app:defaultValue="reply"-->
+            <!--app:entries="@array/reply_entries"-->
+            <!--app:entryValues="@array/reply_values"-->
+            <!--app:key="reply"-->
+            <!--app:title="@string/reply_title"-->
+            <!--app:useSimpleSummaryProvider="true" />-->
+
+    <!--</PreferenceCategory>-->
+
+    <!--<PreferenceCategory app:title="@string/sync_header">-->
+
+        <!--<SwitchPreferenceCompat-->
+            <!--app:key="sync"-->
+            <!--app:title="@string/sync_title" />-->
+
+        <!--<SwitchPreferenceCompat-->
+            <!--app:dependency="sync"-->
+            <!--app:key="attachment"-->
+            <!--app:summaryOff="@string/attachment_summary_off"-->
+            <!--app:summaryOn="@string/attachment_summary_on"-->
+            <!--app:title="@string/attachment_title" />-->
+
+    <!--</PreferenceCategory>-->
+
+</androidx.preference.PreferenceScreen>

@@ -8,7 +8,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProviders
-import androidx.preference.Preference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mcxiaoke.koi.ext.newIntent
 import com.mcxiaoke.koi.ext.restart
@@ -27,9 +26,8 @@ import hoo.etahk.view.follow.FollowActivity
 import hoo.etahk.view.service.UpdateRoutesService
 import org.jetbrains.anko.startActivity
 
-class GeneralPrefFragment : BasePrefFragment() {
+class RootPrefFragment : BasePrefFragment() {
 
-    private lateinit var testing: Preference
     private lateinit var viewModel: SettingsViewModel
 
     /**
@@ -45,35 +43,25 @@ class GeneralPrefFragment : BasePrefFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         viewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
 
-        addPreferencesFromResource(R.xml.pref_general)
-        setHasOptionsMenu(true)
-
-        // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-        // to their values. When their values change, their summaries are
-        // updated to reflect the new value, per the Android Design
-        // guidelines.
+        setPreferencesFromResource(R.xml.pref_root, rootKey)
 
         // General
-        bindPreferenceSummary(R.string.pref_language, Preference.OnPreferenceChangeListener { preference, newValue ->
+        val language = findPreference(R.string.pref_language)
+        language.setOnPreferenceChangeListener { _, newValue ->
             AppHelper.applyAppLocale(newValue.toString())
             activity?.restart()
             true
-        })
+        }
 
         val updateRoutes = findPreference(R.string.pref_update_routes)
-
-        updateRoutes.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        updateRoutes.setOnPreferenceClickListener {
             App.instance.startServiceCompat(activity!!.newIntent<UpdateRoutesService>())
             true
         }
 
-        // Bus
-        bindPreferenceSummary(R.string.pref_bus_jointly)
-
         // Backup and Restore
         val backup = findPreference(R.string.pref_backup)
-
-        backup.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        backup.setOnPreferenceClickListener {
             val exporter = Exporter()
             AlertDialogBuilder(context!!)
                 .setTitle(R.string.title_backup_save_success_to)
@@ -84,8 +72,7 @@ class GeneralPrefFragment : BasePrefFragment() {
         }
 
         val restore = findPreference(R.string.pref_restore)
-
-        restore.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        restore.setOnPreferenceClickListener {
             val importer = Importer()
             val displayList = importer.getBackupList()
             var selectedIndex = -1
@@ -123,7 +110,7 @@ class GeneralPrefFragment : BasePrefFragment() {
 
         // About
         val appName = findPreference(R.string.pref_app_name)
-        appName.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        appName.setOnPreferenceClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, getString(R.string.play_store_developer_url).toUri()))
             true
         }
@@ -132,20 +119,19 @@ class GeneralPrefFragment : BasePrefFragment() {
         appVersion.summary = App.instance.getVersionName()
 
         val privacyPolicy = findPreference(R.string.pref_privacy_policy)
-        privacyPolicy.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        privacyPolicy.setOnPreferenceClickListener {
             (activity as AppCompatActivity).startCustomTabs(getString(R.string.privacy_policy_url))
             true
         }
 
         val disclaimer = findPreference(R.string.pref_disclaimer)
-        disclaimer.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        disclaimer.setOnPreferenceClickListener {
             (activity as AppCompatActivity).startCustomTabs(getString(R.string.disclaimer_url))
             true
         }
 
         val licenses= findPreference(R.string.pref_licenses)
-
-        licenses.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        licenses.setOnPreferenceClickListener {
             activity?.startActivity<OssLicensesMenuActivity>(
                 Argument.ARG_TITLE to getString(R.string.pref_title_licenses)
             )
@@ -155,14 +141,8 @@ class GeneralPrefFragment : BasePrefFragment() {
         // Testing
         val parameters = findPreference(R.string.pref_parameters)
 
-        parameters.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container, ParametersPrefFragment()).addToBackStack(null).commit()
-            true
-        }
-
-        testing = findPreference(R.string.pref_testing)
         if (!viewModel.showTesting) {
-            preferenceScreen.removePreference(testing)
+            preferenceScreen.removePreference(findPreference(R.string.pref_testing))
         }
 
         // Disable preference if permission is not granted

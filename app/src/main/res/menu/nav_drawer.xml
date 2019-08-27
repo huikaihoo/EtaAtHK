@@ -47,6 +47,7 @@
     <group android:id="@+id/nav_group_others">
         <item
             android:id="@+id/nav_help"
+            android:enabled="false"
             android:icon="@drawable/ic_nav_help"
             android:title="@string/help" />
         <item
