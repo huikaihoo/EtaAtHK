@@ -389,7 +389,11 @@ object KmbConnection: BaseConnection {
 
                                 if (kmbEtaRes?.response != null && kmbEtaRes.response.isNotEmpty()) {
                                     (kmbEtaRes.response).forEach {
-                                        etaResults.add(toEtaResult(stop, it))
+                                        if (it.t?.isNotBlank() == true) {
+                                            etaResults.add(toEtaResult(stop, it))
+                                        } else if (etaResults.isEmpty()) {
+                                            etaResults.add(toEtaResult(stop, AppHelper.getString(R.string.eta_msg_no_eta_info)))
+                                        }
                                     }
                                     //logd(AppHelper.gson.toJson(etaResults))
                                 } else {

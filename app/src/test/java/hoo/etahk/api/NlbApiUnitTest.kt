@@ -12,8 +12,8 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class NlbApiUnitTest {
 
-    private val routeId = "88" // 1 88
-    private val stopId = "78" // 28 105
+    private val routeId = "88" // 1 88 3
+    private val stopId = "78" // 28 105 127
 
     @Test
     fun getParentRoutes() {
@@ -64,6 +64,29 @@ class NlbApiUnitTest {
                 }
 
                 assert(!result.estimatedArrivalTime?.html.isNullOrEmpty())
+            } else {
+                println("error = ${response.errorBody()?.string()}")
+                assert(false)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            assert(false)
+        }
+    }
+
+    @Test
+    fun getEta2() {
+        val call = ConnectionHelper.nlb.getEta2(NlbEtaReq(routeId = routeId, stopId = stopId))
+        println("url = ${call.request().url()}")
+
+        try {
+            val response = call.execute()
+            println("isSuccessful = ${response.isSuccessful}")
+
+            if (response.isSuccessful) {
+                val result = response.body()
+                println("result = $result")
+                assert(result != null && !(result.estimatedArrivals.isNullOrEmpty() && result.message.isNullOrBlank()))
             } else {
                 println("error = ${response.errorBody()?.string()}")
                 assert(false)

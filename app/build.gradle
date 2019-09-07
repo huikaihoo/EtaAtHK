@@ -11,9 +11,9 @@ apply plugin: 'kotlin-kapt'
 def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
-def versionSuffix = "-alpha.4"
+def versionSuffix = "-alpha.5"
 
-def versionBuild = 11
+def versionBuild = 12
 
 def static getBuildTime() {
     def date = new Date()
@@ -111,7 +111,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:17.1.0'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
     implementation 'com.google.firebase:firebase-config:19.0.0'
     implementation 'com.google.firebase:firebase-perf:19.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
@@ -166,7 +166,7 @@ dependencies {
     // Unit Test
     testImplementation 'androidx.arch.core:core-testing:2.1.0-rc01'
     testImplementation 'androidx.room:room-testing:2.1.0'
-    testImplementation 'junit:junit:4.13-beta-3'
+    testImplementation 'junit:junit:4.12'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutines_version"
     testImplementation 'org.robolectric:robolectric:4.3'
 

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class KmbEtaRes(
     @SerializedName("generated") val generated: Long? = 0,
-    @SerializedName("response") val response: List<Response>? = emptyList(),
+    @SerializedName("response") val response: List<Response>? = listOf(),
     @SerializedName("responsecode") val responsecode: Long? = 0,
     @SerializedName("updated") val updated: Long? = 0
 ) {
