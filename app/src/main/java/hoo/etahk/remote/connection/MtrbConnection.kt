@@ -9,12 +9,13 @@ import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
+import hoo.etahk.remote.api.GistApi
+import hoo.etahk.remote.api.MtrbApi
 import hoo.etahk.remote.request.MtrbEtaReq
 import hoo.etahk.remote.response.GistDatabaseRes
 import hoo.etahk.remote.response.MtrbEtaRes
@@ -23,9 +24,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.koin.core.KoinComponent
 
 
-object MtrbConnection: BaseConnection {
+open class MtrbConnection(
+    private val mtrb: MtrbApi,
+    private val mtrbEta: MtrbApi,
+    private val gist: GistApi): BaseConnection, KoinComponent {
 
     /***************
      * Shared
@@ -50,14 +55,14 @@ object MtrbConnection: BaseConnection {
         val gistId = SharedPrefs.gistIdMtrb
 
         try {
-            val response = ConnectionHelper.gist.getGist(gistId).execute()
+            val response = gist.getGist(gistId).execute()
 
             logd("gistId = $gistId; isSuccessful = ${response.isSuccessful}")
 
             if (response.isSuccessful) {
                 val gistFile = response.body()?.files?.get(company.toLowerCase())
                 val gistDatabaseRes =
-                    if (gistFile != null) toGistDatabaseRes(company.toLowerCase(), gistFile, t) else GistDatabaseRes()
+                    if (gistFile != null) toGistDatabaseRes(company.toLowerCase(), gistFile, t, gist) else GistDatabaseRes()
 
                 logd("gistDatabaseRes.isValid = ${gistDatabaseRes.isValid}")
 
@@ -117,7 +122,7 @@ object MtrbConnection: BaseConnection {
      * @param route Child Route
      */
     override fun getTimetableUrl(route: Route): String? {
-        return ConnectionHelper.mtrb.getTimetable(route.routeKey.routeNo).request().url().toString()
+        return mtrb.getTimetable(route.routeKey.routeNo).request().url().toString()
     }
 
     override fun getTimetable(route: Route): String? {
@@ -147,7 +152,7 @@ object MtrbConnection: BaseConnection {
 
                         try {
                             val response =
-                                ConnectionHelper.mtrb.getEta(
+                                mtrbEta.getEta(
                                     MtrbEtaReq(key = getKey(),
                                         routeName = routeNo)
                                 ).execute()

@@ -6,6 +6,7 @@ import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.remote.connection.TramConnection
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -15,13 +16,15 @@ class TramConnectionUnitTest: BaseUnitTest() {
 
     override val printLog = false
 
+    private val tramConnection: TramConnection by inject()
+
     private val routeNo = "TRAM"
     private val bound = 1L
     private val variant = 1L
 
     @Test
     fun getParentRoutes() {
-        val result = TramConnection.getParentRoutes(Constants.Company.TRAM)?.getAll()?.sortedBy { it.routeKey.routeNo }
+        val result = tramConnection.getParentRoutes(Constants.Company.TRAM)?.getAll()?.sortedBy { it.routeKey.routeNo }
         result?.forEach {
             println("route = $it")
         }

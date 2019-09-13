@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.SortedMap
 
-object BusConnection : BaseConnection {
+open class BusConnection : BaseConnection {
 
     override fun getEtaRoutes(company: String): List<String>? {
         return null

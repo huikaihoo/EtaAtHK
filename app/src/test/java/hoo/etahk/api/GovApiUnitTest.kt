@@ -1,18 +1,26 @@
 package hoo.etahk.api
 
-import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.BaseUnitTest
+import hoo.etahk.remote.api.GovApi
 import hoo.etahk.remote.connection.GovConnection
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class GovApiUnitTest {
+class GovApiUnitTest: BaseUnitTest() {
+
+    override val printLog = false
+
+    private val gov: GovApi by inject()
+    private val govConnection: GovConnection by inject()
+
     @Test
     fun getParentRoutes() {
-        val call = ConnectionHelper.gov.getParentRoutes(syscode = GovConnection.getSystemCode())
+        val call = gov.getParentRoutes(syscode = govConnection.getSystemCode())
         println("url = ${call.request().url()}")
 
         try {

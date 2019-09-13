@@ -21,6 +21,10 @@ import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
 import io.fabric.sdk.android.Fabric
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidFileProperties
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 class App : Application() {
 
@@ -37,20 +41,29 @@ class App : Application() {
         super.onCreate()
         instance = this
 
+        initKoin()
         initAppHelper()
         initSharePrefs()
         initCrashlytics()
         initStetho()
         initFlipper()
-        initConnectionHelper()
     }
 
-    private fun initSharePrefs() {
-        SharedPrefsHelper.init(this)
+    private fun initKoin() {
+        startKoin {
+            androidLogger()             // use AndroidLogger as Koin Logger - default Level.INFO
+            androidContext(this@App)    // use the Android context given there
+            androidFileProperties()     // load properties from assets/koin.properties file
+            modules(ConnectionHelper.modules)
+        }
     }
 
     private fun initAppHelper() {
         AppHelper.init(this)
+    }
+
+    private fun initSharePrefs() {
+        SharedPrefsHelper.init(this)
     }
 
     private fun initCrashlytics() {
@@ -80,10 +93,6 @@ class App : Application() {
                 client.start()
             }
         }
-    }
-
-    private fun initConnectionHelper() {
-        ConnectionHelper.init()
     }
 
     fun getVersionName(): String {

@@ -1,23 +1,30 @@
 package hoo.etahk.api
 
-import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.BaseUnitTest
+import hoo.etahk.remote.api.NlbApi
 import hoo.etahk.remote.request.NlbEtaReq
 import org.jsoup.Jsoup
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
+import org.koin.core.qualifier.named
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class NlbApiUnitTest {
+class NlbApiUnitTest: BaseUnitTest() {
+
+    override val printLog = false
+
+    private val nlb: NlbApi by inject(named("nlbApi"))
 
     private val routeId = "88" // 1 88 3
     private val stopId = "78" // 28 105 127
 
     @Test
     fun getParentRoutes() {
-        val call = ConnectionHelper.nlb.getDatabase()
+        val call = nlb.getDatabase()
         println("url = ${call.request().url()}")
 
         try {
@@ -47,7 +54,7 @@ class NlbApiUnitTest {
 
     @Test
     fun getEta() {
-        val call = ConnectionHelper.nlb.getEta(NlbEtaReq(routeId = routeId, stopId = stopId))
+        val call = nlb.getEta(NlbEtaReq(routeId = routeId, stopId = stopId))
         println("url = ${call.request().url()}")
 
         try {
@@ -75,8 +82,8 @@ class NlbApiUnitTest {
     }
 
     @Test
-    fun getEta2() {
-        val call = ConnectionHelper.nlb.getEta2(NlbEtaReq(routeId = routeId, stopId = stopId))
+    fun getEtaV2() {
+        val call = nlb.getEtaV2(NlbEtaReq(routeId = routeId, stopId = stopId))
         println("url = ${call.request().url()}")
 
         try {

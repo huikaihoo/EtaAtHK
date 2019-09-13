@@ -1,25 +1,32 @@
 package hoo.etahk.api
 
+import hoo.etahk.BaseUnitTest
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.remote.api.TramApi
 import org.jsoup.Jsoup
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
+import org.koin.core.qualifier.named
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class TramApiUnitTest {
+class TramApiUnitTest: BaseUnitTest() {
+
+    override val printLog = false
+
+    private val tram: TramApi by inject(named("tramApi"))
 
     private val stopId = "93E"
 
     @Test
     fun getParentRoutes() {
-        val call = ConnectionHelper.tram.getDatabase()
+        val call = tram.getDatabase()
         println("url = ${call.request().url()}")
 
         try {
@@ -42,7 +49,7 @@ class TramApiUnitTest {
 
     @Test
     fun getEta() {
-        val call = ConnectionHelper.tram.getEta(stopId)
+        val call = tram.getEta(stopId)
         println("url = ${call.request().url()}")
 
         try {

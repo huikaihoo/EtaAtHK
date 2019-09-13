@@ -4,13 +4,13 @@ import android.util.Base64
 import com.mcxiaoke.koi.ext.closeQuietly
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
-import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.ZipHelper
 import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
+import hoo.etahk.remote.api.GistApi
 import hoo.etahk.remote.response.GistDatabaseRes
 import hoo.etahk.remote.response.GistRes
 import hoo.etahk.view.App
@@ -106,7 +106,7 @@ interface BaseConnection {
      * @param updateTime update time of GistDatabaseRes
      * @return Gist Database
      */
-    fun toGistDatabaseRes(company: String, gistFile: GistRes.File, updateTime: Long): GistDatabaseRes {
+    fun toGistDatabaseRes(company: String, gistFile: GistRes.File, updateTime: Long, gist: GistApi): GistDatabaseRes {
         try {
             val rawUrl = gistFile.rawUrl ?: ""
             val version = rawUrl.substring(rawUrl.lastIndexOf("raw/") + 4, rawUrl.lastIndexOf("/"))
@@ -130,7 +130,7 @@ interface BaseConnection {
                         result = gistFile.content ?: ""
                     } else {
                         // Get from rawUrl
-                        val response = ConnectionHelper.gist.getContent(rawUrl).execute()
+                        val response = gist.getContent(rawUrl).execute()
                         logd("[$version] isSuccessful = ${response.isSuccessful}")
 
                         if (response.isSuccessful) {

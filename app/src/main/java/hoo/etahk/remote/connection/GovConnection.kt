@@ -6,13 +6,13 @@ import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.common.tools.Separator
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.StringLang
+import hoo.etahk.remote.api.GovApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object GovConnection: BaseConnection {
+open class GovConnection(private val gov: GovApi): BaseConnection {
 
     /***************
      * Shared
@@ -57,7 +57,7 @@ object GovConnection: BaseConnection {
         val result = ParentRoutesMap()
 
         try {
-            val response = ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode()).execute()
+            val response = gov.getParentRoutes(syscode = getSystemCode()).execute()
             if (response.isSuccessful) {
                 val separator = Separator(
                     "\\|\\*\\|".toRegex(),
@@ -177,7 +177,7 @@ object GovConnection: BaseConnection {
 
     @Deprecated("Use 'getParentRoutes(company: String): HashMap<String, Route>?' instead.")
     fun getParentRoutesOld(company: String): HashMap<String, Route>? {
-        ConnectionHelper.gov.getParentRoutes(syscode = getSystemCode())
+        gov.getParentRoutes(syscode = getSystemCode())
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {

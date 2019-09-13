@@ -1,21 +1,28 @@
 package hoo.etahk.api
 
-import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.BaseUnitTest
+import hoo.etahk.remote.api.KmbApi
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
+import org.koin.core.qualifier.named
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class KmbApiUnitTest {
+class KmbApiUnitTest: BaseUnitTest() {
+
+    override val printLog = false
+
+    private val kmb: KmbApi by inject(named("kmbApi"))
 
     private val route = "101"
     private val bound = "1"
 
     @Test
     fun getRouteBound() {
-        val call = ConnectionHelper.kmb.getRouteBound(route = route)
+        val call = kmb.getRouteBound(route = route)
         println("url = ${call.request().url()}")
 
         try {
@@ -38,7 +45,7 @@ class KmbApiUnitTest {
 
     @Test
     fun getBoundVariant() {
-        val call = ConnectionHelper.kmb.getBoundVariant(route = route, bound = bound)
+        val call = kmb.getBoundVariant(route = route, bound = bound)
         println("url = ${call.request().url()}")
 
         try {
@@ -61,9 +68,7 @@ class KmbApiUnitTest {
 
     @Test
     fun getTimetable() {
-        val call = ConnectionHelper.kmb.getTimetable(
-            route = route,
-            bound = bound)
+        val call = kmb.getTimetable(route = route, bound = bound)
         println("url = ${call.request().url()}")
 
         try {

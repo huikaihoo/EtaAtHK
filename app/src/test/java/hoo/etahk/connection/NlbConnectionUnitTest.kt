@@ -6,6 +6,7 @@ import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.remote.connection.NlbConnection
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -15,13 +16,15 @@ class NlbConnectionUnitTest: BaseUnitTest() {
 
     override val printLog = false
 
+    private val nlbConnection: NlbConnection by inject()
+
     private val routeNo = "B4"
     private val bound = 1L
     private val variant = 1L
 
     @Test
     fun getParentRoutes() {
-        val result = NlbConnection.getParentRoutes(Constants.Company.NLB)?.getAll()?.sortedBy { it.routeKey.routeNo }
+        val result = nlbConnection.getParentRoutes(Constants.Company.NLB)?.getAll()?.sortedBy { it.routeKey.routeNo }
         result?.forEach {
             println("route = $it")
         }

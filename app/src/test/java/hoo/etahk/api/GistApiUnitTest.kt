@@ -4,13 +4,14 @@ import android.util.Base64
 import com.google.android.gms.common.util.IOUtils
 import hoo.etahk.BaseUnitTest
 import hoo.etahk.R
-import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.Stop
+import hoo.etahk.remote.api.GistApi
 import hoo.etahk.remote.response.GistDatabaseRes
 import hoo.etahk.view.App
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.BufferedReader
@@ -25,6 +26,10 @@ import java.util.zip.ZipFile
 @Config(manifest = Config.NONE)
 class GistApiUnitTest: BaseUnitTest() {
 
+    override val printLog = false
+
+    private val gist: GistApi by inject()
+
     private val gistIdMap = hashMapOf(
         "kmb" to getStringFromResource(R.string.param_gist_id_kmb),
         "nwfb" to getStringFromResource(R.string.param_gist_id_nwfb),
@@ -33,7 +38,7 @@ class GistApiUnitTest: BaseUnitTest() {
     private fun getRawUrl(company: String, gistId: String): String {
         var rawUrl: String? = null
 
-        val call = ConnectionHelper.gist.getGist(gistId)
+        val call = gist.getGist(gistId)
         println("url = ${call.request().url()}")
 
         try {
@@ -86,7 +91,7 @@ class GistApiUnitTest: BaseUnitTest() {
 
         for (rawUrl in rawUrlList) {
             val company = rawUrl.substring(rawUrl.lastIndexOf("/") + 1, rawUrl.length)
-            val call = ConnectionHelper.gist.getContent(rawUrl)
+            val call = gist.getContent(rawUrl)
             println("url = ${call.request().url()}")
 
             try {

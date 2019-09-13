@@ -9,9 +9,11 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
 import org.robolectric.shadows.ShadowLog
 
-abstract class BaseUnitTest {
+abstract class BaseUnitTest: KoinTest {
 
     companion object {
         val gson = GsonBuilder()
@@ -33,6 +35,7 @@ abstract class BaseUnitTest {
     @After
     fun afterClass() {
         Dispatchers.resetMain()
+        stopKoin()
     }
 
     fun getStringFromResource(@StringRes resId: Int): String {

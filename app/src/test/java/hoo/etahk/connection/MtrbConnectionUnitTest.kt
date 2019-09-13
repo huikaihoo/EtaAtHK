@@ -8,6 +8,7 @@ import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.remote.connection.MtrbConnection
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -16,6 +17,8 @@ import org.robolectric.annotation.Config
 class MtrbConnectionUnitTest: BaseUnitTest() {
 
     override val printLog = false
+
+    private val mtrbConnection: MtrbConnection by inject()
 
     private val gistId = getStringFromResource(R.string.param_gist_id_mtrb)
 
@@ -27,7 +30,7 @@ class MtrbConnectionUnitTest: BaseUnitTest() {
     fun getParentRoutes() {
         SharedPrefs.gistIdMtrb = gistId
 
-        val result = MtrbConnection.getParentRoutes(Constants.Company.MTRB)?.getAll()?.sortedBy { it.routeKey.routeNo }
+        val result = mtrbConnection.getParentRoutes(Constants.Company.MTRB)?.getAll()?.sortedBy { it.routeKey.routeNo }
         result?.forEach {
             println("route = $it")
         }

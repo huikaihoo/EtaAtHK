@@ -9,7 +9,6 @@ import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -17,14 +16,20 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
+import hoo.etahk.remote.api.GistApi
+import hoo.etahk.remote.api.TramApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import org.koin.core.KoinComponent
 
-object TramConnection: BaseConnection {
+open class TramConnection(
+    private val tram: TramApi,
+    private val tramEta: TramApi,
+    private val gist: GistApi): BaseConnection, KoinComponent {
 
     /***************
      * Shared
@@ -48,7 +53,7 @@ object TramConnection: BaseConnection {
         val result = ParentRoutesMap()
 
         try {
-            val response = ConnectionHelper.tram.getDatabase().execute()
+            val response = tram.getDatabase().execute()
 
             if (response.isSuccessful) {
                 val rawLines = (response.body()?.string() ?: "").split("\n".toRegex()).map {
@@ -184,7 +189,7 @@ object TramConnection: BaseConnection {
      * @param route Child Route
      */
     override fun getTimetableUrl(route: Route): String? {
-        return ConnectionHelper.tram.getTimetable().request().url().toString()
+        return tram.getTimetable().request().url().toString()
     }
 
     override fun getTimetable(route: Route): String? {
@@ -209,7 +214,7 @@ object TramConnection: BaseConnection {
                         stop.etaUpdateTime = t
                         try {
                             val response =
-                                ConnectionHelper.tramEta.getEta(stop.info.stopId).execute()
+                                tramEta.getEta(stop.info.stopId).execute()
 
                             if (response.isSuccessful) {
                                 val responseStr = response.body()?.string()

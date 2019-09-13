@@ -1,21 +1,30 @@
 package hoo.etahk.api
 
+import hoo.etahk.BaseUnitTest
 import hoo.etahk.common.constants.SharedPrefs
-import hoo.etahk.common.helper.ConnectionHelper
+import hoo.etahk.remote.api.NwfbApi
 import hoo.etahk.remote.connection.NwfbConnection
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
+import org.koin.core.qualifier.named
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class NwfbApiUnitTest {
+class NwfbApiUnitTest: BaseUnitTest() {
+
+    override val printLog = false
+
+    private val nwfb: NwfbApi by inject(named("nwfbApi"))
+    private val nwfbConnection: NwfbConnection by inject()
+
     @Test
     fun getParentRoutes() {
-        val call = ConnectionHelper.nwfb.getParentRoutes(
+        val call = nwfb.getParentRoutes(
             m = SharedPrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
-            syscode = NwfbConnection.getSystemCode()
+            syscode = nwfbConnection.getSystemCode()
         )
         println("url = ${call.request().url()}")
 

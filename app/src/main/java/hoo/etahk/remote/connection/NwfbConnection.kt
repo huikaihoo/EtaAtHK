@@ -13,7 +13,6 @@ import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.common.tools.Separator
 import hoo.etahk.model.data.Path
@@ -23,12 +22,15 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
+import hoo.etahk.remote.api.GistApi
+import hoo.etahk.remote.api.NwfbApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
+import org.koin.core.KoinComponent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +38,10 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-object NwfbConnection: BaseConnection {
+open class NwfbConnection(
+    private val nwfb: NwfbApi,
+    private val nwfbEta: NwfbApi,
+    private val gist: GistApi): BaseConnection, KoinComponent {
 
     /***************
      * Shared
@@ -101,7 +106,7 @@ object NwfbConnection: BaseConnection {
         val result = ParentRoutesMap()
 
         try {
-            val response = ConnectionHelper.nwfb.getParentRoutes(
+            val response = nwfb.getParentRoutes(
                     m = SharedPrefs.NWFB_API_PARAMETER_TYPE_ALL_BUS,
                     syscode = getSystemCode()).execute()
 
@@ -178,7 +183,7 @@ object NwfbConnection: BaseConnection {
             try {
                 val prefix = "[${parentRoute.routeKey.routeNo}][$boundId]"
 
-                val response = ConnectionHelper.nwfb.getBoundVariant(
+                val response = nwfb.getBoundVariant(
                         id = boundId,
                         l = "0",
                         syscode = getSystemCode()).execute()
@@ -248,7 +253,7 @@ object NwfbConnection: BaseConnection {
         val prefix = "[${route.routeKey}]"
 
         try {
-            val response = ConnectionHelper.nwfb.getPaths(
+            val response = nwfb.getPaths(
                     rdv = route.info.rdv,
                     bound = route.info.bound,
                     l = "0",
@@ -288,7 +293,7 @@ object NwfbConnection: BaseConnection {
         //logd("info=[$info]")
 
         try {
-            val response = ConnectionHelper.nwfb.getStops(
+            val response = nwfb.getStops(
                     info = info,
                     l = "0",
                     syscode = getSystemCode()).execute()
@@ -362,7 +367,7 @@ object NwfbConnection: BaseConnection {
     override fun getTimetableUrl(route: Route): String? {
         val info = "1|*|${route.routeKey.company}||${route.info.rdv}||${route.info.startSeq}||${route.info.endSeq}"
 
-        return ConnectionHelper.nwfb.getTimetable(
+        return nwfb.getTimetable(
                 rdv = info,
                 bound = route.info.bound,
                 l = "0",
@@ -393,7 +398,7 @@ object NwfbConnection: BaseConnection {
                         stop.etaUpdateTime = t
                         try {
                             val response =
-                                    ConnectionHelper.nwfbEta.getEta(
+                                    nwfbEta.getEta(
                                             stopid = stop.info.stopId,
                                             service_no = stop.routeKey.routeNo,
                                             removeRepeatedSuspend = "Y",
@@ -451,7 +456,7 @@ object NwfbConnection: BaseConnection {
     }
 
     override fun updateEta(stop: Stop) {
-        ConnectionHelper.nwfbEta.getEta(
+        nwfbEta.getEta(
                 stopid = stop.info.stopId,
                 service_no = stop.routeKey.routeNo,
                 removeRepeatedSuspend = "Y",

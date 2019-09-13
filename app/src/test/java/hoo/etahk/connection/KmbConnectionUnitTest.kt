@@ -8,6 +8,7 @@ import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.remote.connection.KmbConnection
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -16,6 +17,8 @@ import org.robolectric.annotation.Config
 class KmbConnectionUnitTest: BaseUnitTest() {
 
     override val printLog = false
+
+    private val kmbConnection: KmbConnection by inject()
 
     private val gistId = getStringFromResource(R.string.param_gist_id_kmb)
 
@@ -27,7 +30,7 @@ class KmbConnectionUnitTest: BaseUnitTest() {
     fun getParentRoutes() {
         SharedPrefs.gistIdKmb = gistId
 
-        val result = KmbConnection.getParentRoutes(Constants.Company.KMB)?.getAll()?.sortedBy { it.routeKey.routeNo }
+        val result = kmbConnection.getParentRoutes(Constants.Company.KMB)?.getAll()?.sortedBy { it.routeKey.routeNo }
         result?.forEach {
             println("route = $it")
         }

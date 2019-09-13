@@ -7,6 +7,7 @@ import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.remote.connection.BusConnection
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.inject
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -15,6 +16,8 @@ import org.robolectric.annotation.Config
 class BusConnectionUnitTest: BaseUnitTest() {
 
     override val printLog = false
+
+    private val busConnection: BusConnection by inject()
 
     private val gistIdMap = hashMapOf(
         R.string.param_gist_id_kmb to getStringFromResource(R.string.param_gist_id_kmb),
@@ -35,7 +38,7 @@ class BusConnectionUnitTest: BaseUnitTest() {
                 SharedPrefsHelper.put(resId, gistId)
         }
 
-        val result = BusConnection.getParentRoutes(Constants.Company.BUS)?.getAll()?.sortedWith(compareBy({it.routeKey.typeCode}, {it.displaySeq}, {it.routeKey.variant}))
+        val result = busConnection.getParentRoutes(Constants.Company.BUS)?.getAll()?.sortedWith(compareBy({it.routeKey.typeCode}, {it.displaySeq}, {it.routeKey.variant}))
         result?.forEach {
             println("route = $it")
         }

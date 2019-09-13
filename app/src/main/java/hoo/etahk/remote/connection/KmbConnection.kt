@@ -10,7 +10,6 @@ import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.extensions.yn
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Path
 import hoo.etahk.model.data.Route
@@ -19,6 +18,8 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
+import hoo.etahk.remote.api.GistApi
+import hoo.etahk.remote.api.KmbApi
 import hoo.etahk.remote.response.GistDatabaseRes
 import hoo.etahk.remote.response.KmbBoundVariantRes
 import hoo.etahk.remote.response.KmbEtaRes
@@ -29,11 +30,15 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.koin.core.KoinComponent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object KmbConnection: BaseConnection {
+open class KmbConnection(
+    private val kmb: KmbApi,
+    private val kmbEta: KmbApi,
+    private val gist: GistApi): BaseConnection, KoinComponent {
 
     override fun getEtaRoutes(company: String): List<String>? {
         return null
@@ -51,14 +56,14 @@ object KmbConnection: BaseConnection {
         val gistId = SharedPrefs.gistIdKmb
 
         try {
-            val response = ConnectionHelper.gist.getGist(gistId).execute()
+            val response = gist.getGist(gistId).execute()
 
             logd("gistId = $gistId; isSuccessful = ${response.isSuccessful}")
 
             if (response.isSuccessful) {
                 val gistFile = response.body()?.files?.get(company.toLowerCase())
                 val gistDatabaseRes =
-                    if (gistFile != null) toGistDatabaseRes(company.toLowerCase(), gistFile, t) else GistDatabaseRes()
+                    if (gistFile != null) toGistDatabaseRes(company.toLowerCase(), gistFile, t, gist) else GistDatabaseRes()
 
                 logd("gistDatabaseRes.isValid = ${gistDatabaseRes.isValid}")
 
@@ -106,7 +111,7 @@ object KmbConnection: BaseConnection {
             try {
                 val prefix = "[${parentRoute.routeKey.routeNo}][$bound]"
 
-                val response = ConnectionHelper.kmb.getBoundVariant(
+                val response = kmb.getBoundVariant(
                             route = parentRoute.routeKey.routeNo,
                             bound = bound.toString()).execute()
 
@@ -162,7 +167,7 @@ object KmbConnection: BaseConnection {
         val prefix = "[${route.routeKey}]"
 
         try {
-            val response = ConnectionHelper.kmb.getStops(
+            val response = kmb.getStops(
                     route = route.routeKey.routeNo,
                     bound = route.routeKey.bound.toString(),
                     serviceType = route.routeKey.variant.toString()).execute()
@@ -265,7 +270,7 @@ object KmbConnection: BaseConnection {
         var result = ""
 
         try {
-            val response = ConnectionHelper.kmb.getTimetable(
+            val response = kmb.getTimetable(
                     route = route.routeKey.routeNo,
                     bound = route.routeKey.bound.toString()).execute()
 
@@ -373,7 +378,7 @@ object KmbConnection: BaseConnection {
                         stop.etaUpdateTime = t
                         try {
                             val response =
-                                ConnectionHelper.kmbEta.getEta(
+                                kmbEta.getEta(
                                     route = stop.routeKey.routeNo,
                                     bound = stop.routeKey.bound.toString(),
                                     stop = stop.info.stopId,
@@ -422,7 +427,7 @@ object KmbConnection: BaseConnection {
     }
 
     override fun updateEta(stop: Stop) {
-        ConnectionHelper.kmbEta.getEta(
+        kmbEta.getEta(
                 route = stop.routeKey.routeNo,
                 bound = stop.routeKey.bound.toString(),
                 stop = stop.info.stopId,

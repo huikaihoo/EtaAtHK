@@ -9,7 +9,6 @@ import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
-import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.tools.ParentRoutesMap
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
@@ -17,6 +16,7 @@ import hoo.etahk.model.data.Stop
 import hoo.etahk.model.json.EtaResult
 import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
+import hoo.etahk.remote.api.NlbApi
 import hoo.etahk.remote.request.NlbEtaReq
 import hoo.etahk.remote.response.NlbDatabaseRes
 import kotlinx.coroutines.Dispatchers
@@ -25,9 +25,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import org.koin.core.KoinComponent
 import kotlin.math.max
 
-object NlbConnection: BaseConnection {
+open class NlbConnection(
+    private val nlb: NlbApi,
+    private val nlbEta: NlbApi): BaseConnection, KoinComponent {
 
     /***************
      * Shared
@@ -52,7 +55,7 @@ object NlbConnection: BaseConnection {
         val childRoutes = mutableListOf<Route>()
 
         try {
-            val response = ConnectionHelper.nlb.getDatabase().execute()
+            val response = nlb.getDatabase().execute()
 
             if (response.isSuccessful) {
                 val nlbDatabaseRes = response.body()!!
@@ -244,7 +247,7 @@ object NlbConnection: BaseConnection {
      * @param route Child Route
      */
     override fun getTimetableUrl(route: Route): String? {
-        return ConnectionHelper.nlb.getTimetable(route.info.rdv).request().url().toString()
+        return nlb.getTimetable(route.info.rdv).request().url().toString()
     }
 
     override fun getTimetable(route: Route): String? {
@@ -269,7 +272,7 @@ object NlbConnection: BaseConnection {
                         stop.etaUpdateTime = t
                         try {
                             val response =
-                                ConnectionHelper.nlbEta.getEta(
+                                nlbEta.getEta(
                                     NlbEtaReq(routeId = stop.info.rdv,
                                         stopId = stop.info.stopId)
                                 ).execute()
