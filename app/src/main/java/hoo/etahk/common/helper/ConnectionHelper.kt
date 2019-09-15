@@ -21,6 +21,7 @@ import hoo.etahk.remote.connection.GovConnection
 import hoo.etahk.remote.connection.KmbConnection
 import hoo.etahk.remote.connection.MtrbConnection
 import hoo.etahk.remote.connection.NlbConnection
+import hoo.etahk.remote.connection.NlbV2Connection
 import hoo.etahk.remote.connection.NwfbConnection
 import hoo.etahk.remote.connection.TramConnection
 import org.koin.core.KoinComponent
@@ -31,7 +32,7 @@ import retrofit2.create
 
 object ConnectionHelper: BaseConnection, KoinComponent {
 
-    private val clientModule = module {
+    val clientModule = module {
         single(named("okHttpLong")){ ConnectionFactory.createClient(NetworkType.LONG, "") }
         single(named("okHttpEtaKmb")){ ConnectionFactory.createClient(NetworkType.ETA, Company.KMB) }
         single(named("okHttpEtaNwfb")){ ConnectionFactory.createClient(NetworkType.ETA, Company.NWFB) }
@@ -40,19 +41,19 @@ object ConnectionHelper: BaseConnection, KoinComponent {
         single(named("okHttpEtaTram")){ ConnectionFactory.createClient(NetworkType.ETA, Company.KMB) }
     }
 
-    private val gistModule = module {
+    val gistModule = module {
         // API
         single<GistApi> {
             ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.GIST_URL).create()
         }
     }
 
-    private val busModule = module {
+    val busModule = module {
         // Connection
         single { BusConnection() }
     }
 
-    private val govModule = module {
+    val govModule = module {
         // API
         single<GovApi> {
             ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.GOV_URL).create()
@@ -62,7 +63,7 @@ object ConnectionHelper: BaseConnection, KoinComponent {
         single { GovConnection(get()) }
     }
 
-    private val kmbModule = module {
+    val kmbModule = module {
         // API
         single<KmbApi>(named("kmbApi")) {
             ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.KMB_URL).create()
@@ -75,7 +76,7 @@ object ConnectionHelper: BaseConnection, KoinComponent {
         single { KmbConnection(get(named("kmbApi")), get(named("kmbEtaApi")), get()) }
     }
 
-    private val nwfbModule = module {
+    val nwfbModule = module {
         // API
         single<NwfbApi>(named("nwfbApi")) {
             ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.NWFB_URL).create()
@@ -88,7 +89,7 @@ object ConnectionHelper: BaseConnection, KoinComponent {
         single { NwfbConnection(get(named("nwfbApi")), get(named("nwfbEtaApi")), get()) }
     }
 
-    private val nlbModule = module {
+    val nlbModule = module {
         // API
         single<NlbApi>(named("nlbApi")) {
             ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.NLB_URL).create()
@@ -101,7 +102,21 @@ object ConnectionHelper: BaseConnection, KoinComponent {
         single { NlbConnection(get(named("nlbApi")), get(named("nlbEtaApi"))) }
     }
 
-    private val mtrbModule = module {
+    val nlbV2Module = module {
+        // API
+        single<NlbApi>(named("nlbApi")) {
+            ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.NLB_URL).create()
+        }
+        single<NlbApi>(named("nlbEtaApi")) {
+            ConnectionFactory.createRetrofit(get(named("okHttpEtaNlb")), Url.NLB_URL).create()
+        }
+
+        // Connection
+        single<NlbConnection> { NlbV2Connection(get(named("nlbApi")), get(named("nlbEtaApi"))) }
+    }
+
+
+    val mtrbModule = module {
         // API
         single<MtrbApi> {
             ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.MTRB_URL).create()
@@ -111,7 +126,7 @@ object ConnectionHelper: BaseConnection, KoinComponent {
         single { MtrbConnection(get(), get(), get()) }
     }
 
-    private val tramModule = module {
+    val tramModule = module {
         // API
         single<TramApi>(named("tramApi")) {
             ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.TRAM_URL).create()
@@ -127,7 +142,7 @@ object ConnectionHelper: BaseConnection, KoinComponent {
     val modules = listOf(
         clientModule, gistModule, busModule,
         govModule, kmbModule, nwfbModule,
-        nlbModule, mtrbModule, tramModule
+        nlbV2Module, mtrbModule, tramModule
     )
 
     private val busConnection: BusConnection by inject()

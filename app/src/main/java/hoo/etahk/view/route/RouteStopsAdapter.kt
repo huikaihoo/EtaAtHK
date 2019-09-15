@@ -2,14 +2,11 @@ package hoo.etahk.view.route
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.text.SpannableStringBuilder
 import android.view.View
 import androidx.core.content.ContextCompat
 import hoo.etahk.R
-import hoo.etahk.common.Constants
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.SharedPrefs
-import hoo.etahk.common.extensions.prependImage
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.diff.BaseDiffCallback
@@ -105,23 +102,7 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                     tv?.text = ""
 
                     if (tv != null && i < etaResults.size) {
-                        var text = SpannableStringBuilder()
-                        if (stop.isLoading) {
-                            text = tv.prependImage(R.drawable.ic_text_loading, text)
-                        } else if (etaStatus != Constants.EtaStatus.SUCCESS) {
-                            text = tv.prependImage(R.drawable.ic_text_failed, text)
-                        }
-                        if (etaResults[i].valid && !etaResults[i].gps) {
-                            text =tv.prependImage(R.drawable.ic_text_gps_off, text)
-                        }
-                        if (etaResults[i].wifi) {
-                            text = tv.prependImage(R.drawable.ic_text_wheelchair, text)
-                        }
-                        if (etaResults[i].valid && etaResults[i].capacity >= 0L) {
-                            text = tv.prependImage(Utils.getCapacityResId(etaResults[i].capacity), text)
-                        }
-                        text.append(etaResults[i].getDisplayMsg())
-                        tv.text = text
+                        tv.text = etaResults[i].getFullTextMsg(tv, stop.isLoading, etaStatus)
                     }
                 }
             }

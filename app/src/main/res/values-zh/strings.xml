@@ -123,8 +123,10 @@
     <!-- Stop Item -->
     <string name="stop_only_for_particular_time">部分班次途經</string>
     <string name="stop_fare_holiday">假日車費：</string>
+    <string name="eta_msg_arriving">即將到達</string>
+    <string name="eta_msg_departing">即將離開</string>
     <string name="eta_msg_no_eta_service">沒有到站時間服務</string>
-    <string name="eta_msg_not_in_service_hours">服務時間已過</string>
+    <string name="eta_msg_not_in_service_hours">此時段沒有服務</string>
     <string name="eta_msg_service_suspended">暫停服務</string>
     <string name="eta_msg_no_eta_info">沒有到站時間資訊</string>
     <string name="eta_msg_loading">載入中\u2026</string>

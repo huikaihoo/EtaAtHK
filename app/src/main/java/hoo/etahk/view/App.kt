@@ -25,8 +25,9 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
 
-class App : Application() {
+open class App : Application() {
 
     companion object {
         lateinit var instance: App private set
@@ -49,12 +50,16 @@ class App : Application() {
         initFlipper()
     }
 
+    protected open fun getModules(): List<Module> {
+        return ConnectionHelper.modules
+    }
+
     private fun initKoin() {
         startKoin {
             androidLogger()             // use AndroidLogger as Koin Logger - default Level.INFO
             androidContext(this@App)    // use the Android context given there
             androidFileProperties()     // load properties from assets/koin.properties file
-            modules(ConnectionHelper.modules)
+            modules(getModules())
         }
     }
 

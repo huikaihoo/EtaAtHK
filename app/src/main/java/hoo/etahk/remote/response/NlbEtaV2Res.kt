@@ -3,7 +3,7 @@ package hoo.etahk.remote.response
 import com.google.gson.annotations.SerializedName
 
 data class NlbEtaV2Res(
-    @SerializedName("estimatedArrivals") val estimatedArrivals: List<EstimatedArrival?>? = listOf(),
+    @SerializedName("estimatedArrivals") val estimatedArrivals: List<EstimatedArrival>? = listOf(),
     @SerializedName("message") val message: String? = ""
 ) {
     data class EstimatedArrival(
