@@ -11,6 +11,7 @@ import hoo.etahk.common.constants.Argument
 import hoo.etahk.view.fh.FHActivity
 import hoo.etahk.view.follow.FollowActivity
 import hoo.etahk.view.search.BusSearchActivity
+import hoo.etahk.view.search.TramSearchActivity
 
 class ShortcutsActivity : AppCompatActivity() {
 
@@ -35,6 +36,9 @@ class ShortcutsActivity : AppCompatActivity() {
             }
             getString(R.string.aan_sc_bus) -> {
                 setupShortcut(R.string.sc_bus_s, R.drawable.ic_shortcut_bus, newIntent<BusSearchActivity>(0))
+            }
+            getString(R.string.aan_sc_tram) -> {
+                setupShortcut(R.string.sc_tram_s, R.drawable.ic_shortcut_tram, newIntent<TramSearchActivity>(0))
             }
         }
 

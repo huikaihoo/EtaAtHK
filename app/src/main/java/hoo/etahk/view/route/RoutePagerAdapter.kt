@@ -11,7 +11,7 @@ import hoo.etahk.model.data.Route
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class RoutePagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
+class RoutePagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     var dataSource: Route? = null
         set(value) {
             field = value
@@ -30,10 +30,10 @@ class RoutePagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
 
     override fun getPageTitle(position: Int): CharSequence? {
         return AppHelper.getString(R.string.to_prefix) +
-                when (position) {
-                    0 -> dataSource!!.to.value
-                    1 -> dataSource!!.from.value
-                    else -> ""
-                }
+            when (position) {
+                0 -> dataSource!!.to.value
+                1 -> dataSource!!.from.value
+                else -> ""
+            }
     }
 }

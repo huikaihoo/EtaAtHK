@@ -49,7 +49,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
 
         spinnerAdapter = RoutesSpinnerAdapter(this)
 
-        supportActionBar?.title = viewModel.routeKey!!.routeNo
+        supportActionBar?.title = viewModel.routeKey!!.getRouteNoDisplay()
         supportActionBar?.subtitle = viewModel.routeKey!!.getCompanyName()
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -64,7 +64,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
         googleMap.setOnInfoWindowClickListener { marker ->
             val textView = spinner?.selectedView?.findViewById(R.id.title) as TextView?
             val subtitle = viewModel.routeKey!!.getCompanyName() + " " +
-                    viewModel.routeKey!!.routeNo + if (textView != null) " - " + textView.text else ""
+                    viewModel.routeKey!!.getRouteNoDisplay() + if (textView != null) " - " + textView.text else ""
 
             startActivity<StreetViewActivity>(
                 Argument.ARG_ACTIONBAR_TITLE to marker.title,

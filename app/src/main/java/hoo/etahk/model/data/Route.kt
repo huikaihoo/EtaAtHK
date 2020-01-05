@@ -54,7 +54,7 @@ data class Route(
             }
         }
 
-    fun getCompanyDesc(): String {
+    fun getCompanyDisplay(): String {
         var result = ""
         companyDetails.forEachIndexed { i, company ->
             if (i > 0)

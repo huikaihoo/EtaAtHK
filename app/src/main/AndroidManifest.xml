@@ -59,7 +59,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
@@ -71,6 +70,13 @@
         <activity
             android:name=".view.search.BusSearchActivity"
             android:label="@string/title_bus_search">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.search.TramSearchActivity"
+            android:label="@string/title_tram_search">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -98,7 +104,6 @@
         <activity android:name=".view.settings.SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -131,7 +136,17 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".Shortcut.Tram"
+            android:icon="@drawable/ic_shortcut_tram"
+            android:label="@string/sc_tram_l"
+            android:targetActivity=".view.ShortcutsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
@@ -143,7 +158,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
@@ -155,7 +169,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
@@ -167,7 +180,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>

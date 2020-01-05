@@ -23,10 +23,10 @@ import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.view.base.BaseActivity
 import hoo.etahk.view.map.RoutesMapsActivity
-import kotlinx.android.synthetic.main.activity_route.container
-import kotlinx.android.synthetic.main.activity_route.progress_bar
-import kotlinx.android.synthetic.main.activity_route.tabs
-import kotlinx.android.synthetic.main.activity_route.toolbar
+import kotlinx.android.synthetic.main.activity_container_tabs_progress.container
+import kotlinx.android.synthetic.main.activity_container_tabs_progress.progress_bar
+import kotlinx.android.synthetic.main.activity_container_tabs_progress.tabs
+import kotlinx.android.synthetic.main.activity_container_tabs_progress.toolbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -73,7 +73,7 @@ class RouteActivity : BaseActivity() {
         super.setTaskDescription()
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_route)
+        setContentView(R.layout.activity_container_tabs_progress)
 
         setSupportActionBar(toolbar)
 
@@ -95,7 +95,7 @@ class RouteActivity : BaseActivity() {
 
         // Setup Actionbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = viewModel.routeKey!!.getCompanyName() + " " + viewModel.routeKey!!.routeNo
+        supportActionBar?.title = viewModel.routeKey!!.getCompanyName() + " " + viewModel.routeKey!!.getRouteNoDisplay()
 
         // Setup Progressbar
         progress_bar.max = viewModel.durationInMillis.toInt()
@@ -203,7 +203,7 @@ class RouteActivity : BaseActivity() {
             R.id.menu_add_shortcut -> {
                 val intent = intentFor<RouteActivity>(
                     Argument.ARG_COMPANY to viewModel.routeKey?.company,
-                    Argument.ARG_ROUTE_NO to viewModel.routeKey?.routeNo,
+                    Argument.ARG_ROUTE_NO to viewModel.routeKey?.getRouteNoDisplay(),
                     Argument.ARG_TYPE_CODE to (viewModel.routeKey?.typeCode?: RouteType.NONE),
                     Argument.ARG_ANOTHER_COMPANY to viewModel.anotherCompany,
                     Argument.ARG_GOTO_BOUND to -1L,

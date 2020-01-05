@@ -1,6 +1,7 @@
 package hoo.etahk.model.data
 
 import androidx.room.Ignore
+import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Company.CTB
 import hoo.etahk.common.Constants.Company.DB
@@ -23,6 +24,7 @@ import hoo.etahk.common.Constants.RouteType.NONE
 import hoo.etahk.common.Constants.RouteType.TRAM
 import hoo.etahk.common.Utils
 import hoo.etahk.common.extensions.loge
+import hoo.etahk.common.helper.AppHelper
 
 data class RouteKey (
         val company: String,
@@ -49,6 +51,15 @@ data class RouteKey (
     @Ignore
     var suffix: String = ""
         private set
+
+    fun getRouteNoDisplay(): String {
+        return when (typeCode) {
+            TRAM ->
+                AppHelper.getString(if (routeNo[0] == '1') R.string.westbound else R.string.eastbound)
+            else ->
+                routeNo
+        }
+    }
 
     init {
         splitRouteNo()

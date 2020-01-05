@@ -1,5 +1,6 @@
 package hoo.etahk.remote.connection
 
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.perf.metrics.AddTrace
 import com.google.gson.JsonSyntaxException
 import hoo.etahk.R
@@ -10,6 +11,8 @@ import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.tools.ParentRoutesMap
+import hoo.etahk.common.tools.Rule
+import hoo.etahk.model.data.Path
 import hoo.etahk.model.data.Route
 import hoo.etahk.model.data.RouteKey
 import hoo.etahk.model.data.Stop
@@ -19,6 +22,7 @@ import hoo.etahk.model.json.StringLang
 import hoo.etahk.remote.api.GistApi
 import hoo.etahk.remote.api.TramApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -34,8 +38,15 @@ open class TramConnection(
     /***************
      * Shared
      ***************/
-    private fun getFromTo(routeName: String, index: Int): String {
-        return routeName.split(">".toRegex())[index].trim()
+    private val rules: List<Rule> by lazy {
+        listOf(
+            Rule(basedOn = "WB", target="11", excludeFrom = "105", excludeTo = "112"),
+            Rule(basedOn = "WB", target="12", includeTo = "HVT_K"),
+            Rule(basedOn = "WB", target="13", includeFrom = "HVT_K", excludeFrom = "50W", excludeTo = "50W"),
+            Rule(basedOn = "EB", target="21", excludeFrom = "49E", excludeTo = "112"),
+            Rule(basedOn = "EB", target="22", includeTo = "HVT_B"),
+            Rule(basedOn = "EB", target="23", includeFrom = "HVT_B")
+        )
     }
 
     override fun getEtaRoutes(company: String): List<String>? {
@@ -56,51 +67,39 @@ open class TramConnection(
             val response = tram.getDatabase().execute()
 
             if (response.isSuccessful) {
+                // Get stop records from file
                 val rawLines = (response.body()?.string() ?: "").split("\n".toRegex()).map {
                     it.trim().trimEnd(',').trim()
                 }
 
-                // 1. Get Parent Route
-                val parentRoute = toParentRoute(t)
-                result.add(parentRoute)
-                AppHelper.db.childRouteDao().insertOrUpdate(listOf(parentRoute), t)
-
-                // 2. Get Child Routes and Stops
-                var bound = 0L
-                var childRoute: Route? = null
-                val stops = mutableListOf<Stop>()
+                var boundStr = ""
+                val recordsMap: HashMap<String, MutableList<Array<String>>> = hashMapOf()
 
                 for (line in rawLines) {
-                    // Start of Child Route
+                    // Start of lines that contain records
                     val matchResult = "var stopsArray([a-zA-z]*)[ ]*=".toRegex().find(line)
                     if (matchResult != null && matchResult.groupValues.size >= 2) {
-                        val boundStr = matchResult.groupValues[1].trim()
-                        if (boundStr.isNotBlank()) {
-                            bound++
-                            childRoute = toChildRoute(parentRoute, bound, 1L, StringLang.newInstance(boundStr), t)
-                            AppHelper.db.childRouteDao().insertOrUpdate(listOf(childRoute), t)
+                        boundStr = matchResult.groupValues[1].trim()
+                        if (!recordsMap.containsKey(boundStr)) {
+                            recordsMap[boundStr] = mutableListOf()
                         }
                     }
 
-                    // End of Child Route
+                    // End of lines that contain records
                     if (line.matches("][ ]*;".toRegex())) {
-                        if (childRoute != null && stops.isNotEmpty()) {
-                            AppHelper.db.stopDao().insertOrUpdate(childRoute.routeKey, stops, t)
-                        }
-                        childRoute = null
-                        stops.clear()
+                        boundStr = ""
                     }
 
-                    // Get Stop
-                    if ( childRoute != null &&
-                         line.isNotBlank() &&
-                         line.startsWith('[') &&
-                         line.endsWith(']') &&
-                         !line.matches("//".toRegex()) ) {
+                    // Get records
+                    if ( boundStr.isNotBlank() &&
+                        line.isNotBlank() &&
+                        line.startsWith('[') &&
+                        line.endsWith(']') &&
+                        !line.matches("//".toRegex()) ) {
                         try {
                             val records = AppHelper.gson.fromJson(line, Array<String>::class.java)
                             if (records.size >= Constants.Stop.TRAM_STOP_RECORD_SIZE) {
-                                stops.add(toStop(childRoute, stops.size.toLong(), records, t))
+                                recordsMap[boundStr]?.add(records)
                             }
                         } catch (e: JsonSyntaxException) {
                             loge("Not a valid tram stop record [$line]")
@@ -108,40 +107,134 @@ open class TramConnection(
                     }
                 }
 
+                // Sort stops records in orders
+                recordsMap.forEach {
+                    if (it.key == "WB") {
+                        val index = it.value.indexOfFirst{ records -> records[Constants.Stop.TRAM_STOP_RECORD_STOP_ID] == "WMT" }
+                        if (index >= 0) {
+                            it.value[index][Constants.Stop.TRAM_STOP_RECORD_STOP_ID] = "WM"
+                        }
+                    } else if (it.key == "EB") {
+                        val hvFrom = it.value.indexOfFirst{ records -> records[Constants.Stop.TRAM_STOP_RECORD_STOP_ID] == "105" }
+                        val hvTo = it.value.indexOfFirst{ records -> records[Constants.Stop.TRAM_STOP_RECORD_STOP_ID] == "49E" }
+
+                        val after = mutableListOf<Array<String>>()
+
+                        for (i in (it.value.size - 1) downTo hvTo) {
+                            after.add(it.value[i])
+                        }
+                        for (i in hvFrom..hvTo) {
+                            after.add(it.value[i])
+                        }
+                        for (i in (hvFrom - 1) downTo 0) {
+                            after.add(it.value[i])
+                        }
+                        recordsMap["EB"] = after
+                    }
+                }
+
+                // Check
+//                recordsMap.forEach {
+//                    logd(it.key)
+//                    it.value.forEach {
+//                        logd("${it[0]} ${it[1]} ${it[2]} ${it[3]} ${it[4]} ${it[5]}")
+//                    }
+//                }
+
+                // Get parent routes / child routes / stops from records based on rules
+                rules.forEach { rule ->
+                    val recordsList = recordsMap[rule.basedOn]
+
+                    if (recordsList != null) {
+                        // Get from / to
+                        var fromIndex = 0
+                        var toIndex = recordsList.size - 1
+
+                        if (rule.includeFrom.isNotBlank()) {
+                            val index = recordsList.indexOfFirst{ it[Constants.Stop.TRAM_STOP_RECORD_STOP_ID] == rule.includeFrom }
+                            fromIndex = if (index < 0) fromIndex else index
+                        }
+                        if (rule.includeTo.isNotBlank()) {
+                            val index = recordsList.indexOfFirst{ it[Constants.Stop.TRAM_STOP_RECORD_STOP_ID] == rule.includeTo }
+                            toIndex = if (index < 0) toIndex else index
+                        }
+
+                        // Create parent / child route
+                        val parentRoute = toParentRoute(
+                            routeNo = rule.target,
+                            from = toName(recordsList[fromIndex]),
+                            to = toName(recordsList[toIndex]),
+                            displaySeq = result.size + 1L,
+                            t = t
+                        )
+                        val childRoute = toChildRoute(parentRoute, 1L, t)
+
+                        // Get stops based on rules
+                        val stops = mutableListOf<Stop>()
+                        var isExclude = false
+                        var isExcludeEnded = false
+                        for (i in fromIndex..toIndex) {
+                            val records = recordsList[i]
+                            isExclude = isExclude || (rule.excludeFrom == records[Constants.Stop.TRAM_STOP_RECORD_STOP_ID])
+                            if (!isExclude || isExcludeEnded) {
+                                stops.add(toStop(childRoute, stops.size + 1L, records, t))
+                            }
+                            isExclude = isExclude && rule.excludeTo != records[Constants.Stop.TRAM_STOP_RECORD_STOP_ID]
+                            isExcludeEnded = isExcludeEnded || (rule.excludeTo == records[Constants.Stop.TRAM_STOP_RECORD_STOP_ID])
+                        }
+
+                        result.add(parentRoute)
+                        AppHelper.db.childRouteDao().insertOrUpdate(listOf(childRoute), t)
+                        AppHelper.db.stopDao().insertOrUpdate(childRoute.routeKey, stops, t)
+                    }
+                }
+                AppHelper.db.parentRouteDao().insertOrUpdate(result.getAll(), t)
                 logd("Finish Update")
             }
         } catch (e: Exception) {
             loge("getParentRoutes failed!", e)
         }
-        
+
         return result
     }
 
-    private fun toParentRoute(t: Long): Route {
+    private fun toName(records: Array<String>): StringLang {
+        return StringLang(records[Constants.Stop.TRAM_STOP_RECORD_NAME_TC], records[Constants.Stop.TRAM_STOP_RECORD_NAME_EN], records[Constants.Stop.TRAM_STOP_RECORD_NAME_SC])
+    }
+
+    private fun toParentRoute(routeNo: String,
+                              from: StringLang,
+                              to: StringLang,
+                              displaySeq: Long,
+                              t: Long): Route {
         return Route(
             routeKey = RouteKey(company = Company.TRAM,
-                routeNo = "TRAM",
+                routeNo = routeNo,
                 bound = 0L,
                 variant = 0L),
-            direction = 2L,
+            direction = 1L,
             specialCode = 0L,
             companyDetails = listOf(Company.TRAM),
+            from = from,
+            to = to,
+            info = Info(startSeq = routeNo[0].toString().toLong(), endSeq = routeNo[1].toString().toLong()),
+            displaySeq = displaySeq,
             updateTime = t
         )
     }
 
     private fun toChildRoute(parentRoute: Route,
                              bound: Long,
-                             variant: Long,
-                             to: StringLang,
                              t: Long): Route
     {
         return Route(
-            routeKey = parentRoute.routeKey.copy(bound = bound, variant = variant),
+            routeKey = parentRoute.routeKey.copy(bound = bound, variant = 1L),
             direction = parentRoute.childDirection,
             specialCode = parentRoute.specialCode,
             companyDetails = parentRoute.companyDetails,
-            to = to,
+            from = parentRoute.from,
+            to = parentRoute.to,
+            info = parentRoute.info,
             displaySeq = parentRoute.displaySeq,
             typeSeq = parentRoute.typeSeq,
             updateTime = t
@@ -152,7 +245,7 @@ open class TramConnection(
         return Stop(
             routeKey = route.routeKey.copy(),
             seq = seq,
-            name = StringLang(records[Constants.Stop.TRAM_STOP_RECORD_NAME_TC], records[Constants.Stop.TRAM_STOP_RECORD_NAME_EN], records[Constants.Stop.TRAM_STOP_RECORD_NAME_SC]),
+            name = toName(records),
             to = route.to,
             details = StringLang.newInstance(records[Constants.Stop.TRAM_STOP_RECORD_STOP_ID]),
             latitude = records[Constants.Stop.TRAM_STOP_RECORD_LATITUDE].toDouble(),
@@ -172,6 +265,8 @@ open class TramConnection(
     }
 
     override fun getStops(route: Route, needEtaUpdate: Boolean) {
+        val prefix = "[${route.routeKey}]"
+
         if (needEtaUpdate) {
             val stops = AppHelper.db.stopDao().selectOnce(
                 route.routeKey.company,
@@ -180,7 +275,59 @@ open class TramConnection(
                 route.routeKey.variant)
             updateEta(stops)
         }
-        return
+
+        try {
+            val response = tram.getStops(
+                route = route.routeKey.company,
+                bound = route.info.startSeq.toString(),
+                serviceType = route.info.endSeq.toString()).execute()
+
+            logd("$prefix isSuccessful = ${response.isSuccessful}")
+
+            if (response.isSuccessful) {
+                GlobalScope.launch(Dispatchers.Default) {
+                    val t = Utils.getCurrentTimestamp()
+                    val kmbStopsRes = response.body()
+                    //logd(kmbStopsRes.toString())
+
+                    // Add Paths to database
+                    if (kmbStopsRes?.data?.route?.lineGeometry != null && kmbStopsRes.data.route.lineGeometry.isNotEmpty()) {
+                        val paths = mutableListOf<Path>()
+
+                        val strPaths = kmbStopsRes.data.route.lineGeometry.replace("{paths:", "")
+                            .replace("}", "")
+                        val arrPaths =
+                            AppHelper.gson.fromJson(strPaths, Array<Array<DoubleArray>>::class.java)
+
+                        var seq = 0L
+                        arrPaths.forEachIndexed { section, arrPaths2 ->
+                            arrPaths2.forEach { point ->
+                                if (point.size == 2) {
+                                    val latLng = Utils.hk1980GridToLatLng(point[1], point[0])
+                                    paths.add(toPath(route, latLng, seq++, section.toLong(), t))
+                                }
+                            }
+                        }
+
+                        logd("$prefix paths response ${paths.size}")
+                        AppHelper.db.pathDao().insertOrUpdate(route, paths, t)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            loge("getStops failed!", e)
+        }
+    }
+
+    private fun toPath(route: Route, latLng: LatLng, seq: Long, section: Long, t: Long): Path {
+        val path = Path(
+            routeKey = route.routeKey.copy(),
+            seq = seq,
+            section = section,
+            updateTime = t
+        )
+        path.latLng = latLng
+        return path
     }
 
     /**
@@ -251,14 +398,16 @@ open class TramConnection(
     }
 
     private fun toEtaResult(stop: Stop, element: Element): EtaResult {
-        val etaTime = Utils.dateStrToTimestamp(element.attr(Constants.Eta.TRAM_ETA_RECORD_ETA_TIME), "MMM dd yyyy  h:mma")
-        val msg = Utils.timestampToTimeStr(etaTime) + " " + AppHelper.getString(R.string.to) + element.attr(Constants.Eta.TRAM_ETA_RECORD_DEST_TC)
+        val etaTime = Utils.dateStrToTimestamp(element.attr(Constants.Eta.TRAM_ETA_RECORD_ETA_TIME), "MMM d yyyy h:mma")
+        val msg = Utils.timestampToTimeStr(etaTime) + " " + AppHelper.getString(R.string.to) + Utils.phaseFromTo(element.attr(Constants.Eta.TRAM_ETA_RECORD_DEST_TC))
 
         return EtaResult(
             company = stop.routeKey.company,
             etaTime = etaTime,
             msg = Utils.timeStrToMsg(msg),
             scheduleOnly = false,
-            gps = true)
+            gps = true,
+            wifi = element.attr(Constants.Eta.TRAM_ETA_RECORD_DEST_CODE).startsWith("HVT")   // changed to store if dest is HVT
+        )
     }
 }

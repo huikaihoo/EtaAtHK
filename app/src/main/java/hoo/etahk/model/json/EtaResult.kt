@@ -5,7 +5,6 @@ import android.widget.TextView
 import hoo.etahk.R
 import hoo.etahk.common.Constants
 import hoo.etahk.common.Constants.Time.ONE_MINUTE_IN_SECONDS
-import hoo.etahk.common.Utils
 import hoo.etahk.common.Utils.getCurrentTimestamp
 import hoo.etahk.common.extensions.prependImage
 import hoo.etahk.common.helper.AppHelper
@@ -17,7 +16,7 @@ data class EtaResult(
     var scheduleOnly: Boolean = false,
     var gps: Boolean = false,
     var variant: Long = 0L,
-    var wifi: Boolean = false,      // changed to store wheelchair
+    var wifi: Boolean = false,      // changed to store wheelchair (Bus) / if dest is HVT (Tram)
     var capacity: Long = -1L,
     var distance: Long = 0L
 ) {
@@ -60,11 +59,15 @@ data class EtaResult(
             }
         }
         if (wifi) {
-            text = tv.prependImage(R.drawable.ic_text_wheelchair, text)
+            text = if (company == Constants.Company.TRAM) {
+                tv.prependImage(R.drawable.ic_text_horse, text)
+            } else {
+                tv.prependImage(R.drawable.ic_text_wheelchair, text)
+            }
         }
-        if (valid && capacity >= 0L) {
-            text = tv.prependImage(Utils.getCapacityResId(capacity), text)
-        }
+//        if (valid && capacity >= 0L) {
+//            text = tv.prependImage(Utils.getCapacityResId(capacity), text)
+//        }
 
         text.append(getPlainTextMsg())
         return text

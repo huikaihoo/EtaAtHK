@@ -20,12 +20,12 @@ import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.model.data.Route
 import hoo.etahk.view.base.BaseFragment
 import hoo.etahk.view.route.RouteActivity
-import kotlinx.android.synthetic.main.activity_search.fab
+import kotlinx.android.synthetic.main.activity_container_tabs_fab.fab
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.recycler_view
 import kotlinx.android.synthetic.main.fragment_recycler_fast_scroll.view.refresh_layout
 import org.jetbrains.anko.startActivity
 
-class BusSearchFragment : BaseFragment() {
+class SearchFragment : BaseFragment() {
 
     companion object {
         /**
@@ -38,8 +38,8 @@ class BusSearchFragment : BaseFragment() {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        fun newInstance(index: Int): BusSearchFragment {
-            val fragment = BusSearchFragment()
+        fun newInstance(index: Int): SearchFragment {
+            val fragment = SearchFragment()
             val args = Bundle()
             args.putInt(ARG_INDEX, index)
             fragment.arguments = args
@@ -48,18 +48,18 @@ class BusSearchFragment : BaseFragment() {
     }
 
     private lateinit var rootView: View
-    private lateinit var viewModel: BusSearchViewModel
-    private lateinit var fragmentViewModel: BusSearchFragmentViewModel
-    private var busRoutesAdapter: BusRoutesAdapter = BusRoutesAdapter()
+    private lateinit var viewModel: SearchViewModel
+    private lateinit var fragmentViewModel: SearchFragmentViewModel
+    private var searchRoutesAdapter: SearchRoutesAdapter = SearchRoutesAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        busRoutesAdapter.context = this
+        searchRoutesAdapter.context = this
 
-        viewModel = ViewModelProviders.of(activity!!).get(BusSearchViewModel::class.java)
-        fragmentViewModel = ViewModelProviders.of(this).get(BusSearchFragmentViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(SearchViewModel::class.java)
+        fragmentViewModel = ViewModelProviders.of(this).get(SearchFragmentViewModel::class.java)
 
-        fragmentViewModel.index = arguments!!.getInt(ARG_INDEX)
+        fragmentViewModel.config = viewModel.configList[arguments!!.getInt(ARG_INDEX)]
 
         rootView = inflater.inflate(R.layout.fragment_recycler_fast_scroll, container, false)
 
@@ -72,8 +72,8 @@ class BusSearchFragment : BaseFragment() {
             )
         )
 
-        rootView.recycler_view.setPopupBgColor(BusSearchActivity.searchList[fragmentViewModel.index].color.colorPrimaryAccent)
-        rootView.recycler_view.setThumbColor(BusSearchActivity.searchList[fragmentViewModel.index].color.colorPrimaryAccent)
+        rootView.recycler_view.setPopupBgColor(fragmentViewModel.config!!.color.colorPrimaryAccent)
+        rootView.recycler_view.setThumbColor(fragmentViewModel.config!!.color.colorPrimaryAccent)
         rootView.recycler_view.setOnFastScrollStateChangeListener(object: OnFastScrollStateChangeListener{
             override fun onFastScrollStop() {
                 (activity as BusSearchActivity).fab.show()
@@ -83,10 +83,10 @@ class BusSearchFragment : BaseFragment() {
             }
         })
 
-        rootView.recycler_view.adapter = busRoutesAdapter
+        rootView.recycler_view.adapter = searchRoutesAdapter
 
-        rootView.refresh_layout.setColorSchemeColors(BusSearchActivity.searchList[fragmentViewModel.index].color.colorPrimary)
-        rootView.refresh_layout.isRefreshing = busRoutesAdapter.dataSource.isEmpty()
+        rootView.refresh_layout.setColorSchemeColors(fragmentViewModel.config!!.color.colorPrimary)
+        rootView.refresh_layout.isRefreshing = searchRoutesAdapter.dataSource.isEmpty()
 
         subscribeUiChanges()
 
@@ -180,7 +180,7 @@ class BusSearchFragment : BaseFragment() {
 
     private fun subscribeUiChanges() {
         viewModel.searchText.observe(viewLifecycleOwner, Observer<String> {
-            busRoutesAdapter.filter = it?: ""
+            searchRoutesAdapter.filter = it?: ""
         })
 
         fragmentViewModel.getParentRoutes().observe(viewLifecycleOwner, Observer<List<Route>> {
@@ -189,7 +189,7 @@ class BusSearchFragment : BaseFragment() {
                     rootView.refresh_layout.isRefreshing = false
                     rootView.refresh_layout.isEnabled = false
                 }
-                busRoutesAdapter.dataSource = it
+                searchRoutesAdapter.dataSource = it
             }
         })
     }

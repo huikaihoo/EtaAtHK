@@ -3,6 +3,7 @@
     <string name="app_name">到站預報</string>
     <string name="app_name_full">ETA@HK・香港交通到站預報</string>
     <string name="title_bus_search">巴士路線</string>
+    <string name="title_tram_search">電車路線</string>
     <string name="title_favourite">我的最愛</string>
     <string name="title_history">歷史</string>
     <string name="title_settings">設定</string>
@@ -33,6 +34,8 @@
     <string name="sc_history_l">歷史</string>
     <string name="sc_bus_s">巴士</string>
     <string name="sc_bus_l">巴士</string>
+    <string name="sc_tram_s">電車</string>
+    <string name="sc_tram_l">電車</string>
 
     <!-- Menu -->
     <string name="save">儲存</string>
@@ -115,6 +118,10 @@
     <string name="airport_lantau">機場/大嶼山</string>
     <string name="overnight">通宵</string>
 
+    <!-- Tram Specific -->
+    <string name="westbound">西行線</string>
+    <string name="eastbound">東行線</string>
+
     <!-- Location / Group Name -->
     <string name="stops_nearby">附近車站</string>
     <string name="home">屋企</string>
@@ -126,7 +133,7 @@
     <string name="eta_msg_arriving">即將到達</string>
     <string name="eta_msg_departing">即將離開</string>
     <string name="eta_msg_no_eta_service">沒有到站時間服務</string>
-    <string name="eta_msg_not_in_service_hours">此時段沒有服務</string>
+    <string name="eta_msg_not_in_service_hours">非服務時段</string>
     <string name="eta_msg_service_suspended">暫停服務</string>
     <string name="eta_msg_no_eta_info">沒有到站時間資訊</string>
     <string name="eta_msg_loading">載入中\u2026</string>

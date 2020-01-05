@@ -82,6 +82,10 @@ android {
     }
 }
 
+configurations {
+    all*.exclude group: 'com.google.guava', module: 'listenablefuture'
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -94,8 +98,8 @@ dependencies {
     // Android X Core + Material Design
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.appcompat:appcompat-resources:1.1.0'
-    implementation 'androidx.browser:browser:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+    implementation 'androidx.browser:browser:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'androidx.core:core:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'androidx.drawerlayout:drawerlayout:1.1.0-alpha03'
@@ -111,17 +115,17 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:17.2.0'
-    implementation 'com.google.firebase:firebase-config:19.0.1'
-    implementation 'com.google.firebase:firebase-perf:19.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
+    implementation 'com.google.firebase:firebase-config:19.1.0'
+    implementation 'com.google.firebase:firebase-perf:19.0.4'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // ViewModel + LiveData + Room + Paging
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.1.0'
-    implementation 'androidx.room:room-runtime:2.1.0'
-    kapt 'androidx.room:room-compiler:2.1.0'
-    implementation 'androidx.paging:paging-runtime:2.1.0'
+    implementation 'androidx.room:room-runtime:2.2.3'
+    kapt 'androidx.room:room-compiler:2.2.3'
+    implementation 'androidx.paging:paging-runtime:2.1.1'
 
     // Koin
     implementation "org.koin:koin-android:$koin_version"
@@ -135,7 +139,7 @@ dependencies {
     //implementation 'com.github.huikaihoo:recyclerview-fastscroll:1.0.17-fork.1'
 
     // JSON / HTML Parser
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.jsoup:jsoup:1.12.1'
 
     // Markwon
@@ -144,8 +148,8 @@ dependencies {
     implementation "ru.noties:markwon-view:$markwon_version"
 
     // Retrofit2 (OkHttp3)
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
     //implementation 'com.squareup.okhttp3:okhttp:3.12.1'
 
     // Location Picker
@@ -153,26 +157,26 @@ dependencies {
     implementation('com.github.huikaihoo:leku:6.2.1-lite') {
         exclude group: 'com.google.android.gms'
         exclude group: 'androidx.appcompat'
-        exclude group: 'pl.charmas.android'
     }
 
     // Debug
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
-    debugImplementation 'com.facebook.flipper:flipper:0.23.4'
-    debugImplementation 'com.facebook.soloader:soloader:0.7.0'
+    debugImplementation 'com.facebook.flipper:flipper:0.30.1'
+    debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.30.1'
+    debugImplementation 'com.facebook.soloader:soloader:0.8.0'
     //releaseImplementation 'com.facebook.flipper:flipper-noop:0.23.4'
     releaseImplementation('com.github.theGlenn:flipper-android-no-op:0.2.0') {
         exclude group: 'com.squareup.okhttp3'
+        exclude group: 'pl.charmas.android'
     }
-    //debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
     // Unit Test
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
-    testImplementation 'androidx.room:room-testing:2.1.0'
+    testImplementation 'androidx.room:room-testing:2.2.3'
     testImplementation 'junit:junit:4.12'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutines_version"
-    testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation 'org.robolectric:robolectric:4.3.1'
     testImplementation "org.koin:koin-test:$koin_version"
 
     // Android Unit Test

@@ -1,8 +1,15 @@
 package hoo.etahk.model.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import hoo.etahk.common.Constants.OrderBy
+import hoo.etahk.common.Constants.RouteType
 import hoo.etahk.model.data.Route
 
 @Dao
@@ -74,10 +81,13 @@ abstract class ParentRouteDao {
 
     @Transaction
     open fun insertOrUpdate(routes: List<Route>, updateTime: Long? = null) {
+        val typeCodeFrom = routes.minBy { it.routeKey.typeCode }?.routeKey?.typeCode ?: RouteType.NONE
+        val typeCodeTo = routes.maxBy { it.routeKey.typeCode }?.routeKey?.typeCode ?: RouteType.NONE
+
         insert(routes)
         update(routes)
         if (updateTime != null) {
-            delete(updateTime)
+            delete(typeCodeFrom, typeCodeTo, updateTime)
         }
     }
 
@@ -87,6 +97,8 @@ abstract class ParentRouteDao {
 
     @Query("DELETE FROM route " +
             "WHERE bound = 0 " +
+            "AND typeCode >= :typeCodeFrom " +
+            "AND typeCode <= :typeCodeTo " +
             "AND updateTime < :updateTime")
-    abstract fun delete(updateTime: Long)
+    abstract fun delete(typeCodeFrom: Long, typeCodeTo: Long, updateTime: Long)
 }

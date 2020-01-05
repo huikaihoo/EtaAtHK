@@ -3,7 +3,7 @@ package hoo.etahk.view.search
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.tools.ThemeColor
 
-data class BusRoutesConfig(
+data class SearchTabConfig(
         private val titleResId: Int,
         var routeTypes: List<Long>,
         var orderBy: Long,

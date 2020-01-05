@@ -13,7 +13,7 @@ import hoo.etahk.model.relation.LocationAndGroups
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class FollowPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
+class FollowPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     var dataSource: LocationAndGroups? = null
         set(value) {
             field = value

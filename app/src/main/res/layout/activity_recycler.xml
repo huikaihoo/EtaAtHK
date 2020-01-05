@@ -36,19 +36,4 @@
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <!--
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bnv"
-        android:layout_gravity="bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorBgGrey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/nav_b_fh"
-        app:layout_behavior=".common.view.BottomNavigationBehavior" />
-    -->
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

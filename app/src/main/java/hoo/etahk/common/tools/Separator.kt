@@ -1,10 +1,11 @@
 package hoo.etahk.common.tools
 
-class Separator(val regexRow: Regex,
-                val regexColumn: Regex? = null,
-                val columnSize: Int = 1,
-                val removeBlankRow: Boolean = true,
-                val removeInvalidRow: Boolean = true) {
+class Separator(
+    private val regexRow: Regex,
+    private val regexColumn: Regex? = null,
+    private val columnSize: Int = 1,
+    private val removeBlankRow: Boolean = true,
+    private val removeInvalidRow: Boolean = true) {
 
     var original: String = ""
         set(value) = process(value)
@@ -34,11 +35,11 @@ class Separator(val regexRow: Regex,
                             mutableResult.add(columns)
                         } else if (!removeInvalidRow) {
                             val mutableColumns = columns.toMutableList()
-                            mutableColumns.addAll(Array(columnSize - columns.size, { "" }))
+                            mutableColumns.addAll(Array(columnSize - columns.size) { "" })
                             mutableResult.add(mutableColumns.toList())
                         }
                     } else if (!removeBlankRow){
-                        mutableResult.add(Array(columnSize, { "" }).toList())
+                        mutableResult.add(Array(columnSize) { "" }.toList())
                     }
                 }
             }

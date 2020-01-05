@@ -15,6 +15,19 @@
     </shortcut>
 
     <shortcut
+        android:shortcutId="tram"
+        android:icon="@drawable/ic_shortcut_tram"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/sc_tram_s"
+        android:shortcutLongLabel="@string/sc_tram_l">
+        <intent
+            android:targetPackage="hoo.etahk"
+            android:action="android.intent.action.VIEW"
+            android:targetClass="hoo.etahk.view.search.TramSearchActivity">
+        </intent>
+    </shortcut>
+
+    <shortcut
         android:shortcutId="bus"
         android:icon="@drawable/ic_shortcut_bus"
         android:enabled="true"

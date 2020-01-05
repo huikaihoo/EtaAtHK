@@ -182,8 +182,11 @@ object Constants {
         const val NWFB_ETA_RECORD_MSG = 26
 
         const val TRAM_ETA_RECORD_ETA_TIME = "eat"
+        const val TRAM_ETA_RECORD_DEST_CODE = "dest_stop_code"
         const val TRAM_ETA_RECORD_DEST_TC = "tram_dest_tc"
         const val TRAM_ETA_RECORD_DEST_EN = "tram_dest_en"
+        const val TRAM_ETA_RECORD_IS_LAST = "is_last_tram"
+        const val TRAM_ETA_RECORD_TRAM_ID = "tram_id"
     }
 }
 

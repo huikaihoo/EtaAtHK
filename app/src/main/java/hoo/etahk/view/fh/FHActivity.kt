@@ -29,10 +29,10 @@ import hoo.etahk.model.relation.RouteFavouriteEx
 import hoo.etahk.model.relation.RouteHistoryEx
 import hoo.etahk.view.base.NavActivity
 import hoo.etahk.view.route.RouteActivity
-import kotlinx.android.synthetic.main.activity_fh.recycler_view
-import kotlinx.android.synthetic.main.activity_fh.toolbar
 import kotlinx.android.synthetic.main.activity_fh_nav.bnv
 import kotlinx.android.synthetic.main.activity_fh_nav.nav
+import kotlinx.android.synthetic.main.activity_recycler.recycler_view
+import kotlinx.android.synthetic.main.activity_recycler.toolbar
 import org.jetbrains.anko.startActivity
 
 class FHActivity : NavActivity() {
@@ -214,7 +214,7 @@ class FHActivity : NavActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_fh, menu)
+        menuInflater.inflate(R.menu.menu_default_shortcut, menu)
         return true
     }
 

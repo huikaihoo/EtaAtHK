@@ -51,7 +51,7 @@ class RouteHistoryDiffCallback : DiffUtil.ItemCallback<RouteHistoryEx>() {
             true -> (oldItem.route!!.from == newItem.route!!.from &&
                      oldItem.route!!.direction == newItem.route!!.direction &&
                      oldItem.route!!.to == newItem.route!!.to &&
-                     oldItem.route!!.getCompanyDesc() == newItem.route!!.getCompanyDesc())
+                     oldItem.route!!.getCompanyDisplay() == newItem.route!!.getCompanyDisplay())
             false -> areItemsTheSame(oldItem, newItem)
         }
     }

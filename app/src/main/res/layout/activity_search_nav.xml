@@ -9,7 +9,7 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/activity_search"
+        layout="@layout/activity_container_tabs_fab"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

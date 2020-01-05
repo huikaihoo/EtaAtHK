@@ -35,9 +35,9 @@ class FavouriteAdapter : BasePagedAdapter<FHActivity, RouteFavouriteEx>(RouteFav
                 itemView.from_to.text = "NOT EXIST"
                 itemView.route_company.text = Utils.getStringResourceByName(favourite.company)
             } else {
-                itemView.route_no.text = route.routeKey.routeNo
+                itemView.route_no.text = route.routeKey.getRouteNoDisplay()
                 itemView.from_to.text = route.from.value + route.getDirectionArrow() + route.to.value
-                itemView.route_company.text = route.getCompanyDesc()
+                itemView.route_company.text = route.getCompanyDisplay()
 
                 itemView.setOnClickListener {
                     if (route.companyDetails.size > 1) {

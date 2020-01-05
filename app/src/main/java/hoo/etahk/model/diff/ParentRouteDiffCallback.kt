@@ -42,6 +42,6 @@ class ParentRouteDiffCallback(oldData: List<Route>, newData: List<Route>): BaseD
         return (oldItem.from == newItem.from &&
                 oldItem.direction == newItem.direction &&
                 oldItem.to == newItem.to &&
-                oldItem.getCompanyDesc() == newItem.getCompanyDesc())
+                oldItem.getCompanyDisplay() == newItem.getCompanyDisplay())
     }
 }

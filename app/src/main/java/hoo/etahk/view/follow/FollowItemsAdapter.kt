@@ -46,7 +46,7 @@ class FollowItemsAdapter : DiffAdapter<FollowFragment, ItemAndStop>(), ItemTouch
                 val etaStatus = stop.etaStatus
                 val etaResults = stop.etaResults
 
-                itemView.stop_title.text = stop.routeKey.getCompanyName() + " " + stop.routeKey.routeNo
+                itemView.stop_title.text = stop.routeKey.getCompanyName() + " " + stop.routeKey.getRouteNoDisplay()
                 itemView.stop_desc.text = stop.name.value + " " + AppHelper.getString(R.string.to_prefix) + stop.to.value
                 if (stop.fare > 0) {
                     itemView.fare.text = AppHelper.getString(R.string.price_2dp).format(stop.fare)

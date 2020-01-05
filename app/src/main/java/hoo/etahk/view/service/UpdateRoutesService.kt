@@ -42,6 +42,7 @@ class UpdateRoutesService: Service() {
                         SharedPrefsHelper.putFromRemote(R.string.param_gist_id_kmb, "")
                         SharedPrefsHelper.putFromRemote(R.string.param_gist_id_nwfb, "")
                         SharedPrefsHelper.putFromRemote(R.string.param_gist_id_mtrb, "")
+                        SharedPrefsHelper.putFromRemote(R.string.param_enable_tram_list, true)
                     }
                     RoutesRepo.updateParentRoutes()
                     logd("Finish working thread (Complete)")

@@ -29,12 +29,13 @@ class HistoryAdapter : BasePagedAdapter<FHActivity, RouteHistoryEx>(RouteHistory
             val route = if (dataSource.isEmpty()) null else dataSource[0].route
             val history = dataSource[0].history
 
-            itemView.route_no.text = history.routeNo
             itemView.route_company.text = Utils.getStringResourceByName(history.company.toLowerCase())
 
             if (route == null) {
+                itemView.route_no.text = history.routeNo
                 itemView.from_to.text = "NOT EXIST"
             } else {
+                itemView.route_no.text = route.routeKey.getRouteNoDisplay()
                 itemView.from_to.text = route.from.value + route.getDirectionArrow() + route.to.value
 
                 val routeKey = RouteKey(

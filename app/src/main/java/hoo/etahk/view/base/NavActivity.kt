@@ -21,11 +21,10 @@ import hoo.etahk.common.constants.SharedPrefs
 import hoo.etahk.common.extensions.startActivity
 import hoo.etahk.view.fh.FHActivity
 import hoo.etahk.view.follow.FollowActivity
-import hoo.etahk.view.route.RouteActivity
 import hoo.etahk.view.search.BusSearchActivity
+import hoo.etahk.view.search.TramSearchActivity
 import hoo.etahk.view.settings.SettingsActivity
 import kotlinx.android.synthetic.main.nav_header.view.nav_last_update
-import org.jetbrains.anko.startActivity
 
 abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -94,6 +93,11 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
         menu.findItem(R.id.nav_mtr).isEnabled = SharedPrefs.enableMtrList
     }
 
+    override fun onResume() {
+        super.onResume()
+        initNavigationItems()
+    }
+
     /**
      * Take care of popping the fragment back stack or finishing the activity
      * as appropriate.
@@ -131,14 +135,7 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
 
             }
             R.id.nav_tram -> {
-                startActivity<RouteActivity>(
-                    Argument.ARG_COMPANY to Constants.Company.TRAM,
-                    Argument.ARG_ROUTE_NO to "TRAM",
-                    Argument.ARG_TYPE_CODE to Constants.RouteType.TRAM,
-                    Argument.ARG_ANOTHER_COMPANY to "",
-                    Argument.ARG_GOTO_BOUND to -1L,
-                    Argument.ARG_GOTO_SEQ to -1L
-                )
+                startActivity<TramSearchActivity>(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             }
             R.id.nav_mtr -> {
 
@@ -152,6 +149,6 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
         }
 
         drawer.closeDrawer(GravityCompat.START)
-        return true
+        return false
     }
 }

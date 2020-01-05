@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.item_route.view.route_company
 import kotlinx.android.synthetic.main.item_route.view.route_no
 import org.jetbrains.anko.startActivity
 
-class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
+class SearchRoutesAdapter : FilterDiffAdapter<SearchFragment, Route>(), FastScrollRecyclerView.SectionedAdapter {
 
     init {
         useDiff = false
@@ -30,15 +30,15 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
 
     override fun instantiateViewHolder(view: View, viewType: Int): ViewHolder = ViewHolder(view)
 
-    class ViewHolder(itemView: View) : BaseViewHolder<BusSearchFragment, Route>(itemView) {
+    class ViewHolder(itemView: View) : BaseViewHolder<SearchFragment, Route>(itemView) {
 
         @SuppressLint("SetTextI18n")
-        override fun onBind(context: BusSearchFragment?, position: Int, dataSource: List<Route>) {
+        override fun onBind(context: SearchFragment?, position: Int, dataSource: List<Route>) {
             val route = dataSource[position]
 
-            itemView.route_no.text = route.routeKey.routeNo
+            itemView.route_no.text = route.routeKey.getRouteNoDisplay()
             itemView.from_to.text = route.from.value + route.getDirectionArrow() + route.to.value
-            itemView.route_company.text = route.getCompanyDesc()
+            itemView.route_company.text = route.getCompanyDisplay()
 
             itemView.setOnClickListener {
                 if (route.companyDetails.size > 1) {
@@ -54,7 +54,7 @@ class BusRoutesAdapter : FilterDiffAdapter<BusSearchFragment, Route>(), FastScro
             itemView.setOnLongClickListener { context?.showRoutePopupMenu(itemView, route); true }
         }
 
-        private fun startRouteActivity(context: BusSearchFragment?, routeKey: RouteKey, company: String, anotherCompany: String = ""){
+        private fun startRouteActivity(context: SearchFragment?, routeKey: RouteKey, company: String, anotherCompany: String = ""){
             context?.activity?.startActivity<RouteActivity>(
                 Argument.ARG_COMPANY to company,
                 Argument.ARG_ROUTE_NO to routeKey.routeNo,

@@ -2,6 +2,7 @@
     <string name="app_name">ETA@HK</string>
     <string name="app_name_full">ETA@HK</string>
     <string name="title_bus_search">Bus Routes</string>
+    <string name="title_tram_search">Tram Routes</string>
     <string name="title_favourite">Favourite</string>
     <string name="title_history">History</string>
     <string name="title_settings">Settings</string>
@@ -11,6 +12,7 @@
     <string name="aan_sc_favourite" translatable="false">.Shortcut.Favourite</string>
     <string name="aan_sc_history" translatable="false">.Shortcut.History</string>
     <string name="aan_sc_bus" translatable="false">.Shortcut.Bus</string>
+    <string name="aan_sc_tram" translatable="false">.Shortcut.Tram</string>
 
     <!-- Notification Channel -->
     <string name="nc_id_update_routes" translatable="false">update_routes</string>
@@ -43,6 +45,8 @@
     <string name="sc_history_l">History</string>
     <string name="sc_bus_s">Bus</string>
     <string name="sc_bus_l">Bus Routes</string>
+    <string name="sc_tram_s">Tram</string>
+    <string name="sc_tram_l">Tram Routes</string>
 
     <!-- Menu -->
     <string name="save">Save</string>
@@ -131,6 +135,10 @@
     <string name="airport_lantau">Airport/Lantau</string>
     <string name="overnight">Overnight</string>
 
+    <!-- Tram Specific -->
+    <string name="westbound">Westbound</string>
+    <string name="eastbound">Eastbound</string>
+
     <!-- Location / Group Name -->
     <string name="stops_nearby">Stops Nearby</string>
     <string name="home">Home</string>
@@ -210,7 +218,7 @@
     <string name="pref_parameters" translatable="false">parameters</string>
 
     <!-- General Preference [not translatable] -->
-    <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018-2019</string>
+    <string name="pref_summary_app_name" translatable="false">Simon Hui \u00A9 2018-2020</string>
     <string name="play_store_app_url" translatable="false">market://details?id=</string>
     <string name="play_store_developer_url" translatable="false">market://search?q=pub:Simon+Hui</string>
     <string name="github_url" translatable="false">https://github.com/huikaihoo/EtaAtHK/</string>

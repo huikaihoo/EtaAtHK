@@ -19,53 +19,55 @@ import hoo.etahk.common.extensions.createShortcut
 import hoo.etahk.common.extensions.tag
 import hoo.etahk.common.tools.ThemeColor
 import hoo.etahk.view.base.NavActivity
-import kotlinx.android.synthetic.main.activity_search.appbar
-import kotlinx.android.synthetic.main.activity_search.container
-import kotlinx.android.synthetic.main.activity_search.fab
-import kotlinx.android.synthetic.main.activity_search.tabs
-import kotlinx.android.synthetic.main.activity_search.toolbar
+import kotlinx.android.synthetic.main.activity_container_tabs_fab.appbar
+import kotlinx.android.synthetic.main.activity_container_tabs_fab.container
+import kotlinx.android.synthetic.main.activity_container_tabs_fab.fab
+import kotlinx.android.synthetic.main.activity_container_tabs_fab.tabs
+import kotlinx.android.synthetic.main.activity_container_tabs_fab.toolbar
 import kotlinx.android.synthetic.main.activity_search_nav.nav
 
 class BusSearchActivity : NavActivity() {
 
     companion object {
-        val availableIndices = listOf(0, 1, 2, 3, 4, 5)
+        val availableIndices: List<Int> by lazy{ listOf(0, 1, 2, 3, 4, 5) }
 
-        val searchList = listOf(
+        val configList: List<SearchTabConfig> by lazy {
+            listOf(
                 // ALL
-                BusRoutesConfig(R.string.all,
-                        listOf(RouteType.BUS_KL_NT, RouteType.BUS_KL_NT_NIGHT,
-                                RouteType.BUS_HKI, RouteType.BUS_HKI_NIGHT,
-                                RouteType.BUS_CROSS_HARBOUR, RouteType.BUS_CROSS_HARBOUR_NIGHT,
-                                RouteType.BUS_AIRPORT_LANTAU, RouteType.BUS_AIRPORT_LANTAU_NIGHT),
-                        OrderBy.BUS,
-                        ThemeColor(R.color.colorAll, R.color.colorAllDark, R.color.colorAllAccent)),
+                SearchTabConfig(R.string.all,
+                    listOf(RouteType.BUS_KL_NT, RouteType.BUS_KL_NT_NIGHT,
+                        RouteType.BUS_HKI, RouteType.BUS_HKI_NIGHT,
+                        RouteType.BUS_CROSS_HARBOUR, RouteType.BUS_CROSS_HARBOUR_NIGHT,
+                        RouteType.BUS_AIRPORT_LANTAU, RouteType.BUS_AIRPORT_LANTAU_NIGHT),
+                    OrderBy.BUS,
+                    ThemeColor(R.color.colorAll, R.color.colorAllDark, R.color.colorAllAccent)),
                 // KLN / NT
-                BusRoutesConfig(R.string.kln_nt,
-                        listOf(RouteType.BUS_KL_NT, RouteType.BUS_KL_NT_NIGHT),
-                        OrderBy.TYPE_SEQ,
-                        ThemeColor(R.color.colorKmb, R.color.colorKmbDark, R.color.colorKmbAccent)),
+                SearchTabConfig(R.string.kln_nt,
+                    listOf(RouteType.BUS_KL_NT, RouteType.BUS_KL_NT_NIGHT),
+                    OrderBy.TYPE_SEQ,
+                    ThemeColor(R.color.colorKmb, R.color.colorKmbDark, R.color.colorKmbAccent)),
                 // HK Island
-                BusRoutesConfig(R.string.hki,
-                        listOf(RouteType.BUS_HKI, RouteType.BUS_HKI_NIGHT),
-                        OrderBy.TYPE_SEQ,
-                        ThemeColor(R.color.colorHki, R.color.colorHkiDark, R.color.colorHkiAccent)),
+                SearchTabConfig(R.string.hki,
+                    listOf(RouteType.BUS_HKI, RouteType.BUS_HKI_NIGHT),
+                    OrderBy.TYPE_SEQ,
+                    ThemeColor(R.color.colorHki, R.color.colorHkiDark, R.color.colorHkiAccent)),
                 // Cross Harbour
-                BusRoutesConfig(R.string.cross_harbour,
-                        listOf(RouteType.BUS_CROSS_HARBOUR, RouteType.BUS_CROSS_HARBOUR_NIGHT),
-                        OrderBy.TYPE_SEQ,
-                        ThemeColor(R.color.colorCrossHarbour, R.color.colorCrossHarbourDark, R.color.colorCrossHarbourAccent)),
+                SearchTabConfig(R.string.cross_harbour,
+                    listOf(RouteType.BUS_CROSS_HARBOUR, RouteType.BUS_CROSS_HARBOUR_NIGHT),
+                    OrderBy.TYPE_SEQ,
+                    ThemeColor(R.color.colorCrossHarbour, R.color.colorCrossHarbourDark, R.color.colorCrossHarbourAccent)),
                 // Lantau + Airport
-                BusRoutesConfig(R.string.airport_lantau,
-                        listOf(RouteType.BUS_AIRPORT_LANTAU, RouteType.BUS_AIRPORT_LANTAU_NIGHT),
-                        OrderBy.TYPE_SEQ,
-                        ThemeColor(R.color.colorNlb, R.color.colorNlbDark, R.color.colorNlbAccent)),
+                SearchTabConfig(R.string.airport_lantau,
+                    listOf(RouteType.BUS_AIRPORT_LANTAU, RouteType.BUS_AIRPORT_LANTAU_NIGHT),
+                    OrderBy.TYPE_SEQ,
+                    ThemeColor(R.color.colorNlb, R.color.colorNlbDark, R.color.colorNlbAccent)),
                 // Overnight
-                BusRoutesConfig(R.string.overnight,
-                        listOf(RouteType.BUS_KL_NT_NIGHT, RouteType.BUS_HKI_NIGHT, RouteType.BUS_CROSS_HARBOUR_NIGHT, RouteType.BUS_AIRPORT_LANTAU_NIGHT),
-                        OrderBy.SEQ,
-                        ThemeColor(R.color.colorNight, R.color.colorNightDark, R.color.colorNightAccent))
-        )
+                SearchTabConfig(R.string.overnight,
+                    listOf(RouteType.BUS_KL_NT_NIGHT, RouteType.BUS_HKI_NIGHT, RouteType.BUS_CROSS_HARBOUR_NIGHT, RouteType.BUS_AIRPORT_LANTAU_NIGHT),
+                    OrderBy.SEQ,
+                    ThemeColor(R.color.colorNight, R.color.colorNightDark, R.color.colorNightAccent))
+            )
+        }
     }
 
     init {
@@ -81,7 +83,7 @@ class BusSearchActivity : NavActivity() {
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var pagerAdapter: BusSearchPagerAdapter? = null
-    private lateinit var viewModel: BusSearchViewModel
+    private lateinit var viewModel: SearchViewModel
 
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
@@ -92,11 +94,15 @@ class BusSearchActivity : NavActivity() {
 
         setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProviders.of(this).get(BusSearchViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
 
+        viewModel.configList = configList
         if (viewModel.selectedTabPosition == -1)
-            viewModel.selectedTabPosition = 0 // TODO(" Pass argument to Activity to set the default open tab")
+            viewModel.selectedTabPosition = 0 // TODO("Pass argument to Activity to set the default open tab")
+
         changeColor(viewModel.selectedTabPosition, viewModel.selectedTabPosition)
+
+        super.initNavigationDrawer()
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -104,7 +110,7 @@ class BusSearchActivity : NavActivity() {
 
         // Set up the ViewPager with the sections adapter.
         container.adapter = pagerAdapter
-        container.offscreenPageLimit = searchList.size
+        container.offscreenPageLimit = configList.size
 
         tabs.setupWithViewPager(container)
         tabs.addOnTabSelectedListener(object : TabLayout.ViewPagerOnTabSelectedListener(container) {
@@ -114,7 +120,7 @@ class BusSearchActivity : NavActivity() {
                 val oldTabPosition = viewModel.selectedTabPosition
                 val newTabPosition = tab.position
 
-                if (oldTabPosition in 0 until searchList.size) {
+                if (oldTabPosition in configList.indices) {
                     changeColor(oldTabPosition, newTabPosition)
                 }
 
@@ -128,8 +134,6 @@ class BusSearchActivity : NavActivity() {
             searchMenuItem?.expandActionView()
             searchView?.requestFocus()
         }
-
-        super.initNavigationDrawer()
 
         subscribeUiChanges()
     }
@@ -226,20 +230,20 @@ class BusSearchActivity : NavActivity() {
     }
 
     private fun changeColor(from: Int, to: Int) {
-        when (to in 0 until searchList.size) {
+        when (to in configList.indices) {
             true -> {
                 // Change Task list color
-                super.setTaskDescription(searchList[to].color.colorPrimaryDark)
-                when (from in 0 until searchList.size || from == to) {
+                super.setTaskDescription(configList[to].color.colorPrimaryDark)
+                when (from in configList.indices || from == to) {
                     true -> {
                         /**
                          * Source: https://stackoverflow.com/questions/28547820/how-can-i-change-the-action-bar-colour-with-animation
                          */
                         // Index changes > change color with animation
                         val colorAnimations = listOf(
-                                ValueAnimator.ofObject(ArgbEvaluator(), searchList[from].color.colorPrimary, searchList[to].color.colorPrimary),
-                                ValueAnimator.ofObject(ArgbEvaluator(), searchList[from].color.colorPrimaryDark, searchList[to].color.colorPrimaryDark),
-                                ValueAnimator.ofObject(ArgbEvaluator(), searchList[from].color.colorPrimaryAccent, searchList[to].color.colorPrimaryAccent)
+                            ValueAnimator.ofObject(ArgbEvaluator(), configList[from].color.colorPrimary, configList[to].color.colorPrimary),
+                            ValueAnimator.ofObject(ArgbEvaluator(), configList[from].color.colorPrimaryDark, configList[to].color.colorPrimaryDark),
+                            ValueAnimator.ofObject(ArgbEvaluator(), configList[from].color.colorPrimaryAccent, configList[to].color.colorPrimaryAccent)
                         )
 
                         colorAnimations[0].addUpdateListener { animator ->
@@ -265,9 +269,9 @@ class BusSearchActivity : NavActivity() {
                     }
                     false -> {
                         // Invalid from index / No index changes > change color without animation
-                        appbar.setBackgroundColor(searchList[to].color.colorPrimary)
-                        toolbar.setBackgroundColor(searchList[to].color.colorPrimary)
-                        window.statusBarColor = searchList[to].color.colorPrimaryDark
+                        appbar.setBackgroundColor(configList[to].color.colorPrimary)
+                        toolbar.setBackgroundColor(configList[to].color.colorPrimary)
+                        window.statusBarColor = configList[to].color.colorPrimaryDark
                     }
                 }
             }

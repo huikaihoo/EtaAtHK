@@ -17,6 +17,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.sin
+import kotlin.math.sqrt
+import kotlin.math.tan
 
 
 object Utils {
@@ -67,8 +72,7 @@ object Utils {
     }
 
     fun getStringResourceByName(name: String): String {
-        val resId = App.instance.applicationContext.resources.getIdentifier(name, "string", App.instance.packageName)
-        return when (resId) {
+        return when (val resId = App.instance.applicationContext.resources.getIdentifier(name, "string", App.instance.packageName)) {
             0 -> ""
             else -> AppHelper.getString(resId)
         }
@@ -97,9 +101,9 @@ object Utils {
         val a = 6378388.0
         val e2 = 6.722670022e-3
 
-        val A0 = 1.0 - e2 / 4.0 - 3.0 * Math.pow(e2, 2.0) / 64.0
-        val A2 = 3.0 / 8.0 * (e2 + Math.pow(e2, 2.0) / 4.0)
-        val A4 = 15.0 / 256.0 * Math.pow(e2, 2.0)
+        val A0 = 1.0 - e2 / 4.0 - 3.0 * e2.pow(2.0) / 64.0
+        val A2 = 3.0 / 8.0 * (e2 + e2.pow(2.0) / 4.0)
+        val A4 = 15.0 / 256.0 * e2.pow(2.0)
         val delta_N = n - N0
 
         // 2. iterations
@@ -107,11 +111,11 @@ object Utils {
 
         var fa = 0.5
         val fd = 1e-30
-        var fb = ((delta_N + M0) / m0 / a + A2 * Math.sin(2 * fa) - A4 * Math.sin(4 * fa)) / A0
+        var fb = ((delta_N + M0) / m0 / a + A2 * sin(2 * fa) - A4 * sin(4 * fa)) / A0
         var k = 0
         while (fa - fb > fd || fa - fb < -1 * fd) {
             fa = fb
-            fb = ((delta_N + M0) / m0 / a + A2 * Math.sin(2 * fa) - A4 * Math.sin(4 * fa)) / A0
+            fb = ((delta_N + M0) / m0 / a + A2 * sin(2 * fa) - A4 * sin(4 * fa)) / A0
             if (++k > 1000) {
                 Log.d("hk1980GridToLatLng", "The equation does not converge. Computation Stopped.")
                 fb = 0.0
@@ -124,18 +128,18 @@ object Utils {
         //  a*(A0 * phi_rou - A2 * sin(2 * phi_rou) + A4 * sin(4*phi_rou))
         // (delta_N + M0) / m0
 
-        val t_rou = Math.tan(phi_rou)
-        val niu_rou = a / Math.sqrt(1.0 - e2 * Math.pow(Math.sin(phi_rou), 2.0))
-        val rou_rou = a * (1.0 - e2) / Math.pow(1 - e2 * Math.pow(Math.sin(phi_rou), 2.0), 1.5)
+        val t_rou = tan(phi_rou)
+        val niu_rou = a / sqrt(1.0 - e2 * sin(phi_rou).pow(2.0))
+        val rou_rou = a * (1.0 - e2) / (1 - e2 * sin(phi_rou).pow(2.0)).pow(1.5)
         val psi_rou = niu_rou / rou_rou
 
         val delta_E = e - E0
 
         // Equation 4
-        val lambda = lambda0 / (180.0 / Math.PI) + 1.0 / Math.cos(phi_rou) * (delta_E / (m0 * niu_rou)) - 1 / Math.cos(phi_rou) * (Math.pow(delta_E, 3.0) / (6.0 * Math.pow(m0, 3.0) * Math.pow(niu_rou, 3.0))) * (psi_rou + 2 * Math.pow(t_rou, 2.0))
+        val lambda = lambda0 / (180.0 / Math.PI) + 1.0 / cos(phi_rou) * (delta_E / (m0 * niu_rou)) - 1 / cos(phi_rou) * (delta_E.pow(3.0) / (6.0 * m0.pow(3.0) * niu_rou.pow(3.0))) * (psi_rou + 2 * t_rou.pow(2.0))
 
         // Equation 5
-        val phi = phi_rou - t_rou / (m0 * rou_rou) * (Math.pow(delta_E, 2.0) / (2.0 * m0 * niu_rou))
+        val phi = phi_rou - t_rou / (m0 * rou_rou) * (delta_E.pow(2.0) / (2.0 * m0 * niu_rou))
 
         var latitude = phi * (180.0 / Math.PI)
         var longitude = lambda * (180.0 / Math.PI)
@@ -225,10 +229,10 @@ object Utils {
 
     fun replaceSpecialCharacters(str: String): String {
         return str.replace("\uE473".toRegex(), "邨")
-                .replace("\uE2B4".toRegex(), "璧")
-                .replace("\uE88C".toRegex(), "埗")
-                .replace("\uE1D0".toRegex(), "栢")
-                .replace("\uE05E".toRegex(), "匯")
+            .replace("\uE2B4".toRegex(), "璧")
+            .replace("\uE88C".toRegex(), "埗")
+            .replace("\uE1D0".toRegex(), "栢")
+            .replace("\uE05E".toRegex(), "匯")
     }
 
     fun phaseFromTo(str: String): String {
@@ -252,14 +256,15 @@ object Utils {
     fun timeStrToMsg(timeStr: String): String {
         // TODO("Need to Support English")
         return replaceSpecialCharacters(timeStr)
-                .replace("　".toRegex(), " ")
-                .replace("班次".toRegex(), "")
-                .replace("時段".toRegex(), "")
-                .replace("預定".toRegex(), "")
-                .replace("距離.*公里".toRegex(), "")
-                .replace("未開出".toRegex(), "")
-                .replace("預計時間".toRegex(), "")
-                .trim()
+            .replace("　".toRegex(), " ")
+            .replace("班次".toRegex(), "")
+            .replace("時段".toRegex(), "")
+            .replace("預定".toRegex(), "")
+            .replace("距離.*公里".toRegex(), "")
+            .replace("未開出".toRegex(), "")
+            .replace("預計時間".toRegex(), "")
+            .replace("此路線".toRegex(), "")
+            .trim()
     }
 
     /**

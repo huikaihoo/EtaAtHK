@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/activity_fh"
+            layout="@layout/activity_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />

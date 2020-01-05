@@ -7,13 +7,13 @@ import hoo.etahk.model.data.RouteKey
 import hoo.etahk.transfer.repo.MiscRepo
 import hoo.etahk.transfer.repo.RoutesRepo
 
-class BusSearchFragmentViewModel : ViewModel() {
+class SearchFragmentViewModel : ViewModel() {
     private var parentRoutes: LiveData<List<Route>>? = null
 
-    var index: Int = -1
+    var config: SearchTabConfig? = null
         set(value) {
             field = value
-            if (value >= 0)
+            if (value != null)
                 subscribeToRepo()
         }
 
@@ -26,7 +26,6 @@ class BusSearchFragmentViewModel : ViewModel() {
     }
 
     private fun subscribeToRepo() {
-        val config = BusSearchActivity.searchList[index]
-        parentRoutes = RoutesRepo.getParentRoutes(config.routeTypes, config.orderBy)
+        parentRoutes = RoutesRepo.getParentRoutes(config!!.routeTypes, config!!.orderBy)
     }
 }

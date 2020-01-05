@@ -18,7 +18,7 @@ class TramConnectionUnitTest: BaseUnitTest() {
 
     private val tramConnection: TramConnection by inject()
 
-    private val routeNo = "TRAM"
+    private val routeNo = "21"
     private val bound = 1L
     private val variant = 1L
 

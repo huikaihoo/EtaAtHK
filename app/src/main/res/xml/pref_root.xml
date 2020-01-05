@@ -122,7 +122,7 @@
             android:key="@string/pref_parameters"
             android:title="@string/pref_title_parameters"
             android:summary="@string/pref_summary_parameters"
-            app:fragment="hoo.etahk.view.settings.ParametersSettingsFragment" />
+            app:fragment="hoo.etahk.view.settings.ParametersPrefFragment" />
 
     </PreferenceCategory>
 

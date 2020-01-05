@@ -11,7 +11,7 @@ import hoo.etahk.BuildConfig
 import hoo.etahk.R
 import hoo.etahk.common.extensions.startCustomTabs
 import hoo.etahk.view.base.BaseActivity
-import kotlinx.android.synthetic.main.activity_follow.toolbar
+import kotlinx.android.synthetic.main.activity_settings.toolbar
 
 class SettingsActivity : BaseActivity() {
 

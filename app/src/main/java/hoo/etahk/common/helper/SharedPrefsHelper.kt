@@ -35,7 +35,7 @@ object SharedPrefsHelper {
             remote.setConfigSettingsAsync(FirebaseRemoteConfigSettings.Builder()
                 .setMinimumFetchIntervalInSeconds(minimumFetchInterval)
                 .build())
-            remote.setDefaults(R.xml.remote_config_defaults)
+            remote.setDefaultsAsync(R.xml.remote_config_defaults)
         }
     }
 
@@ -76,7 +76,7 @@ object SharedPrefsHelper {
     inline fun <reified T> putFromRemote(@StringRes resId: Int, ignoreValue: T) {
         if (get(R.string.param_enable_remote_config, true)) {
             val remoteValue = remote.get<T>(AppHelper.getString(resId))
-            if (remoteValue != ignoreValue) {
+            if (T::class == Boolean::class || remoteValue != ignoreValue) {
                 put(resId, remote.get<T>(AppHelper.getString(resId)))
             }
         }
