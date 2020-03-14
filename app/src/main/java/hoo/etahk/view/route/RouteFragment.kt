@@ -53,15 +53,20 @@ class RouteFragment : BaseFragment() {
         }
     }
 
+    val childRoutes
+        get() = fragmentViewModel.getChildRoutes().value
+    var selectedIndex
+        get () = fragmentViewModel.selectedIndex
+        set (value) { fragmentViewModel.selectedIndex = value }
+    var isGotoSeqUsed
+        get() = viewModel.isGotoSeqUsed
+        set(value) { viewModel.isGotoSeqUsed = value }
+
     private lateinit var rootView: View
     private lateinit var viewModel: RouteViewModel
     private lateinit var fragmentViewModel: RouteFragmentViewModel
     private var routeStopsAdapter: RouteStopsAdapter = RouteStopsAdapter()
     private var subscribeStops = false
-
-    var isGotoSeqUsed
-        get() = viewModel.isGotoSeqUsed
-        set(value) { viewModel.isGotoSeqUsed = value }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

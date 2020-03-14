@@ -9,21 +9,22 @@ import androidx.appcompat.widget.ThemedSpinnerAdapter
 import hoo.etahk.R
 import hoo.etahk.model.relation.RouteAndStops
 import hoo.etahk.view.base.BaseArrayAdapter
-import kotlinx.android.synthetic.main.item_spinner_small.view.*
+import kotlinx.android.synthetic.main.item_spinner_multiple.view.subtitle
+import kotlinx.android.synthetic.main.item_spinner_multiple.view.title
 
-class RoutesSpinnerAdapter(context: Context): BaseArrayAdapter<RouteAndStops>(context, R.layout.item_spinner_small) {
+class RoutesSpinnerAdapter(context: Context): BaseArrayAdapter<RouteAndStops>(context, R.layout.item_spinner_multiple) {
     private val dropDownHelper: ThemedSpinnerAdapter.Helper = ThemedSpinnerAdapter.Helper(context)
 
     @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View
 
-        if (convertView == null) {
+        view = if (convertView == null) {
             // Inflate the drop down using the helper's LayoutInflater
             val inflater = dropDownHelper.dropDownViewInflater
-            view = inflater.inflate(R.layout.item_spinner_small, parent, false)
+            inflater.inflate(R.layout.item_spinner_multiple, parent, false)
         } else {
-            view = convertView
+            convertView
         }
 
         val route = getItem(position).route

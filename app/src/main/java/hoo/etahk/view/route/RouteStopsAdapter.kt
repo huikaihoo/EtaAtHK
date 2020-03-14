@@ -3,23 +3,31 @@ package hoo.etahk.view.route
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
+import android.widget.Adapter
+import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.SharedPrefs
+import hoo.etahk.common.extensions.loge
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.diff.BaseDiffCallback
 import hoo.etahk.model.diff.StopDiffCallback
+import hoo.etahk.model.relation.RouteAndStops
 import hoo.etahk.view.App
 import hoo.etahk.view.base.BaseViewHolder
 import hoo.etahk.view.base.DiffAdapter
+import hoo.etahk.view.map.RoutesSpinnerAdapter
 import kotlinx.android.synthetic.main.item_stop.view.eta_0
 import kotlinx.android.synthetic.main.item_stop.view.eta_1
 import kotlinx.android.synthetic.main.item_stop.view.eta_2
 import kotlinx.android.synthetic.main.item_stop.view.fare
 import kotlinx.android.synthetic.main.item_stop.view.stop_desc
 import kotlinx.android.synthetic.main.item_stop.view.stop_title
+import kotlinx.android.synthetic.main.item_stop_with_spinner.view.separator
+import kotlinx.android.synthetic.main.item_stop_with_spinner.view.spinner
+import kotlinx.android.synthetic.main.item_stop_with_spinner.view.stop
 
 class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
@@ -29,7 +37,7 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
 
     override fun getDiffCallback(oldData: List<Stop>, newData: List<Stop>): BaseDiffCallback<Stop> = StopDiffCallback(oldData, newData)
 
-    override fun getItemViewId(position: Int, dataSource: List<Stop>): Int = R.layout.item_stop
+    override fun getItemViewId(position: Int, dataSource: List<Stop>): Int = if (position == 0) R.layout.item_stop_with_spinner else R.layout.item_stop
 
     override fun instantiateViewHolder(view: View, viewType: Int): ViewHolder = ViewHolder(view)
 
@@ -38,6 +46,36 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
         @SuppressLint("SetTextI18n")
         override fun onBind(context: RouteFragment?, position: Int, dataSource: List<Stop>) {
             val stop = dataSource[position]
+            val childRoutes = context?.childRoutes
+
+            if (position == 0) {
+                if (childRoutes.isNullOrEmpty() || childRoutes.size <= 1) {
+                    itemView.spinner.visibility = View.GONE
+                    itemView.separator.visibility = View.GONE
+                } else if (itemView.spinner.adapter == null){
+                    val spinnerAdapter = RoutesSpinnerAdapter(context.activity!!)
+
+                    itemView.spinner.adapter = spinnerAdapter
+                    itemView.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                            loge("onItemSelected $position")
+                            context.selectedIndex = position
+                        }
+                        override fun onNothingSelected(parent: AdapterView<out Adapter>?) {}
+                    }
+
+                    spinnerAdapter.dataSource = childRoutes.map {
+                        val routeAndStops = RouteAndStops()
+                        routeAndStops.route = it
+                        routeAndStops
+                    }
+                    itemView.spinner.setSelection(context.selectedIndex)
+                    loge("spinner done")
+                } else {
+                    loge("spinner no change ${childRoutes.size} ${context?.selectedIndex}")
+                }
+            }
+
             val etaStatus = stop.etaStatus
             val etaResults = stop.etaResults
 
@@ -124,8 +162,9 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                 }
             }
 
-            itemView.setOnClickListener { context?.updateEta(listOf(stop)) }
-            itemView.setOnLongClickListener { context?.showStopPopupMenu(itemView, stop); true }
+            val stopView = if (position == 0) itemView.stop else itemView
+            stopView.setOnClickListener { context?.updateEta(listOf(stop)) }
+            stopView.setOnLongClickListener { context?.showStopPopupMenu(itemView, stop); true }
         }
     }
 }

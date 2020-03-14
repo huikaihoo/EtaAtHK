@@ -21,7 +21,13 @@ class RouteFragmentViewModel : ViewModel() {
             if (value != null)
                 subscribeChildRoutesToRepo()
         }
-
+    var selectedIndex: Int = 0
+        set(value) {
+            if (field != value) {
+                field = value
+                //subscribeStopsToRepo()
+            }
+        }
     var isRefreshingAll: Boolean = false
 
     fun getAllFollowLocations(): List<LocationAndGroups> {
@@ -57,7 +63,6 @@ class RouteFragmentViewModel : ViewModel() {
     }
 
     fun subscribeStopsToRepo() {
-        // TODO("Support variant")
-        stops = StopsRepo.getStops(childRoutes!!.value!![0])
+        stops = StopsRepo.getStops(childRoutes!!.value!![selectedIndex])
     }
 }

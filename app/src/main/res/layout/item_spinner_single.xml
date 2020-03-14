@@ -8,10 +8,12 @@
     android:background="?android:attr/selectableItemBackground"
     android:clickable="false"
     android:focusable="false"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:orientation="vertical"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-    android:paddingStart="?android:attr/listPreferredItemPaddingStart">
+    android:paddingTop="@dimen/half_margin"
+    android:paddingBottom="@dimen/half_margin">
 
     <TextView
         android:id="@+id/title"
