@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.SharedPrefs
-import hoo.etahk.common.extensions.loge
+import hoo.etahk.common.extensions.logd
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.model.data.Stop
 import hoo.etahk.model.diff.BaseDiffCallback
@@ -52,14 +52,14 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                 if (childRoutes.isNullOrEmpty() || childRoutes.size <= 1) {
                     itemView.spinner.visibility = View.GONE
                     itemView.separator.visibility = View.GONE
-                } else if (itemView.spinner.adapter == null){
+                } else if (itemView.spinner.adapter == null) {
                     val spinnerAdapter = RoutesSpinnerAdapter(context.activity!!)
 
                     itemView.spinner.adapter = spinnerAdapter
                     itemView.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                            loge("onItemSelected $position")
-                            context.selectedIndex = position
+                            logd("onItemSelected $position")
+                            context.updateSpinnerIndex(position)
                         }
                         override fun onNothingSelected(parent: AdapterView<out Adapter>?) {}
                     }
@@ -70,9 +70,9 @@ class RouteStopsAdapter : DiffAdapter<RouteFragment, Stop>() {
                         routeAndStops
                     }
                     itemView.spinner.setSelection(context.selectedIndex)
-                    loge("spinner done")
+                    logd("spinner done")
                 } else {
-                    loge("spinner no change ${childRoutes.size} ${context?.selectedIndex}")
+                    logd("spinner no change ${childRoutes.size} ${context.selectedIndex}")
                 }
             }
 

@@ -55,9 +55,8 @@ class RouteFragment : BaseFragment() {
 
     val childRoutes
         get() = fragmentViewModel.getChildRoutes().value
-    var selectedIndex
-        get () = fragmentViewModel.selectedIndex
-        set (value) { fragmentViewModel.selectedIndex = value }
+    val selectedIndex
+        get() = fragmentViewModel.selectedIndex.value ?: 0
     var isGotoSeqUsed
         get() = viewModel.isGotoSeqUsed
         set(value) { viewModel.isGotoSeqUsed = value }
@@ -102,6 +101,15 @@ class RouteFragment : BaseFragment() {
         subscribeUiChanges()
 
         return rootView
+    }
+
+    fun updateSpinnerIndex(index: Int) {
+        val routes = childRoutes
+        if (!routes.isNullOrEmpty() && fragmentViewModel.selectedIndex.value != index) {
+            rootView.refresh_layout.isRefreshing = true
+            fragmentViewModel.updateStops(routes, index)
+            fragmentViewModel.selectedIndex.value = index
+        }
     }
 
     fun updateEta(stops: List<Stop>) {
