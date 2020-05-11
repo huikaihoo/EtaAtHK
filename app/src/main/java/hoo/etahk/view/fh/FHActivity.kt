@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -50,7 +50,7 @@ class FHActivity : NavActivity() {
         favouriteAdapter.context = this
         historyAdapter.context = this
 
-        viewModel = ViewModelProviders.of(this).get(FHViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FHViewModel::class.java)
         viewModel.currentType = Constants.MiscType.valueOf(getExtra(Argument.ARG_MISC_TYPE))
 
         super.initNavigationDrawer()

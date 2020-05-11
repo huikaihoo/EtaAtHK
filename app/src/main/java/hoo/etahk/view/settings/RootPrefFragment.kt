@@ -7,7 +7,7 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.mcxiaoke.koi.ext.newIntent
 import com.mcxiaoke.koi.ext.restart
@@ -41,7 +41,7 @@ class RootPrefFragment : BasePrefFragment() {
      * [androidx.preference.PreferenceScreen] with this key.
      */
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        viewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
 
         setPreferencesFromResource(R.xml.pref_root, rootKey)
 

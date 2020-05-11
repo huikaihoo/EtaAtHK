@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import com.mcxiaoke.koi.ext.find
 import hoo.etahk.R
@@ -60,7 +60,7 @@ abstract class NavActivity : BaseActivity(), NavigationView.OnNavigationItemSele
         initNavigationItems()
         nav.setNavigationItemSelectedListener(this)
 
-        navViewModel = ViewModelProviders.of(this).get(NavViewModel::class.java)
+        navViewModel = ViewModelProvider(this).get(NavViewModel::class.java)
         navViewModel.subscribeToRepo()
 
         val tv = nav.getHeaderView(0).nav_last_update

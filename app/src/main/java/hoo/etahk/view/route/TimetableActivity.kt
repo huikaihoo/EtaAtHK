@@ -1,7 +1,7 @@
 package hoo.etahk.view.route
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import hoo.etahk.R
 import hoo.etahk.common.Utils
 import hoo.etahk.common.constants.Argument
@@ -28,7 +28,7 @@ class TimetableActivity : BaseActivity() {
 
         setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProviders.of(this).get(TimetableViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(TimetableViewModel::class.java)
 
         // Setup Actionbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import hoo.etahk.R
@@ -77,7 +77,7 @@ class RouteActivity : BaseActivity() {
 
         setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProviders.of(this).get(RouteViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RouteViewModel::class.java)
         viewModel.routeKey = RouteKey(getExtra(Argument.ARG_COMPANY), getExtra(
             Argument.ARG_ROUTE_NO), -1L, -1L)
         viewModel.anotherCompany = getExtra(Argument.ARG_ANOTHER_COMPANY)

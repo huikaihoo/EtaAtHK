@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,8 +56,8 @@ class SearchFragment : BaseFragment() {
                               savedInstanceState: Bundle?): View? {
         searchRoutesAdapter.context = this
 
-        viewModel = ViewModelProviders.of(activity!!).get(SearchViewModel::class.java)
-        fragmentViewModel = ViewModelProviders.of(this).get(SearchFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!).get(SearchViewModel::class.java)
+        fragmentViewModel = ViewModelProvider(this).get(SearchFragmentViewModel::class.java)
 
         fragmentViewModel.config = viewModel.configList[arguments!!.getInt(ARG_INDEX)]
 

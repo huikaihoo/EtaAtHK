@@ -9,7 +9,7 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,9 +71,8 @@ class RouteFragment : BaseFragment() {
                               savedInstanceState: Bundle?): View? {
         routeStopsAdapter.context = this
 
-        viewModel = ViewModelProviders.of(activity!!).get(RouteViewModel::class.java)
-        fragmentViewModel =
-                ViewModelProviders.of(this).get(RouteFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!).get(RouteViewModel::class.java)
+        fragmentViewModel = ViewModelProvider(this).get(RouteFragmentViewModel::class.java)
 
         if (fragmentViewModel.routeKey == null)
             fragmentViewModel.routeKey =

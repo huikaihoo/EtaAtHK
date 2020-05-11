@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import hoo.etahk.BuildConfig
 import hoo.etahk.R
 import hoo.etahk.common.extensions.startCustomTabs
@@ -23,7 +23,7 @@ class SettingsActivity : BaseActivity() {
 
         setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
 
         if (!checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             checkAndRequestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)

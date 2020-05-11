@@ -8,7 +8,7 @@ import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
 import com.mcxiaoke.koi.ext.newIntent
 import hoo.etahk.R
@@ -94,7 +94,7 @@ class BusSearchActivity : NavActivity() {
 
         setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
 
         viewModel.configList = configList
         if (viewModel.selectedTabPosition == -1)

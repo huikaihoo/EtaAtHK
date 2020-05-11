@@ -14,7 +14,7 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
@@ -77,7 +77,7 @@ class FollowActivity : NavActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        viewModel = ViewModelProviders.of(this).get(FollowViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FollowViewModel::class.java)
         viewModel.durationInMillis = SharedPrefs.DEFAULT_ETA_AUTO_REFRESH * Constants.Time.ONE_SECOND_IN_MILLIS
         viewModel.isLocationIdUsed = getExtra(Argument.ARG_LOCATION_ID, -1L) == -1L
 

@@ -11,7 +11,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -41,7 +41,7 @@ class RoutesMapsActivity : MapsActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(RoutesMapViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RoutesMapViewModel::class.java)
         viewModel.routeKey = RouteKey(getExtra(Argument.ARG_COMPANY), getExtra(
             Argument.ARG_ROUTE_NO), -1L, -1L)
 
