@@ -16,6 +16,7 @@ import hoo.etahk.view.App
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.pow
@@ -40,10 +41,13 @@ object Utils {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun getDateTimeString(t: Long?, pattern: String = Constants.Time.PATTERN_DISPLAY): String {
+    fun getDateTimeString(t: Long?, pattern: String = Constants.Time.PATTERN_DISPLAY, timeZone: String? = null): String {
         if (t != null && t > 0) {
             try {
                 val sdf = SimpleDateFormat(pattern)
+                if (timeZone != null) {
+                    sdf.timeZone = TimeZone.getTimeZone(timeZone)
+                }
                 val strDate = Date(t * Time.ONE_SECOND_IN_MILLIS)
                 return sdf.format(strDate)
             } catch (e: Exception) {

@@ -1,5 +1,6 @@
 package hoo.etahk.remote.connection
 
+import android.util.Base64
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.perf.metrics.AddTrace
 import hoo.etahk.R
@@ -20,6 +21,7 @@ import hoo.etahk.model.json.Info
 import hoo.etahk.model.json.StringLang
 import hoo.etahk.remote.api.GistApi
 import hoo.etahk.remote.api.KmbApi
+import hoo.etahk.remote.request.KmbEtaReq
 import hoo.etahk.remote.response.GistDatabaseRes
 import hoo.etahk.remote.response.KmbBoundVariantRes
 import hoo.etahk.remote.response.KmbEtaRes
@@ -39,6 +41,21 @@ open class KmbConnection(
     private val kmb: KmbApi,
     private val kmbEta: KmbApi,
     private val gist: GistApi): BaseConnection, KoinComponent {
+
+    /***************
+     * Shared
+     ***************/
+    fun getEtaReq(routeNo: String, bound: String, variant: String, stopId: String, seq: String): KmbEtaReq {
+        val timestamp = Utils.getCurrentTimestamp()
+        val timeStr = Utils.getDateTimeString(timestamp, "yyyy-MM-dd HH:mm:ss", "UTC") + ".00."
+        val sep = "--31${timeStr}13--"
+
+        val str = routeNo + sep + bound + sep + variant + sep + stopId.replace("-", "") + sep + seq + sep + (timestamp * 1000).toString()
+        return KmbEtaReq(
+            token = "EA" + Base64.encodeToString(str.toByteArray(), Base64.NO_WRAP),
+            t = timeStr
+        )
+    }
 
     override fun getEtaRoutes(company: String): List<String>? {
         return null
@@ -377,14 +394,20 @@ open class KmbConnection(
                         stop.etaStatus = Constants.EtaStatus.FAILED
                         stop.etaUpdateTime = t
                         try {
+                            val kmbEtaReq = getEtaReq(
+                                routeNo = stop.routeKey.routeNo,
+                                bound = stop.routeKey.bound.toString(),
+                                variant = stop.routeKey.variant.toString(),
+                                stopId = stop.info.stopId,
+                                seq = stop.seq.toString()
+                            )
+
                             val response =
                                 kmbEta.getEta(
-                                    route = stop.routeKey.routeNo,
-                                    bound = stop.routeKey.bound.toString(),
-                                    stop = stop.info.stopId,
-                                    stop_seq = stop.seq.toString(),
-                                    serviceType = stop.routeKey.variant.toString(),
-                                    lang = "tc").execute()
+                                    token = kmbEtaReq.token,
+                                    t = kmbEtaReq.t,
+                                    lang = "1"
+                                ).execute()
 
                             if (response.isSuccessful) {
                                 val kmbEtaRes = response.body()
@@ -392,8 +415,8 @@ open class KmbConnection(
 
                                 val etaResults = mutableListOf<EtaResult>()
 
-                                if (kmbEtaRes?.response != null && kmbEtaRes.response.isNotEmpty()) {
-                                    (kmbEtaRes.response).forEach {
+                                if (kmbEtaRes?.data?.response != null && kmbEtaRes.data.response.isNotEmpty()) {
+                                    (kmbEtaRes.data.response).forEach {
                                         if (it.t?.isNotBlank() == true) {
                                             etaResults.add(toEtaResult(stop, it))
                                         } else if (etaResults.isEmpty()) {
@@ -427,48 +450,11 @@ open class KmbConnection(
     }
 
     override fun updateEta(stop: Stop) {
-        kmbEta.getEta(
-                route = stop.routeKey.routeNo,
-                bound = stop.routeKey.bound.toString(),
-                stop = stop.info.stopId,
-                stop_seq = stop.seq.toString(),
-                serviceType = stop.routeKey.variant.toString(),
-                lang = "tc")
-                .enqueue(object : Callback<KmbEtaRes> {
-                    override fun onFailure(call: Call<KmbEtaRes>, t: Throwable) {
-                        val t = Utils.getCurrentTimestamp()
-
-                        stop.etaStatus = Constants.EtaStatus.FAILED
-                        stop.etaUpdateTime = t
-
-                        AppHelper.db.stopDao().update(stop)
-                    }
-
-                    override fun onResponse(call: Call<KmbEtaRes>, response: Response<KmbEtaRes>){
-                        val t = Utils.getCurrentTimestamp()
-                        val kmbEtaRes = response.body()
-                        //logd(kmbEtaRes.toString())
-
-                        if (kmbEtaRes?.response != null && kmbEtaRes.response.isNotEmpty()) {
-                            val etaResults = mutableListOf<EtaResult>()
-                            (kmbEtaRes.response).forEach {
-                                etaResults.add(toEtaResult(stop, it))
-                            }
-                            stop.etaStatus = Constants.EtaStatus.SUCCESS
-                            stop.etaResults = etaResults
-                            stop.etaUpdateTime = t
-                            //logd(AppHelper.gson.toJson(etaResults))
-                        } else {
-                            stop.etaStatus = Constants.EtaStatus.FAILED
-                            stop.etaUpdateTime = t
-                        }
-
-                        AppHelper.db.stopDao().update(stop)
-                    }
-                })
+        return
     }
 
     private fun toEtaResult(stop: Stop, response: KmbEtaRes.Response): EtaResult {
+        val distance = response.dis ?: 0L
         val ignoreGps = response.t?.contains("[新|城]巴".toRegex()) ?: false
 
         return EtaResult(
@@ -479,7 +465,8 @@ open class KmbConnection(
                 gps = ignoreGps || (response.ei != null && response.ei == "N"),
                 variant = response.busServiceType,
                 wifi = (response.wifi != null && response.wifi == "Y"),     // changed to store wheelchair
-                capacity = Utils.phaseCapacity(response.ol ?: "")
+                capacity = Utils.phaseCapacity(response.ol ?: ""),
+                distance = distance
         )
     }
 }

@@ -2,6 +2,7 @@ package hoo.etahk.api
 
 import hoo.etahk.BaseUnitTest
 import hoo.etahk.remote.api.KmbApi
+import hoo.etahk.remote.connection.KmbConnection
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.inject
@@ -16,6 +17,7 @@ class KmbApiUnitTest: BaseUnitTest() {
     override val printLog = false
 
     private val kmb: KmbApi by inject(named("kmbApi"))
+    private val kmbConnection: KmbConnection by inject()
 
     private val route = "101"
     private val bound = "1"
@@ -47,6 +49,32 @@ class KmbApiUnitTest: BaseUnitTest() {
     fun getBoundVariant() {
         val call = kmb.getBoundVariant(route = route, bound = bound)
         println("url = ${call.request().url()}")
+
+        try {
+            val response = call.execute()
+            println("isSuccessful = ${response.isSuccessful}")
+
+            if (response.isSuccessful) {
+                val result = response.body()
+                println("result = $result")
+                assert(result != null && result.result == true && result.data != null)
+            } else {
+                println("error = ${response.errorBody()?.string()}")
+                assert(false)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            assert(false)
+        }
+    }
+
+    @Test
+    fun getEta() {
+        val kmbEtaReq = kmbConnection.getEtaReq("6C", "2", "1", "CA07S68000", "5");
+        val call = kmb.getEta(kmbEtaReq.token, kmbEtaReq.t)
+        println("url = ${call.request().url()}")
+        println("token = ${kmbEtaReq.token}")
+        println("t = ${kmbEtaReq.t}")
 
         try {
             val response = call.execute()
