@@ -16,7 +16,7 @@ data class KmbEtaRes(
     data class Response(
         @SerializedName("bus_service_type") val busServiceType: Long = 1L,
         @SerializedName("dis") val dis: Long? = null,   // distance in meters
-        @SerializedName("ei") val ei: String? = "",     // can server receive bus gps signal (N=Yes; Y=No)
+        @SerializedName("ei") val ei: String? = "",     // can server receive bus gps signal (N=Yes; Y=No) [SEEMS NOT CORRECT]
         @SerializedName("eot") val eot: String? = "",   // E: time only; T: with text
         @SerializedName("ex") val ex: String? = "",     // expire time (YYYY-MM-DD hh:mm:ss)
         @SerializedName("ol") val ol: String? = "",     // Bus Capacity

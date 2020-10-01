@@ -3,7 +3,6 @@ package hoo.etahk.view
 import android.app.Application
 import android.content.Context
 import android.preference.PreferenceManager
-import com.crashlytics.android.Crashlytics
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.android.utils.FlipperUtils
 import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
@@ -20,7 +19,6 @@ import hoo.etahk.common.extensions.applyLocale
 import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.ConnectionHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
-import io.fabric.sdk.android.Fabric
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
 import org.koin.android.ext.koin.androidLogger
@@ -72,9 +70,9 @@ open class App : Application() {
     }
 
     private fun initCrashlytics() {
+        AppHelper.crashlytics.setCrashlyticsCollectionEnabled(!Utils.isUnitTest)
         if (!Utils.isUnitTest) {
-            Fabric.with(this, Crashlytics())
-            Crashlytics.setUserIdentifier(SharedPrefsHelper.getUserUUID())
+            AppHelper.crashlytics.setUserId(SharedPrefsHelper.getUserUUID())
         }
     }
 

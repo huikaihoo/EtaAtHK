@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'de.undercouch.download'
-apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -110,7 +110,7 @@ dependencies {
 
     // Google Service
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
@@ -118,7 +118,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.2.3'
     implementation 'com.google.firebase:firebase-config:19.1.2'
     implementation 'com.google.firebase:firebase-perf:19.0.5'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics:17.5.0'
 
     // ViewModel + LiveData + Room + Paging
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -142,7 +143,7 @@ dependencies {
 
     // JSON / HTML Parser
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'org.jsoup:jsoup:1.12.2'
+    implementation 'org.jsoup:jsoup:1.13.1'
 
     // Markwon
     implementation "ru.noties:markwon:$markwon_version"
@@ -166,7 +167,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
     debugImplementation 'com.facebook.flipper:flipper:0.33.1'
     debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.33.1'
-    debugImplementation 'com.facebook.soloader:soloader:0.8.2'
+    debugImplementation 'com.facebook.soloader:soloader:0.9.0'
     //releaseImplementation 'com.facebook.flipper:flipper-noop:0.23.4'
     releaseImplementation('com.github.theGlenn:flipper-android-no-op:0.2.0') {
         exclude group: 'com.squareup.okhttp3'
@@ -178,7 +179,7 @@ dependencies {
     testImplementation 'androidx.room:room-testing:2.2.4'
     testImplementation 'junit:junit:4.12'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutines_version"
-    testImplementation 'org.robolectric:robolectric:4.3.1'
+    testImplementation 'org.robolectric:robolectric:4.4'
     testImplementation "org.koin:koin-test:$koin_version"
 
     // Android Unit Test

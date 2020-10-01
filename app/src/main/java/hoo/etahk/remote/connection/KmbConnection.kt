@@ -1,6 +1,7 @@
 package hoo.etahk.remote.connection
 
 import android.util.Base64
+import com.google.android.gms.common.util.Hex
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.perf.metrics.AddTrace
 import hoo.etahk.R
@@ -22,6 +23,7 @@ import hoo.etahk.model.json.StringLang
 import hoo.etahk.remote.api.GistApi
 import hoo.etahk.remote.api.KmbApi
 import hoo.etahk.remote.request.KmbEtaReq
+import hoo.etahk.remote.request.KmbEtaV2Req
 import hoo.etahk.remote.response.GistDatabaseRes
 import hoo.etahk.remote.response.KmbBoundVariantRes
 import hoo.etahk.remote.response.KmbEtaRes
@@ -33,9 +35,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.core.KoinComponent
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import java.math.BigInteger
+import java.util.Random
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 open class KmbConnection(
     private val kmb: KmbApi,
@@ -54,6 +58,33 @@ open class KmbConnection(
         return KmbEtaReq(
             token = "EA" + Base64.encodeToString(str.toByteArray(), Base64.NO_WRAP),
             t = timeStr
+        )
+    }
+
+    private fun encrypt(content: String, random: BigInteger): String {
+        val randomStr = random.toString(16)
+        val str = "0".repeat(32 - randomStr.length) + randomStr
+
+        // Encrypt Random String
+        val keySpec = SecretKeySpec(Hex.stringToBytes("801C26C9AFB352FA4DF8C009BAB0FA72"), "AES")
+        val ivParameterSpec = IvParameterSpec(Hex.stringToBytes(str))
+
+        val instance = Cipher.getInstance("AES/CTR/NoPadding")
+        instance.init(Cipher.ENCRYPT_MODE, keySpec, ivParameterSpec)
+
+        return Hex.bytesToStringUppercase(instance.doFinal(content.toByteArray()))
+    }
+
+    fun getEtaV2Req(routeNo: String, bound: String, variant: String, seq: String): KmbEtaV2Req {
+        val t = Utils.getDateTimeString(Utils.getCurrentTimestamp() + 2, "yyyy-MM-dd'T'HH:mm:ss'Z'", "UTC")
+        val random = BigInteger(50, Random())
+        val apiKey = encrypt(t, random)
+        val queryString = "?lang=tc&route=${routeNo}&bound=${bound}&stop_seq=${seq}&service_type=${variant}&vendor_id=qdb9jfu6bccb8ffs&apiKey=${apiKey}&ctr=${random}"
+        val d = encrypt(queryString, random)
+
+        return KmbEtaV2Req(
+            d = d,
+            ctr = random.toString()
         )
     }
 
@@ -454,15 +485,18 @@ open class KmbConnection(
     }
 
     private fun toEtaResult(stop: Stop, response: KmbEtaRes.Response): EtaResult {
-        val distance = response.dis ?: 0L
         val ignoreGps = response.t?.contains("[新|城]巴".toRegex()) ?: false
+        var distance = response.dis ?: -1L
+        if (distance <= 0L) {
+            distance += 1L
+        }
 
         return EtaResult(
                 company = stop.routeKey.company,
                 etaTime = Utils.timeStrToTimestamp(response.t ?: ""),
                 msg = Utils.timeStrToMsg(response.t ?: ""),
                 scheduleOnly = Utils.isScheduledOnly(response.t ?: ""),
-                gps = ignoreGps || (response.ei != null && response.ei == "N"),
+                gps = ignoreGps || (response.ei != null && distance > 0L),
                 variant = response.busServiceType,
                 wifi = (response.wifi != null && response.wifi == "Y"),     // changed to store wheelchair
                 capacity = Utils.phaseCapacity(response.ol ?: ""),

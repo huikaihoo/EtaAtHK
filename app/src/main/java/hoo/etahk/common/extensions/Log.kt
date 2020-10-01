@@ -1,8 +1,8 @@
 package hoo.etahk.common.extensions
 
 import android.util.Log
-import com.crashlytics.android.Crashlytics
 import hoo.etahk.common.Utils
+import hoo.etahk.common.helper.AppHelper
 
 /**
  * Sources: https://github.com/Kotlin/anko/blob/27fba1aa00811470f58ec6b61851e1cd8c2d9999/anko/library/static/commons/src/main/java/Logging.kt
@@ -49,7 +49,7 @@ fun kotlin.Any.logd(message: Any?, thr: Throwable? = null) {
         if (Utils.isUnitTest)
             Log.d(tag(), message?.toString() ?: "null")
         else
-            Crashlytics.log(Log.DEBUG, tag(), message?.toString() ?: "null")
+            AppHelper.crashlytics.log(message?.toString() ?: "null")
     }
 }
 
@@ -106,12 +106,12 @@ fun kotlin.Any.loge(message: Any?, thr: Throwable? = null) {
     if (thr != null) {
         Log.e(tag(), message?.toString() ?: "null", thr)
         if (!Utils.isUnitTest)
-            Crashlytics.logException(thr)
+            AppHelper.crashlytics.recordException(thr)
     } else {
         if (Utils.isUnitTest)
             Log.e(tag(), message?.toString() ?: "null")
         else
-            Crashlytics.log(Log.ERROR, tag(), message?.toString() ?: "null")
+            AppHelper.crashlytics.log(message?.toString() ?: "null")
     }
 }
 
@@ -158,7 +158,7 @@ inline fun kotlin.Any.logv(message: () -> Any?) {
  * @see [Log.d].
  */
 inline fun kotlin.Any.logd(message: () -> Any?) {
-    Crashlytics.log(Log.DEBUG, tag(), message()?.toString() ?: "null")
+    AppHelper.crashlytics.log(message()?.toString() ?: "null")
 }
 
 /**
@@ -200,5 +200,5 @@ inline fun kotlin.Any.logw(message: () -> Any?) {
  * @see [Log.e].
  */
 inline fun kotlin.Any.loge(message: () -> Any?) {
-    Crashlytics.log(Log.ERROR, tag(), message()?.toString() ?: "null")
+    AppHelper.crashlytics.log(message()?.toString() ?: "null")
 }

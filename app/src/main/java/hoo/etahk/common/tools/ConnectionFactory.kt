@@ -13,6 +13,7 @@ import hoo.etahk.common.helper.AppHelper
 import hoo.etahk.common.helper.SharedPrefsHelper
 import hoo.etahk.view.App.Companion.networkFlipperPlugin
 import okhttp3.Dispatcher
+import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -79,7 +80,8 @@ object ConnectionFactory {
                 .newBuilder()
                 .removeHeader("User-Agent")
                 .addHeader("User-Agent", SharedPrefs.userAgent)
-                //.addHeader("User-Agent", WebSettings.getDefaultUserAgent(App.instance))
+//                .addHeader("User-Agent", WebSettings.getDefaultUserAgent(App.instance))
+//                .headers(Headers.of(emptyMap()))
                 .build()
             chain.proceed(request)
         }

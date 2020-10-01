@@ -1,10 +1,13 @@
 package hoo.etahk.remote.api
 
+import hoo.etahk.remote.request.KmbEtaV2Req
 import hoo.etahk.remote.response.*
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -32,6 +35,10 @@ interface KmbApi {
     fun getEta(@Field("token") token: String,
                @Field("t") t: String,
                @Query("lang") lang: String = "1"): Call<KmbEtaRes>
+
+    @Headers("Content-Type: application/json")
+    @POST("https://etav3.kmb.hk/?action=geteta")
+    fun getEtaV2(@Body body: KmbEtaV2Req): Call<List<KmbEtaV2Res>>
 
     @GET("http://etadatafeed.kmb.hk:1933/GetData.ashx?type=ETA_R")
     fun getEtaRoutes(): Call<List<KmbEtaRoutesRes>>

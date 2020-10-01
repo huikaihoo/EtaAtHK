@@ -10,6 +10,7 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.room.Room
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import hoo.etahk.R
@@ -28,6 +29,7 @@ object AppHelper {
     lateinit var gson: Gson private set
     lateinit var db: AppDatabase private set
     lateinit var notificationManager: NotificationManagerCompat private set
+    lateinit var crashlytics: FirebaseCrashlytics private set
 
     fun init(context: Context) {
         languageContext = context
@@ -63,6 +65,8 @@ object AppHelper {
             val manager = ContextCompat.getSystemService(context, NotificationManager::class.java)
             manager?.createNotificationChannels(channelList)
         }
+
+        crashlytics = FirebaseCrashlytics.getInstance()
     }
 
     fun applyAppLocale(language: String) {

@@ -14,11 +14,13 @@ import hoo.etahk.remote.api.KmbApi
 import hoo.etahk.remote.api.MtrbApi
 import hoo.etahk.remote.api.NlbApi
 import hoo.etahk.remote.api.NwfbApi
+import hoo.etahk.remote.api.NwfbV2Api
 import hoo.etahk.remote.api.TramApi
 import hoo.etahk.remote.connection.BaseConnection
 import hoo.etahk.remote.connection.BusConnection
 import hoo.etahk.remote.connection.GovConnection
 import hoo.etahk.remote.connection.KmbConnection
+import hoo.etahk.remote.connection.KmbV2Connection
 import hoo.etahk.remote.connection.MtrbConnection
 import hoo.etahk.remote.connection.NlbConnection
 import hoo.etahk.remote.connection.NlbV2Connection
@@ -76,6 +78,19 @@ object ConnectionHelper: BaseConnection, KoinComponent {
         single { KmbConnection(get(named("kmbApi")), get(named("kmbEtaApi")), get()) }
     }
 
+    val kmbV2Module = module {
+        // API
+        single<KmbApi>(named("kmbApi")) {
+            ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.KMB_URL).create()
+        }
+        single<KmbApi>(named("kmbEtaApi")) {
+            ConnectionFactory.createRetrofit(get(named("okHttpEtaKmb")), Url.KMB_URL).create()
+        }
+
+        // Connection
+        single<KmbConnection> { KmbV2Connection(get(named("kmbApi")), get(named("kmbEtaApi")), get()) }
+    }
+
     val nwfbModule = module {
         // API
         single<NwfbApi>(named("nwfbApi")) {
@@ -87,6 +102,19 @@ object ConnectionHelper: BaseConnection, KoinComponent {
 
         // Connection
         single { NwfbConnection(get(named("nwfbApi")), get(named("nwfbEtaApi")), get()) }
+    }
+
+    val nwfbV2Module = module {
+        // API
+        single<NwfbV2Api>(named("nwfbV2Api")) {
+            ConnectionFactory.createRetrofit(get(named("okHttpLong")), Url.NWFB_URL).create()
+        }
+        single<NwfbV2Api>(named("nwfbV2EtaApi")) {
+            ConnectionFactory.createRetrofit(get(named("okHttpEtaNwfb")), Url.NWFB_URL).create()
+        }
+
+        // Connection
+        single { NwfbConnection(get(named("nwfbV2Api")), get(named("nwfbV2EtaApi")), get()) }
     }
 
     val nlbModule = module {
@@ -141,7 +169,7 @@ object ConnectionHelper: BaseConnection, KoinComponent {
 
     val modules = listOf(
         clientModule, gistModule, busModule,
-        govModule, kmbModule, nwfbModule,
+        govModule, kmbV2Module  , nwfbModule,
         nlbV2Module, mtrbModule, tramModule
     )
 
